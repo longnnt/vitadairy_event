@@ -6,31 +6,14 @@ import { HOST_API } from '../../config';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  paramsSerializer: (param) => toQueryString(param),
+  paramsSerializer: (param: object) => toQueryString(param),
   baseURL: HOST_API,
 });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
+  (error) =>
+    Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
-axiosInstance.interceptors.request.use(async (config) => {
-  const getPersist = localStorage.getItem('redux-root');
-  if (getPersist) {
-    try {
-      const authLogin = JSON.parse(getPersist).authLogin;
-      const token = JSON.parse(authLogin).accessToken;
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`,
-      }
-    }catch(e){
-       
-    }
-  }
-  return {
-    ...config,
-  };
-});
 export default axiosInstance;

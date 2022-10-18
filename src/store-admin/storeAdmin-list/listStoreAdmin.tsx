@@ -30,7 +30,7 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
-import { IFormStore, IStoreAdminSearchParams } from '../interfaces';
+import { IFormStore, IStoreParams } from '../interfaces';
 import { filterNameSelector, setFilterName } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/storeTableRow';
 
@@ -70,7 +70,7 @@ function StoreAdminListDashboard() {
 
   const mutationDetele = useDeleteStoreAdmin({ onSuccess, onError });
 
-  const searchParams: IStoreAdminSearchParams = {
+  const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
   };

@@ -15,7 +15,7 @@ export type IStoreAdminCallback = {
 
 export type IStories = Array<IFormStore>;
 
-export interface IStoreAdminSearchParams {
+export interface IStoreParams {
   endDate?: Date | string;
   page?: number;
   searchText?: string;
