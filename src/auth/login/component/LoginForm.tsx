@@ -50,10 +50,9 @@ export default function LoginForm() {
       variant: 'error',
     });
   };
-
   const { mutate, isSuccess } = useAuthlogin({ onSuccess, onError });
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.general.app);
+    if (isSuccess) navigate(PATH_DASHBOARD.root);
   }, [isSuccess]);
   const onSubmit = (data: IFormLoginValuesProps) => {
     mutate({ email: data.email, password: data.password });

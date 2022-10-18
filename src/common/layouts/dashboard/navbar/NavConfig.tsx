@@ -49,6 +49,19 @@ const navConfig = [
       { title: 'kanban', path: PATH_DASHBOARD.general.app, icon: ICONS.kanban },
     ],
   },
+  {
+    subheader: 'management',
+    items: [
+      {
+        title: 'Quản lý quản trị viên',
+        path: PATH_DASHBOARD.admin.root,
+        icon: ICONS.policy,
+        children: [
+          { title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list },
+        ],
+      },
+    ]
+  }
 ];
 
 export default navConfig;

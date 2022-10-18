@@ -6,7 +6,7 @@ type AuthLoginProps = {
 };
 const AuthLoginState: AuthLoginProps = {
   isAuthenticated: false,
-  accessToken: '',
+  accessToken:'',
 };
 export const authLoginSlice = createSlice({
   name: 'authLogin',
@@ -16,7 +16,8 @@ export const authLoginSlice = createSlice({
       state.isAuthenticated = action.payload;
     },
     setAccessToken: (state, action) => {
-      state.accessToken = action.payload;
+      state.accessToken =action.payload;
+
     },
     setLogout: (state, action) => {
       state.isAuthenticated = action.payload;

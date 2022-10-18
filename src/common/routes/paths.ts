@@ -35,7 +35,7 @@ export const PATH_PAGE = {
 };
 
 export const PATH_DASHBOARD = {
-  root: ROOTS_DASHBOARD,
+  root: '/',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
@@ -43,4 +43,8 @@ export const PATH_DASHBOARD = {
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
   },
+  admin: {
+    root: path(ROOTS_DASHBOARD, '/admins'),
+    list: path(ROOTS_DASHBOARD, '/admins'),
+  }
 };

@@ -15,5 +15,22 @@ axiosInstance.interceptors.response.use(
   (error) =>
     Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
-
+axiosInstance.interceptors.request.use(async (config) => {
+  const getPersist = localStorage.getItem('redux-root');
+  if (getPersist) {
+    try {
+      const authLogin = JSON.parse(getPersist).authLogin;
+      const token = JSON.parse(authLogin).accessToken;
+      config.headers = {
+        ...config.headers,
+        Authorization: `${token}`,
+      }
+    }catch(e){
+       console.log(e)
+    }
+  }
+  return {
+    ...config,
+  };
+});
 export default axiosInstance;
