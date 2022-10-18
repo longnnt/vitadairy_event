@@ -60,18 +60,14 @@ export default function InvitationTableRow({
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {firstScanDate}
+        {new Date(firstScanDate).toUTCString()}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {registrationDate}
+        {new Date(registrationDate).toUTCString()}
       </TableCell>
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {qrCode}
-      </TableCell>
-
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <img style={thumbnailStyle} src={qrCode} alt={qrCode} />
       </TableCell>
 
       <TableCell align="left" title={isSuccess ? 'featured' : 'unFeatured'}>
@@ -86,37 +82,6 @@ export default function InvitationTableRow({
           }}
         />
       </TableCell>
-
-      {/* <TableCell align="right">
-        <TableMoreMenu
-          open={openMenu}
-          onOpen={handleOpenMenu}
-          onClose={handleCloseMenu}
-          actions={
-            <>
-              <MenuItem
-                onClick={() => {
-                  onDeleteRow();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'eva:edit-fill'} />
-                Edit
-              </MenuItem>
-            </>
-          }
-        /> */}
-      {/* </TableCell> */}
     </TableRow>
   );
 }

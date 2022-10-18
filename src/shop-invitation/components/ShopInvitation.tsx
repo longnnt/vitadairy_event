@@ -39,7 +39,9 @@ import { useGetAllShop_InvitationByParams } from '../hooks/useGetAllShop_Invitat
 import { getQueryObj } from 'src/common/utils/getQueryObj';
 
 export default function ShopInvitation() {
-  // const { data } = useGetAllShop_Invitation();
+  // const { data: allData } = useGetAllShop_Invitation();
+  // console.log(allData?.data);
+
   const {
     dense,
     page,
@@ -54,11 +56,13 @@ export default function ShopInvitation() {
     onChangeRowsPerPage,
   } = useTable();
 
+  console.log('.....', page);
+
   const searchText = useSelector(searchTextSelector);
   const statusSuccess = useSelector(statusSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
-  console.log(firstScanStart);
+  // console.log(firstScanStart);
 
   const params: IParams_Query = {
     page: page + 1,
@@ -69,10 +73,12 @@ export default function ShopInvitation() {
     status: statusSuccess,
   };
   const searchParams = getQueryObj(params);
+  // console.log('jdksajflksds', searchParams);
+
   const { data, refetch } = useGetAllShop_InvitationByParams(searchParams);
   const tableData: IResShop_Invitation[] = data ? data?.data?.response?.response : [];
 
-  // console.log('MMMM', data?.data);
+  // console.log('MMMM', typeof data?.data?.response?.response[0].firstScanDate);
 
   const navigate = useNavigate();
 
@@ -90,7 +96,7 @@ export default function ShopInvitation() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="Danh Khách Hàng "
+        heading="Danh Sách Khách Hàng "
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
           {
@@ -124,10 +130,7 @@ export default function ShopInvitation() {
                 onSelectAllRows={handleCheckAll}
                 actions={
                   <Tooltip title="Delete">
-                    <IconButton
-                      color="primary"
-                      // onClick={() => handleDeleteRows(selectedIds)}
-                    >
+                    <IconButton color="primary">
                       <Iconify icon={'eva:trash-2-outline'} />
                     </IconButton>
                   </Tooltip>
@@ -142,7 +145,7 @@ export default function ShopInvitation() {
                 isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={
-                  tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  tableData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .length
                 }
                 numSelected={selectedIds.length}
@@ -151,7 +154,7 @@ export default function ShopInvitation() {
               />
 
               <TableBody>
-                {tableData.map((row: IResShop_Invitation) => (
+                {tableData?.map((row: IResShop_Invitation) => (
                   <InvitationTableRow
                     key={row.qrCode}
                     row={row}
@@ -164,7 +167,7 @@ export default function ShopInvitation() {
                   />
                 ))}
 
-                <TableNoData isNotFound={!tableData.length} />
+                <TableNoData isNotFound={!tableData?.length} />
               </TableBody>
             </Table>
           </TableContainer>
@@ -174,7 +177,7 @@ export default function ShopInvitation() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
-            count={data ? data?.data?.response?.response.length : 0}
+            count={data ? data?.data?.response?.response.length : 1}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onChangePage}

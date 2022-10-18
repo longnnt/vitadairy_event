@@ -90,7 +90,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     type="submit"
                     variant="contained"
                     size="medium"
-                    onClick={handleSearch}
+                    onClick={() => handleSearch()}
                   >
                     Tìm kiếm
                   </LoadingButton>
