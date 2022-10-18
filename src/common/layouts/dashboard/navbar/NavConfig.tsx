@@ -49,6 +49,25 @@ const navConfig = [
       { title: 'kanban', path: PATH_DASHBOARD.general.app, icon: ICONS.kanban },
     ],
   },
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'management',
+    items: [
+      // STORE
+      {
+        title: 'Cửa hàng',
+        path: PATH_DASHBOARD.storeAdmin.root,
+        icon: ICONS.booking,
+        children: [
+          {
+            title: 'Danh sách',
+            path: PATH_DASHBOARD.storeAdmin.list,
+          }
+        ],
+      },
+    ],
+  }
 ];
 
 export default navConfig;

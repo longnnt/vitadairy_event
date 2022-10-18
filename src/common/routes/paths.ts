@@ -43,4 +43,9 @@ export const PATH_DASHBOARD = {
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
   },
+  storeAdmin: {
+    root: path(ROOTS_DASHBOARD, '/stories'),
+    list: path(ROOTS_DASHBOARD, '/stories'),
+    new: path(ROOTS_DASHBOARD, '/store/new'),
+  }
 };

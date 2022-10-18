@@ -1,0 +1,89 @@
+import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
+import moment from 'moment';
+import { useState } from 'react';
+import Iconify from 'src/common/components/Iconify';
+import { TableMoreMenu } from 'src/common/components/table';
+import { IPropsStoreTableRow } from '../../interfaces';
+
+// ----------------------------------------------------------------------
+
+function StoreTableRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onDeleteRow,
+}: IPropsStoreTableRow) {
+  const { code, name, phoneNumber, address, qrLink, isActive, createdDate } = row;
+
+  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
+ 
+
+  const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
+    setOpenMenuActions(store.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpenMenuActions(null);
+  };
+
+  return (
+    <TableRow hover selected={selected}>
+      <TableCell padding="checkbox">
+        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
+      </TableCell>
+      <TableCell align="left">{code}</TableCell>
+
+      <TableCell align="left">{name}</TableCell>
+
+      <TableCell align="left">{phoneNumber}</TableCell>
+
+      <TableCell align="left">{address}</TableCell>
+
+      <TableCell align="left"><a target="_blank" rel="noopener noreferrer" href={qrLink}>Tải QR</a></TableCell>
+
+      <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
+        <Switch
+          checked={isActive ? true : false }
+          onChange ={e=>{e.target.checked}}
+        />
+      </TableCell>
+
+      <TableCell align="left">{moment(createdDate).format('D/MM/YYYY')}</TableCell>
+
+      <TableCell align="right">
+        <TableMoreMenu
+          open={openMenu}
+          onOpen={handleOpenMenu}
+          onClose={handleCloseMenu}
+          actions={
+            <>
+              <MenuItem
+                onClick={() => {
+                  onDeleteRow();
+                  handleCloseMenu();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon={'eva:trash-2-outline'} />
+                Delete
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  onEditRow();
+                  handleCloseMenu();
+                }}
+              >
+                <Iconify icon={'eva:edit-fill'} />
+                Edit
+              </MenuItem>
+            </>
+          }
+        />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+export { StoreTableRow };
+

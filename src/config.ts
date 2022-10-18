@@ -10,7 +10,7 @@ import { PATH_DASHBOARD } from './common/routes/paths';
 // This for call http API from https client. You can check here: https://stackoverflow.com/questions/60938091/make-api-request-to-http-endpoint-from-aws-amplify-deployed-https-ssl-client
 export const HOST_API =
   process.env.REACT_APP_HOST_API_KEY ||
-  'https://cors-everywhere.herokuapp.com/http://vief-dev-loadbalancer-2024646.ap-southeast-1.elb.amazonaws.com';
+  'https://api-stg.vitadairyvietnam.vn/';
 
 export const FIREBASE_API = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
