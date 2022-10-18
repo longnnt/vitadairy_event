@@ -20,18 +20,15 @@ axiosInstance.interceptors.response.use(
 );
 
 axiosInstance.interceptors.request.use(async (config) => {
-  // const getPersist = localStorage.getItem('redux-root');
-  const getToken = store.getState().authLogin;
+  const token = store.getState()?.authLogin?.accessToken;
 
-  if (getToken) {
+  if (token) {
     try {
-      const token = getToken?.accessToken;
-
       // const token =
       //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjYwNzU1MzMsImV4cCI6MjM4NjA3NTUzM30.IRg3CBf7G7QtAmsunqZShSqAa6ASKXtZRWSAMJY_yxMgaaNrcYfIG367UH03DfAGt35cvSioE0dMo7TGwabNQA';
       config.headers = {
         ...config.headers,
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       };
     } catch (e) {
       console.log(e);
