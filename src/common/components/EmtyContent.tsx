@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Box, BoxProps } from '@mui/material';
 //
 import Image from './Image';
+import { svg } from '../image/svg';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ export default function EmptyContent({ title, description, img, ...other }: Prop
         disabledEffect
         visibleByDefault
         alt="empty content"
-        src={img || '/assets/illustrations/illustration_empty_content.svg'}
+        src={img || svg}
         sx={{ height: 240, mb: 3 }}
       />
 

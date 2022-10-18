@@ -6,35 +6,31 @@ import { HOST_API } from '../../config';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  paramsSerializer: (param: object) => toQueryString(param),
+  paramsSerializer: (param) => toQueryString(param),
   baseURL: HOST_API,
 });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) =>
-    Promise.reject((error.response && error.response.data) || 'Something went wrong')
+  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
 axiosInstance.interceptors.request.use(async (config) => {
   const getPersist = localStorage.getItem('redux-root');
-
   if (getPersist) {
     try {
       const authLogin = JSON.parse(getPersist).authLogin;
-
-      // const token = JSON.parse(authLogin).accessToken;
-
-      const token =
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjU5NzY4MjQsImV4cCI6MjM4NTk3NjgyNH0.ACJEmsJaDwoAYfAYmdX0DKlAUrxOXifxpHWAlpkX21iiHZ8dwkOVN5LcjUHu0K82gS93epviKVrzVzlRw-wTqw';
+      const token = JSON.parse(authLogin).accessToken;
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${token}`,
-      };
-    } catch (e) {
-      console.log(e);
+      }
+    }catch(e){
+       
     }
   }
-  return config;
+  return {
+    ...config,
+  };
 });
 export default axiosInstance;

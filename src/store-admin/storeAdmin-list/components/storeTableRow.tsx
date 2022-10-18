@@ -1,5 +1,4 @@
 import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
-import moment from 'moment';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
@@ -14,7 +13,7 @@ function StoreTableRow({
   onSelectRow,
   onDeleteRow,
 }: IPropsStoreTableRow) {
-  const { code, name, phoneNumber, address, qrLink, isActive, createdDate } = row;
+  const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
  
@@ -34,9 +33,11 @@ function StoreTableRow({
       </TableCell>
       <TableCell align="left">{code}</TableCell>
 
-      <TableCell align="left">{name}</TableCell>
-
       <TableCell align="left">{phoneNumber}</TableCell>
+
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {createdDate.slice(0, 19).replace('T', ' ')}
+      </TableCell>
 
       <TableCell align="left">{address}</TableCell>
 
@@ -49,7 +50,6 @@ function StoreTableRow({
         />
       </TableCell>
 
-      <TableCell align="left">{moment(createdDate).format('D/MM/YYYY')}</TableCell>
 
       <TableCell align="right">
         <TableMoreMenu

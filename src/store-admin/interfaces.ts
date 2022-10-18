@@ -5,7 +5,7 @@ export interface IFormStore {
   address: string;
   qrLink: string;
   isActive: boolean;
-  createdDate: Date;
+  createdDate: string;
 }
 
 export type IStoreAdminCallback = {
@@ -16,32 +16,34 @@ export type IStoreAdminCallback = {
 export type IStories = Array<IFormStore>;
 
 export interface IStoreAdminSearchParams {
-  endDate?: string;
+  endDate?: Date | string;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: string;
+  startDate?: Date | string;
 }
 
 export interface IDataStore {
-  meta: {
-    status: number;
-    msg: string;
-  };
-  response: {
+  data: {
     meta: {
       status: number;
       msg: string;
     };
-    pagination: {
-      totalPages: number;
-      totalRecords: number;
-      currentPage: number;
-      recordsPerPage: number;
-      last: boolean;
+    response: {
+      meta: {
+        status: number;
+        msg: string;
+      };
+      pagination: {
+        totalPages: number;
+        totalRecords: number;
+        currentPage: number;
+        recordsPerPage: number;
+        last: boolean;
+      };
+      response: IStories;
     };
-    response: IStories;
-  };
+  }
 }
 
 export type IPropsStoreTableRow = {

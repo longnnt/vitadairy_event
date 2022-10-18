@@ -79,7 +79,7 @@ function StoreAdminListDashboard() {
 
   const { data } = useGetStoreAdmin(searchParams);
 
-  const listStoreAdmin = data?.response?.response || [];
+  const listStoreAdmin = data?.data?.response?.response || [];
 
   const {
     isCheckedAll,
@@ -108,7 +108,7 @@ function StoreAdminListDashboard() {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
 
-  const { totalRecords } = data?.response?.pagination || {
+  const { totalRecords } = data?.data?.response?.pagination || {
     totalRecords: 0,
   };
 
@@ -116,19 +116,19 @@ function StoreAdminListDashboard() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="CỬA HÀNG"
+        heading="DANH SÁCH CỬA HÀNG"
         links={[
           { name: BREADCUMBS.STORE_ADMIN, href: PATH_DASHBOARD.storeAdmin.root },
-          { name: 'Danh sách cửa hàng' },
+          { name: 'Danh sách' },
         ]}
         action={
           <Button
             variant="contained"
-            startIcon={<Iconify icon={'eva:plus-fill'} />}
-            to={PATH_DASHBOARD.storeAdmin.new}
+            startIcon={<Iconify icon={'akar-icons:file'} />}
+            to={PATH_DASHBOARD.storeAdmin.root}
             component={RouterLink}
           >
-            Thêm mới
+            Export
           </Button>
         }
       />
@@ -173,9 +173,8 @@ function StoreAdminListDashboard() {
                 {listStoreAdmin.map((row: IFormStore) => (
                   <StoreTableRow
                     key={row.code}
-                    row={row}
+                    row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
                     selected={selectedIds.includes(row.code)}
-                    // selected={true}
                     onSelectRow={(e) => {
                       handleSelectItem(row.code, e);
                     }}
