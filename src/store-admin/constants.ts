@@ -1,5 +1,5 @@
 export const TABLE_HEAD = [
-  { id: 'code', label: 'Mã', align: 'left' },
+  { id: 'code', label: 'Mã định dạnh', align: 'left' },
   { id: 'name', label: 'Tên', align: 'left' },
   { id: 'phoneNumber', label: 'Số điện thoại', align: 'left' },
   { id: 'address', label: 'Địa chỉ', align: 'left' },

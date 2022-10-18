@@ -116,10 +116,10 @@ function StoreAdminListDashboard() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="Danh mục"
+        heading="CỬA HÀNG"
         links={[
           { name: BREADCUMBS.STORE_ADMIN, href: PATH_DASHBOARD.storeAdmin.root },
-          { name: 'Danh mục' },
+          { name: 'Danh sách cửa hàng' },
         ]}
         action={
           <Button
