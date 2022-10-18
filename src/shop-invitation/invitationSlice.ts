@@ -1,6 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { IParams_Query } from './interfaces';
+import {
+  IParams_Query,
+  IPayloadDate,
+  IPayloadSearch,
+  IPayloadStatus,
+} from './interfaces';
 
 export const initialState: IParams_Query = {
   searchText: '',
@@ -13,16 +18,16 @@ export const invitationSlice = createSlice({
   name: 'shop_invitation',
   initialState,
   reducers: {
-    setSearchText: (state, action) => {
+    setSearchText: (state, action: IPayloadSearch) => {
       state.searchText = action.payload;
     },
-    setFirstScanStartDate: (state, action) => {
+    setFirstScanStartDate: (state, action: IPayloadDate) => {
       state.firstScanStartDate = action.payload;
     },
-    setFirstScanEndDate: (state, action) => {
+    setFirstScanEndDate: (state, action: IPayloadDate) => {
       state.firstScanEndDate = action.payload;
     },
-    setStatus: (state, action) => {
+    setStatus: (state, action: IPayloadStatus) => {
       state.status = action.payload;
     },
   },

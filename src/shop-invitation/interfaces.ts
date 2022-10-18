@@ -17,3 +17,16 @@ export interface IResShop_Invitation {
   spoonCode: string;
   isSuccess: boolean;
 }
+
+export interface IPayloadSearch {
+  payload: string;
+  type: string;
+}
+export interface IPayloadDate {
+  payload: Date | string;
+  type: string;
+}
+export interface IPayloadStatus {
+  payload: boolean | string;
+  type: string;
+}

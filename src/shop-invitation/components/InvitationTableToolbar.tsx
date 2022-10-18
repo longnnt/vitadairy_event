@@ -42,9 +42,9 @@ export const InvitationTableToolbar = (handleSearch: any) => {
     if (data.searchText) dispatch(setSearchText(data.searchText));
     if (typeof data.status === 'boolean') dispatch(setStatus(data.status));
 
-    dispatch(setFirstScanStartDate(data.firstScanStartDate));
+    dispatch(setFirstScanStartDate(data.firstScanStartDate as string));
 
-    dispatch(setFirstScanEndDate(data.firstScanEndDate));
+    dispatch(setFirstScanEndDate(data.firstScanEndDate as string));
   };
   return (
     <>
