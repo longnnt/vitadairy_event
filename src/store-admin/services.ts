@@ -6,7 +6,6 @@ export const getStoreAdmin = (params: IStoreParams) => {
   return axiosInstance.get<unknown, IDataStore>(`${API_STORE_ADMIN}`, { params });
 };
 
-export const deleteStoreAdmin = (ids: number[]) => {
-  const data = axiosInstance.delete(`${API_STORE_ADMIN}/${ids}`, { data: { id: ids } });
-  return data;
+export const deleteStoreAdmin = (id: number) => {
+  return axiosInstance.delete(`${API_STORE_ADMIN}/${id}`);
 };

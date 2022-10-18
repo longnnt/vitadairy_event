@@ -98,8 +98,8 @@ function StoreAdminListDashboard() {
   };
 
   const handleDeleteRows = (ids: number[]) => {
-    if (ids.length) {
-      mutationDetele.mutate(ids);
+    for (let i = 0; i < ids.length; i++){
+      mutationDetele.mutate(ids[i]);
       resetSelect();
     }
   };
