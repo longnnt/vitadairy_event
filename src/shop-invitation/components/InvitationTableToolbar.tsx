@@ -13,7 +13,7 @@ import {
   setStatus,
 } from '../invitationSlice';
 import { dispatch } from 'src/common/redux/store';
-import { IParams_Query } from '../interfaces';
+import { IParamsQuery } from '../interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const onSubmit = (data: IParams_Query) => {
+  const onSubmit = (data: IParamsQuery) => {
     console.log(data);
     if (data.searchText) dispatch(setSearchText(data.searchText));
     if (typeof data.status === 'boolean') dispatch(setStatus(data.status));

@@ -1,4 +1,4 @@
-export interface IParams_Query {
+export interface IParamsQuery {
   searchText?: string;
   firstScanStartDate?: Date | string;
   firstScanEndDate?: Date | string;
@@ -7,7 +7,7 @@ export interface IParams_Query {
   size?: number;
 }
 
-export interface IResShop_Invitation {
+export interface IResShopInvitation {
   userName: string;
   storeCode: string;
   phoneNumber: string;
@@ -29,4 +29,12 @@ export interface IPayloadDate {
 export interface IPayloadStatus {
   payload: boolean | string;
   type: string;
+}
+
+export interface IResShopInvitationData {
+  data: {
+    response: {
+      response: IResShopInvitation[];
+    };
+  };
 }

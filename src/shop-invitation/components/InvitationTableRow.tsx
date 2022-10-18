@@ -2,7 +2,7 @@ import { useState } from 'react';
 // @mui
 import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
 // @types
-import { IResShop_Invitation } from '../interfaces';
+import { IResShopInvitation } from '../interfaces';
 // components
 import Iconify from 'src/common/components/Iconify';
 // import { TableMoreMenu } from 'src/components/table';
@@ -10,7 +10,7 @@ import Iconify from 'src/common/components/Iconify';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IResShop_Invitation;
+  row: IResShopInvitation;
   selected?: boolean;
   onEditRow?: VoidFunction;
   onSelectRow: (checked: boolean) => void;

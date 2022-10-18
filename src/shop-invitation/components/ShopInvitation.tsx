@@ -24,8 +24,8 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
-import { useGetAllShop_Invitation } from '../hooks/useGetAllShop_invitation';
-import { IParams_Query, IResShop_Invitation } from '../interfaces';
+import { useGetAllShopInvitation } from '../hooks/useGetAllShopInvitation';
+import { IParamsQuery, IResShopInvitation } from '../interfaces';
 import {
   firstScanEndSelector,
   firstScanStartSelector,
@@ -35,7 +35,7 @@ import {
 import InvitationTableRow from './InvitationTableRow';
 import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
-import { useGetAllShop_InvitationByParams } from '../hooks/useGetAllShop_InvitationByParams';
+import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
 import { getQueryObj } from 'src/common/utils/getQueryObj';
 
 export default function ShopInvitation() {
@@ -64,7 +64,7 @@ export default function ShopInvitation() {
   const firstScanEnd = useSelector(firstScanEndSelector);
   // console.log(firstScanStart);
 
-  const params: IParams_Query = {
+  const params: IParamsQuery = {
     page: page + 1,
     size: rowsPerPage,
     firstScanEndDate: firstScanEnd,
@@ -75,10 +75,10 @@ export default function ShopInvitation() {
   const searchParams = getQueryObj(params);
   // console.log('jdksajflksds', searchParams);
 
-  const { data, refetch } = useGetAllShop_InvitationByParams(searchParams);
-  const tableData: IResShop_Invitation[] = data ? data?.data?.response?.response : [];
+  const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
+  const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
 
-  // console.log('MMMM', typeof data?.data?.response?.response[0].firstScanDate);
+  console.log('MMMM', data?.data?.response?.response);
 
   const navigate = useNavigate();
 
@@ -154,7 +154,7 @@ export default function ShopInvitation() {
               />
 
               <TableBody>
-                {tableData?.map((row: IResShop_Invitation) => (
+                {tableData?.map((row: IResShopInvitation) => (
                   <InvitationTableRow
                     key={row.qrCode}
                     row={row}

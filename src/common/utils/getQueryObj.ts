@@ -1,6 +1,6 @@
-import { IParams_Query } from 'src/shop-invitation/interfaces';
+import { IParamsQuery } from 'src/shop-invitation/interfaces';
 import { DEFAULT_PICK_DATE } from 'src/shop-invitation/constants';
-export const getQueryObj = (params: IParams_Query) => {
+export const getQueryObj = (params: IParamsQuery) => {
   const temp = { ...params };
 
   if (temp.searchText === '') delete temp.searchText;

@@ -2,11 +2,11 @@ import axios from 'axios';
 import { toQueryString } from 'src/common/constants/common.utils';
 // config
 import { HOST_API } from '../../config';
+import { store } from '../redux/store';
 
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  paramsSerializer: (param: object) => toQueryString(param),
   baseURL: HOST_API,
 });
 
@@ -15,21 +15,20 @@ axiosInstance.interceptors.response.use(
   (error) =>
     // Promise.reject((error.response && error.response.data) || 'Something went wrong')
     Promise.reject(
-      (error.response && error.response.data) || { mesage: 'Something went wrong' }
+      (error.response && error.response.data) || { message: 'Something went wrong' }
     )
 );
 
 axiosInstance.interceptors.request.use(async (config) => {
-  const getPersist = localStorage.getItem('redux-root');
+  // const getPersist = localStorage.getItem('redux-root');
+  const getToken = store.getState().authLogin;
 
-  if (getPersist) {
+  if (getToken) {
     try {
-      const authLogin = JSON.parse(getPersist).authLogin;
+      const token = getToken?.accessToken;
 
-      // const token = JSON.parse(authLogin).accessToken;
-
-      const token =
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjYwNzU1MzMsImV4cCI6MjM4NjA3NTUzM30.IRg3CBf7G7QtAmsunqZShSqAa6ASKXtZRWSAMJY_yxMgaaNrcYfIG367UH03DfAGt35cvSioE0dMo7TGwabNQA';
+      // const token =
+      //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjYwNzU1MzMsImV4cCI6MjM4NjA3NTUzM30.IRg3CBf7G7QtAmsunqZShSqAa6ASKXtZRWSAMJY_yxMgaaNrcYfIG367UH03DfAGt35cvSioE0dMo7TGwabNQA';
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${token}`,

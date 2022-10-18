@@ -8,6 +8,4 @@ export const TABLE_HEAD = [
   { id: 'success', label: 'isSuccess', align: 'left' },
 ];
 
-export const ROLE_OPTIONS = ['ALL', 'ISSUCCESS', 'NOT_SUCCESS'];
-
 export const DEFAULT_PICK_DATE = new Date(2000, 1, 1);

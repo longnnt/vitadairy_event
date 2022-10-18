@@ -1,13 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import {
-  IParams_Query,
-  IPayloadDate,
-  IPayloadSearch,
-  IPayloadStatus,
-} from './interfaces';
+import { IParamsQuery, IPayloadDate, IPayloadSearch, IPayloadStatus } from './interfaces';
 
-export const initialState: IParams_Query = {
+export const initialState: IParamsQuery = {
   searchText: '',
   firstScanStartDate: new Date(2000, 1, 1),
   firstScanEndDate: new Date(2000, 1, 1),
