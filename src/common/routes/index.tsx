@@ -52,7 +52,12 @@ export default function Router() {
           <DashboardLayout />
         </AuthGuard>
       ),
-      children: [],
+      children: [
+        {
+          path: 'shop-invitation',
+          element: <ShopInvitation />,
+        },
+      ],
     },
 
     // Main Routes
@@ -83,3 +88,8 @@ const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+
+// shop invitation
+const ShopInvitation = Loadable(
+  lazy(() => import('src/shop-invitation/components/ShopInvitation'))
+);

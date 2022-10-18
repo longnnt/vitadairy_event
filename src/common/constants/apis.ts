@@ -8,3 +8,5 @@ export const API_EVENT = '/events';
 export const API_EVENT_ADMIN = '/admin/events';
 export const API_REGISTER_EVENT_ADMIN = '/admin/events/register';
 export const API_DOCUMENT = '/admin/documents';
+// -----------------
+export const API_SHOP_INVITATION = '/api/admin/store-invitation';

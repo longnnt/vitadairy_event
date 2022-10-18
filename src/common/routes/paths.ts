@@ -42,5 +42,9 @@ export const PATH_DASHBOARD = {
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
+    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
+  // shop_invitation: {
+  //   invitationShop: path(ROOTS_DASHBOARD, '/shop-invitation'),
+  // },
 };
