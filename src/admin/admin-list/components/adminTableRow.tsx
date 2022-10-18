@@ -39,21 +39,6 @@ function AdminTableRow({
 
       <TableCell align="left">{status}</TableCell>
 
-      {/* <TableCell align="left" title={isActive === 1 ? 'actived' : 'unAtivced'}>
-        <Iconify
-          icon={isActive === 1 ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-          sx={{
-            width: 20,
-            height: 20,
-            color: 'success.main',
-
-            ...(isActive === -1 && { color: 'warning.main' }),
-          }}
-        />
-      </TableCell> */}
-{/* 
-      <TableCell align="left">{moment(createdDate).format('D/MM/YYYY')}</TableCell> */}
-
       <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
