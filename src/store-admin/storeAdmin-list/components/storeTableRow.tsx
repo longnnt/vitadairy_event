@@ -28,9 +28,7 @@ function StoreTableRow({
   };
 
   const handleOnChange = (active: boolean) => {
-    console.log(active)
     mutate({code, isActive: active}) 
-
   }
 
   return (
@@ -54,7 +52,6 @@ function StoreTableRow({
         <Switch
           checked={isActive ? true : false }
           onChange ={e=>{handleOnChange(e.target.checked)}}
-          // onChange = {e=>e.target.checked}
         />
       </TableCell>
 

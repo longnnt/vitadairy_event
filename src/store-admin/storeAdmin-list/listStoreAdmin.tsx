@@ -10,10 +10,9 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -21,14 +20,13 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { boolean, string } from 'yup';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
@@ -94,11 +92,6 @@ function StoreAdminListDashboard() {
     page + 1
   );
 
-  const handleFilterName = (filterName: string) => {
-    dispatch(setFilterName(filterName));
-    setPage(0);
-  };
-
   const handleDeleteRows = (ids: string[]) => {
     for (let i = 0; i < ids.length; i++){
       mutationDetele.mutate(ids[i]);
@@ -124,6 +117,16 @@ function StoreAdminListDashboard() {
           { name: 'Danh sách' },
         ]}
         action={
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon={'akar-icons:file'} />}
+            to={PATH_DASHBOARD.storeAdmin.root}
+            component={RouterLink}
+          >
+            Export
+          </Button>
+        }
+        action2={
           <Button
             variant="contained"
             startIcon={<Iconify icon={'akar-icons:file'} />}
@@ -214,3 +217,4 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
+
