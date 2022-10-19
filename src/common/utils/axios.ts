@@ -24,11 +24,12 @@ axiosInstance.interceptors.request.use(async (config) => {
 
   if (token) {
     try {
-      // const token =
-      //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjYwNzU1MzMsImV4cCI6MjM4NjA3NTUzM30.IRg3CBf7G7QtAmsunqZShSqAa6ASKXtZRWSAMJY_yxMgaaNrcYfIG367UH03DfAGt35cvSioE0dMo7TGwabNQA';
+      // const token2 =
+      //   'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjYxNDk4MTcsImV4cCI6MjM4NjE0OTgxN30.dy7a2Jg7bay5nHlaHL__6t9FcEX9-rJypEiKC2KChHaoIZ-wX1zExV5GEBEmmZiJD5o9PpcMqQrXaNwTCK0kZg';
       config.headers = {
         ...config.headers,
         Authorization: token,
+        // Authorization: token2,
       };
     } catch (e) {
       console.log(e);

@@ -9,3 +9,13 @@ export const TABLE_HEAD = [
 ];
 
 export const DEFAULT_PICK_DATE = new Date(2000, 1, 1);
+
+export const HEADERS_CSV = [
+  { label: 'Code', key: 'Code' },
+  { label: 'Name', key: 'Name' },
+  { label: 'Phone Number', key: 'Phone Number' },
+  { label: 'RegistrationDate', key: 'RegistrationDate' },
+  { label: "'FirstScanDate", key: "'FirstScanDate" },
+  { label: 'QrCode', key: 'QrCode' },
+  { label: 'Success', key: 'Success' },
+];

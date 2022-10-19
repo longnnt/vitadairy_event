@@ -16,7 +16,7 @@ export const authLoginSlice = createSlice({
       state.isAuthenticated = action.payload;
     },
     setAccessToken: (state, action) => {
-      state.accessToken = `Bearer ${action.payload}`;
+      state.accessToken = action.payload;
     },
     setLogout: (state, action) => {
       state.isAuthenticated = action.payload;

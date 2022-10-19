@@ -23,8 +23,7 @@ import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { TABLE_HEAD } from '../constants';
-import { useGetAllShopInvitation } from '../hooks/useGetAllShopInvitation';
+import { HEADERS_CSV, TABLE_HEAD } from '../constants';
 import { IParamsQuery, IResShopInvitation } from '../interfaces';
 import {
   firstScanEndSelector,
@@ -37,11 +36,10 @@ import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
 import { getQueryObj } from 'src/common/utils/getQueryObj';
-
+import { CSVLink } from 'react-csv';
+import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 export default function ShopInvitation() {
-  // const { data: allData } = useGetAllShop_Invitation();
-  // console.log(allData?.data);
-
+  const navigate = useNavigate();
   const {
     dense,
     page,
@@ -56,13 +54,10 @@ export default function ShopInvitation() {
     onChangeRowsPerPage,
   } = useTable();
 
-  console.log('.....', page);
-
   const searchText = useSelector(searchTextSelector);
   const statusSuccess = useSelector(statusSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
-  // console.log(firstScanStart);
 
   const params: IParamsQuery = {
     page: page + 1,
@@ -73,14 +68,10 @@ export default function ShopInvitation() {
     status: statusSuccess,
   };
   const searchParams = getQueryObj(params);
-  // console.log('jdksajflksds', searchParams);
 
   const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
   const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
-
-  console.log('MMMM', data?.data?.response?.response);
-
-  const navigate = useNavigate();
+  const { data: csvData } = useGetAllShopInvitationExportCsv(params);
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
@@ -106,13 +97,15 @@ export default function ShopInvitation() {
           { name: BREADCUMBS.SHOP_INVITATION_lIST },
         ]}
         action={
-          <Button
-            variant="contained"
-            startIcon={<Iconify icon={'eva:plus-fill'} />}
-            onClick={() => navigate(PATH_DASHBOARD.general.shop_invitation)}
-          >
-            Export
-          </Button>
+          <CSVLink data={csvData ? csvData.data : []}>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+              onClick={() => navigate(PATH_DASHBOARD.general.shop_invitation)}
+            >
+              Export
+            </Button>
+          </CSVLink>
         }
       />
       <Card>

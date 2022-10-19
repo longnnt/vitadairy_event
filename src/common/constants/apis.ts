@@ -10,3 +10,4 @@ export const API_REGISTER_EVENT_ADMIN = '/admin/events/register';
 export const API_DOCUMENT = '/admin/documents';
 // -----------------
 export const API_SHOP_INVITATION = '/api/admin/store-invitation';
+export const API_SHOP_INVITATION_EXPORTCSV = '/api/admin/store-invitation/export/csv';
