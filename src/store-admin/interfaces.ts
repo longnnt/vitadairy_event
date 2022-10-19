@@ -1,11 +1,16 @@
 export interface IFormStore {
-  code: number;
+  code: string;
   name: string;
   phoneNumber: number;
   address: string;
   qrLink: string;
   isActive: boolean;
   createdDate: string;
+}
+
+export interface IStoreActive {
+  code: string;
+  isActive: boolean;
 }
 
 export type IStoreAdminCallback = {

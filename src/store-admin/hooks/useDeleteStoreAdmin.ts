@@ -6,7 +6,7 @@ import { deleteStoreAdmin } from '../services';
 export function useDeleteStoreAdmin(callback: IStoreAdminCallback) {
   const queryClient = useQueryClient();
 
-  return useMutation((id: number) => deleteStoreAdmin(id), {
+  return useMutation((id: string) => deleteStoreAdmin(id), {
     onSuccess: (_rs, _variables) => {
       queryClient
         .getQueryCache()

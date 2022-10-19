@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -27,6 +28,7 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { boolean, string } from 'yup';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
@@ -79,7 +81,7 @@ function StoreAdminListDashboard() {
 
   const { data } = useGetStoreAdmin(searchParams);
 
-  const listStoreAdmin = data?.data?.response?.response || [];
+  const listStoreAdmin = data?.data?.response?.response || [];  
 
   const {
     isCheckedAll,
@@ -97,14 +99,14 @@ function StoreAdminListDashboard() {
     setPage(0);
   };
 
-  const handleDeleteRows = (ids: number[]) => {
+  const handleDeleteRows = (ids: string[]) => {
     for (let i = 0; i < ids.length; i++){
       mutationDetele.mutate(ids[i]);
       resetSelect();
     }
   };
 
-  const handleEditRow = (id: number) => {
+  const handleEditRow = (id: string) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
 

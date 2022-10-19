@@ -2,6 +2,7 @@ import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
 import { IPropsStoreTableRow } from '../../interfaces';
 
 // ----------------------------------------------------------------------
@@ -16,8 +17,8 @@ function StoreTableRow({
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
- 
 
+  const {mutate} = useGetStoreActive();
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(store.currentTarget);
   };
@@ -25,6 +26,12 @@ function StoreTableRow({
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
   };
+
+  const handleOnChange = (active: boolean) => {
+    console.log(active)
+    mutate({code, isActive: active}) 
+
+  }
 
   return (
     <TableRow hover selected={selected}>
@@ -46,7 +53,8 @@ function StoreTableRow({
       <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
           checked={isActive ? true : false }
-          onChange ={e=>{e.target.checked}}
+          onChange ={e=>{handleOnChange(e.target.checked)}}
+          // onChange = {e=>e.target.checked}
         />
       </TableCell>
 
