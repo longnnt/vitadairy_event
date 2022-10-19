@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toQueryString } from 'src/common/constants/common.utils';
 // config
 import { HOST_API } from '../../config';
+import { store } from '../redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -15,26 +16,20 @@ axiosInstance.interceptors.response.use(
   (error) =>
     Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
-
 axiosInstance.interceptors.request.use(async (config) => {
-  const getPersist = localStorage.getItem('redux-root');
-
-  if (getPersist) {
+  const token = store.getState()?.authLogin.accessToken
+  if (token) {
     try {
-      const authLogin = JSON.parse(getPersist).authLogin;
-
-      // const token = JSON.parse(authLogin).accessToken;
-
-      const token =
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW9sYW0wMzA3QGdtYWlsLmNvbSIsIlVzZXJUeXBlIjoiQURNSU4iLCJpYXQiOjE2NjU5NzY4MjQsImV4cCI6MjM4NTk3NjgyNH0.ACJEmsJaDwoAYfAYmdX0DKlAUrxOXifxpHWAlpkX21iiHZ8dwkOVN5LcjUHu0K82gS93epviKVrzVzlRw-wTqw';
       config.headers = {
         ...config.headers,
-        Authorization: `Bearer ${token}`,
-      };
-    } catch (e) {
-      console.log(e);
+        Authorization: `${token}`,
+      }
+    }catch(e){
+       console.log(e)
     }
   }
-  return config;
+  return {
+    ...config,
+  };
 });
 export default axiosInstance;
