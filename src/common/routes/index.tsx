@@ -52,7 +52,16 @@ export default function Router() {
           <DashboardLayout />
         </AuthGuard>
       ),
-      children: [],
+      children: [
+        // STORE
+        {
+          path: '',
+          children:[
+            { element: <Navigate to="/dashboard/store" replace />, index: true},
+            { path: 'stories', element: <ListStore />},
+          ],
+        },
+      ],
     },
 
     // Main Routes
@@ -79,6 +88,9 @@ export default function Router() {
 }
 
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
+
+// STORE ADMIN
+const ListStore = Loadable(lazy(() => import('../pages/store-admin/listStoreAdmin')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
