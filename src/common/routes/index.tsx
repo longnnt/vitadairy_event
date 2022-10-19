@@ -61,6 +61,13 @@ export default function Router() {
             { path: 'stories', element: <ListStore />},
           ],
         },
+        {
+          path: '',
+          children: [
+            { element: <Navigate to="/stories" replace />, index: true },
+            { path: 'admins', element: <AdminList/> },
+          ],
+        },
       ],
     },
 
@@ -95,3 +102,7 @@ const ListStore = Loadable(lazy(() => import('../pages/store-admin/listStoreAdmi
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+
+// ADMIN
+const AdminList = Loadable(lazy(()=>import('../pages/admin/adminList')))
+

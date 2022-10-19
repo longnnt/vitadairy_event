@@ -43,7 +43,7 @@ export default function AccountPopover() {
 
   const authLogout = useSelector(loginSelector);
   const logout = async () => {
-    dispatch(setAccessToken(null));
+    dispatch(setAccessToken(''));
     dispatch(setLogout(!authLogout));
   };
 
