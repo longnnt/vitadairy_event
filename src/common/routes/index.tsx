@@ -91,4 +91,5 @@ const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
 // ADMIN
-const AdminList = Loadable(lazy(()=>import('../pages/admin/adminList')))
+const AdminList = Loadable(lazy(()=>import('../pages/admin/AdminList')))
+

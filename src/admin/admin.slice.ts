@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 
 type StateProps = {
@@ -15,10 +15,10 @@ export const adminSlice = createSlice({
   name: 'admin',
   initialState,
   reducers: {
-    setFilterName: (state, action) => {
+    setFilterName: (state, action: PayloadAction<string>) => {
       state.filterName = action.payload;
     },
-    setFilterRole: (state, action) => {
+    setFilterRole: (state, action:PayloadAction<string>) => {
       state.filterRole = action.payload;
     },
   },

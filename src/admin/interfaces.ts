@@ -5,7 +5,7 @@ export interface IFormAdmin {
   firstName: string;
   lastName: string;
   status: string;
-  permission:number;
+  permission: number;
 }
 
 export type IAdminCallback = {
@@ -15,7 +15,7 @@ export type IAdminCallback = {
 
 export type IAdmins = Array<IFormAdmin>;
 
-export interface IAdminSearchParams {
+export interface IAdminParams {
   endDate?: string;
   page?: number;
   searchText?: string;
@@ -23,23 +23,25 @@ export interface IAdminSearchParams {
   startDate?: string;
 }
 export interface IResAdmins {
-  meta: {
-    status: number;
-    msg: string;
-  };
-  response: {
+  data: {
     meta: {
       status: number;
       msg: string;
     };
-    pagination: {
-      totalPages: number;
-      totalRecords: number;
-      currentPage: number;
-      recordsPerPage: number;
-      last: boolean;
+    response: {
+      meta: {
+        status: number;
+        msg: string;
+      };
+      pagination: {
+        totalPages: number;
+        totalRecords: number;
+        currentPage: number;
+        recordsPerPage: number;
+        last: boolean;
+      };
+      response: IAdmins;
     };
-    response: IAdmins;
   };
 }
 export type IPropsAdminTableRow = {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toQueryString } from 'src/common/constants/common.utils';
 // config
 import { HOST_API } from '../../config';
+import { store } from '../redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -16,11 +17,9 @@ axiosInstance.interceptors.response.use(
     Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 axiosInstance.interceptors.request.use(async (config) => {
-  const getPersist = localStorage.getItem('redux-root');
-  if (getPersist) {
+  const token = store.getState()?.authLogin.accessToken
+  if (token) {
     try {
-      const authLogin = JSON.parse(getPersist).authLogin;
-      const token = JSON.parse(authLogin).accessToken;
       config.headers = {
         ...config.headers,
         Authorization: `${token}`,

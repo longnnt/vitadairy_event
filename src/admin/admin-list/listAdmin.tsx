@@ -30,7 +30,7 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
 import { useGetAdmin } from '../hooks/useGetAdmin';
-import { IFormAdmin, IAdminSearchParams } from '../interfaces';
+import { IFormAdmin, IAdminParams } from '../interfaces';
 import {
   filterNameSelector,
   filterRoleSelector,
@@ -74,7 +74,7 @@ function AdminListDashboard() {
 
   const mutationDetele = useDeleteAdmin({ onSuccess, onError });
 
-  const searchParams: IAdminSearchParams = {
+  const searchParams: IAdminParams = {
     page: page,
     size: rowsPerPage,
   };
@@ -82,8 +82,8 @@ function AdminListDashboard() {
   if (filterName) searchParams.searchText = filterName;
 
   const { data } = useGetAdmin(searchParams);
-
-  const listAdmin = data?.response?.response || [];
+  const listAdmin = data?.data?.response?.response || [];
+  console.log(listAdmin)
   const {
     isCheckedAll,
     reset: resetSelect,
@@ -101,8 +101,8 @@ function AdminListDashboard() {
   };
 
   const handleDeleteRows = (ids: number[]) => {
-    if (ids.length) {
-      mutationDetele.mutate(ids);
+    for (let i = 0; i < ids.length; i++) {
+      mutationDetele.mutate(ids[i]);
       resetSelect();
     }
   };
@@ -110,7 +110,7 @@ function AdminListDashboard() {
   const handleEditRow = (id: number) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
-  const { totalRecords } = data?.response?.pagination || {
+  const { totalRecords } = data?.data?.response?.pagination || {
     totalRecords: 0,
   };
   const isNotFound = !listAdmin.length;
@@ -188,7 +188,7 @@ function AdminListDashboard() {
         </Scrollbar>
 
         <Box sx={{ position: 'relative' }}>
-          {!!data?.response?.pagination?.totalPages && (
+          {!!data?.data?.response?.pagination?.totalPages && (
             <TablePagination
               rowsPerPageOptions={[5, 10, 15]}
               component="div"
