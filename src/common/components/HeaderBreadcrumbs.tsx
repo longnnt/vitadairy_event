@@ -32,7 +32,8 @@ export default function HeaderBreadcrumbs({
           <Breadcrumbs links={links} {...other} />
         </Box>
 
-        {action && <Box sx={{ flexShrink: 0 }}>{action}</Box>}
+        {action && <Box sx={{ flexShrink: 0, m: 2 }}>{action}</Box>}
+
         {action2 && <Box sx={{ flexShrink: 0 }}>{action2}</Box>}
       </Box>
 

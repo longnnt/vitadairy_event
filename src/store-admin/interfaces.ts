@@ -8,10 +8,6 @@ export interface IFormStore {
   createdDate: string;
 }
 
-export interface IImportFile {
-  file: File;
-}
-
 export interface IStoreActive {
   code: string;
   isActive: boolean;

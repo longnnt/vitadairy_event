@@ -17,6 +17,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
+import { URLSearchParams } from 'url';
 import {
   TableHeadCustom,
   TableNoData,
@@ -29,10 +30,13 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
+import { useExportFile } from '../hooks/useExportFile';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
+import { useImportFile } from '../hooks/useImportFile';
 import { IFormStore, IStoreParams } from '../interfaces';
+import { exportStoreAdmin, importStoreAdmin } from '../services';
 import { filterNameSelector, setFilterName } from '../storeAdmin.slice';
-import { StoreTableRow } from './components/storeTableRow';
+import { StoreTableRow } from './components/StoreTableRow';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -66,15 +70,28 @@ function StoreAdminListDashboard() {
       variant: 'error',
     });
   };
+
+  const importSucess = () => {
+    enqueueSnackbar(' Import file successfully', {
+      variant: 'success',
+    });
+  };
+  const importFail = () => {
+    enqueueSnackbar('Import file error', {
+      variant: 'error',
+    });
+  };
+
   const filterName = useSelector(filterNameSelector);
 
   const mutationDetele = useDeleteStoreAdmin({ onSuccess, onError });
+
+  const { mutate } = useImportFile({ onSuccess: importSucess, onError: importFail });
 
   const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
   };
-
 
   if (filterName) searchParams.searchText = filterName;
 
@@ -100,6 +117,42 @@ function StoreAdminListDashboard() {
     }
   };
 
+  const importFile = async (event: any) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', event.target.files[0]);
+      mutate(formData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const exportFile = () => {
+    const expData: IStoreParams = {
+      searchText: filterName,
+      startDate: '',
+      endDate: '',
+      page: page,
+      size: rowsPerPage,
+    };
+    const response = exportStoreAdmin(expData);
+    response
+      .then((data) => {
+        const fileLink = document.createElement('a');
+
+        const blob = new Blob([data?.data], {
+          type: 'text/csv; charset=utf-8',
+        });
+
+        const fileName = `export_store_admin_${Date.now()}.csv`;
+
+        fileLink.href = window.URL.createObjectURL(blob);
+        fileLink.download = fileName;
+        fileLink.click();
+      })
+      .catch((err) => console.log(err));
+  };
+
   const handleEditRow = (id: string) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
@@ -118,16 +171,23 @@ function StoreAdminListDashboard() {
           { name: 'Danh sách' },
         ]}
         action={
-          <Button variant="contained" component="label">
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon={'mdi:file-import'} />}
+            component="label"
+          >
             Import
-            <input hidden accept="image/*" multiple type="csvfile" />
+            <input hidden multiple type="file" onChange={importFile} />
           </Button>
         }
         action2={
           <Button
             variant="contained"
-            startIcon={<Iconify icon={'eva:plus-fill'} />}
-            onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
+            startIcon={<Iconify icon={'mdi:file-export'} />}
+            onClick={(e) => {
+              exportFile();
+              navigate(PATH_DASHBOARD.storeAdmin.list);
+            }}
           >
             Export
           </Button>

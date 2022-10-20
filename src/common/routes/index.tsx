@@ -97,7 +97,7 @@ export default function Router() {
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 
 // STORE ADMIN
-const ListStore = Loadable(lazy(() => import('../../store-admin/store/listStoreAdmin')));
+const ListStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));

@@ -7,15 +7,6 @@ export function useGetStoreActive() {
   return useMutation(getActiveStore, {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEYS.STORE_ADMIN]);
-      // queryClient
-      //   .getQueryCache()
-      //   .findAll([QUERY_KEYS.STORE_ADMIN])
-      //   .forEach(({ queryKey }) => {
-      //     queryClient.invalidateQueries(queryKey);
-      //   });
-      // queryClient.invalidateQueries([QUERY_KEYS.STORE_ADMIN,{
-      //   refetchType: 'all',
-      // }]);
     },
     retry: 2,
   });
