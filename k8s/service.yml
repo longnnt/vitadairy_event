@@ -1,0 +1,15 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: vtd-fe-admin-v2
+spec:
+  selector:
+    app: vtd-fe-admin-v2
+  type: LoadBalancer
+  loadBalancerIP: '34.126.86.108'
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: vtd-fe-admin-v2
