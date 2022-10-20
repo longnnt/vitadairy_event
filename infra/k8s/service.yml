@@ -6,8 +6,6 @@ metadata:
 spec:
   selector:
     app: vtd-fe-admin-v2
-  type: LoadBalancer
-  loadBalancerIP: ''
   ports:
     - port: 80
       targetPort: 3000
