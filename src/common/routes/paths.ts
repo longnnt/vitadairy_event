@@ -51,5 +51,5 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/stories'),
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
-  }
+  },
 };

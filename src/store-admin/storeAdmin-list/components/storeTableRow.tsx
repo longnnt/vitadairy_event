@@ -48,7 +48,11 @@ function StoreTableRow({
 
       <TableCell align="left">{address}</TableCell>
 
-      <TableCell align="left"><a target="_blank" rel="noopener noreferrer" href={qrLink}>Tải QR</a></TableCell>
+      <TableCell align="left">
+        <a target="_blank" rel="noopener noreferrer" href={qrLink}>
+          Tải QR
+        </a>
+      </TableCell>
 
       <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
@@ -56,7 +60,6 @@ function StoreTableRow({
           onChange ={e=>{handleOnChange(e.target.checked)}}
         />
       </TableCell>
-
 
       <TableCell align="right">
         <TableMoreMenu
@@ -93,4 +96,3 @@ function StoreTableRow({
 }
 
 export { StoreTableRow };
-

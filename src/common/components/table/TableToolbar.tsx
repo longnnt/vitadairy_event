@@ -37,7 +37,7 @@ export default function TableToolbar({
           textTransform: 'capitalize',
         }}
       >
-        { roleOptions.map((option) => (
+        {roleOptions.map((option) => (
           <MenuItem
             key={option}
             value={option}
