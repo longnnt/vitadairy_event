@@ -7,13 +7,9 @@ spec:
   selector:
     app: vtd-fe-admin-v2
   type: LoadBalancer
-  # loadBalancerIP: 34.124.149.247
+  loadBalancerIP: 34.124.149.247
   ports:
     - port: 80
       targetPort: 3000
       protocol: TCP
       name: vtd-fe-admin-v2
-# status:
-#   loadBalancer:
-#     ingress:
-#     - ip: 34.124.149.247
