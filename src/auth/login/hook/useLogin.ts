@@ -7,7 +7,10 @@ export const useAuthlogin = (callback: ILoginCallback) => {
   return {
     ...useMutation(getAuth, {
       onSuccess: (data, context) => {
-        const { accessToken } = data.data;
+        if (!data) return;
+        const { accessToken } = data.data.response.auth;
+        console.log('accesstoken', accessToken);
+
         dispatch(setAccessToken(`Bearer ${accessToken}`));
         dispatch(setLogin(true));
         callback.onSuccess && callback.onSuccess();

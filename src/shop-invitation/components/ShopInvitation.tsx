@@ -35,7 +35,8 @@ import InvitationTableRow from './InvitationTableRow';
 import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
-import { getQueryObj } from 'src/common/utils/getQueryObj';
+import { useGetAllShopInvitation } from '../hooks/useGetAllShopInvitation';
+import { getQueryObj } from 'src/shop-invitation/getQueryObj';
 import { CSVLink } from 'react-csv';
 import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 export default function ShopInvitation() {
@@ -72,6 +73,7 @@ export default function ShopInvitation() {
   const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
   const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
   const { data: csvData } = useGetAllShopInvitationExportCsv();
+  const { data: allData } = useGetAllShopInvitation();
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
@@ -97,7 +99,10 @@ export default function ShopInvitation() {
           { name: BREADCUMBS.SHOP_INVITATION_lIST },
         ]}
         action={
-          <CSVLink data={csvData ? csvData.data : []}>
+          <CSVLink
+            headers={csvData ? csvData.data.split(',') : []}
+            data={allData ? allData?.data?.response?.response : []}
+          >
             <Button
               variant="contained"
               startIcon={<Iconify icon={'eva:plus-fill'} />}
