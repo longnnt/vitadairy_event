@@ -10,32 +10,30 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
-import { URLSearchParams } from 'url';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
-import { dispatch, useSelector } from 'src/common/redux/store';
+import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
-import { useExportFile } from '../hooks/useExportFile';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
 import { IFormStore, IStoreParams } from '../interfaces';
-import { exportStoreAdmin, importStoreAdmin } from '../services';
-import { filterNameSelector, setFilterName } from '../storeAdmin.slice';
+import { exportStoreAdmin } from '../services';
+import { filterNameSelector } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 
 function StoreAdminListDashboard() {
@@ -171,6 +169,8 @@ function StoreAdminListDashboard() {
           { name: 'Danh sách' },
         ]}
         action={
+          <>
+          <Box marginRight="8px" display='inline'>
           <Button
             variant="contained"
             startIcon={<Iconify icon={'mdi:file-import'} />}
@@ -179,18 +179,18 @@ function StoreAdminListDashboard() {
             Import
             <input hidden multiple type="file" onChange={importFile} />
           </Button>
-        }
-        action2={
+          </Box>
           <Button
-            variant="contained"
-            startIcon={<Iconify icon={'mdi:file-export'} />}
-            onClick={(e) => {
-              exportFile();
-              navigate(PATH_DASHBOARD.storeAdmin.list);
-            }}
-          >
-            Export
-          </Button>
+          variant="contained"
+          startIcon={<Iconify icon={'mdi:file-export'} />}
+          onClick={() => {
+            exportFile();
+            navigate(PATH_DASHBOARD.storeAdmin.list);
+          }}
+        >
+          Export
+        </Button>
+        </>
         }
       />
       <Card>
@@ -222,12 +222,12 @@ function StoreAdminListDashboard() {
               <TableHeadCustom
                 order={order}
                 orderBy={orderBy}
-                isSelectAll={isCheckedAll}
+                // isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={listStoreAdmin.length}
-                numSelected={selectedIds.length}
+                // numSelected={selectedIds.length}
                 onSort={onSort}
-                onSelectAllRows={handleCheckAll}
+                // onSelectAllRows={handleCheckAll}
               />
 
               <TableBody>
@@ -276,3 +276,4 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
+

@@ -17,7 +17,6 @@ function StoreTableRow({
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-  const [transactionData, setTransactionData] = useState([])
 
   const {mutate} = useGetStoreActive();
 
@@ -35,9 +34,9 @@ function StoreTableRow({
 
   return (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell>
+      </TableCell> */}
       <TableCell align="left">{code}</TableCell>
 
       <TableCell align="left">{phoneNumber}</TableCell>
@@ -61,7 +60,7 @@ function StoreTableRow({
         />
       </TableCell>
 
-      <TableCell align="right">
+      {/* <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -90,7 +89,7 @@ function StoreTableRow({
             </>
           }
         />
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 }

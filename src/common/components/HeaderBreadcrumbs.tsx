@@ -8,7 +8,6 @@ import Breadcrumbs, { Props as BreadcrumbsProps } from './Breadcrumbs';
 
 interface Props extends BreadcrumbsProps {
   action?: ReactNode;
-  action2?: ReactNode;
   heading: string;
   moreLink?: string | string[];
 }
@@ -16,7 +15,6 @@ interface Props extends BreadcrumbsProps {
 export default function HeaderBreadcrumbs({
   links,
   action,
-  action2,
   heading,
   moreLink = '' || [],
   sx,
@@ -32,9 +30,7 @@ export default function HeaderBreadcrumbs({
           <Breadcrumbs links={links} {...other} />
         </Box>
 
-        {action && <Box sx={{ flexShrink: 0, m: 2 }}>{action}</Box>}
-
-        {action2 && <Box sx={{ flexShrink: 0 }}>{action2}</Box>}
+        {action && <Box sx={{ flexShrink: 0 }}>{action}</Box>}
       </Box>
 
       <Box sx={{ mt: 2 }}>
