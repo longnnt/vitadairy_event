@@ -11,5 +11,7 @@ export const deleteStoreAdmin = (id: string) => {
 };
 
 export const getActiveStore = (params: IStoreActive) => {
-  return axiosInstance.patch<unknown, IStoreActive>(`${API_STORE_ADMIN}/${params.code}/active?isActive=${params.isActive}`);
+  return axiosInstance.patch<unknown, IStoreActive>(
+    `${API_STORE_ADMIN}/${params.code}/active?isActive=${params.isActive}`
+  );
 };

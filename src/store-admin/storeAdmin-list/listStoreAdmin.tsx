@@ -81,7 +81,7 @@ function StoreAdminListDashboard() {
 
   const { data } = useGetStoreAdmin(searchParams);
 
-  const listStoreAdmin = data?.data?.response?.response || [];  
+  const listStoreAdmin = data?.data?.response?.response || [];
 
   const {
     isCheckedAll,
@@ -100,7 +100,7 @@ function StoreAdminListDashboard() {
   };
 
   const handleDeleteRows = (ids: string[]) => {
-    for (let i = 0; i < ids.length; i++){
+    for (let i = 0; i < ids.length; i++) {
       mutationDetele.mutate(ids[i]);
       resetSelect();
     }
@@ -175,7 +175,10 @@ function StoreAdminListDashboard() {
                 {listStoreAdmin.map((row: IFormStore) => (
                   <StoreTableRow
                     key={row.code}
-                    row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
+                    row={{
+                      ...row,
+                      createdDate: new Date(row.createdDate).toLocaleString(),
+                    }}
                     selected={selectedIds.includes(row.code)}
                     onSelectRow={(e) => {
                       handleSelectItem(row.code, e);

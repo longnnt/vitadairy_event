@@ -18,7 +18,7 @@ export const adminSlice = createSlice({
     setFilterName: (state, action: PayloadAction<string>) => {
       state.filterName = action.payload;
     },
-    setFilterRole: (state, action:PayloadAction<string>) => {
+    setFilterRole: (state, action: PayloadAction<string>) => {
       state.filterRole = action.payload;
     },
   },
