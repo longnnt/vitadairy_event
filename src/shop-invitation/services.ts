@@ -15,6 +15,6 @@ export const getAllShopInvitationByparams = (
   return axiosInstance.get(API_SHOP_INVITATION, { params });
 };
 
-export const getAllShopInvitationExport = (params: IParamsQuery) => {
-  return axiosInstance.get(API_SHOP_INVITATION_EXPORTCSV, { params });
+export const getAllShopInvitationExport = () => {
+  return axiosInstance.get(API_SHOP_INVITATION_EXPORTCSV);
 };

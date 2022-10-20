@@ -71,7 +71,7 @@ export default function ShopInvitation() {
 
   const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
   const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
-  const { data: csvData } = useGetAllShopInvitationExportCsv(params);
+  const { data: csvData } = useGetAllShopInvitationExportCsv();
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
