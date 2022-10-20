@@ -1,5 +1,5 @@
 import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
@@ -17,8 +17,10 @@ function StoreTableRow({
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
+  const [transactionData, setTransactionData] = useState([])
 
   const {mutate} = useGetStoreActive();
+
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(store.currentTarget);
   };

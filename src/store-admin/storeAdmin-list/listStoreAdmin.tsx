@@ -10,7 +10,7 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions
+  TableSelectedActions,
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -75,11 +75,12 @@ function StoreAdminListDashboard() {
     size: rowsPerPage,
   };
 
+
   if (filterName) searchParams.searchText = filterName;
 
   const { data } = useGetStoreAdmin(searchParams);
 
-  const listStoreAdmin = data?.data?.response?.response || [];  
+  const listStoreAdmin = data?.data?.response?.response || [];
 
   const {
     isCheckedAll,
@@ -93,7 +94,7 @@ function StoreAdminListDashboard() {
   );
 
   const handleDeleteRows = (ids: string[]) => {
-    for (let i = 0; i < ids.length; i++){
+    for (let i = 0; i < ids.length; i++) {
       mutationDetele.mutate(ids[i]);
       resetSelect();
     }
@@ -117,21 +118,16 @@ function StoreAdminListDashboard() {
           { name: 'Danh sách' },
         ]}
         action={
-          <Button
-            variant="contained"
-            startIcon={<Iconify icon={'akar-icons:file'} />}
-            to={PATH_DASHBOARD.storeAdmin.root}
-            component={RouterLink}
-          >
-            Export
+          <Button variant="contained" component="label">
+            Import
+            <input hidden accept="image/*" multiple type="csvfile" />
           </Button>
         }
         action2={
           <Button
             variant="contained"
-            startIcon={<Iconify icon={'akar-icons:file'} />}
-            to={PATH_DASHBOARD.storeAdmin.root}
-            component={RouterLink}
+            startIcon={<Iconify icon={'eva:plus-fill'} />}
+            onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
           >
             Export
           </Button>
@@ -178,7 +174,10 @@ function StoreAdminListDashboard() {
                 {listStoreAdmin.map((row: IFormStore) => (
                   <StoreTableRow
                     key={row.code}
-                    row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
+                    row={{
+                      ...row,
+                      createdDate: new Date(row.createdDate).toLocaleString(),
+                    }}
                     selected={selectedIds.includes(row.code)}
                     onSelectRow={(e) => {
                       handleSelectItem(row.code, e);
@@ -217,4 +216,3 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
-
