@@ -1,6 +1,10 @@
 import { Stack, InputAdornment, TextField, MenuItem } from '@mui/material';
 // components
+<<<<<<< HEAD
 import Iconify from '../Iconify';
+=======
+import Iconify from 'src/common/components/Iconify';
+>>>>>>> 2813d6e6326a234b72b45e52e01abd0c40e479d8
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +41,11 @@ export default function TableToolbar({
           textTransform: 'capitalize',
         }}
       >
+<<<<<<< HEAD
         {roleOptions.map((option) => (
+=======
+        { roleOptions.map((option) => (
+>>>>>>> 2813d6e6326a234b72b45e52e01abd0c40e479d8
           <MenuItem
             key={option}
             value={option}

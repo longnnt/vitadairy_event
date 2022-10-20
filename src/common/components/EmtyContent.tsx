@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Box, BoxProps } from '@mui/material';
 //
 import Image from './Image';
-import { svg } from '../svg';
+import { svg } from '../image/svg';
 
 // ----------------------------------------------------------------------
 

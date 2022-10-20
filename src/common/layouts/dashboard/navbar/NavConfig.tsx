@@ -54,6 +54,33 @@ const navConfig = [
       },
     ],
   },
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'management',
+    items: [
+      // STORE
+      {
+        title: 'Cửa hàng',
+        path: PATH_DASHBOARD.storeAdmin.root,
+        icon: ICONS.booking,
+        children: [
+          {
+            title: 'Danh sách',
+            path: PATH_DASHBOARD.storeAdmin.list,
+          }
+        ],
+      },
+      {
+        title: 'Quản lý quản trị viên',
+        path: PATH_DASHBOARD.admin.root,
+        icon: ICONS.policy,
+        children: [
+          { title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list },
+        ],
+      },
+    ],
+  }
 ];
 
 export default navConfig;

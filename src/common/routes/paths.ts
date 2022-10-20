@@ -35,7 +35,7 @@ export const PATH_PAGE = {
 };
 
 export const PATH_DASHBOARD = {
-  root: ROOTS_DASHBOARD,
+  root: '/',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
@@ -44,7 +44,16 @@ export const PATH_DASHBOARD = {
     booking: path(ROOTS_DASHBOARD, '/booking'),
     shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
+  admin: {
+    root: path(ROOTS_DASHBOARD, '/admins'),
+    list: path(ROOTS_DASHBOARD, '/admins'),
+  },
+  storeAdmin: {
+    root: path(ROOTS_DASHBOARD, '/stories'),
+    list: path(ROOTS_DASHBOARD, '/stories'),
+    new: path(ROOTS_DASHBOARD, '/store/new'),
+  },
   // shop_invitation: {
-  //   invitationShop: path(ROOTS_DASHBOARD, '/shop-invitation'),
+  //   root: path(ROOTS_DASHBOARD, '/shop-invitation'),
   // },
 };
