@@ -7,6 +7,7 @@ export const useAuthlogin = (callback: ILoginCallback) => {
   return {
     ...useMutation(getAuth, {
       onSuccess: (data, context) => {
+        if (!data) return;
         const { accessToken } = data.data.response.auth;
         dispatch(setAccessToken('Bearer ' + accessToken));
         dispatch(setLogin(true));
