@@ -1,6 +1,6 @@
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, Typography } from '@mui/material';
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
@@ -15,6 +15,9 @@ import { IconButtonAnimate } from '../../../components/animate';
 //
 import LanguagePopover from './LanguagePopover';
 import AccountPopover from './AccountPopover';
+import { useSelector } from 'react-redux';
+import { emailSelector } from 'src/auth/login/login.slice';
+import { store } from 'src/common/redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -66,6 +69,7 @@ export default function DashboardHeader({
   verticalLayout = false,
 }: Props) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
+  const email = store.getState()?.login.email;
 
   const isDesktop = useResponsive('up', 'lg');
 
@@ -95,8 +99,11 @@ export default function DashboardHeader({
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <LanguagePopover />
+          {/* <LanguagePopover /> */}
           <AccountPopover />
+          <Typography variant="subtitle2" sx={{ color: 'primary.main' }} noWrap>
+            {email}
+          </Typography>
         </Stack>
       </Toolbar>
     </RootStyle>

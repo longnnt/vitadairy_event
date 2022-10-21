@@ -5,3 +5,13 @@ export const TABLE_HEAD = [
   { id: 'status', label: 'Status', align: 'left' },
   { id: '' },
 ];
+export const defaultValues = {
+  email: '',
+  password: '',
+};
+
+export const status = ['ACTIVE', 'INACTIVE'];
+export const permission = [
+  { id: 1, name: 'Chỉ xem' },
+  { id: 2, name: 'Đầy đủ' },
+];

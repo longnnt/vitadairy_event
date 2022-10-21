@@ -10,7 +10,7 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -20,24 +20,22 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import {
+  filterNameSelector,
+  setFilterName
+} from '../admin.slice';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
 import { useGetAdmin } from '../hooks/useGetAdmin';
-import { IFormAdmin, IAdminParams } from '../interfaces';
-import {
-  filterNameSelector,
-  filterRoleSelector,
-  setFilterName,
-  setFilterRole,
-} from '../admin.slice';
-import { AdminTableRow } from './components/adminTableRow';
+import { IAdminParams, IFormAdmin } from '../interfaces';
+import { AdminTableRow } from './components/AdminTableRow';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -61,7 +59,7 @@ function AdminListDashboard() {
   const { enqueueSnackbar } = useSnackbar();
 
   const onSuccess = () => {
-    enqueueSnackbar('Delete category successfully', {
+    enqueueSnackbar('Delete admin successfully', {
       variant: 'success',
     });
   };
@@ -83,7 +81,6 @@ function AdminListDashboard() {
 
   const { data } = useGetAdmin(searchParams);
   const listAdmin = data?.data?.response?.response || [];
-  console.log(listAdmin)
   const {
     isCheckedAll,
     reset: resetSelect,
@@ -108,7 +105,7 @@ function AdminListDashboard() {
   };
 
   const handleEditRow = (id: number) => {
-    // navigate(PATH_DASHBOARD.policy.editCategory(id));
+    navigate(PATH_DASHBOARD.admin.edit(id));
   };
   const { totalRecords } = data?.data?.response?.pagination || {
     totalRecords: 0,
@@ -118,12 +115,15 @@ function AdminListDashboard() {
     <>
       <HeaderBreadcrumbs
         heading="Danh sách admin"
-        links={[{ name: BREADCUMBS.ADMIN_LIST, href: PATH_DASHBOARD.admin.root }]}
+        links={[
+          { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
+          { name: 'List admin' },
+        ]}
         action={
           <Button
             variant="contained"
             startIcon={<Iconify icon={'eva:plus-fill'} />}
-            to={PATH_DASHBOARD.admin.root}
+            to={PATH_DASHBOARD.admin.create}
             component={RouterLink}
           >
             Thêm mới

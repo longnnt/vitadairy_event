@@ -40,4 +40,5 @@ export const BREADCUMBS = {
   CATEGORY_ENTERPRISE_NEW: 'category enterprise add new',
   ADMIN_LIST:'List admin',
   STORE_ADMIN: 'Cửa hàng',
+  NEW_ADMIN: 'create admin',
 };

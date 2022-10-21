@@ -66,6 +66,8 @@ export default function Router() {
           children: [
             { element: <Navigate to="/stories" replace />, index: true },
             { path: 'admins', element: <AdminList/> },
+            { path: 'admins/create', element: <AddNewAdmin /> },
+            { path: 'admins/:id', element: <EditAdmin /> },
           ],
         },
       ],
@@ -104,5 +106,7 @@ const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
 // ADMIN
-const AdminList = Loadable(lazy(()=>import('../pages/admin/adminList')))
+const AdminList = Loadable(lazy(()=>import('../../admin/admin-pages/AdminList')))
+const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
+const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
 

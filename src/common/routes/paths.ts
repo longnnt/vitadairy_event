@@ -46,6 +46,8 @@ export const PATH_DASHBOARD = {
   admin: {
     root: path(ROOTS_DASHBOARD, '/admins'),
     list: path(ROOTS_DASHBOARD, '/admins'),
+    create: path(ROOTS_DASHBOARD, '/admins/create'),
+    edit: (adminId: number) => path(ROOTS_DASHBOARD, `/admins/${adminId}`),
   },
   storeAdmin: {
     root: path(ROOTS_DASHBOARD, '/stories'),

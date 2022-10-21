@@ -1,7 +1,6 @@
 export interface IFormAdmin {
   id: number;
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
   status: string;
@@ -51,3 +50,13 @@ export type IPropsAdminTableRow = {
   onSelectRow: (checked: boolean) => void;
   onDeleteRow: VoidFunction;
 };
+export interface IResEditAdmin {
+  response: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    permission: number;
+    status: string;
+  };
+}
