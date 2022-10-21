@@ -117,7 +117,7 @@ function AdminListDashboard() {
         heading="Danh sách admin"
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
-          { name: 'List admin' },
+          { name: 'List admins' },
         ]}
         action={
           <Button
@@ -126,7 +126,7 @@ function AdminListDashboard() {
             to={PATH_DASHBOARD.admin.create}
             component={RouterLink}
           >
-            Thêm mới
+            Thêm mới 
           </Button>
         }
       />
