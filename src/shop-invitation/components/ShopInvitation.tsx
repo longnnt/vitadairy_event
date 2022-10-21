@@ -23,8 +23,8 @@ import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { HEADERS_CSV, TABLE_HEAD } from '../constants';
-import { IParamsQuery, IResShopInvitation } from '../interfaces';
+import { HEADERS_CSV, TABLE_HEAD } from '../common/constants';
+import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
 import {
   firstScanEndSelector,
   firstScanStartSelector,
@@ -36,7 +36,7 @@ import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
 import { useGetAllShopInvitation } from '../hooks/useGetAllShopInvitation';
-import { getQueryObj } from 'src/shop-invitation/getQueryObj';
+import { getQueryObj } from 'src/shop-invitation/common/ultils/getQueryObj';
 import { CSVLink } from 'react-csv';
 import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 export default function ShopInvitation() {

@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { IParamsQuery, IPayloadDate, IPayloadSearch, IPayloadStatus } from './interfaces';
+import {
+  IParamsQuery,
+  IPayloadDate,
+  IPayloadSearch,
+  IPayloadStatus,
+} from './common/interfaces';
 
 export const initialState: IParamsQuery = {
   searchText: '',

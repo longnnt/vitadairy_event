@@ -2,7 +2,7 @@ import { useState } from 'react';
 // @mui
 import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
 // @types
-import { IResShopInvitation } from '../interfaces';
+import { IResShopInvitation } from '../common/interfaces';
 // components
 import Iconify from 'src/common/components/Iconify';
 // import { TableMoreMenu } from 'src/components/table';

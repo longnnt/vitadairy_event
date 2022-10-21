@@ -3,7 +3,11 @@ import {
   API_SHOP_INVITATION_EXPORTCSV,
 } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
-import { IParamsQuery, IResShopInvitation, IResShopInvitationData } from './interfaces';
+import {
+  IParamsQuery,
+  IResShopInvitation,
+  IResShopInvitationData,
+} from './common/interfaces';
 
 export const getAllShopInvitation = (): Promise<IResShopInvitationData> => {
   return axiosInstance.get(API_SHOP_INVITATION);

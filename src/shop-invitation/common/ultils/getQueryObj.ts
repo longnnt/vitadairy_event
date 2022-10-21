@@ -1,5 +1,5 @@
-import { IParamsQuery } from 'src/shop-invitation/interfaces';
-import { DEFAULT_PICK_DATE } from 'src/shop-invitation/constants';
+import { IParamsQuery } from 'src/shop-invitation/common/interfaces';
+import { DEFAULT_PICK_DATE } from 'src/shop-invitation/common/constants';
 export const getQueryObj = (params: IParamsQuery) => {
   const temp = { ...params };
 

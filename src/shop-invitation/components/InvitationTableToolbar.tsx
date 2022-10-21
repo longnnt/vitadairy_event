@@ -13,7 +13,7 @@ import {
   setStatus,
 } from '../invitationSlice';
 import { dispatch } from 'src/common/redux/store';
-import { IParamsQuery } from '../interfaces';
+import { IParamsQuery } from '../common/interfaces';
 
 // ----------------------------------------------------------------------
 
