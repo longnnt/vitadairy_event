@@ -36,6 +36,7 @@ import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
 import { useGetAdmin } from '../hooks/useGetAdmin';
 import { IAdminParams, IFormAdmin } from '../interfaces';
 import { AdminTableRow } from './components/AdminTableRow';
+import  useMessage from 'src/store-admin/hooks/useMessage';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -56,21 +57,18 @@ function AdminListDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-  const { enqueueSnackbar } = useSnackbar();
 
-  const onSuccess = () => {
-    enqueueSnackbar('Delete admin successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Delete error', {
-      variant: 'error',
-    });
-  };
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const filterName = useSelector(filterNameSelector);
 
-  const mutationDetele = useDeleteAdmin({ onSuccess, onError });
+  const mutationDetele = useDeleteAdmin({
+    onSuccess: () => {
+      showSuccessSnackbar('Delete admin successfully')
+    },
+    onError: () => {
+      showErrorSnackbar('Delete admin fail')
+    },
+  });
 
   const searchParams: IAdminParams = {
     page: page,

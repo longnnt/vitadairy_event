@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { getRelatedCacheKeys } from 'src/common/utils/getRelatedCacheKeys';
+import { statusResError } from '../constants';
 import { IAdminCallback } from '../interfaces';
 import { addAllNewAccount } from '../services';
 
@@ -13,7 +14,7 @@ export const useAddNewAdmin = (callback: IAdminCallback) => {
   return {
     ...useMutation(addAllNewAccount, {
       onSuccess: (_result, _variables) => {
-        if (_result.data.meta.status > 1000) {
+        if (_result.data.meta.status > statusResError) {
           return callback.onError && callback.onError();
         }
         navigate(PATH_DASHBOARD.admin.list);

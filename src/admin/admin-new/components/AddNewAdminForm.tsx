@@ -9,26 +9,20 @@ import { defaultValues, permission, status } from '../../constants';
 import { IFormAdmin } from 'src/admin/interfaces';
 import { NewAdminSchema } from 'src/admin/schema';
 import { useAddNewAdmin } from '../../hooks/useAddNewAccount';
+import  useMessage from 'src/store-admin/hooks/useMessage';
 
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
+
 
 function AddFormNewAdmin() {
-  const { enqueueSnackbar } = useSnackbar();
-  const onSuccess = () => {
-    enqueueSnackbar('Add admin successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Add admin error', {
-      variant: 'error',
-    });
-  };
-  const { mutate, isSuccess } = useAddNewAdmin({ onSuccess, onError });
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { mutate, isSuccess } = useAddNewAdmin({
+    onSuccess: () => {
+      showSuccessSnackbar('Add admin successfully')
+    },
+    onError: () => {
+      showErrorSnackbar('Add admin fail')
+    },
+  });
 
   const methods = useForm<IFormAdmin>({
     resolver: yupResolver(NewAdminSchema),

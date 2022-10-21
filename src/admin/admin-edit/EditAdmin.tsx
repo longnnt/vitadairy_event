@@ -9,26 +9,25 @@ import { setAdmintDetail } from '../admin.slice';
 import { useEffect } from 'react';
 import { dispatch } from 'src/common/redux/store';
 import { EditFormAdmin } from './components/EditAdminForm';
-// import { AddFormNewAdmin } from './components/AddNewAdminForm';
+import useMessage from 'src/store-admin/hooks/useMessage'
 
 export default function EditAdminDashboard() {
   const params = useParams();
   const id = params?.id;
 
-  const { enqueueSnackbar } = useSnackbar();
-  const onSuccess = () => {
-    enqueueSnackbar('Get admin successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Get admin error', {
-      variant: 'error',
-    });
-  };
+  
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+
   const { data } = useGetAdminById({
     id: parseInt(id as string),
-    callback: { onSuccess, onError },
+    callback: {
+      onSuccess: () => {
+        showSuccessSnackbar('Get Admin successfully')
+      },
+      onError: () => {
+        showErrorSnackbar('Get admin fail')
+      },
+    },
   });
   const adminDetail: IResEditAdmin = data?.data;
   useEffect(() => {

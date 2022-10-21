@@ -30,6 +30,7 @@ import { useSelector } from 'react-redux';
 import { adminDetailSelector } from 'src/admin/admin.slice';
 import { useEditAdmin } from 'src/admin/hooks/useEditAdmin';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { isBuffer } from 'lodash';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -55,6 +56,7 @@ function EditFormAdmin() {
       variant: 'error',
     });
   };
+  // const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { mutate, isSuccess } = useEditAdmin({ onSuccess, onError });
   useEffect(() => {
     console.log(mutate);
@@ -73,17 +75,13 @@ function EditFormAdmin() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
-
-  useDeepCompareEffect(() => {
-    if (dataAdmin?.response?.email) setValue('email', dataAdmin.response.email);
-    if (dataAdmin?.response?.firstName)
-      setValue('firstName', dataAdmin.response.firstName);
-    if (dataAdmin?.response?.lastName) setValue('lastName', dataAdmin.response.lastName);
-    if (dataAdmin?.response?.permission)
-      setValue('permission', dataAdmin.response.permission);
-    if (dataAdmin?.response?.status) setValue('status', dataAdmin.response.status);
-    if (dataAdmin?.response?.id) setValue('id', dataAdmin.response.id);
-  }, [dataAdmin]);
+  const dataRes = dataAdmin?.response;
+  useEffect(() => {
+    if(dataRes){
+       dataRes
+       reset(dataRes)
+    }
+  }, [dataAdmin])
   const onSubmit = async (data: IFormAdmin) => {
     const dataEdit = {
       email: data.email,
