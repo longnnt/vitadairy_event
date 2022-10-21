@@ -20,7 +20,6 @@ axiosInstance.interceptors.response.use(
 );
 axiosInstance.interceptors.request.use(async (config) => {
   const token = store.getState()?.authLogin.accessToken;
-
   if (token) {
     try {
       config.headers = {

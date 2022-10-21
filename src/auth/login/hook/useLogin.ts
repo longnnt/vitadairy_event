@@ -9,9 +9,7 @@ export const useAuthlogin = (callback: ILoginCallback) => {
       onSuccess: (data, context) => {
         if (!data) return;
         const { accessToken } = data.data.response.auth;
-        console.log('accesstoken', accessToken);
-
-        dispatch(setAccessToken(`Bearer ${accessToken}`));
+        dispatch(setAccessToken('Bearer ' + accessToken));
         dispatch(setLogin(true));
         callback.onSuccess && callback.onSuccess();
       },

@@ -48,7 +48,7 @@ export interface IDataStore {
       };
       response: IStories;
     };
-  }
+  };
 }
 
 export type IPropsStoreTableRow = {

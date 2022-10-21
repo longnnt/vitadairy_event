@@ -83,7 +83,7 @@ function AdminListDashboard() {
 
   const { data } = useGetAdmin(searchParams);
   const listAdmin = data?.data?.response?.response || [];
-  console.log(listAdmin)
+  console.log(listAdmin);
   const {
     isCheckedAll,
     reset: resetSelect,

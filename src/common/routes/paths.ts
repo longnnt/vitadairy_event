@@ -53,7 +53,4 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
   },
-  // shop_invitation: {
-  //   root: path(ROOTS_DASHBOARD, '/shop-invitation'),
-  // },
 };

@@ -14,7 +14,7 @@ function AdminTableRow({
   onSelectRow,
   onDeleteRow,
 }: IPropsAdminTableRow) {
-  const { email,firstName, lastName, status} = row;
+  const { email, firstName, lastName, status } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -74,4 +74,3 @@ function AdminTableRow({
 }
 
 export { AdminTableRow };
-

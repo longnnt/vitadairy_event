@@ -5,8 +5,6 @@ import { getStoreAdmin } from '../services';
 
 export function useGetStoreAdmin(params: IStoreParams) {
   return {
-    ...useQuery([QUERY_KEYS.STORE_ADMIN, params], () =>
-      getStoreAdmin(params)
-    ),
+    ...useQuery([QUERY_KEYS.STORE_ADMIN, params], () => getStoreAdmin(params)),
   };
-};
+}
