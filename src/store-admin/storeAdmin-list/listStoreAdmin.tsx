@@ -58,31 +58,25 @@ function StoreAdminListDashboard() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const { showMessage } = useMessage();
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const filterName = useSelector(filterNameSelector);
 
   const mutationDetele = useDeleteStoreAdmin({
     onSuccess: () => {
-      showMessage({
-        type: MessageType.SUCCESS,
-        message: 'Delete store successfully',
-      });
+      showSuccessSnackbar('Delete store successfully')
     },
     onError: () => {
-      showMessage({ type: MessageType.ERROR, message: 'Delete store fail' });
+      showErrorSnackbar('Delete store fail')
     },
   });
 
   const { mutate } = useImportFile({
     onSuccess: () => {
-      showMessage({
-        type: MessageType.SUCCESS,
-        message: 'Import file successfully',
-      });
+      showSuccessSnackbar('Import file successfully')
     },
     onError: () => {
-      showMessage({ type: MessageType.ERROR, message: 'Import file fail' });
+      showErrorSnackbar('Import file fail')
     },
   });
 

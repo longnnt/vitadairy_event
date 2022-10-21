@@ -29,8 +29,8 @@ export interface IStoreParams {
 }
 
 export enum MessageType {
-  ERROR = 'ERROR',
-  SUCCESS = 'SUCCESS',
+  ERROR = 'error',
+  SUCCESS = 'success',
 }
 
 export interface IShowMessage {

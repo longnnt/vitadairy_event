@@ -1,18 +1,18 @@
 import { useSnackbar } from 'notistack';
 import { IShowMessage, MessageType } from '../interfaces';
 
-export default function useMessage() {
+export default function useShowSnackbar() {
   const { enqueueSnackbar } = useSnackbar();
-  function showMessage(data: IShowMessage) {
-    if (data.type === MessageType.ERROR) {
-      enqueueSnackbar(data.message, {
-        variant: 'error',
-      });
-    } else {
-      enqueueSnackbar(data.message, {
-        variant: 'success',
-      });
-    }
+  function showSuccessSnackbar(message: string, config?: IShowMessage) {
+    enqueueSnackbar(message, {
+      variant: MessageType.SUCCESS,
+      ...config
+    });
   }
-  return { showMessage };
+  function showErrorSnackbar(message: string, config?: IShowMessage) {
+    enqueueSnackbar(message, {
+      variant: MessageType.ERROR,
+    });
+  }
+  return { showSuccessSnackbar, showErrorSnackbar };
 }

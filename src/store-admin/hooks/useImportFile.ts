@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
+import { SuccessUploadCode } from '../constants';
 import { IStoreAdminCallback } from '../interfaces';
 import { importStoreAdmin } from '../services';
 
@@ -8,7 +9,7 @@ export function useImportFile(callback: IStoreAdminCallback) {
 
   return useMutation(importStoreAdmin, {
     onSuccess: (rs, _variables) => {
-      if (rs.data?.meta?.status === 1000) {
+      if (rs.data?.meta?.status === SuccessUploadCode) {
         queryClient.invalidateQueries([QUERY_KEYS.STORE_ADMIN]);
         callback.onSuccess && callback.onSuccess();
       } else {
