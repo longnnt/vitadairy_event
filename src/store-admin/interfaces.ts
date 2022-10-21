@@ -28,6 +28,16 @@ export interface IStoreParams {
   startDate?: Date | string;
 }
 
+export enum MessageType {
+  ERROR = 'ERROR',
+  SUCCESS = 'SUCCESS',
+}
+
+export interface IShowMessage {
+  type: MessageType;
+  message: string;
+}
+
 export interface IDataStore {
   data: {
     meta: {

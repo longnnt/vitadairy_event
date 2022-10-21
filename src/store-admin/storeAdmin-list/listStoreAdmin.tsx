@@ -31,7 +31,8 @@ import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
-import { IFormStore, IStoreParams } from '../interfaces';
+import useMessage from '../hooks/useMessage';
+import { IFormStore, IStoreParams, MessageType } from '../interfaces';
 import { exportStoreAdmin } from '../services';
 import { filterNameSelector } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
@@ -56,35 +57,34 @@ function StoreAdminListDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-  const { enqueueSnackbar } = useSnackbar();
 
-  const onSuccess = () => {
-    enqueueSnackbar('Delete store successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Delete store error', {
-      variant: 'error',
-    });
-  };
-
-  const importSucess = () => {
-    enqueueSnackbar(' Import file successfully', {
-      variant: 'success',
-    });
-  };
-  const importFail = () => {
-    enqueueSnackbar('Import file error', {
-      variant: 'error',
-    });
-  };
+  const { showMessage } = useMessage();
 
   const filterName = useSelector(filterNameSelector);
 
-  const mutationDetele = useDeleteStoreAdmin({ onSuccess, onError });
+  const mutationDetele = useDeleteStoreAdmin({
+    onSuccess: () => {
+      showMessage({
+        type: MessageType.SUCCESS,
+        message: 'Delete store successfully',
+      });
+    },
+    onError: () => {
+      showMessage({ type: MessageType.ERROR, message: 'Delete store fail' });
+    },
+  });
 
-  const { mutate } = useImportFile({ onSuccess: importSucess, onError: importFail });
+  const { mutate } = useImportFile({
+    onSuccess: () => {
+      showMessage({
+        type: MessageType.SUCCESS,
+        message: 'Import file successfully',
+      });
+    },
+    onError: () => {
+      showMessage({ type: MessageType.ERROR, message: 'Import file fail' });
+    },
+  });
 
   const searchParams: IStoreParams = {
     page: page,
