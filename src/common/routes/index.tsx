@@ -107,10 +107,14 @@ const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
 // ADMIN
 <<<<<<< HEAD
+<<<<<<< HEAD
 const AdminList = Loadable(lazy(()=>import('../../admin/admin-pages/AdminList')))
 const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
 const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
 
+=======
+const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
+>>>>>>> d5a8b8c9c0eba8b0b79f038053e4007d6882942b
 =======
 const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
 >>>>>>> d5a8b8c9c0eba8b0b79f038053e4007d6882942b
