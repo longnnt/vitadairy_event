@@ -94,7 +94,6 @@ function StoreAdminListDashboard() {
   if (filterName) searchParams.searchText = filterName;
 
   const { data } = useGetStoreAdmin(searchParams);
-  console.log(data)
 
   const listStoreAdmin = data?.data?.response?.response || [];
 
@@ -134,7 +133,7 @@ function StoreAdminListDashboard() {
       page: page,
       size: totalRecords,
     };
-    console.log(expData);
+
     const response = exportStoreAdmin(expData);
     response
       .then((data) => {
