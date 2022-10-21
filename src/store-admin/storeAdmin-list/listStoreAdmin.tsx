@@ -10,7 +10,7 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions
+  TableSelectedActions,
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -94,6 +94,7 @@ function StoreAdminListDashboard() {
   if (filterName) searchParams.searchText = filterName;
 
   const { data } = useGetStoreAdmin(searchParams);
+  console.log(data)
 
   const listStoreAdmin = data?.data?.response?.response || [];
 
@@ -131,8 +132,9 @@ function StoreAdminListDashboard() {
       startDate: '',
       endDate: '',
       page: page,
-      size: rowsPerPage,
+      size: totalRecords,
     };
+    console.log(expData);
     const response = exportStoreAdmin(expData);
     response
       .then((data) => {
@@ -170,27 +172,27 @@ function StoreAdminListDashboard() {
         ]}
         action={
           <>
-          <Box marginRight="8px" display='inline'>
-          <Button
-            variant="contained"
-            startIcon={<Iconify icon={'mdi:file-import'} />}
-            component="label"
-          >
-            Import
-            <input hidden multiple type="file" onChange={importFile} />
-          </Button>
-          </Box>
-          <Button
-          variant="contained"
-          startIcon={<Iconify icon={'mdi:file-export'} />}
-          onClick={() => {
-            exportFile();
-            navigate(PATH_DASHBOARD.storeAdmin.list);
-          }}
-        >
-          Export
-        </Button>
-        </>
+            <Box marginRight="8px" display="inline">
+              <Button
+                variant="contained"
+                startIcon={<Iconify icon={'mdi:file-import'} />}
+                component="label"
+              >
+                Import
+                <input hidden multiple type="file" onChange={importFile} />
+              </Button>
+            </Box>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon={'mdi:file-export'} />}
+              onClick={() => {
+                exportFile();
+                navigate(PATH_DASHBOARD.storeAdmin.list);
+              }}
+            >
+              Export
+            </Button>
+          </>
         }
       />
       <Card>
@@ -276,4 +278,3 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
-

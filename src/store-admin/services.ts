@@ -25,7 +25,7 @@ export const importStoreAdmin = (formData: FormData) => {
 };
 
 export const exportStoreAdmin = (params: IStoreParams) => {
-  return axiosInstance.get<any, any>(`${API_STORE_ADMIN}/export/csv`, {
+  return axiosInstance.get(`${API_STORE_ADMIN}/export/csv`, {
     params,
     headers: { responseType: 'blob' },
   });
