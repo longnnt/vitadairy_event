@@ -5,7 +5,6 @@ import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { IPropsAdminTableRow } from '../../interfaces';
 
-// ----------------------------------------------------------------------
 
 function AdminTableRow({
   row,
