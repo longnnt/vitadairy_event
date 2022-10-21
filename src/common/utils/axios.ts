@@ -7,14 +7,16 @@ import { store } from '../redux/store';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  paramsSerializer: (param: object) => toQueryString(param),
   baseURL: HOST_API,
 });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) =>
-    Promise.reject((error.response && error.response.data) || 'Something went wrong')
+    // Promise.reject((error.response && error.response.data) || 'Something went wrong')
+    Promise.reject(
+      (error.response && error.response.data) || { message: 'Something went wrong' }
+    )
 );
 axiosInstance.interceptors.request.use(async (config) => {
   const token = store.getState()?.authLogin.accessToken;
@@ -22,7 +24,7 @@ axiosInstance.interceptors.request.use(async (config) => {
     try {
       config.headers = {
         ...config.headers,
-        Authorization: `${token}`,
+        Authorization: token,
       };
     } catch (e) {
       console.log(e);

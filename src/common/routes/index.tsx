@@ -53,6 +53,10 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
+        {
+          path: 'shop-invitation',
+          element: <ShopInvitation />,
+        },
         // STORE
         {
           path: '',
@@ -103,5 +107,9 @@ const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
+// shop invitation
+const ShopInvitation = Loadable(
+  lazy(() => import('src/shop-invitation/components/ShopInvitation'))
+);
 // ADMIN
 const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
