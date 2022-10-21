@@ -12,6 +12,7 @@ export default function useShowSnackbar() {
   function showErrorSnackbar(message: string, config?: IShowMessage) {
     enqueueSnackbar(message, {
       variant: MessageType.ERROR,
+      ...config
     });
   }
   return { showSuccessSnackbar, showErrorSnackbar };
