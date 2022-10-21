@@ -14,11 +14,11 @@ const rootPersistConfig = {
   whitelist: ['authLogin', 'login'],
 };
 
-const rootReducer = combineReducers({ 
+const rootReducer = combineReducers({
   authLogin: authLoginReducer,
   login: loginReducer,
   storeAdmin: storeAdminReducer,
-  admin:adminReducer 
+  admin: adminReducer,
 });
 
 export { rootPersistConfig, rootReducer };

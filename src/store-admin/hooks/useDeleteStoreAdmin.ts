@@ -14,7 +14,7 @@ export function useDeleteStoreAdmin(callback: IStoreAdminCallback) {
         .forEach(({ queryKey }) => {
           queryClient.invalidateQueries(queryKey);
         });
-        callback.onSuccess && callback.onSuccess();
+      callback.onSuccess && callback.onSuccess();
     },
     onError: (error, _variables) => {
       callback.onError && callback.onError();
