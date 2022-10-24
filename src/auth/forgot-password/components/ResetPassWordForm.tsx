@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { FormValuesProps } from '../../login/interface';
 import { forgotPassword } from '../services';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
+import { statusEnum } from 'src/auth/login/constants';
 
 export default function ResetPassWordForm() {
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
@@ -30,7 +31,9 @@ export default function ResetPassWordForm() {
   const onSubmit = async (value: FormValuesProps) => {
     try {
       const data = await forgotPassword(value);
-      if (data?.meta?.status === 1000) {
+      console.log(data);
+
+      if (data?.data?.meta?.status === statusEnum.SUCCESS) {
         showSuccessSnackbar('Please check your Email for reset password link!');
       } else {
         showErrorSnackbar('Your email is not exist!');

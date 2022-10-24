@@ -3,3 +3,8 @@ export const defaultValues = {
   password: '',
   remember: true,
 };
+
+export enum statusEnum {
+  SUCCESS = 1000,
+  ERROR = 2001,
+}
