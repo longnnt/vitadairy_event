@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
-import { StoreAdminListDashboard } from 'src/store-admin/storeAdmin-list/listStoreAdmin';
+import { StoreAdminListDashboard } from 'src/store-admin/storeAdmin-list/ListStoreAdmin';
 // --------------------------------------------
 
 export default function StoreAdminList() {

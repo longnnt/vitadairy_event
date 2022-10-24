@@ -35,22 +35,31 @@ export const PATH_PAGE = {
 };
 
 export const PATH_DASHBOARD = {
-  root: ROOTS_DASHBOARD,
+  root: '/',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
+    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
+  },
+  admin: {
+    root: path(ROOTS_DASHBOARD, '/admins'),
+    list: path(ROOTS_DASHBOARD, '/admins'),
+    create: path(ROOTS_DASHBOARD, '/admins/create'),
+    edit: (adminId: number) => path(ROOTS_DASHBOARD, `/admins/${adminId}`),
   },
   storeAdmin: {
     root: path(ROOTS_DASHBOARD, '/stories'),
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
   },
+
   eventAdmin: {
     root: path(ROOTS_DASHBOARD, '/event-list'),
     list: path(ROOTS_DASHBOARD, '/events-list'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
   }
+
 };

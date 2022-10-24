@@ -17,6 +17,8 @@ import MenuPopover from '../../../components/MenuPopover';
 import MyAvatar from '../../../components/MyAvatar';
 import { loginSelector, setAccessToken, setLogout } from 'src/auth/login/auth.slice';
 import useIsMountedRef from 'src/common/hooks/useIsMountedRef';
+import { useAuthlogout } from 'src/auth/login/hook/useLogout';
+import { emailSelector } from 'src/auth/login/login.slice';
 
 // ----------------------------------------------------------------------
 
@@ -40,16 +42,20 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const navigate = useNavigate();
   const { user } = useAuth();
-
-  const authLogout = useSelector(loginSelector);
-  const logout = async () => {
-    dispatch(setAccessToken(null));
-    dispatch(setLogout(!authLogout));
-  };
-
-  const isMountedRef = useIsMountedRef();
-
   const { enqueueSnackbar } = useSnackbar();
+  const onSuccess = () => {
+    enqueueSnackbar('Đăng xuất thành công', {
+      variant: 'success',
+      autoHideDuration: 1000,
+    });
+  };
+  const onError = () => {
+    enqueueSnackbar('Đăng xuất thất bại', {
+      variant: 'error',
+    });
+  };
+  const { mutate } = useAuthlogout({ onSuccess, onError });
+  const isMountedRef = useIsMountedRef();
 
   const [open, setOpen] = useState<HTMLElement | null>(null);
 
@@ -63,7 +69,7 @@ export default function AccountPopover() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await mutate();
       navigate(PATH_AUTH.login, { replace: true });
 
       if (isMountedRef.current) {

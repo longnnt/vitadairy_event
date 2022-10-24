@@ -20,7 +20,7 @@ import Iconify from '../../../common/components/Iconify';
 import { defaultValues } from '../constants';
 import { useAuthlogin } from '../hook/useLogin';
 import { IFormLoginValuesProps } from '../interface/interface';
-import { setShowPassword, showPasswordSelector } from '../login.slice';
+import { setShowPassword, showPasswordSelector, setEmail } from '../login.slice';
 import { LoginSchema } from '../schema/login.schema';
 
 // ----------------------------------------------------------------------
@@ -50,12 +50,12 @@ export default function LoginForm() {
       variant: 'error',
     });
   };
-
   const { mutate, isSuccess } = useAuthlogin({ onSuccess, onError });
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.general.app);
+    if (isSuccess) navigate(PATH_DASHBOARD.root);
   }, [isSuccess]);
   const onSubmit = (data: IFormLoginValuesProps) => {
+    dispatch(setEmail(data.email));
     mutate({ email: data.email, password: data.password });
   };
 

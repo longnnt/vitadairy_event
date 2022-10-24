@@ -1,5 +1,5 @@
 import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
@@ -19,6 +19,7 @@ function StoreTableRow({
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const {mutate} = useGetStoreActive();
+
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(store.currentTarget);
   };
@@ -28,16 +29,14 @@ function StoreTableRow({
   };
 
   const handleOnChange = (active: boolean) => {
-    console.log(active)
     mutate({code, isActive: active}) 
-
   }
 
   return (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell>
+      </TableCell> */}
       <TableCell align="left">{code}</TableCell>
 
       <TableCell align="left">{phoneNumber}</TableCell>
@@ -48,18 +47,20 @@ function StoreTableRow({
 
       <TableCell align="left">{address}</TableCell>
 
-      <TableCell align="left"><a target="_blank" rel="noopener noreferrer" href={qrLink}>Tải QR</a></TableCell>
+      <TableCell align="left">
+        <a target="_blank" rel="noopener noreferrer" href={qrLink}>
+          Tải QR
+        </a>
+      </TableCell>
 
       <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
           checked={isActive ? true : false }
           onChange ={e=>{handleOnChange(e.target.checked)}}
-          // onChange = {e=>e.target.checked}
         />
       </TableCell>
 
-
-      <TableCell align="right">
+      {/* <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -88,10 +89,9 @@ function StoreTableRow({
             </>
           }
         />
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 }
 
 export { StoreTableRow };
-

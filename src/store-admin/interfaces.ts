@@ -28,6 +28,16 @@ export interface IStoreParams {
   startDate?: Date | string;
 }
 
+export enum MessageType {
+  ERROR = 'error',
+  SUCCESS = 'success',
+}
+
+export interface IShowMessage {
+  type: MessageType;
+  message: string;
+}
+
 export interface IDataStore {
   data: {
     meta: {
@@ -48,7 +58,7 @@ export interface IDataStore {
       };
       response: IStories;
     };
-  }
+  };
 }
 
 export type IPropsStoreTableRow = {

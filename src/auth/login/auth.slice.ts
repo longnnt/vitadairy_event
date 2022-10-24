@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 type AuthLoginProps = {
   isAuthenticated: boolean;
@@ -12,13 +12,13 @@ export const authLoginSlice = createSlice({
   name: 'authLogin',
   initialState: AuthLoginState,
   reducers: {
-    setLogin: (state, action) => {
+    setLogin: (state, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload;
     },
-    setAccessToken: (state, action) => {
+    setAccessToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
     },
-    setLogout: (state, action) => {
+    setLogout: (state, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload;
     },
   },

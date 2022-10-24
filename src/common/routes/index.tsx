@@ -53,12 +53,25 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
+        {
+          path: 'shop-invitation',
+          element: <ShopInvitation />,
+        },
         // STORE
         {
           path: '',
-          children:[
-            { element: <Navigate to="/dashboard/store" replace />, index: true},
-            { path: 'stories', element: <ListStore />},
+          children: [
+            { element: <Navigate to="/dashboard/store" replace />, index: true },
+            { path: 'stories', element: <ListStore /> },
+          ],
+        },
+        {
+          path: '',
+          children: [
+            { element: <Navigate to="/stories" replace />, index: true },
+            { path: 'admins', element: <AdminList/> },
+            { path: 'admins/create', element: <AddNewAdmin /> },
+            { path: 'admins/:id', element: <EditAdmin /> },
           ],
         },
         {
@@ -98,7 +111,7 @@ export default function Router() {
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 
 // STORE ADMIN
-const ListStore = Loadable(lazy(() => import('../pages/store-admin/listStoreAdmin')));
+const ListStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin')));
 
 
 // EVENT ADMIN
@@ -108,3 +121,12 @@ const History = Loadable(lazy(() => import('../../event/event-history-prize/inde
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+
+// shop invitation
+const ShopInvitation = Loadable(
+  lazy(() => import('src/shop-invitation/components/ShopInvitation'))
+);
+// ADMIN
+const AdminList = Loadable(lazy(()=>import('../../admin/admin-pages/AdminList')))
+const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
+const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
