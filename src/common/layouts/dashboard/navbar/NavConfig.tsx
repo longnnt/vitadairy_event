@@ -71,12 +71,29 @@ const navConfig = [
           },
         ],
       },
+
+      // EVENT      
+      {
+        title: 'Sự kiện Promotion Quý 4',
+        path: PATH_DASHBOARD.eventAdmin.root,
+        icon: ICONS.booking,
+        children: [
+          {
+            title: 'Danh sách event',
+            path: PATH_DASHBOARD.eventAdmin.list,
+          },
+          {
+            title: 'Lịch sử trúng giải',
+            path: PATH_DASHBOARD.eventAdmin.historyPrize,
+          }
+        ],
+      },
       {
         title: 'Quản lý quản trị viên',
         path: PATH_DASHBOARD.admin.root,
         icon: ICONS.policy,
         children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
-<<<<<<< HEAD
+
       },
       {
         title: 'Event Promotion Quý 4',
@@ -88,8 +105,7 @@ const navConfig = [
             path: PATH_DASHBOARD.eventPromotionIV.list,
           },
         ],
-=======
->>>>>>> develop
+
       },
     ],
   },
