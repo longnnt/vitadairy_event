@@ -10,12 +10,12 @@ import { useEffect } from 'react';
 import { dispatch } from 'src/common/redux/store';
 import { EditFormAdmin } from './components/EditAdminForm';
 import useMessage from 'src/store-admin/hooks/useMessage'
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 export default function EditAdminDashboard() {
   const params = useParams();
   const id = params?.id;
-
-  
+  const { useDeepCompareEffect } = useDeepEffect();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const { data } = useGetAdminById({
@@ -26,7 +26,7 @@ export default function EditAdminDashboard() {
     },
   });
   const adminDetail: IResEditAdmin = data?.data;
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     dispatch(setAdmintDetail(adminDetail));
   }, [JSON.stringify(adminDetail)]);
 
