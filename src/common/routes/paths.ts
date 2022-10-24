@@ -55,6 +55,12 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
   },
+  eventPromotionIV: {
+    root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
+    list: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
+    new: path(ROOTS_DASHBOARD, '/event-promotion-IV/new'),
+    edit: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+  },
 
   eventAdmin: {
     root: path(ROOTS_DASHBOARD, '/event-list'),

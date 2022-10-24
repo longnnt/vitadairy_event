@@ -95,6 +95,18 @@ const navConfig = [
         children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
 
       },
+      {
+        title: 'Event Promotion Quý 4',
+        path: PATH_DASHBOARD.eventPromotionIV.root,
+        icon: ICONS.policy,
+        children: [
+          {
+            title: 'Danh sách Event',
+            path: PATH_DASHBOARD.eventPromotionIV.list,
+          },
+        ],
+
+      },
     ],
   },
 ];
