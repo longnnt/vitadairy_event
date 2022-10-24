@@ -61,7 +61,15 @@ export default function Router() {
             { path: 'stories', element: <ListStore />},
           ],
         },
+        {
+          path: '',
+          children:[
+            { element: <Navigate to="/dashboard/event" replace />, index: true},
+            { path: 'event-history', element: <History />},
+          ],
+        }
       ],
+
     },
 
     // Main Routes
@@ -91,6 +99,11 @@ const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 
 // STORE ADMIN
 const ListStore = Loadable(lazy(() => import('../pages/store-admin/listStoreAdmin')));
+
+
+// EVENT ADMIN
+const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));
+
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));

@@ -66,6 +66,22 @@ const navConfig = [
           }
         ],
       },
+      // EVENT      
+      {
+        title: 'Sự kiện Promotion Quý 4',
+        path: PATH_DASHBOARD.eventAdmin.root,
+        icon: ICONS.booking,
+        children: [
+          {
+            title: 'Danh sách event',
+            path: PATH_DASHBOARD.eventAdmin.list,
+          },
+          {
+            title: 'Lịch sử trúng giải',
+            path: PATH_DASHBOARD.eventAdmin.historyPrize,
+          }
+        ],
+      },
     ],
   }
 ];

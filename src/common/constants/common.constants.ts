@@ -39,4 +39,5 @@ export const BREADCUMBS = {
   CATEGORY_ENTERPRISE_EDIT: 'Category enterprise edit',
   CATEGORY_ENTERPRISE_NEW: 'category enterprise add new',
   STORE_ADMIN: 'Cửa hàng',
+  EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4'
 };

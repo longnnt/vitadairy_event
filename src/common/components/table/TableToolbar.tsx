@@ -5,11 +5,11 @@ import Iconify from 'src/common/components/Iconify';
 // ----------------------------------------------------------------------
 
 type Props = {
-  roleOptions: string[];
+  roleOptions?: string[];
   filterName: string;
-  filterRole: string;
+  filterRole?: string;
   onFilterName: (value: string) => void;
-  onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterRole?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function TableToolbar({
@@ -37,7 +37,7 @@ export default function TableToolbar({
           textTransform: 'capitalize',
         }}
       >
-        { roleOptions.map((option) => (
+        {/* { roleOptions.map((option) => (
           <MenuItem
             key={option}
             value={option}
@@ -51,7 +51,7 @@ export default function TableToolbar({
           >
             {option}
           </MenuItem>
-        ))}
+        ))} */}
       </TextField>
 
       <TextField
