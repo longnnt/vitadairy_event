@@ -17,11 +17,9 @@ export type IForgotPassword = {
 };
 
 export interface IResForgotPass {
-  data: {
-    meta: {
-      status: number;
-      msg: string;
-    };
-    response: boolean;
+  meta: {
+    status: number;
+    msg: string;
   };
+  response: boolean;
 }
