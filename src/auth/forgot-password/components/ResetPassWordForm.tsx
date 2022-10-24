@@ -39,7 +39,7 @@ export default function ResetPassWordForm() {
         });
       }
     } catch (e) {
-      console.log(e);
+      return;
     }
   };
   return (
