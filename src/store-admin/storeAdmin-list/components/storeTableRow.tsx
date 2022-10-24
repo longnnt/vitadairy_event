@@ -18,7 +18,7 @@ function StoreTableRow({
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
-  const {mutate} = useGetStoreActive();
+  const { mutate } = useGetStoreActive();
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(store.currentTarget);
   };
@@ -28,10 +28,9 @@ function StoreTableRow({
   };
 
   const handleOnChange = (active: boolean) => {
-    console.log(active)
-    mutate({code, isActive: active}) 
-
-  }
+    console.log(active);
+    mutate({ code, isActive: active });
+  };
 
   return (
     <TableRow hover selected={selected}>
@@ -48,16 +47,21 @@ function StoreTableRow({
 
       <TableCell align="left">{address}</TableCell>
 
-      <TableCell align="left"><a target="_blank" rel="noopener noreferrer" href={qrLink}>Tải QR</a></TableCell>
+      <TableCell align="left">
+        <a target="_blank" rel="noopener noreferrer" href={qrLink}>
+          Tải QR
+        </a>
+      </TableCell>
 
       <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
-          checked={isActive ? true : false }
-          onChange ={e=>{handleOnChange(e.target.checked)}}
+          checked={isActive ? true : false}
+          onChange={(e) => {
+            handleOnChange(e.target.checked);
+          }}
           // onChange = {e=>e.target.checked}
         />
       </TableCell>
-
 
       <TableCell align="right">
         <TableMoreMenu
@@ -94,4 +98,3 @@ function StoreTableRow({
 }
 
 export { StoreTableRow };
-

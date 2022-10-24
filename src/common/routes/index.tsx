@@ -11,6 +11,7 @@ import GuestGuard from '../guards/GuestGuard';
 // config
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import ListEventPromotionDashboard from 'src/event-promotion-IV/ListEvent';
 
 // ----------------------------------------------------------------------
 
@@ -56,16 +57,26 @@ export default function Router() {
         // STORE
         {
           path: '',
-          children:[
-            { element: <Navigate to="/dashboard/store" replace />, index: true},
-            { path: 'stories', element: <ListStore />},
+          children: [
+            { element: <Navigate to="/dashboard/store" replace />, index: true },
+            { path: 'stories', element: <ListStore /> },
           ],
         },
         {
           path: '',
           children: [
             { element: <Navigate to="/stories" replace />, index: true },
-            { path: 'admins', element: <AdminList/> },
+            { path: 'admins', element: <AdminList /> },
+          ],
+        },
+        {
+          path: '',
+          children: [
+            {
+              element: <Navigate to="/dashboard/event-promotion-IV" replace />,
+              index: true,
+            },
+            { path: 'event-promotion-IV', element: <ListEventPromotion /> },
           ],
         },
       ],
@@ -104,5 +115,10 @@ const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
 // ADMIN
-const AdminList = Loadable(lazy(()=>import('../pages/admin/adminList')))
+const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
 
+// EVENT_PROMOTION_IV
+
+const ListEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
+);
