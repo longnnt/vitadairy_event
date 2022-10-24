@@ -43,7 +43,7 @@ export const BREADCUMBS = {
   ADMIN_LIST: 'List admin',
   STORE_ADMIN: 'Cửa hàng',
 
-  EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4'
+  EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4',
 
   NEW_ADMIN: 'create admin',
 
