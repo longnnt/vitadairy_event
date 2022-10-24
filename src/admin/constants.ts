@@ -22,4 +22,4 @@ export const permission = [
   { id: 1, name: 'Chỉ xem' },
   { id: 2, name: 'Đầy đủ' },
 ];
-export const statusResError = 1000
+export const STATUS_RES_ERR = 1000

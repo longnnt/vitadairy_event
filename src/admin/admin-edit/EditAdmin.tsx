@@ -21,12 +21,8 @@ export default function EditAdminDashboard() {
   const { data } = useGetAdminById({
     id: parseInt(id as string),
     callback: {
-      onSuccess: () => {
-        showSuccessSnackbar('Get Admin successfully')
-      },
-      onError: () => {
-        showErrorSnackbar('Get admin fail')
-      },
+      onSuccess: () =>  showSuccessSnackbar('Get Admin successfully'),
+      onError: () =>  showErrorSnackbar('Get admin fail'),
     },
   });
   const adminDetail: IResEditAdmin = data?.data;

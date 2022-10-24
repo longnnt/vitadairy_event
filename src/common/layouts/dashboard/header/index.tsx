@@ -69,7 +69,7 @@ export default function DashboardHeader({
   verticalLayout = false,
 }: Props) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
-  const email = store.getState()?.login.email;
+  const email = useSelector(emailSelector);
 
   const isDesktop = useResponsive('up', 'lg');
 

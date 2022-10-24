@@ -1,36 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
-  Alert,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Stack,
-  Card,
-  Typography,
+  Card, Grid, Stack, Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormProvider, RHFTextField, RHFSelect } from 'src/common/components/hook-form';
-// import { dispatch, useSelector } from 'src/redux/store';
+import { FormProvider, RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-// import { useGetAllAddNewAccount } from '../../hooks/useGetAllNewAccount';
-// import { IFormAddNewAccount, userType } from '../../interface';
-// import { AddNewAccountSchema } from '../../adminAccount.schema';
 import { defaultValues, permission, status } from '../../constants';
-// import Iconify from 'src/components/Iconify';
-// import { setShowPassword, showPasswordSelector } from '../../adminAccount.slice';
-import { useAddNewAdmin } from '../../hooks/useAddNewAccount';
-import { IFormAdmin } from 'src/admin/interfaces';
-import { NewAdminSchema } from 'src/admin/schema';
 import { useSelector } from 'react-redux';
 import { adminDetailSelector } from 'src/admin/admin.slice';
 import { useEditAdmin } from 'src/admin/hooks/useEditAdmin';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { isBuffer } from 'lodash';
+import { IFormAdmin } from 'src/admin/interfaces';
+import { NewAdminSchema } from 'src/admin/schema';
+import useMessage from 'src/store-admin/hooks/useMessage';
+
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -44,22 +30,15 @@ function EditFormAdmin() {
   const dataAdmin = useSelector(adminDetailSelector);
   const id = params?.id;
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-  const { useDeepCompareEffect } = useDeepEffect();
-  const onSuccess = () => {
-    enqueueSnackbar('Edit admin successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Edit admin error', {
-      variant: 'error',
-    });
-  };
-  // const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { mutate, isSuccess } = useEditAdmin({ onSuccess, onError });
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { mutate, isSuccess } = useEditAdmin({ onSuccess: () => {
+    showSuccessSnackbar('Get Admin successfully')
+  },
+  onError: () => {
+    showErrorSnackbar('Get admin fail')
+  }});
+  
   useEffect(() => {
-    console.log(mutate);
     if (isSuccess) navigate(PATH_DASHBOARD.admin.list);
   }, [isSuccess]);
 
@@ -174,3 +153,4 @@ function EditFormAdmin() {
 }
 
 export { EditFormAdmin };
+

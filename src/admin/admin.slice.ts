@@ -5,13 +5,13 @@ import { IResEditAdmin } from './interfaces';
 type StateProps = {
   filterName: string;
   filterRole: string;
-  adminDetail: IResEditAdmin;
+  adminDetail: Partial<IResEditAdmin>;
 };
 
 const initialState: StateProps = {
   filterName: '',
   filterRole: '',
-  adminDetail: {} as IResEditAdmin,
+  adminDetail: {} ,
 };
 
 export const adminSlice = createSlice({
@@ -24,7 +24,7 @@ export const adminSlice = createSlice({
     setFilterRole: (state, action: PayloadAction<string>) => {
       state.filterRole = action.payload;
     },
-    setAdmintDetail: (state, action: { payload: IResEditAdmin; type: string }) => {
+    setAdmintDetail: (state, action: PayloadAction<IResEditAdmin>) => {
       state.adminDetail = action.payload;
     },
   },
