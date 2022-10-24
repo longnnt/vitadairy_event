@@ -1,12 +1,3 @@
-// export interface IPrizeHistory {
-//   id: string;
-//   name: string;
-//   phoneNumber: number;
-//   prize: string;
-//   receivedDate: string;
-//   qrCode: string;
-//   xCode: string;
-// }
 
 export interface IHistoryListEventParams {
   endDate?: Date | string;
