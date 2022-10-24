@@ -37,7 +37,7 @@ import { InvitationTableToolbar } from './InvitationTableToolbar';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
 import { useGetAllShopInvitation } from '../hooks/useGetAllShopInvitation';
 import { getQueryObj } from 'src/shop-invitation/common/ultils/getQueryObj';
-import { CSVLink } from 'react-csv';
+import { CSVLink } from 'react-csv'
 import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 export default function ShopInvitation() {
   const navigate = useNavigate();

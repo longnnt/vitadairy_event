@@ -13,9 +13,9 @@ export const deleteStoreAdmin = (id: string) => {
 export const getActiveStore = (params: IStoreActive) => {
   return axiosInstance.patch<unknown, IStoreActive>(
     `${API_STORE_ADMIN}/${params.code}/active?isActive=${params.isActive}`
-  );
-};
-
+    );
+  };
+  
 export const importStoreAdmin = (formData: FormData) => {
   return axiosInstance.post(`${API_STORE_ADMIN}/import/csv`, formData, {
     headers: {

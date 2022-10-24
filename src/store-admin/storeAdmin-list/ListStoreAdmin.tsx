@@ -10,9 +10,8 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
-import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -20,7 +19,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -32,10 +31,11 @@ import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
 import useMessage from '../hooks/useMessage';
-import { IFormStore, IStoreParams, MessageType } from '../interfaces';
+import { IFormStore, IStoreParams } from '../interfaces';
 import { exportStoreAdmin } from '../services';
-import { filterNameSelector } from '../storeAdmin.slice';
+import { firstScanEndSelector, firstScanStartSelector, searchTextSelector } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
+import { StoreTableToolbar } from './components/StoreTableToolbar';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -60,7 +60,9 @@ function StoreAdminListDashboard() {
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const filterName = useSelector(filterNameSelector);
+  const searchText = useSelector(searchTextSelector);
+  const firstScanStart = useSelector(firstScanStartSelector);
+  const firstScanEnd = useSelector(firstScanEndSelector);
 
   const mutationDetele = useDeleteStoreAdmin({
     onSuccess: () => {
@@ -83,14 +85,18 @@ function StoreAdminListDashboard() {
   const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
+    endDate: firstScanEnd,
+    startDate: firstScanStart,
+    searchText: searchText,
   };
 
-  if (filterName) searchParams.searchText = filterName;
+  if (searchText) searchParams.searchText = searchText;
 
-  const { data } = useGetStoreAdmin(searchParams);
+  console.log(searchParams)
+  const { data, refetch } = useGetStoreAdmin(searchParams);
 
   const listStoreAdmin = data?.data?.response?.response || [];
-
+  
   const {
     isCheckedAll,
     reset: resetSelect,
@@ -121,9 +127,6 @@ function StoreAdminListDashboard() {
 
   const exportFile = () => {
     const expData: IStoreParams = {
-      searchText: filterName,
-      startDate: '',
-      endDate: '',
       page: page,
       size: totalRecords,
     };
@@ -136,6 +139,7 @@ function StoreAdminListDashboard() {
         const blob = new Blob([data?.data], {
           type: 'text/csv; charset=utf-8',
         });
+        console.log(data.data)
 
         const fileName = `export_store_admin_${Date.now()}.csv`;
 
@@ -155,6 +159,12 @@ function StoreAdminListDashboard() {
   };
 
   const isNotFound = !listStoreAdmin.length;
+
+  const handleSearch = () => {
+    refetch();
+    setPage(0);
+  };
+
   return (
     <>
       <HeaderBreadcrumbs
@@ -190,6 +200,8 @@ function StoreAdminListDashboard() {
       />
       <Card>
         <Divider />
+
+        <StoreTableToolbar handleSearch={handleSearch} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -271,3 +283,4 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
+

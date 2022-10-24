@@ -1,4 +1,5 @@
 import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
+import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
@@ -42,7 +43,7 @@ function StoreTableRow({
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {createdDate.slice(0, 19).replace('T', ' ')}
+        {dayjs(createdDate).format('MMMM D, YYYY h:mm A')}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
