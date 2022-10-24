@@ -7,7 +7,7 @@ import Iconify from 'src/common/components/Iconify';
 type Props = {
   roleOptions: string[];
   filterName: string;
-  filterRole?: string;
+  filterRole: string;
   onFilterName: (value: string) => void;
   onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -37,7 +37,7 @@ export default function TableToolbar({
           textTransform: 'capitalize',
         }}
       >
-        { roleOptions.map((option) => (
+        {roleOptions.map((option) => (
           <MenuItem
             key={option}
             value={option}
