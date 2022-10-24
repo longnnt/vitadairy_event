@@ -139,7 +139,6 @@ function StoreAdminListDashboard() {
         const blob = new Blob([data?.data], {
           type: 'text/csv; charset=utf-8',
         });
-        console.log(data.data)
 
         const fileName = `export_store_admin_${Date.now()}.csv`;
 
