@@ -3,6 +3,7 @@ import { IEventCallback, IResEvents } from './../interface';
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { deleteEvents } from '../service';
+import { cancelMultiQueries } from 'src/common/utils/cacelCategoryInvalidate';
 
 export function useDeleteEvents(callback: IEventCallback) {
   const queryClient = useQueryClient();
@@ -10,9 +11,7 @@ export function useDeleteEvents(callback: IEventCallback) {
   return useMutation(deleteEvents, {
     onMutate: async (eventIds: number[]) => {
       const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_LIST);
-      keys.forEach(async (key) => {
-        await queryClient.cancelQueries(key);
-      });
+      cancelMultiQueries(queryClient, keys);
 
       const previousEvent = keys.map(
         (key) => queryClient.getQueryData<IResEvents>(key) || ({} as IResEvents)

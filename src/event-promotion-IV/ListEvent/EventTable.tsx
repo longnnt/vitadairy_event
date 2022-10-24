@@ -20,18 +20,23 @@ import { useDeleteEvents } from '../hooks/useDeleteEvent';
 import { RowProps } from '../interface';
 import { EventTableRow } from './EventTableRow';
 
-function createData(id: number, nameEvent: string, startDate: number, endDate: number) {
+function createDataEventList(
+  id: number,
+  nameEvent: string,
+  startDate: number,
+  endDate: number
+) {
   return { nameEvent, startDate, endDate, id };
 }
 
 const rows = [
-  createData(1, 'Frozen yoghurt', 1, 2),
-  createData(2, 'Ice cream sandwich', 1, 2),
-  createData(3, 'Eclair', 1, 2),
-  createData(4, 'Cupcake', 1, 2),
-  createData(5, 'Gingerbread', 1, 2),
-  createData(6, 'Gingerbread', 1, 2),
-  createData(7, 'Gingerbread', 1, 2),
+  createDataEventList(1, 'Frozen yoghurt', 1, 2),
+  createDataEventList(2, 'Ice cream sandwich', 1, 2),
+  createDataEventList(3, 'Eclair', 1, 2),
+  createDataEventList(4, 'Cupcake', 1, 2),
+  createDataEventList(5, 'Gingerbread', 1, 2),
+  createDataEventList(6, 'Gingerbread', 1, 2),
+  createDataEventList(7, 'Gingerbread', 1, 2),
 ];
 
 export const EventTable = () => {
