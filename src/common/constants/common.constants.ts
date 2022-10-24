@@ -38,6 +38,12 @@ export const BREADCUMBS = {
   CATEGORY_ENTERPRISE_LIST: 'List category enterprise ',
   CATEGORY_ENTERPRISE_EDIT: 'Category enterprise edit',
   CATEGORY_ENTERPRISE_NEW: 'category enterprise add new',
+<<<<<<< HEAD
+=======
+  SHOP_INVITATION: 'shop invitation',
+  SHOP_INVITATION_lIST: 'shop invitation list',
+>>>>>>> develop
   ADMIN_LIST: 'List admin',
   STORE_ADMIN: 'Cửa hàng',
+  NEW_ADMIN: 'create admin',
 };

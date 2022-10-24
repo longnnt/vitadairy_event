@@ -7,3 +7,5 @@ export const TABLE_HEAD = [
   { id: 'isActive', label: 'Active', align: 'left' },
   { id: '' },
 ];
+
+export const SuccessUploadCode = 1000

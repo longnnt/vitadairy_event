@@ -1,11 +1,9 @@
 import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
-// import moment from 'moment';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { IPropsAdminTableRow } from '../../interfaces';
 
-// ----------------------------------------------------------------------
 
 function AdminTableRow({
   row,
@@ -14,7 +12,7 @@ function AdminTableRow({
   onSelectRow,
   onDeleteRow,
 }: IPropsAdminTableRow) {
-  const { email,firstName, lastName, status} = row;
+  const { email, firstName, lastName, status } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -74,4 +72,3 @@ function AdminTableRow({
 }
 
 export { AdminTableRow };
-

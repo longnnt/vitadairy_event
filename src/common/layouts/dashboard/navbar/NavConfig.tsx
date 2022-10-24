@@ -47,6 +47,11 @@ const navConfig = [
       { title: 'chat', path: PATH_DASHBOARD.general.app, icon: ICONS.chat },
       { title: 'calendar', path: PATH_DASHBOARD.general.app, icon: ICONS.calendar },
       { title: 'kanban', path: PATH_DASHBOARD.general.app, icon: ICONS.kanban },
+      {
+        title: 'shop-invitation',
+        path: PATH_DASHBOARD.general.shop_invitation,
+        icon: ICONS.analytics,
+      },
     ],
   },
   // MANAGEMENT
@@ -71,6 +76,7 @@ const navConfig = [
         path: PATH_DASHBOARD.admin.root,
         icon: ICONS.policy,
         children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
+<<<<<<< HEAD
       },
       {
         title: 'Event Promotion Quý 4',
@@ -82,6 +88,8 @@ const navConfig = [
             path: PATH_DASHBOARD.eventPromotionIV.list,
           },
         ],
+=======
+>>>>>>> develop
       },
     ],
   },

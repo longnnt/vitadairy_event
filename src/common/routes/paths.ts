@@ -42,10 +42,13 @@ export const PATH_DASHBOARD = {
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
+    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
   admin: {
     root: path(ROOTS_DASHBOARD, '/admins'),
     list: path(ROOTS_DASHBOARD, '/admins'),
+    create: path(ROOTS_DASHBOARD, '/admins/create'),
+    edit: (adminId: number) => path(ROOTS_DASHBOARD, `/admins/${adminId}`),
   },
   storeAdmin: {
     root: path(ROOTS_DASHBOARD, '/stories'),

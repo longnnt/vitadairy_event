@@ -11,5 +11,22 @@ export const deleteStoreAdmin = (id: string) => {
 };
 
 export const getActiveStore = (params: IStoreActive) => {
-  return axiosInstance.patch<unknown, IStoreActive>(`${API_STORE_ADMIN}/${params.code}/active?isActive=${params.isActive}`);
+  return axiosInstance.patch<unknown, IStoreActive>(
+    `${API_STORE_ADMIN}/${params.code}/active?isActive=${params.isActive}`
+  );
+};
+
+export const importStoreAdmin = (formData: FormData) => {
+  return axiosInstance.post(`${API_STORE_ADMIN}/import/csv`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+export const exportStoreAdmin = (params: IStoreParams) => {
+  return axiosInstance.get(`${API_STORE_ADMIN}/export/csv`, {
+    params,
+    headers: { responseType: 'blob' },
+  });
 };
