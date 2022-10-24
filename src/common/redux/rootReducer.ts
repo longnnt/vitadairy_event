@@ -5,6 +5,7 @@ import loginReducer from 'src/auth/login/login.slice';
 import invitationReducer from 'src/shop-invitation/invitationSlice';
 import adminReducer from 'src/admin/admin.slice';
 import storeAdminReducer from 'src/store-admin/storeAdmin.slice';
+import eventReducer from 'src/event/event-history-prize/event.slice';
 // slices
 
 // ----------------------------------------------------------------------
@@ -20,7 +21,11 @@ const rootReducer = combineReducers({
   login: loginReducer,
   shop_invitation: invitationReducer,
   storeAdmin: storeAdminReducer,
+
+  historyList: eventReducer,
+
   admin: adminReducer,
+
 });
 
 export { rootPersistConfig, rootReducer };

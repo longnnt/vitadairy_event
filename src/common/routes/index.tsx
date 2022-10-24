@@ -74,7 +74,15 @@ export default function Router() {
             { path: 'admins/:id', element: <EditAdmin /> },
           ],
         },
+        {
+          path: '',
+          children:[
+            { element: <Navigate to="/dashboard/event" replace />, index: true},
+            { path: 'event-history', element: <History />},
+          ],
+        }
       ],
+
     },
 
     // Main Routes
@@ -104,6 +112,11 @@ const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 
 // STORE ADMIN
 const ListStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin')));
+
+
+// EVENT ADMIN
+const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));
+
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
