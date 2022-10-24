@@ -29,7 +29,6 @@ export default function ResetPassWordForm() {
   const onSubmit = async (value: FormValuesProps) => {
     try {
       const data = await forgotPassword(value);
-      console.log('data>>>>', data);
       if (data?.meta?.status === 1000) {
         enqueueSnackbar('Please check your Email for reset password link!', {
           variant: 'success',
