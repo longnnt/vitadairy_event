@@ -69,7 +69,9 @@ export default function Router() {
           path: '',
           children: [
             { element: <Navigate to="/stories" replace />, index: true },
-            { path: 'admins', element: <AdminList /> },
+            { path: 'admins', element: <AdminList/> },
+            { path: 'admins/create', element: <AddNewAdmin /> },
+            { path: 'admins/:id', element: <EditAdmin /> },
           ],
         },
       ],
@@ -112,4 +114,6 @@ const ShopInvitation = Loadable(
   lazy(() => import('src/shop-invitation/components/ShopInvitation'))
 );
 // ADMIN
-const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
+const AdminList = Loadable(lazy(()=>import('../../admin/admin-pages/AdminList')))
+const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
+const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));

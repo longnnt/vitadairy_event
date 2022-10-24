@@ -42,4 +42,5 @@ export const BREADCUMBS = {
   SHOP_INVITATION_lIST: 'shop invitation list',
   ADMIN_LIST: 'List admin',
   STORE_ADMIN: 'Cửa hàng',
+  NEW_ADMIN: 'create admin',
 };
