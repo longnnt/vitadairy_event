@@ -23,7 +23,7 @@ import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { HEADERS_CSV, TABLE_HEAD } from '../common/constants';
+import { TABLE_HEAD } from '../common/constants';
 import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
 import {
   firstScanEndSelector,

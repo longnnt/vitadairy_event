@@ -41,6 +41,10 @@ export default function Router() {
             </GuestGuard>
           ),
         },
+        {
+          path: 'forgot-password',
+          element: <ForgotPassword />,
+        },
       ],
     },
 
@@ -97,11 +101,16 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
-
+// login
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
+const ForgotPassword = Loadable(
+  lazy(() => import('../../auth/forgot-password/ResetPassword'))
+);
 
 // STORE ADMIN
-const ListStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin')));
+const ListStore = Loadable(
+  lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin'))
+);
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
