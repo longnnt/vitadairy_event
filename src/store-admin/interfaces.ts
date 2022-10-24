@@ -18,7 +18,7 @@ export interface IPayloadDate {
 }
 
 export interface IStoreActive {
-  code: string;
+  code?: string;
   isActive: boolean;
 }
 
@@ -35,7 +35,8 @@ export interface IStoreParams {
   searchText?: string;
   size?: number;
   startDate?: Date | string;
-}
+};
+
 
 export enum MessageType {
   ERROR = 'error',

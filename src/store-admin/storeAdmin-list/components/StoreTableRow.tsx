@@ -3,8 +3,9 @@ import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import { FormatDate } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
-import { IPropsStoreTableRow } from '../../interfaces';
+import { IPropsStoreTableRow, IStoreActive } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,9 @@ function StoreTableRow({
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
+  // const temp :IStoreActive = {
+  //   isActive : isActive,
+  // }
   const {mutate} = useGetStoreActive();
 
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
@@ -43,7 +47,7 @@ function StoreTableRow({
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(createdDate).format('MMMM D, YYYY h:mm A')}
+        {dayjs(createdDate).format(FormatDate)}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
