@@ -146,17 +146,12 @@ const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 const ShopInvitation = Loadable(
   lazy(() => import('src/shop-invitation/components/ShopInvitation'))
 );
-// ADMIN
-<<<<<<< HEAD
-const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
 
 // EVENT_PROMOTION_IV
 
 const ListEventPromotion = Loadable(
   lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
 );
-=======
 const AdminList = Loadable(lazy(()=>import('../../admin/admin-pages/AdminList')))
 const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
 const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
->>>>>>> develop
