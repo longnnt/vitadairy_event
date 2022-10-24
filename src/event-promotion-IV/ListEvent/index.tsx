@@ -27,8 +27,8 @@ import {
 } from '../eventPromotionIV.slice';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'src/common/redux/store';
-import { Dayjs } from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import { TimeProps } from '../interface';
 
 export default function ListEventPromotionDashboard() {
   const navigate = useNavigate();
@@ -36,10 +36,10 @@ export default function ListEventPromotionDashboard() {
   const timeEndValue = useSelector(timeEndState);
   const searchInputValue = useSelector(searchInputState);
   const dispatch = useDispatch();
-  const handleUpdateTimeStart = (newTimeStartValue: Dayjs | null | Date) => {
+  const handleUpdateTimeStart = (newTimeStartValue: TimeProps) => {
     dispatch(updateTimeStart(newTimeStartValue));
   };
-  const handleUpdateTimeEnd = (newTimeEndValue: Dayjs | null | Date) => {
+  const handleUpdateTimeEnd = (newTimeEndValue: TimeProps) => {
     dispatch(updateTimeEnd(newTimeEndValue));
   };
   const handleUpdateSearchInput = (newSearchInputValue: string) => {

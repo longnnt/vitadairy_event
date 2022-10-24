@@ -15,12 +15,15 @@ const eventPromotionIVSlice = createSlice({
   name: 'eventPromotionIV',
   initialState: initialValue,
   reducers: {
-    updateTimeStart: (state, action: PayloadAction<TimeProps>) =>
-      void (state.timeStartValue = action.payload),
-    updateTimeEnd: (state, action: PayloadAction<TimeProps>) =>
-      void (state.timeEndValue = action.payload),
-    updateSearchInput: (state, action: PayloadAction<string>) =>
-      void (state.searchInputValue = action.payload),
+    updateTimeStart: (state, action: PayloadAction<TimeProps>) => {
+      state.timeStartValue = action.payload;
+    },
+    updateTimeEnd: (state, action: PayloadAction<TimeProps>) => {
+      state.timeEndValue = action.payload;
+    },
+    updateSearchInput: (state, action: PayloadAction<string>) => {
+      state.searchInputValue = action.payload;
+    },
     resetFormFilter: (state) => {
       state.timeEndValue = new Date();
       state.timeStartValue = new Date();
