@@ -7,9 +7,10 @@ import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import * as Yup from 'yup';
 import { FormValuesProps } from '../../login/interface';
 import { forgotPassword } from '../services';
+import useShowSnackbar from 'src/store-admin/hooks/useMessage';
 
 export default function ResetPassWordForm() {
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .email('Email must be a valid email address')
@@ -30,13 +31,9 @@ export default function ResetPassWordForm() {
     try {
       const data = await forgotPassword(value);
       if (data?.meta?.status === 1000) {
-        enqueueSnackbar('Please check your Email for reset password link!', {
-          variant: 'success',
-        });
+        showSuccessSnackbar('Please check your Email for reset password link!');
       } else {
-        enqueueSnackbar('Your email is not exist!', {
-          variant: 'error',
-        });
+        showErrorSnackbar('Your email is not exist!');
       }
     } catch (e) {
       return;
