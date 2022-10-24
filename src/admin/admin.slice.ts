@@ -1,14 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
+import { IResEditAdmin } from './interfaces';
 
 type StateProps = {
   filterName: string;
   filterRole: string;
+  adminDetail: Partial<IResEditAdmin>;
 };
 
 const initialState: StateProps = {
   filterName: '',
   filterRole: '',
+  adminDetail: {} ,
 };
 
 export const adminSlice = createSlice({
@@ -21,12 +24,16 @@ export const adminSlice = createSlice({
     setFilterRole: (state, action: PayloadAction<string>) => {
       state.filterRole = action.payload;
     },
+    setAdmintDetail: (state, action: PayloadAction<IResEditAdmin>) => {
+      state.adminDetail = action.payload;
+    },
   },
 });
 
-export const { setFilterName, setFilterRole } = adminSlice.actions;
+export const { setFilterName, setFilterRole, setAdmintDetail } = adminSlice.actions;
 
 export const filterNameSelector = (state: RootState) => state.admin.filterName;
 export const filterRoleSelector = (state: RootState) => state.admin.filterRole;
+export const adminDetailSelector = (state: RootState) => state.admin.adminDetail;
 
 export default adminSlice.reducer;

@@ -30,7 +30,7 @@ export const FIELD = {
 
 export const BREADCUMBS = {
   DASHBOARD: 'Dashboard',
-  LIST_EVENT: 'List event',
+  LIST_EVENT: 'Sự kiện Promotion quý 4',
   LIST_REGISTER_EVENT: 'List register event',
   LIST_POLICY_CATEGORY: 'List category policy',
   ADD_POLICY_CATEGORY: 'Add category',
@@ -42,4 +42,9 @@ export const BREADCUMBS = {
   SHOP_INVITATION_lIST: 'shop invitation list',
   ADMIN_LIST: 'List admin',
   STORE_ADMIN: 'Cửa hàng',
+
+  EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4',
+
+  NEW_ADMIN: 'create admin',
+
 };

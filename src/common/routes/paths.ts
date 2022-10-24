@@ -47,10 +47,25 @@ export const PATH_DASHBOARD = {
   admin: {
     root: path(ROOTS_DASHBOARD, '/admins'),
     list: path(ROOTS_DASHBOARD, '/admins'),
+    create: path(ROOTS_DASHBOARD, '/admins/create'),
+    edit: (adminId: number) => path(ROOTS_DASHBOARD, `/admins/${adminId}`),
   },
   storeAdmin: {
     root: path(ROOTS_DASHBOARD, '/stories'),
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
   },
+  eventPromotionIV: {
+    root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
+    list: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
+    new: path(ROOTS_DASHBOARD, '/event-promotion-IV/new'),
+    edit: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+  },
+
+  eventAdmin: {
+    root: path(ROOTS_DASHBOARD, '/event-list'),
+    list: path(ROOTS_DASHBOARD, '/events-list'),
+    historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
+  }
+
 };

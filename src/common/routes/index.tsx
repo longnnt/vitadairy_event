@@ -11,6 +11,7 @@ import GuestGuard from '../guards/GuestGuard';
 // config
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import ListEventPromotionDashboard from 'src/event-promotion-IV/ListEvent';
 
 // ----------------------------------------------------------------------
 
@@ -69,10 +70,30 @@ export default function Router() {
           path: '',
           children: [
             { element: <Navigate to="/stories" replace />, index: true },
-            { path: 'admins', element: <AdminList /> },
+            { path: 'admins', element: <AdminList/> },
+            { path: 'admins/create', element: <AddNewAdmin /> },
+            { path: 'admins/:id', element: <EditAdmin /> },          ],
+        },
+        {
+          path: '',
+          children: [
+            {
+              element: <Navigate to="/dashboard/event-promotion-IV" replace />,
+              index: true,
+            },
+            { path: 'event-promotion-IV', element: <ListEventPromotion /> },
+            
           ],
         },
+        {
+          path: '',
+          children:[
+            { element: <Navigate to="/dashboard/event" replace />, index: true},
+            { path: 'event-history', element: <History />},
+          ],
+        }
       ],
+
     },
 
     // Main Routes
@@ -103,6 +124,11 @@ const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 // STORE ADMIN
 const ListStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin')));
 
+
+// EVENT ADMIN
+const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));
+
+
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
@@ -111,5 +137,12 @@ const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 const ShopInvitation = Loadable(
   lazy(() => import('src/shop-invitation/components/ShopInvitation'))
 );
-// ADMIN
-const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
+
+// EVENT_PROMOTION_IV
+
+const ListEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
+);
+const AdminList = Loadable(lazy(()=>import('../../admin/admin-pages/AdminList')))
+const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
+const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));

@@ -19,7 +19,6 @@ function StoreTableRow({
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-
   // const temp :IStoreActive = {
   //   isActive : isActive,
   // }
@@ -34,8 +33,8 @@ function StoreTableRow({
   };
 
   const handleOnChange = (active: boolean) => {
-    mutate({code, isActive: active}) 
-  }
+    mutate({ code, isActive: active });
+  };
 
   return (
     <TableRow hover selected={selected}>
@@ -60,12 +59,14 @@ function StoreTableRow({
 
       <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
-          checked={isActive ? true : false }
-          onChange ={e=>{handleOnChange(e.target.checked)}}
+          checked={isActive ? true : false}
+          onChange={(e) => {
+            handleOnChange(e.target.checked);
+          }}
         />
       </TableCell>
 
-      {/* <TableCell align="right">
+      <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -94,7 +95,7 @@ function StoreTableRow({
             </>
           }
         />
-      </TableCell> */}
+      </TableCell>
     </TableRow>
   );
 }

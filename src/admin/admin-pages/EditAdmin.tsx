@@ -1,17 +1,15 @@
 import { Container } from '@mui/material';
-import { AdminListDashboard } from 'src/admin/admin-list/listAdmin';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
+import EditAdminDashboard from '../admin-edit/EditAdmin';
 
-// import AddLibraryDashboard from 'src/sections/@dashboard/library/add-library/AddLibrary';
-
-export default function AdminList() {
+export default function EditEvent() {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Quản lý admin">
+    <Page title="Admin: Edit">
       <Container maxWidth={themeStretch ? 'sm' : 'lg'}>
-        <AdminListDashboard />
+        <EditAdminDashboard />
       </Container>
     </Page>
   );

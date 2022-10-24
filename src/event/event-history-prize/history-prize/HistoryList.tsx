@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -27,19 +28,18 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { boolean, string } from 'yup';
 import { TABLE_HEAD } from '../constants';
-import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
-import { useGetAdmin } from '../hooks/useGetAdmin';
-import { IFormAdmin, IAdminParams } from '../interfaces';
-import {
-  filterNameSelector,
-  filterRoleSelector,
-  setFilterName,
-  setFilterRole,
-} from '../admin.slice';
-import { AdminTableRow } from './components/adminTableRow';
+import { filterNameSelector, setFilterName } from '../event.slice';
+import { useDeletePrizeHistoryAdmin } from '../hooks/useDeletePrizeHistory';
 
-function AdminListDashboard() {
+import { useGetPrizeHistory } from '../hooks/useGetPrizeHistory';
+import { IPrizeHistory, IPrizeHistoryParams } from '../interfaces';
+import FilterBar from './components/FilterBar';
+import { PrizeHistoryTableRow } from './components/HistoryTable';
+
+
+function EventPrizeHistoryDashboard() {
   const navigate = useNavigate();
   const {
     dense,
@@ -53,6 +53,7 @@ function AdminListDashboard() {
     selected: selectedRows,
     onSelectRow,
     onSelectAllRows,
+
     onSort,
     onChangeDense,
     onChangePage,
@@ -61,29 +62,30 @@ function AdminListDashboard() {
   const { enqueueSnackbar } = useSnackbar();
 
   const onSuccess = () => {
-    enqueueSnackbar('Delete category successfully', {
+    enqueueSnackbar('Delete store successfully', {
       variant: 'success',
     });
   };
   const onError = () => {
-    enqueueSnackbar('Delete error', {
+    enqueueSnackbar('Delete store error', {
       variant: 'error',
     });
   };
   const filterName = useSelector(filterNameSelector);
 
-  const mutationDetele = useDeleteAdmin({ onSuccess, onError });
+  const mutationDetele = useDeletePrizeHistoryAdmin({ onSuccess, onError });
 
-  const searchParams: IAdminParams = {
+  const searchParams: IPrizeHistoryParams = {
     page: page,
     size: rowsPerPage,
   };
 
   if (filterName) searchParams.searchText = filterName;
 
-  const { data } = useGetAdmin(searchParams);
-  const listAdmin = data?.data?.response?.response || [];
-  console.log(listAdmin);
+  const { data } = useGetPrizeHistory(searchParams);
+
+  const listStoreAdmin = data?.data?.response?.response || [];  
+
   const {
     isCheckedAll,
     reset: resetSelect,
@@ -91,7 +93,7 @@ function AdminListDashboard() {
     handleSelectItem,
     handleCheckAll,
   } = useSelectMultiple(
-    listAdmin.map((item) => item.id),
+    listStoreAdmin.map((item) => item.code),
     page + 1
   );
 
@@ -100,38 +102,47 @@ function AdminListDashboard() {
     setPage(0);
   };
 
-  const handleDeleteRows = (ids: number[]) => {
-    for (let i = 0; i < ids.length; i++) {
+  const handleDeleteRows = (ids: string[]) => {
+    for (let i = 0; i < ids.length; i++){
       mutationDetele.mutate(ids[i]);
       resetSelect();
     }
   };
 
-  const handleEditRow = (id: number) => {
+  const handleEditRow = (id: string) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
+
   const { totalRecords } = data?.data?.response?.pagination || {
     totalRecords: 0,
   };
-  const isNotFound = !listAdmin.length;
+
+  const isNotFound = !listStoreAdmin.length;
   return (
     <>
       <HeaderBreadcrumbs
-        heading="Danh sách admin"
-        links={[{ name: BREADCUMBS.ADMIN_LIST, href: PATH_DASHBOARD.admin.root }]}
+        heading="Lịch sử trúng giải"
+        links={[
+          { name: BREADCUMBS.EVENT_PROMOTION_Q4, href: PATH_DASHBOARD.eventAdmin.historyPrize },
+          { name: 'Lịch sử trúng giải' },
+        ]}
         action={
           <Button
             variant="contained"
-            startIcon={<Iconify icon={'eva:plus-fill'} />}
-            to={PATH_DASHBOARD.admin.root}
+            startIcon={<Iconify icon={'akar-icons:file'} />}
+            to={PATH_DASHBOARD.storeAdmin.root}
             component={RouterLink}
           >
-            Thêm mới
+            Export
           </Button>
         }
       />
       <Card>
         <Divider />
+        <FilterBar
+          filterName={filterName}
+          onFilterName={handleFilterName}
+        />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -140,7 +151,7 @@ function AdminListDashboard() {
                 dense={dense}
                 isSelectAll={isCheckedAll}
                 numSelected={selectedIds.length}
-                rowCount={listAdmin.length}
+                rowCount={listStoreAdmin.length}
                 onSelectAllRows={handleCheckAll}
                 actions={
                   <Tooltip title="Delete">
@@ -161,23 +172,23 @@ function AdminListDashboard() {
                 orderBy={orderBy}
                 isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
-                rowCount={listAdmin.length}
+                rowCount={listStoreAdmin.length}
                 numSelected={selectedIds.length}
                 onSort={onSort}
                 onSelectAllRows={handleCheckAll}
               />
 
               <TableBody>
-                {listAdmin.map((row: IFormAdmin) => (
-                  <AdminTableRow
-                    key={row.id}
-                    row={row}
-                    selected={selectedIds.includes(row.id)}
+                {listStoreAdmin.map((row: IPrizeHistory) => (
+                  <PrizeHistoryTableRow
+                    key={row.code}
+                    row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
+                    selected={selectedIds.includes(row.code)}
                     onSelectRow={(e) => {
-                      handleSelectItem(row.id, e);
+                      handleSelectItem(row.code, e);
                     }}
-                    onDeleteRow={() => handleDeleteRows([row.id])}
-                    onEditRow={() => handleEditRow(row.id)}
+                    onDeleteRow={() => handleDeleteRows([row.code])}
+                    onEditRow={() => handleEditRow(row.code)}
                   />
                 ))}
 
@@ -188,17 +199,15 @@ function AdminListDashboard() {
         </Scrollbar>
 
         <Box sx={{ position: 'relative' }}>
-          {!!data?.data?.response?.pagination?.totalPages && (
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 15]}
-              component="div"
-              count={totalRecords}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={onChangePage}
-              onRowsPerPageChange={onChangeRowsPerPage}
-            />
-          )}
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={totalRecords}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={onChangePage}
+            onRowsPerPageChange={onChangeRowsPerPage}
+          />
 
           <FormControlLabel
             control={<Switch checked={dense} onChange={onChangeDense} />}
@@ -211,4 +220,4 @@ function AdminListDashboard() {
   );
 }
 
-export { AdminListDashboard };
+export { EventPrizeHistoryDashboard};
