@@ -73,7 +73,7 @@ export default function ShopInvitation() {
   const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
   const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
   const { data: csvData } = useGetAllShopInvitationExportCsv();
-  const { data: allData } = useGetAllShopInvitation();
+  // const { data: allData } = useGetAllShopInvitation();
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
@@ -99,10 +99,7 @@ export default function ShopInvitation() {
           { name: BREADCUMBS.SHOP_INVITATION_lIST },
         ]}
         action={
-          <CSVLink
-            headers={csvData ? csvData.data.split(',') : []}
-            data={allData ? allData?.data?.response?.response : []}
-          >
+          <CSVLink data={csvData ? csvData.data : ''}>
             <Button
               variant="contained"
               startIcon={<Iconify icon={'eva:plus-fill'} />}
