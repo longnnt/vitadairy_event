@@ -93,7 +93,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud run deploy --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --cluster=$GKE_CLUSTER
+          gcloud run deploy vtd-fe-admin-v2 --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
 
 
   build-and-deploy-to-prod:
