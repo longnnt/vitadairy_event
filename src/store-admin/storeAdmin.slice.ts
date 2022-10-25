@@ -10,7 +10,7 @@ type StateProps = {
 
 export const initialState: StateProps = {
   searchText: '',
-  startDate: new Date().toISOString(),
+  startDate: new Date(1, 1, 2000),
   endDate: new Date().toISOString(),
 };
 
