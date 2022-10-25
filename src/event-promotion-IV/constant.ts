@@ -20,3 +20,16 @@ export const TABLE_HEAD = [
     align: 'left',
   },
 ];
+
+export const defaultValues = {
+  nameEvent: '',
+  startDate: null,
+  endDate: null,
+  skus: [],
+  defaultWinRate: undefined,
+  upRate: undefined,
+  downRate: undefined,
+  typeUser: '',
+  userRegisterDate: null,
+  userLimit: undefined,
+};

@@ -86,7 +86,6 @@
   "devDependencies": {
     "@types/lodash": "4.14.186",
     "@types/nprogress": "0.2.0",
-    "@types/react-csv": "1.1.3",
     "@types/react-lazy-load-image-component": "1.5.2",
     "@types/redux-persist": "4.3.1",
     "@typescript-eslint/eslint-plugin": "5.40.0",
