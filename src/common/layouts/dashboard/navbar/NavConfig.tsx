@@ -76,16 +76,16 @@ const navConfig = [
       {
         title: 'Sự kiện Promotion Quý 4',
         path: PATH_DASHBOARD.eventAdmin.root,
-        icon: ICONS.booking,
+        icon: ICONS.calendar,
         children: [
-          {
-            title: 'Danh sách event',
-            path: PATH_DASHBOARD.eventAdmin.list,
-          },
           {
             title: 'Lịch sử trúng giải',
             path: PATH_DASHBOARD.eventAdmin.historyPrize,
-          }
+          },
+          {
+            title:'Quà tặng Sự kiện',
+            path: PATH_DASHBOARD.eventAdmin.listPrize,
+          },
         ],
       },
       {
@@ -105,7 +105,6 @@ const navConfig = [
             path: PATH_DASHBOARD.eventPromotionIV.list,
           },
         ],
-
       },
     ],
   },

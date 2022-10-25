@@ -7,6 +7,7 @@ import adminReducer from 'src/admin/admin.slice';
 import storeAdminReducer from 'src/store-admin/storeAdmin.slice';
 import eventPromotionIVReducer from 'src/event-promotion-IV/eventPromotionIV.slice';
 import eventReducer from 'src/event/event-history-prize/event.slice';
+import listPrizeReducer from 'src/event/list-prize/event.slice';
 // slices
 
 // ----------------------------------------------------------------------
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   storeAdmin: storeAdminReducer,
 
   historyList: eventReducer,
+  listPrize: listPrizeReducer,
 
   admin: adminReducer,
   eventPromotionIV: eventPromotionIVReducer,
