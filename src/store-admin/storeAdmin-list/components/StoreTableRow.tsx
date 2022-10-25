@@ -22,7 +22,7 @@ function StoreTableRow({
   // const temp :IStoreActive = {
   //   isActive : isActive,
   // }
-  const {mutate} = useGetStoreActive();
+  const { mutate } = useGetStoreActive();
 
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(store.currentTarget);
