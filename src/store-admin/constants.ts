@@ -12,3 +12,5 @@ export const SuccessUploadCode = 1000
 
 export const FormatDate = 'MMMM D, YYYY h:mm A'
 
+export const FormateDateNew = 'dd-MM-yyyy hh:mm a'
+

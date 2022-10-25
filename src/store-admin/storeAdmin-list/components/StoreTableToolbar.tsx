@@ -13,6 +13,7 @@ import {
 } from '../../storeAdmin.slice';
 import { dispatch } from 'src/common/redux/store';
 import { IStoreParams } from '../../interfaces';
+import { FormateDateNew } from 'src/store-admin/constants';
 
 // ----------------------------------------------------------------------
 
@@ -21,17 +22,20 @@ export const StoreTableToolbar = (props: {handleSearch: Function}) => {
   const methods = useForm({
     defaultValues: initialState,
   });
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = methods;
 
   const onSubmit = (data: IStoreParams) => {
-    if (data.searchText || data.searchText == "") dispatch(setSearchText(data.searchText));
+    dispatch(setSearchText(data.searchText as string));
     dispatch(setFirstScanStartDate(data.startDate as string));
     dispatch(setFirstScanEndDate(data.endDate as string));
   };
+
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -85,7 +89,7 @@ export const StoreTableToolbar = (props: {handleSearch: Function}) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat="dd-MM-yyyy hh:mm a"
+                      inputFormat={FormateDateNew}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -102,7 +106,7 @@ export const StoreTableToolbar = (props: {handleSearch: Function}) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat="dd-MM-yyyy hh:mm a"
+                    inputFormat={FormateDateNew}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}
