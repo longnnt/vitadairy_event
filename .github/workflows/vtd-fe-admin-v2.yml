@@ -95,6 +95,7 @@ jobs:
         run: |-
           gcloud run deploy $DEPLOYMENT_NAME --image $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --platform managed --region $GKE_ZONE
 
+
   build-and-deploy-to-prod:
     if: github.ref == 'refs/heads/prod'
     name: Push image production to GAR
