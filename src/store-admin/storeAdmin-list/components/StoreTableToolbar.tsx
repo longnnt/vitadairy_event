@@ -1,19 +1,19 @@
 import { LoadingButton } from '@mui/lab';
-import { Stack, InputAdornment, TextField, Box, Grid, Card } from '@mui/material';
+import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
-import { FormProvider, RHFSwitch } from 'src/common/components/hook-form';
+import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
+import { dispatch } from 'src/common/redux/store';
+import { formatDateNews } from 'src/store-admin/constants';
+import { IStoreParams } from '../../interfaces';
 import {
   initialState,
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText,
+  setSearchText
 } from '../../storeAdmin.slice';
-import { dispatch } from 'src/common/redux/store';
-import { IStoreParams } from '../../interfaces';
-import { FormateDateNew } from 'src/store-admin/constants';
 
 // ----------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ export const StoreTableToolbar = (props: {handleSearch: Function}) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={FormateDateNew}
+                      inputFormat={formatDateNews}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -106,7 +106,7 @@ export const StoreTableToolbar = (props: {handleSearch: Function}) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={FormateDateNew}
+                    inputFormat={formatDateNews}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}
