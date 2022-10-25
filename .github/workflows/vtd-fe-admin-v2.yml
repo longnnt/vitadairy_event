@@ -90,9 +90,10 @@ jobs:
           docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
           docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
 
-      - name: Deploy to GKE
+
+      - name: Deploy
         run: |-
-          kubectl rollout restart deployment $DEPLOYMENT_NAME
+          gcloud run deploy $DEPLOYMENT_NAME --image $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --platform managed
 
   build-and-deploy-to-prod:
     if: github.ref == 'refs/heads/prod'
