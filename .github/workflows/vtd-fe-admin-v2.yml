@@ -97,9 +97,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud run deploy "$DEPLOYMENT_NAME" \
-            --quiet \
-            --region "$GKE_ZONE" \
+          gcloud run deploy
             --image "$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest" \
             --platform "managed"
       # - name: Deploy to GKE
