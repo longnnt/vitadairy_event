@@ -2,11 +2,7 @@ import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
-import { IPropsPrizeHistoryTableRow } from 'src/event/event-history-prize/interfaces';
 import { IPropsListPrizeTableRow } from '../../interfaces';
-
-
-
 // ----------------------------------------------------------------------
 
 function ListPrizeTableRow({
@@ -19,11 +15,9 @@ function ListPrizeTableRow({
   const { id, giftName, ordinal, probability, quantity  } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(event.currentTarget);
   };
-
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
   };
@@ -33,13 +27,10 @@ function ListPrizeTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-
       <TableCell align="left">{giftName}</TableCell>
-
       <TableCell align="left">{ordinal}</TableCell>
       <TableCell align="left">{quantity}</TableCell>
       <TableCell align="left">{probability}</TableCell>
-
       <TableCell align="left">
         <TableMoreMenu
           open={openMenu}
@@ -75,12 +66,10 @@ function ListPrizeTableRow({
                 <Iconify icon={'eva:trash-2-outline'} />
                 Delete
               </MenuItem>
-              
             </>
           }
         />
       </TableCell>
-
     </TableRow>
   );
 }

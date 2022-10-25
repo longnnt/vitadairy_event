@@ -31,6 +31,7 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../contants';
 import { filterNameSelector, setFilterName } from '../event.slice';
+import useShowSnackbar from '../hooks/useCustomSnackBar';
 import { useDeleteListPrizeAdmin } from '../hooks/useDeleteListPrize';
 import { useGetListPrize } from '../hooks/useGetListPrize';
 import { IListPrize, IListPrizeParams } from '../interfaces';
@@ -39,7 +40,6 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
 
 
   function ListPrizeDashboard() {
-    const navigate = useNavigate();
     const {
       dense,
       page,
@@ -48,42 +48,34 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
       rowsPerPage,
       setPage,
       setSelected,
-  
       selected: selectedRows,
       onSelectRow,
       onSelectAllRows,
-  
       onSort,
       onChangeDense,
       onChangePage,
       onChangeRowsPerPage,
     } = useTable();
-    const { enqueueSnackbar } = useSnackbar();
-  
-    const onSuccess = () => {
-      enqueueSnackbar('Delete store successfully', {
-        variant: 'success',
-      });
-    };
-    const onError = () => {
-      enqueueSnackbar('Delete store error', {
-        variant: 'error',
-      });
-    };
-    const filterName = useSelector(filterNameSelector);
-  
-    const mutationDetele = useDeleteListPrizeAdmin({ onSuccess, onError });
-  
+    
+    const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
+    const mutationDetele = useDeleteListPrizeAdmin({
+      onSuccess: () => {
+        showSuccessSnackbar('Delete store successfully')
+      },
+      onError: () => {
+        showErrorSnackbar('Delete store fail')
+      },
+    });
+
     const searchParams: IListPrizeParams = {
       eventId: 1
     };
-  
+    const filterName = useSelector(filterNameSelector);
     if (filterName) searchParams.searchText = filterName;
-  
+    
     const { data } = useGetListPrize(searchParams);
-  
-    const listPrize = data?.data?.response || [];  
-  
+    const listPrize = data?.data?.response || [];   
+    
     const {
       isCheckedAll,
       reset: resetSelect,
@@ -99,22 +91,17 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
       dispatch(setFilterName(filterName));
       setPage(0);
     };
-  
     const handleDeleteRows = (ids: string[]) => {
       for (let i = 0; i < ids.length; i++){
         mutationDetele.mutate(ids[i]);
         resetSelect();
       }
     };
-  
     const handleEditRow = (id: string) => {
       // navigate(PATH_DASHBOARD.policy.editCategory(id));
     };
   
-    const { totalRecords } = data?.data?.pagination || {
-      totalRecords: 0,
-    };
-  
+    const  totalRecords  = data?.data?.pagination?.totalRecords || 0;
     const isNotFound = !listPrize.length;
     return (
       <>
@@ -124,13 +111,11 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
             { name: BREADCUMBS.EVENT_PROMOTION_Q4, href: PATH_DASHBOARD.eventAdmin.listPrize },
             { name: 'Danh sách sự kiện'},
             { name: 'Quà tặng sự kiện' },
-
           ]}
           action={
             <Stack direction='row' spacing={'10px'}>
               <Button
                 variant="contained"
-                
                 to={'#'}
                 component={RouterLink}
               >
@@ -138,7 +123,6 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
               </Button>
               <Button
               variant="contained"
-            
               to={'#'}
               component={RouterLink}
               >
@@ -153,7 +137,6 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
             filterName={filterName}
             onFilterName={handleFilterName}
           />
-  
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
               {!!selectedIds.length && (
@@ -192,7 +175,6 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
                   {listPrize.map((row: IListPrize) => (
                     <ListPrizeTableRow
                       key={row.id}
-                      // row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
                       row={{ ...row}}
                       selected={selectedIds.includes(row.id)}
                       onSelectRow={(e) => {

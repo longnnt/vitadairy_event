@@ -1,10 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { IListPrizeCallback } from '../interfaces';
-
 import { deleteListPrizeAdmin } from '../services';
-
-
 
 export function useDeleteListPrizeAdmin(callback: IListPrizeCallback) {
   const queryClient = useQueryClient();
@@ -13,7 +10,7 @@ export function useDeleteListPrizeAdmin(callback: IListPrizeCallback) {
     onSuccess: (_rs, _variables) => {
       queryClient
         .getQueryCache()
-        .findAll([QUERY_KEYS.EVENT_PRIZE_HISTORY])
+        .findAll([QUERY_KEYS.EVENT_LIST_PRIZE])
         .forEach(({ queryKey }) => {
           queryClient.invalidateQueries(queryKey);
         });

@@ -6,17 +6,6 @@ export interface IListPrizeEventParams {
   size?: number;
 }
 
-
-// export interface IListPrize {
-//   code: string;
-//   name: string;
-//   phoneNumber: number;
-//   address: string;
-//   qrLink: string;
-//   isActive: boolean;
-//   createdDate: string;
-// }
-
 export interface IListPrize {
   id: string;
   giftName: string;
@@ -24,7 +13,6 @@ export interface IListPrize {
   probability: number;
   quantity: number; 
 }
-
 
 export type IListPrizeCallback = {
   onSuccess: VoidFunction;
@@ -65,3 +53,12 @@ export type IPropsListPrizeTableRow = {
   onDeleteRow: VoidFunction;
 };
 
+export enum MessageType {
+  ERROR = 'error',
+  SUCCESS = 'success',
+}
+
+export interface IShowMessage {
+  type: MessageType;
+  message: string;
+}
