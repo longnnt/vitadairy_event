@@ -1,36 +1,41 @@
 import { LoadingButton } from '@mui/lab';
-import { Stack, InputAdornment, TextField, Box, Grid, Card } from '@mui/material';
+import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
-import { FormProvider, RHFSwitch } from 'src/common/components/hook-form';
+import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
+import { dispatch } from 'src/common/redux/store';
+import { formatDateNews } from 'src/store-admin/constants';
+import { IStoreParams } from '../../interfaces';
 import {
   initialState,
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText,
+  setSearchText
 } from '../../storeAdmin.slice';
-import { dispatch } from 'src/common/redux/store';
-import { IStoreParams } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
-export const StoreTableToolbar = (handleSearch: any) => {
+export const StoreTableToolbar = (props: {handleSearch: Function}) => {
+  const {handleSearch} = {...props};
   const methods = useForm({
     defaultValues: initialState,
   });
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = methods;
 
   const onSubmit = (data: IStoreParams) => {
-    if (data.searchText) dispatch(setSearchText(data.searchText));
+    dispatch(setSearchText(data.searchText as string));
     dispatch(setFirstScanStartDate(data.startDate as string));
     dispatch(setFirstScanEndDate(data.endDate as string));
   };
+
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -84,7 +89,7 @@ export const StoreTableToolbar = (handleSearch: any) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat="yyyy-MM-dd'T'HH:mm:ss'Z'"
+                      inputFormat={formatDateNews}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -101,7 +106,7 @@ export const StoreTableToolbar = (handleSearch: any) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat="yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    inputFormat={formatDateNews}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}
