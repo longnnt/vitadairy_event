@@ -1,23 +1,17 @@
-FROM node:16-alpine as builder
+FROM node:16-alpine as build
 
-RUN mkdir -p /usr/src/app
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json ./
+COPY . ./
 
-COPY yarn.lock ./
+# ---
+FROM fholzer/nginx-brotli:v1.12.2
 
-RUN yarn install
+WORKDIR /etc/nginx
+ADD nginx.conf /etc/nginx/nginx.conf
 
-COPY . .
-
-RUN yarn build
-
-FROM node:16-alpine as release
-
-COPY --from=builder /usr/src/app/ .
-
+COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
 
-CMD [ "yarn", "start" ]
