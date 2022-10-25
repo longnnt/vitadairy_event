@@ -75,15 +75,14 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
     const mutationDetele = useDeleteListPrizeAdmin({ onSuccess, onError });
   
     const searchParams: IListPrizeParams = {
-      page: page,
-      size: rowsPerPage,
+      eventId: 1
     };
   
     if (filterName) searchParams.searchText = filterName;
   
     const { data } = useGetListPrize(searchParams);
   
-    const listPrize = data?.data?.response?.response || [];  
+    const listPrize = data?.data?.response || [];  
   
     const {
       isCheckedAll,
@@ -112,7 +111,7 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
       // navigate(PATH_DASHBOARD.policy.editCategory(id));
     };
   
-    const { totalRecords } = data?.data?.response?.pagination || {
+    const { totalRecords } = data?.data?.pagination || {
       totalRecords: 0,
     };
   

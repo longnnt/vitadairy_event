@@ -6,7 +6,7 @@ import { getListPrize } from '../services';
 
 export function useGetListPrize(params: IListPrizeEventParams) {
   return {
-    ...useQuery([QUERY_KEYS.EVENT_PRIZE_HISTORY, params], () =>
+    ...useQuery([QUERY_KEYS.EVENT_LIST_PRIZE, params], () =>
       getListPrize(params)
     ),
   };

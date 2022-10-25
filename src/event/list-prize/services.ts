@@ -1,6 +1,6 @@
 import { API_LIST_PRiZE, API_STORE_ADMIN } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
-import { IDataListPrize, IListPrizeActive, IListPrizeParams } from './interfaces';
+import { IDataListPrize, IListPrizeParams } from './interfaces';
 
 
 
@@ -10,10 +10,4 @@ export const getListPrize = (params: IListPrizeParams) => {
 
 export const deleteListPrizeAdmin = (id: string) => {
   return axiosInstance.delete(`${API_LIST_PRiZE}/${id}`);
-};
-
-
-
-export const getActiveListPrize = (params: IListPrizeActive) => {
-  return axiosInstance.patch<unknown, IListPrizeActive>(`${API_LIST_PRiZE}/${params.code}/active?isActive=${params.isActive}`);
 };

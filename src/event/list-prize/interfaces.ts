@@ -1,10 +1,9 @@
 
 export interface IListPrizeEventParams {
-  endDate?: Date | string;
+  eventId?: number;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
 }
 
 
@@ -26,12 +25,8 @@ export interface IListPrize {
   quantity: number; 
 }
 
-export interface IListPrizeActive {
-  code: string;
-  isActive: boolean;
-}
 
-export type IStoreAdminCallback = {
+export type IListPrizeCallback = {
   onSuccess: VoidFunction;
   onError: VoidFunction;
 };
@@ -39,11 +34,10 @@ export type IStoreAdminCallback = {
 export type IListPrizeArray = Array<IListPrize>;
 
 export interface IListPrizeParams {
-  endDate?: Date | string;
+  eventId?: number;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
 }
 
 export interface IDataListPrize {
@@ -52,19 +46,13 @@ export interface IDataListPrize {
       status: number;
       msg: string;
     };
-    response: {
-      meta: {
-        status: number;
-        msg: string;
-      };
-      pagination: {
-        totalPages: number;
-        totalRecords: number;
-        currentPage: number;
-        recordsPerPage: number;
-        last: boolean;
-      };
-      response: IListPrizeArray;
+    response: IListPrizeArray;
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
     };
   }
 }

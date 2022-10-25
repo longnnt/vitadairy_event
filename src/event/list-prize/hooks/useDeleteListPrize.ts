@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
-import { IStoreAdminCallback } from '../interfaces';
+import { IListPrizeCallback } from '../interfaces';
+
 import { deleteListPrizeAdmin } from '../services';
 
 
 
-export function useDeleteListPrizeAdmin(callback: IStoreAdminCallback) {
+export function useDeleteListPrizeAdmin(callback: IListPrizeCallback) {
   const queryClient = useQueryClient();
 
   return useMutation((id: string) => deleteListPrizeAdmin(id), {
