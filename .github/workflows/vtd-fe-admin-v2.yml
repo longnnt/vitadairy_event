@@ -89,20 +89,11 @@ jobs:
         run: |-
           docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
           docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
-      # - name: Build & Push
-      #   run: |-
-      #     gcloud builds submit \
-      #       --quiet \
-      #       --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+
 
       - name: Deploy
         run: |-
-          gcloud run deploy
-            --image "$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest" \
-            --platform "managed"
-      # - name: Deploy to GKE
-      #   run: |-
-      #     kubectl rollout restart deployment $DEPLOYMENT_NAME
+          gcloud run deploy --image $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --platform managed
 
   build-and-deploy-to-prod:
     if: github.ref == 'refs/heads/prod'
