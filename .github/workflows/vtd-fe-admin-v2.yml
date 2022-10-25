@@ -82,13 +82,13 @@ jobs:
           gcloud auth configure-docker --quiet
           gcloud auth configure-docker $GAR_HOST --quiet
 
-      # - name: Build Docker
-      #   run: docker build -t $IMAGE_NAME:latest .
+      - name: Build Docker
+        run: docker build -t $IMAGE_NAME:latest .
 
-      # - name: Push Docker Image to Artifact Registry
-      #   run: |-
-      #     docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
-      #     docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
+      - name: Push Docker Image to Artifact Registry
+        run: |-
+          docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
+          docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
 
 
       - name: Deploy
