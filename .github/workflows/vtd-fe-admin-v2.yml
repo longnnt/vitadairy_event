@@ -93,7 +93,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud run deploy vtd-fe-admin-v2 --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=asia-east1
+          gcloud run deploy vtd-fe-admin-v2 --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=asia-east1
 
 
   build-and-deploy-to-prod:
