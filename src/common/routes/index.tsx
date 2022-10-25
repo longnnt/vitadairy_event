@@ -42,6 +42,10 @@ export default function Router() {
             </GuestGuard>
           ),
         },
+        {
+          path: 'forgot-password',
+          element: <ForgotPassword />,
+        },
       ],
     },
 
@@ -117,8 +121,11 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
-
+// login
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
+const ForgotPassword = Loadable(
+  lazy(() => import('../../auth/forgot-password/ResetPassword'))
+);
 
 // STORE ADMIN
 const ListStore = Loadable(
@@ -136,8 +143,6 @@ const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 const ShopInvitation = Loadable(
   lazy(() => import('src/shop-invitation/components/ShopInvitation'))
 );
-// ADMIN
-// const AdminList = Loadable(lazy(() => import('../pages/admin/adminList')));
 
 // EVENT_PROMOTION_IV
 
