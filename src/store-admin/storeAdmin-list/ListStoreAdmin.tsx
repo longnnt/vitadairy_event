@@ -12,6 +12,7 @@ import {
   TablePagination,
   Tooltip
 } from '@mui/material';
+import { ChangeEvent, ReactEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -93,7 +94,7 @@ function StoreAdminListDashboard() {
   if (searchText) searchParams.searchText = searchText;
 
   const { data, refetch } = useGetStoreAdmin(searchParams);
-  console.log(data)
+
 
   const listStoreAdmin = data?.data?.response?.response || [];
   

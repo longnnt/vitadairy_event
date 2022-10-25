@@ -16,7 +16,8 @@ import { IStoreParams } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
-export const StoreTableToolbar = (handleSearch: any) => {
+export const StoreTableToolbar = (props: {handleSearch: Function}) => {
+  const {handleSearch} = {...props};
   const methods = useForm({
     defaultValues: initialState,
   });
@@ -27,7 +28,7 @@ export const StoreTableToolbar = (handleSearch: any) => {
   } = methods;
 
   const onSubmit = (data: IStoreParams) => {
-    if (data.searchText) dispatch(setSearchText(data.searchText));
+    if (data.searchText || data.searchText == "") dispatch(setSearchText(data.searchText));
     dispatch(setFirstScanStartDate(data.startDate as string));
     dispatch(setFirstScanEndDate(data.endDate as string));
   };
@@ -84,7 +85,7 @@ export const StoreTableToolbar = (handleSearch: any) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat="yyyy-MM-dd'T'HH:mm:ss'Z'"
+                      inputFormat="dd-MM-yyyy hh:mm a"
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -101,7 +102,7 @@ export const StoreTableToolbar = (handleSearch: any) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat="yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    inputFormat="dd-MM-yyyy hh:mm a"
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}

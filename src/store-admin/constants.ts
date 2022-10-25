@@ -11,3 +11,4 @@ export const TABLE_HEAD = [
 export const SuccessUploadCode = 1000
 
 export const FormatDate = 'MMMM D, YYYY h:mm A'
+
