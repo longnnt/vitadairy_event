@@ -66,7 +66,7 @@ function StoreTableRow({
         />
       </TableCell>
 
-      <TableCell align="right">
+      {/* <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -95,7 +95,7 @@ function StoreTableRow({
             </>
           }
         />
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 }
