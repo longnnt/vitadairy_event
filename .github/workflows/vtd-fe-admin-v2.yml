@@ -93,7 +93,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud run deploy $DEPLOYMENT_NAME --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --cluster=$GKE_CLUSTER
+          gcloud run deploy --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --cluster=$GKE_CLUSTER
 
 
   build-and-deploy-to-prod:
