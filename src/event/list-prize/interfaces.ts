@@ -8,14 +8,22 @@ export interface IListPrizeEventParams {
 }
 
 
+// export interface IListPrize {
+//   code: string;
+//   name: string;
+//   phoneNumber: number;
+//   address: string;
+//   qrLink: string;
+//   isActive: boolean;
+//   createdDate: string;
+// }
+
 export interface IListPrize {
-  code: string;
-  name: string;
-  phoneNumber: number;
-  address: string;
-  qrLink: string;
-  isActive: boolean;
-  createdDate: string;
+  id: string;
+  giftName: string;
+  ordinal: number;
+  probability: number;
+  quantity: number; 
 }
 
 export interface IListPrizeActive {
@@ -28,7 +36,7 @@ export type IStoreAdminCallback = {
   onError: VoidFunction;
 };
 
-export type IListPrizeHistory = Array<IListPrize>;
+export type IListPrizeArray = Array<IListPrize>;
 
 export interface IListPrizeParams {
   endDate?: Date | string;
@@ -56,7 +64,7 @@ export interface IDataListPrize {
         recordsPerPage: number;
         last: boolean;
       };
-      response: IListPrizeHistory;
+      response: IListPrizeArray;
     };
   }
 }

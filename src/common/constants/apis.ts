@@ -14,3 +14,4 @@ export const API_SHOP_INVITATION_EXPORTCSV = '/admin/store-invitation/export/csv
 export const API_ADMIN = '/admin';
 export const API_STORE_ADMIN = '/admin/store';
 export const API_ADMIN_FORGOTPASSWORD = '/admin/forgot-password';
+export const API_LIST_PRiZE = '/admin/events/details';

@@ -3,8 +3,7 @@ import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { IPropsPrizeHistoryTableRow } from 'src/event/event-history-prize/interfaces';
-
-import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
+import { IPropsListPrizeTableRow } from '../../interfaces';
 
 
 
@@ -16,8 +15,9 @@ function ListPrizeTableRow({
   onEditRow,
   onSelectRow,
   onDeleteRow,
-}: IPropsPrizeHistoryTableRow) {
-  const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
+}: IPropsListPrizeTableRow) {
+  // const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
+  const { id, giftName, ordinal, probability, quantity  } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -34,15 +34,12 @@ function ListPrizeTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="left">{code}</TableCell>
 
-      <TableCell align="left">{phoneNumber}</TableCell>
+      <TableCell align="left">{giftName}</TableCell>
 
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {createdDate.slice(0, 19).replace('T', ' ')}
-      </TableCell>
-
-      <TableCell align="left">{address}</TableCell>
+      <TableCell align="left">{ordinal}</TableCell>
+      <TableCell align="left">{quantity}</TableCell>
+      <TableCell align="left">{probability}</TableCell>
 
       <TableCell align="left">
         <TableMoreMenu

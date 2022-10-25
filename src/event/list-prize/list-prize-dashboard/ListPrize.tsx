@@ -92,7 +92,7 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
       handleSelectItem,
       handleCheckAll,
     } = useSelectMultiple(
-      listPrize.map((item) => item.code),
+      listPrize.map((item) => item.id),
       page + 1
     );
   
@@ -192,14 +192,15 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
                 <TableBody>
                   {listPrize.map((row: IListPrize) => (
                     <ListPrizeTableRow
-                      key={row.code}
-                      row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
-                      selected={selectedIds.includes(row.code)}
+                      key={row.id}
+                      // row={{ ...row, createdDate: new Date(row.createdDate).toLocaleString()}}
+                      row={{ ...row}}
+                      selected={selectedIds.includes(row.id)}
                       onSelectRow={(e) => {
-                        handleSelectItem(row.code, e);
+                        handleSelectItem(row.id, e);
                       }}
-                      onDeleteRow={() => handleDeleteRows([row.code])}
-                      onEditRow={() => handleEditRow(row.code)}
+                      onDeleteRow={() => handleDeleteRows([row.id])}
+                      onEditRow={() => handleEditRow(row.id)}
                     />
                   ))}
   
