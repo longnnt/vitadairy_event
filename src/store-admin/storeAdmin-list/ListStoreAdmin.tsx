@@ -12,7 +12,6 @@ import {
   TablePagination,
   Tooltip
 } from '@mui/material';
-import { ChangeEvent, ReactEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
