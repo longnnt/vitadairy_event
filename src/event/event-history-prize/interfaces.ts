@@ -1,4 +1,3 @@
-
 export interface IHistoryListEventParams {
   endDate?: Date | string;
   page?: number;
@@ -7,15 +6,14 @@ export interface IHistoryListEventParams {
   startDate?: Date | string;
 }
 
-
 export interface IPrizeHistory {
-  code: string;
-  name: string;
+  id: string;
+  userName: string;
   phoneNumber: number;
-  address: string;
-  qrLink: string;
-  isActive: boolean;
-  createdDate: string;
+  giftName: string;
+  qr: string;
+  giftReceivedDate: string;
+  spoonCode: string;
 }
 
 export interface IPrizeHistoryActive {
@@ -44,21 +42,15 @@ export interface IDataPrizeHistory {
       status: number;
       msg: string;
     };
-    response: {
-      meta: {
-        status: number;
-        msg: string;
-      };
-      pagination: {
-        totalPages: number;
-        totalRecords: number;
-        currentPage: number;
-        recordsPerPage: number;
-        last: boolean;
-      };
-      response: IListPrizeHistory;
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
     };
-  }
+    response: IListPrizeHistory;
+  };
 }
 
 export type IPropsPrizeHistoryTableRow = {
@@ -69,3 +61,11 @@ export type IPropsPrizeHistoryTableRow = {
   onDeleteRow: VoidFunction;
 };
 
+export interface IPayloadSearch {
+  payload: string;
+  type: string;
+}
+export interface IPayloadDate {
+  payload: Date | string;
+  type: string;
+}
