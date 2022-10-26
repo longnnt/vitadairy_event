@@ -25,14 +25,14 @@ export const TABLE_HEAD = [
 
 export const defaultValues = {
   name: '',
-  startDate: null,
-  endDate: null,
-  skus: [],
-  defaultWinRate: undefined,
-  upRate: undefined,
-  downRate: undefined,
+  startDate: new Date(),
+  endDate: new Date(),
+  skus: [''],
+  defaultWinRate: 0,
+  upRate: 0,
+  downRate: 0,
   typeUser: '',
-  userRegisterDate: null,
-  userLimit: undefined,
+  userRegisterDate: new Date(),
+  userLimit: 0,
   id: uuidv4(),
 };

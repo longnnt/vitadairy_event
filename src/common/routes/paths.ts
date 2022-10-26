@@ -60,7 +60,9 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
     list: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
     new: path(ROOTS_DASHBOARD, '/event-promotion-IV/new'),
-    edit: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+    view: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+    edit: (eventId: number) =>
+      path(ROOTS_DASHBOARD, `/event-promotion-IV/edit/${eventId}`),
   },
 
   eventAdmin: {

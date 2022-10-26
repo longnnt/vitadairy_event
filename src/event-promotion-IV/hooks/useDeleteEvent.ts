@@ -19,7 +19,7 @@ export function useDeleteEvents(callback: IEventCallback) {
       keys.forEach((queryKey) => {
         queryClient.setQueryData<IResEvents>(queryKey, (old) => {
           if (!old) return {} as IResEvents;
-          const newEvents = (old.data || []).filter((p) => !eventIds.includes(p.id));
+          const newEvents = (old.data || []).filter((p) => !eventIds.includes(+p.id));
           const total = old.total - (old.data.length - newEvents.length);
           return {
             data: [...newEvents],

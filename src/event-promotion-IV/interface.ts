@@ -20,29 +20,13 @@ export interface initialValueProps {
   isFilter: boolean;
   isDeleteSelected: boolean;
   isOpenMenu: HTMLElement | null;
+  eventDetail: IEventFormData;
 }
 
-export type TimeProps = Dayjs | null | Date;
+export type TimeProps = Dayjs | Date | null;
 
-interface IThumbnailEvent {
-  id: number;
-  url: string;
-}
-
-export interface IEvent {
-  id: number;
-  thumbnail: IThumbnailEvent;
-  location: string;
-  field: string;
-  timeStart: string;
-  isFeature: -1 | 1;
-  title: string;
-  slug: string;
-  shortDesc: string;
-  content: string;
-}
 export interface IResEvents {
-  data: Array<IEvent>;
+  data: Array<IEventFormData>;
   total: number;
 }
 
@@ -67,12 +51,12 @@ export interface FormNewEventProps {
 
 export interface IEventFormData {
   name: string;
-  startDate: TimeProps;
-  endDate: TimeProps;
+  startDate: Date;
+  endDate: Date;
   defaultWinRate: number;
   upRate: number;
   downRate: number;
-  userRegisterDate: TimeProps;
+  userRegisterDate: Date;
   userLimit: number;
   id: string;
   skus: string[];

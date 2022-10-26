@@ -26,8 +26,13 @@ export const EventTableRow = ({
     dispatch(udpateStatusMenu(null));
   };
 
-  const handleEditEvent = (id: number) => {
+  const handleViewEvent = (id: number) => {
+    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
+    dispatch(udpateStatusMenu(null));
+  };
+  const handleEditEventAction = (id: number) => {
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
+    dispatch(udpateStatusMenu(null));
   };
   return (
     <TableRow hover selected={selected}>
@@ -44,11 +49,11 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem>
+              <MenuItem onClick={() => handleViewEvent(id)}>
                 <Iconify icon={'akar-icons:eye'} />
                 View
               </MenuItem>
-              <MenuItem onClick={() => handleEditEvent(id)}>
+              <MenuItem onClick={() => handleEditEventAction(id)}>
                 <Iconify icon={'eva:edit-fill'} />
                 Edit
               </MenuItem>
