@@ -34,6 +34,7 @@ import { eventDetailState } from '../eventPromotionIV.slice';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import id from 'date-fns/esm/locale/id/index.js';
 import { useEditEvent } from '../hooks/useEditEvent';
+import { IEventFormData } from '../interface';
 
 const names = [
   'Oliver Hansen',
@@ -56,12 +57,12 @@ export const EditEventForm = () => {
 
   const params = useParams();
   const id = params?.id;
-  const dataEventDetail = useSelector(eventDetailState);
+  const dataEventDetail: IEventFormData = useSelector(eventDetailState);
 
   const {
     control,
     handleSubmit,
-    setValue,
+    reset,
     formState: { errors },
   } = methods;
 
@@ -94,17 +95,9 @@ export const EditEventForm = () => {
   };
 
   useDeepCompareEffect(() => {
-    if (dataEventDetail?.name) setValue('name', dataEventDetail?.name);
-    if (dataEventDetail.startDate) setValue('startDate', dataEventDetail.startDate);
-    if (dataEventDetail?.endDate) setValue('endDate', dataEventDetail.endDate);
-    if (dataEventDetail?.defaultWinRate)
-      setValue('defaultWinRate', dataEventDetail?.defaultWinRate);
-    if (dataEventDetail?.upRate) setValue('upRate', dataEventDetail.upRate);
-    if (dataEventDetail?.downRate) setValue('downRate', dataEventDetail.downRate);
-    if (dataEventDetail?.userRegisterDate)
-      setValue('userRegisterDate', dataEventDetail?.userRegisterDate);
-    if (dataEventDetail?.userLimit) setValue('userLimit', dataEventDetail?.userLimit);
-    if (dataEventDetail?.skus) setValue('skus', dataEventDetail?.skus);
+    if (dataEventDetail) {
+      reset(dataEventDetail);
+    }
   }, [dataEventDetail]);
 
   useEffect(() => {

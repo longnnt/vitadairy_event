@@ -51,7 +51,7 @@ export interface FormNewEventProps {
 
 export interface IEventFormData {
   name: string;
-  startDate: Date | null;
+  startDate: Date;
   endDate: Date;
   defaultWinRate: number;
   upRate: number;

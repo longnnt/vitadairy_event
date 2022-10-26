@@ -11,10 +11,8 @@ export const addNewEvent = async (formData: {}) => {
 
   return data;
 };
-export const getEventById = async (id: number) => {
-  const data = await axiosInstance.post(`${API_EVENT_ADMIN}/${id}`);
-
-  return data;
+export const getEventById = (id: number) => {
+  return axiosInstance.post(`${API_EVENT_ADMIN}/${id}`);
 };
 export const editEventService = async ({
   formEditData,
