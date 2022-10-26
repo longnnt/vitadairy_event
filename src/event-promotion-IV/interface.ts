@@ -20,13 +20,22 @@ export interface initialValueProps {
   isFilter: boolean;
   isDeleteSelected: boolean;
   isOpenMenu: HTMLElement | null;
-  eventDetail: IEvent;
+  eventDetail: IEventFormData;
 }
 
 export type TimeProps = Dayjs | Date | null;
 
-export type IEvent = {
-  id: string;
+export interface IResEvents {
+  data: Array<IEventFormData>;
+  total: number;
+}
+
+export interface IEventCallback {
+  onSuccess: VoidFunction;
+  onError: VoidFunction;
+}
+
+export interface IEventFormData {
   name: string;
   startDate: Date;
   endDate: Date;
@@ -35,14 +44,6 @@ export type IEvent = {
   downRate: number;
   userRegisterDate: Date;
   userLimit: number;
+  id: string;
   skus: string[];
-};
-export interface IResEvents {
-  data: Array<IEvent>;
-  total: number;
-}
-
-export interface IEventCallback {
-  onSuccess: VoidFunction;
-  onError: VoidFunction;
 }

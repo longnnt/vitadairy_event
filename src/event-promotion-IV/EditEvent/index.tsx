@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useDispatch } from 'src/common/redux/store';
 import { setEventDetail } from '../eventPromotionIV.slice';
 import { useEffect } from 'react';
-import { IEvent } from '../interface';
+import { IEventFormData } from '../interface';
 import dayjs from 'dayjs';
 
 export const EditEvent = () => {
@@ -38,7 +38,7 @@ export const EditEvent = () => {
     userLimit: 1,
     id: '172ce2e3-2cb5-4815-9b27-888fc77594af',
   };
-  const data: IEvent = {
+  const data: IEventFormData = {
     ...fakeData,
     startDate: new Date(fakeData.startDate),
     endDate: new Date(fakeData.endDate),
@@ -52,7 +52,7 @@ export const EditEvent = () => {
 
   useEffect(
     () => () => {
-      dispatch(setEventDetail({} as IEvent));
+      dispatch(setEventDetail({} as IEventFormData));
     },
     []
   );

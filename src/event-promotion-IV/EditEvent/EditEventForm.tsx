@@ -18,14 +18,14 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { schemaAddEvent } from '../schema';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import {
   FormProvider,
   RHFRadioGroup,
   RHFTextField,
 } from 'src/common/components/hook-form';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import uuidv4 from 'src/common/utils/uuidv4';
 import { defaultValues } from '../constant';
@@ -34,11 +34,6 @@ import { eventDetailState } from '../eventPromotionIV.slice';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import id from 'date-fns/esm/locale/id/index.js';
 import { useEditEvent } from '../hooks/useEditEvent';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 const names = [
   'Oliver Hansen',
@@ -67,7 +62,6 @@ export const EditEventForm = () => {
     control,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = methods;
 
@@ -113,18 +107,6 @@ export const EditEventForm = () => {
     if (dataEventDetail?.skus) setValue('skus', dataEventDetail?.skus);
   }, [dataEventDetail]);
 
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleCloseAndSubmit = () => {
-    setOpen(false);
-  };
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
   }, [isSuccess]);
@@ -158,7 +140,7 @@ export const EditEventForm = () => {
                             {...params}
                             fullWidth
                             helperText={errors.startDate && errors.startDate?.message}
-                            error={errors.startDate ? true : false}
+                            error={!!errors.startDate}
                           />
                         )}
                       />
@@ -181,7 +163,7 @@ export const EditEventForm = () => {
                             {...params}
                             fullWidth
                             helperText={errors.endDate && errors.endDate?.message}
-                            error={errors.endDate ? true : false}
+                            error={!!errors.endDate}
                           />
                         )}
                       />
@@ -191,7 +173,7 @@ export const EditEventForm = () => {
               </Stack>
 
               <FormControl>
-                <InputLabel error={errors.skus ? true : false}>Mã sản phẩm</InputLabel>
+                <InputLabel error={!!errors.skus}>Mã sản phẩm</InputLabel>
                 <Controller
                   name="skus"
                   control={control}
@@ -207,7 +189,7 @@ export const EditEventForm = () => {
                         }
                         fullWidth
                         {...field}
-                        error={errors.skus ? true : false}
+                        error={!!errors.skus}
                       >
                         {names.map((name) => (
                           <MenuItem key={name} value={name}>
@@ -218,7 +200,7 @@ export const EditEventForm = () => {
                     </Stack>
                   )}
                 />
-                <FormHelperText error={errors.skus ? true : false}>
+                <FormHelperText error={!!errors.skus}>
                   {errors.skus?.message}
                 </FormHelperText>
               </FormControl>
@@ -266,7 +248,7 @@ export const EditEventForm = () => {
                           helperText={
                             errors.userRegisterDate && errors.userRegisterDate.message
                           }
-                          error={errors.userRegisterDate ? true : false}
+                          error={!!errors.userRegisterDate}
                         />
                       )}
                     />
@@ -283,37 +265,13 @@ export const EditEventForm = () => {
           </Card>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button
-            variant="contained"
-            color="secondary"
-            // onClick={handleClickOpen}
-            type="submit"
-          >
+          <Button variant="contained" color="secondary" type="submit">
             Lưu
           </Button>
           <Button variant="contained" sx={{ mx: '7px' }}>
             Lưu & chỉnh sửa
           </Button>
         </Box>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{'Xác thực thay đổi'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Bạn có muốn lưu thay đổi
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
-            <Button onClick={handleCloseAndSubmit} autoFocus type="submit">
-              Agree
-            </Button>
-          </DialogActions>
-        </Dialog>
       </FormProvider>
     </>
   );

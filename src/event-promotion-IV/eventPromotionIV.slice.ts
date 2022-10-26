@@ -1,6 +1,6 @@
 import { RootState } from 'src/common/redux/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initialValueProps, TimeProps, IEvent } from './interface';
+import { initialValueProps, TimeProps, IEventFormData } from './interface';
 
 const initialValue: initialValueProps = {
   timeStartValue: new Date(),
@@ -9,7 +9,7 @@ const initialValue: initialValueProps = {
   isFilter: false,
   isDeleteSelected: false,
   isOpenMenu: null,
-  eventDetail: {} as IEvent,
+  eventDetail: {} as IEventFormData,
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -33,8 +33,8 @@ const eventPromotionIVSlice = createSlice({
     udpateStatusMenu: (state, action) => {
       state.isOpenMenu = action.payload;
     },
-    setEventDetail: (state, action: { payload: IEvent; type: string }) => {
-      state.eventDetail = { ...action.payload };
+    setEventDetail: (state, action: PayloadAction<IEventFormData>) => {
+      state.eventDetail = action.payload;
     },
   },
 });
