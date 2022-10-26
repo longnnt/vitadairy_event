@@ -10,7 +10,7 @@ export const useGetEventById = ({
   id: number;
   callback: IEventCallback;
 }) =>
-  useQuery([QUERY_KEYS.EDIT_ADMIN, id], () => getEventById(id), {
+  useQuery([QUERY_KEYS.EDIT_EVENT_ADMIN, id], () => getEventById(id), {
     onSuccess() {
       callback.onSuccess && callback.onSuccess();
     },
