@@ -20,27 +20,23 @@ export interface initialValueProps {
   isFilter: boolean;
   isDeleteSelected: boolean;
   isOpenMenu: HTMLElement | null;
+  eventDetail: IEvent;
 }
 
-export type TimeProps = Dayjs | null | Date;
+export type TimeProps = Dayjs | Date | null;
 
-interface IThumbnailEvent {
-  id: number;
-  url: string;
-}
-
-export interface IEvent {
-  id: number;
-  thumbnail: IThumbnailEvent;
-  location: string;
-  field: string;
-  timeStart: string;
-  isFeature: -1 | 1;
-  title: string;
-  slug: string;
-  shortDesc: string;
-  content: string;
-}
+export type IEvent = {
+  id: string;
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
+  userRegisterDate: Date;
+  userLimit: number;
+  skus: string[];
+};
 export interface IResEvents {
   data: Array<IEvent>;
   total: number;
