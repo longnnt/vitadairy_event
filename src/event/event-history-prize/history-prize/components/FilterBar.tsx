@@ -1,11 +1,19 @@
-
-import { Stack, InputAdornment, TextField, MenuItem, Box, Button } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
+import { Controller, useForm } from 'react-hook-form';
 import { dispatch, useSelector } from 'src/common/redux/store';
-import { filterFromDateSelector, filterToDateSelector, setFilterFromDate, setFilterToDate } from '../../event.slice';
+import {
+  initialState,
+  setFirstScanEndDate,
+  setFirstScanStartDate,
+  setSearchText,
+} from '../../event.slice';
+import { IHistoryListEventParams } from '../../interfaces';
+import { formatDateNews } from '../../constants';
 
 // ----------------------------------------------------------------------
 
@@ -13,81 +21,106 @@ type Props = {
   filterName: string;
 
   onFilterName: (value: string) => void;
-
 };
 
-export default function FilterBar({
-  filterName,
-  onFilterName,
+export const FilterBar = (props: { handleSearch: Function }) => {
+  const { handleSearch } = { ...props };
+  const methods = useForm({
+    defaultValues: initialState,
+  });
 
-}: Props) {
-  const filterFromDate = useSelector(filterFromDateSelector);
-  const filterToDate = useSelector(filterToDateSelector);
- 
-  const handleFilterFromDate = (fromDate: string) => {
-    dispatch(setFilterFromDate(fromDate));
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, errors },
+  } = methods;
 
+  const onSubmit = (data: IHistoryListEventParams) => {
+    dispatch(setSearchText(data.searchText as string));
+    dispatch(setFirstScanStartDate(data.startDate as string));
+    dispatch(setFirstScanEndDate(data.endDate as string));
   };
 
-  const handleFilterToDate = (toDate: string) => {
-    dispatch(setFilterToDate(toDate));
-
-  };
   return (
-    <Stack>
-  
-      <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: '11px', px: 3 }}>
-      
-        <Box>
-          <DatePicker
-                  value={filterFromDate}
-                  onChange={(newDate:any) => handleFilterFromDate(newDate)}
-                  label= 'Ngày bắt đầu'
-                  inputFormat="dd/MM/yyyy"
-                  renderInput={(params) => <TextField {...params} />}
-            />
-        </Box>
-
-        <Box>
-          <DatePicker
-                  value={filterToDate}
-                  onChange={(toDate:any) => handleFilterToDate(toDate)}
-                  label= 'Ngày kết thúc'
-                  inputFormat="dd/MM/yyyy"
-                  renderInput={(params) => <TextField {...params} />}
-            />
-        </Box>
-
-        <TextField
-          fullWidth
-          value={filterName}
-          onChange={(event) => onFilterName(event.target.value)}
-          placeholder="Lọc theo tên, số điện thoại hoặc quà"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Iconify
-                  icon={'eva:search-fill'}
-                  sx={{ color: 'text.disabled', width: 20, height: 20 }}
+    <>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Card>
+          <Grid container spacing={5} py="30px">
+            <Grid item xs={10} md={4} ml="20px">
+              <Stack spacing={'20px'}>
+                <Controller
+                  name="searchText"
+                  control={control}
+                  render={({ field: { onChange } }) => (
+                    <TextField
+                      fullWidth
+                      onChange={onChange}
+                      name="searchText"
+                      placeholder="Search..."
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Iconify
+                              icon={'eva:search-fill'}
+                              sx={{ color: 'text.disabled', width: 20, height: 20 }}
+                            />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
                 />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Stack>
-      <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 1, px: 3 }}>
-        <Box >
-          <Button variant='outlined' >
-            Lọc
-          </Button>
-
-        </Box>
-        <Box >
-          <Button variant='outlined'>
-            Xóa
-          </Button>
-        </Box>
-      </Stack>
-    </Stack>
+                <Box>
+                  <LoadingButton
+                    sx={{ size: '30px' }}
+                    type="submit"
+                    variant="contained"
+                    size="medium"
+                    onClick={() => handleSearch()}
+                  >
+                    Tìm kiếm
+                  </LoadingButton>
+                </Box>
+              </Stack>
+            </Grid>
+            <Grid item xs={10} md={3}>
+              <Stack spacing={'20px'}>
+                <Controller
+                  name="startDate"
+                  key={'firstScanStartDate'}
+                  control={control}
+                  render={({ field }) => (
+                    <MobileDateTimePicker
+                      {...field}
+                      label="Start date"
+                      key={'firstScanStartDate'}
+                      inputFormat={formatDateNews}
+                      renderInput={(params) => <TextField {...params} fullWidth />}
+                    />
+                  )}
+                />
+              </Stack>
+            </Grid>
+            <Grid item xs={10} md={3}>
+              <Controller
+                name="endDate"
+                key="firstScanEndDate"
+                control={control}
+                render={({ field }: { field: any }) => (
+                  <MobileDateTimePicker
+                    {...field}
+                    key="firstScanEndDate"
+                    label="End date"
+                    inputFormat={formatDateNews}
+                    renderInput={(params: any) => <TextField {...params} fullWidth />}
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
+        </Card>
+      </FormProvider>
+    </>
   );
-}
+};

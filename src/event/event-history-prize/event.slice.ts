@@ -1,45 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
+import { IPayloadDate, IPayloadSearch } from './interfaces';
 
 type StateProps = {
-  filterName: string;
-  filterRole: string;
-  filterFromDate: any,
-  filterToDate: any,
+  searchText: string;
+  startDate: Date | string;
+  endDate: Date | string;
 };
 
-const initialState: StateProps = {
-  filterName: '',
-  filterRole: '',
-  filterFromDate: null,
-  filterToDate: null,
+export const initialState: StateProps = {
+  searchText: '',
+  startDate: new Date("2022-01-01T00:00:00Z"),
+  endDate: new Date().toISOString(),
 };
 
 export const eventAdminSlice = createSlice({
   name: 'eventAdmin',
   initialState,
   reducers: {
-    setFilterName: (state, action: PayloadAction<string>) => {
-      state.filterName = action.payload;
+    setSearchText: (state, action: IPayloadSearch) => {
+      state.searchText = action.payload;
     },
-    setFilterRole: (state, action: PayloadAction<string>) => {
-      state.filterRole = action.payload;
+    setFirstScanStartDate: (state, action: IPayloadDate) => {
+      state.startDate = action.payload;
     },
-    setFilterFromDate: (state, action: PayloadAction<string>) => {
-      state.filterFromDate = action.payload;
-    },
-    setFilterToDate: (state, action: PayloadAction<string>) => {
-      state.filterToDate = action.payload;
+    setFirstScanEndDate: (state, action: IPayloadDate) => {
+      state.endDate = action.payload;
     },
   },
 });
 
-export const { setFilterName, setFilterRole, setFilterFromDate, setFilterToDate } = eventAdminSlice.actions;
+export const { setFirstScanEndDate, setFirstScanStartDate, setSearchText } =
+  eventAdminSlice.actions;
 
-export const filterNameSelector = (state: RootState) => state.historyList.filterName;
-export const filterRoleSelector = (state: RootState) => state.historyList.filterRole;
-export const filterFromDateSelector = (state: RootState) => state.historyList.filterFromDate;
-export const filterToDateSelector = (state: RootState) => state.historyList.filterToDate;
-
+  export const searchTextSelector = (state: RootState) => state.historyList.searchText;
+  export const firstScanStartSelector = (state: RootState) => state.historyList.startDate;
+  export const firstScanEndSelector = (state: RootState) => state.historyList.endDate;
 
 export default eventAdminSlice.reducer;
