@@ -34,19 +34,9 @@ const ICONS = {
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
-
   {
     subheader: 'app',
     items: [
-      {
-        title: 'mail',
-        path: PATH_DASHBOARD.general.app,
-        icon: ICONS.mail,
-        info: <Label color="error">+32</Label>,
-      },
-      { title: 'chat', path: PATH_DASHBOARD.general.app, icon: ICONS.chat },
-      { title: 'calendar', path: PATH_DASHBOARD.general.app, icon: ICONS.calendar },
-      { title: 'kanban', path: PATH_DASHBOARD.general.app, icon: ICONS.kanban },
       {
         title: 'shop-invitation',
         path: PATH_DASHBOARD.general.shop_invitation,
