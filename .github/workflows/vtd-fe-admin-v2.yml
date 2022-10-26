@@ -9,44 +9,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checking-deploy-k8s-change:
-    if: github.ref == 'refs/heads/develop'
-    name: Check Deploy Staging config change to GKE
-    runs-on: ubuntu-latest
+  # checking-deploy-k8s-change:
+  #   if: github.ref == 'refs/heads/develop'
+  #   name: Check Deploy Staging config change to GKE
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 2
 
-      - name: Get specific changed files
-        uses: tj-actions/changed-files@v27
-        id: check-k8s-changes
-        with:
-          files: |
-            infra/k8s/**
-          sha: ${{ github.sha }}
+  #     - name: Get specific changed files
+  #       uses: tj-actions/changed-files@v27
+  #       id: check-k8s-changes
+  #       with:
+  #         files: |
+  #           infra/k8s/**
+  #         sha: ${{ github.sha }}
 
-      - name: Wait for deploy infra to succeed
-        if: steps.check-k8s-changes.outputs.any_changed == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-deploy-infra
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Deploy Infra Staging
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          timeoutSeconds: 100
+  #     - name: Wait for deploy infra to succeed
+  #       if: steps.check-k8s-changes.outputs.any_changed == 'true'
+  #       uses: fountainhead/action-wait-for-check@v1.0.0
+  #       id: wait-for-deploy-infra
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         checkName: Deploy Infra Staging
+  #         ref: ${{ github.event.pull_request.head.sha || github.sha }}
+  #         timeoutSeconds: 100
 
-      - if: steps.check-k8s-changes.outputs.any_changed == 'true' && steps.wait-for-deploy-infra.outputs.conclusion == 'failure'
-        name: Checking the deploy status
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Deploy to env infra fail, we will not deploy service cause service need env to run')
+  #     - if: steps.check-k8s-changes.outputs.any_changed == 'true' && steps.wait-for-deploy-infra.outputs.conclusion == 'failure'
+  #       name: Checking the deploy status
+  #       uses: actions/github-script@v3
+  #       with:
+  #         script: |
+  #           core.setFailed('Deploy to env infra fail, we will not deploy service cause service need env to run')
 
   build-and-deploy-to-staging:
-    needs: checking-deploy-k8s-change
+    # needs: checking-deploy-k8s-change
     if: github.ref == 'refs/heads/develop'
     name: Deploy Staging to GKE
     runs-on: ubuntu-latest
@@ -93,7 +93,8 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud run deploy $DEPLOYMENT_NAME --image $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --platform managed
+          gcloud run deploy vtd-fe-admin-v2 --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=asia-southeast1 --allow-unauthenticated
+
 
   build-and-deploy-to-prod:
     if: github.ref == 'refs/heads/prod'
