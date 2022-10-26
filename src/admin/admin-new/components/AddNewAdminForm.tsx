@@ -9,18 +9,16 @@ import { defaultValues, permission, status } from '../../constants';
 import { IFormAdmin } from 'src/admin/interfaces';
 import { NewAdminSchema } from 'src/admin/schema';
 import { useAddNewAdmin } from '../../hooks/useAddNewAccount';
-import  useMessage from 'src/store-admin/hooks/useMessage';
-
-
+import useMessage from 'src/store-admin/hooks/useMessage';
 
 function AddFormNewAdmin() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { mutate, isSuccess } = useAddNewAdmin({
     onSuccess: () => {
-      showSuccessSnackbar('Add admin successfully')
+      showSuccessSnackbar('Add admin successfully');
     },
     onError: () => {
-      showErrorSnackbar('Add admin fail')
+      showErrorSnackbar('Add admin fail');
     },
   });
 
