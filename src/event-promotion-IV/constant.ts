@@ -1,3 +1,5 @@
+import uuidv4 from 'src/common/utils/uuidv4';
+
 export const TABLE_HEAD = [
   {
     id: 'nameEvent',
@@ -22,7 +24,7 @@ export const TABLE_HEAD = [
 ];
 
 export const defaultValues = {
-  nameEvent: '',
+  name: '',
   startDate: null,
   endDate: null,
   skus: [],
@@ -32,4 +34,5 @@ export const defaultValues = {
   typeUser: '',
   userRegisterDate: null,
   userLimit: undefined,
+  id: uuidv4(),
 };

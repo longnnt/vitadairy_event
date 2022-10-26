@@ -64,3 +64,16 @@ export interface FormNewEventProps {
   userLimit: number;
   id: 0;
 }
+
+export interface IEventFormData {
+  name: string;
+  startDate: TimeProps;
+  endDate: TimeProps;
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
+  userRegisterDate: TimeProps;
+  userLimit: number;
+  id: string;
+  skus: string[];
+}

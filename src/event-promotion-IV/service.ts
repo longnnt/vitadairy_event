@@ -1,3 +1,4 @@
+import { IEventFormData } from './interface';
 import axiosInstance from 'src/common/utils/axios';
 import { API_EVENT_ADMIN } from './../common/constants/apis';
 
@@ -6,7 +7,7 @@ export const deleteEvents = async (ids: number[]) => {
   return data;
 };
 
-export const addNewEvent = async (formData: {}) => {
+export const addNewEvent = async (formData: IEventFormData) => {
   const data = await axiosInstance.post(API_EVENT_ADMIN, formData);
 
   return data;

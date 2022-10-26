@@ -32,6 +32,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import uuidv4 from 'src/common/utils/uuidv4';
 import { defaultValues } from '../constant';
+import { IEventFormData } from '../interface';
 
 const names = [
   'Oliver Hansen',
@@ -70,8 +71,8 @@ export const AddEvent = () => {
     },
   });
   const onSubmit = (data: any) => {
-    const formDataAddNewEvent = {
-      name: data.nameEvent,
+    const formDataAddNewEvent: IEventFormData = {
+      name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
       skus: data.skus,
@@ -96,7 +97,7 @@ export const AddEvent = () => {
         links={[
           { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Tạo mới sự kiện' },
+          { name: BREADCUMBS.CREATE_EVENT },
         ]}
       />
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -106,7 +107,7 @@ export const AddEvent = () => {
         <Scrollbar sx={{ marginTop: '20px' }}>
           <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
             <Stack spacing="26px">
-              <RHFTextField name="nameEvent" label="Tên sự kiện" fullWidth />
+              <RHFTextField name="name" label="Tên sự kiện" fullWidth />
               <Stack
                 spacing={'10px'}
                 direction="row"
@@ -127,7 +128,7 @@ export const AddEvent = () => {
                             {...params}
                             fullWidth
                             helperText={errors.startDate && errors.startDate?.message}
-                            error={errors.startDate ? true : false}
+                            error={!!errors.startDate}
                           />
                         )}
                       />
@@ -150,7 +151,7 @@ export const AddEvent = () => {
                             {...params}
                             fullWidth
                             helperText={errors.endDate && errors.endDate?.message}
-                            error={errors.endDate ? true : false}
+                            error={!!errors.endDate}
                           />
                         )}
                       />
@@ -176,7 +177,7 @@ export const AddEvent = () => {
                         }
                         fullWidth
                         {...field}
-                        error={errors.skus ? true : false}
+                        error={!!errors.skus}
                       >
                         {names.map((name) => (
                           <MenuItem key={name} value={name}>
@@ -187,7 +188,7 @@ export const AddEvent = () => {
                     </Stack>
                   )}
                 />
-                <FormHelperText error={errors.skus ? true : false}>
+                <FormHelperText error={!!errors.skus}>
                   {errors.skus?.message}
                 </FormHelperText>
               </FormControl>
@@ -235,7 +236,7 @@ export const AddEvent = () => {
                           helperText={
                             errors.userRegisterDate && errors.userRegisterDate.message
                           }
-                          error={errors.userRegisterDate ? true : false}
+                          error={!!errors.userRegisterDate}
                         />
                       )}
                     />

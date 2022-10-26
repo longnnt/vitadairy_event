@@ -3,7 +3,7 @@ import * as yup from 'yup';
 export const schemaAddEvent = yup
   .object()
   .shape({
-    nameEvent: yup
+    name: yup
       .string()
       .required('Vui lòng nhập thông tin vào ô trống')
       .max(200, 'Dữ liệu không hợp lệ. Tên sự kiện có độ dài tối đa 200 kí tự'),

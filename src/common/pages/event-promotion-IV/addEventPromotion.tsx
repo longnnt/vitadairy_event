@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import Container from '@mui/material/Container';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
 import { AddEvent } from 'src/event-promotion-IV/AddEvent';
