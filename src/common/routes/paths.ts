@@ -70,5 +70,4 @@ export const PATH_DASHBOARD = {
     listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
     createPrize: path(ROOTS_DASHBOARD, '/event-create-prize')
   }
-
 };

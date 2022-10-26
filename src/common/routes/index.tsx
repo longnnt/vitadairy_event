@@ -87,6 +87,7 @@ export default function Router() {
               index: true,
             },
             { path: 'event-promotion-IV', element: <ListEventPromotion /> },
+            { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
           ],
         },
         {
@@ -139,7 +140,6 @@ const History = Loadable(lazy(() => import('../../event/event-history-prize/inde
 const ListPrize = Loadable(lazy(() => import('../../event/list-prize/index')));
 const CreatePrize = Loadable(lazy(() => import('../../event/event-history-prize/history-prize-create/create')))
 
-
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
@@ -154,6 +154,11 @@ const ShopInvitation = Loadable(
 const ListEventPromotion = Loadable(
   lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
 );
+const AddEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))
+);
+
+// ADMIN
 const AdminList = Loadable(lazy(() => import('../../admin/admin-pages/AdminList')));
 const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
 const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
