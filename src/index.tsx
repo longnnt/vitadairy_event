@@ -17,6 +17,9 @@ import { store, persistor } from './common/redux/store';
 import { SettingsProvider } from './common/contexts/SettingsContext';
 import { CollapseDrawerProvider } from './common/contexts/CollapseDrawerContext';
 
+// editor
+import 'react-quill/dist/quill.snow.css';
+
 import { AuthProvider } from './common/contexts/JWTContext';
 
 //

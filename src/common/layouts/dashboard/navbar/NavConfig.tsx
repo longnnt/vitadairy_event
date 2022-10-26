@@ -83,6 +83,10 @@ const navConfig = [
             path: PATH_DASHBOARD.eventAdmin.historyPrize,
           },
           {
+            title: 'Thêm mới',
+            path: PATH_DASHBOARD.eventAdmin.createPrize,
+          },
+          {
             title:'Quà tặng Sự kiện',
             path: PATH_DASHBOARD.eventAdmin.listPrize,
           },

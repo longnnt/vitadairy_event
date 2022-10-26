@@ -1,4 +1,3 @@
-
 export interface IHistoryListEventParams {
   endDate?: Date | string;
   page?: number;
@@ -6,7 +5,6 @@ export interface IHistoryListEventParams {
   size?: number;
   startDate?: Date | string;
 }
-
 
 export interface IPrizeHistory {
   code: string;
@@ -58,7 +56,7 @@ export interface IDataPrizeHistory {
       };
       response: IListPrizeHistory;
     };
-  }
+  };
 }
 
 export type IPropsPrizeHistoryTableRow = {
@@ -69,3 +67,40 @@ export type IPropsPrizeHistoryTableRow = {
   onDeleteRow: VoidFunction;
 };
 
+export type IFormEventValuesProps = {
+  thumbnail: string | null;
+  isFeature: boolean;
+  location: string;
+  timeStart: Date | null;
+};
+
+export interface IFormCreateEvent {
+  eventDetailProvinces: {
+    endDate: Date | string;
+    id: number;
+    provinceId: number;
+    quantity: number;
+    startDate: Date | string;
+  };
+  eventId: number,
+  giftId: number,
+  id: number,
+  notificationContent: string,
+  notificationDescription: string,
+  notificationTitle: string,
+  ordinal: 0,
+  popupCode: string,
+  popupImageLink: string,
+  popupLink: string,
+  popupType: string,
+  probability: number,
+  quantity: number,
+  transactionTypeId: number
+};
+
+export interface ITransactionType {
+  id: number,
+  code: string,
+  name: string,
+  description: string
+}
