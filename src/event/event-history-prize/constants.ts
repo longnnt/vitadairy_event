@@ -13,7 +13,7 @@ export const TABLE_HEAD = [
   { id: '' },
 ];
 
-export const formatDateNews = 'dd-MM-yyyy hh:mm a'
+export const formatDateNews = 'dd-MM-yyyy '
 
 
 

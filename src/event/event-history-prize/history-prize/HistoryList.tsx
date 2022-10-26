@@ -62,20 +62,9 @@ function EventPrizeHistoryDashboard() {
   } = useTable();
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSuccess = () => {
-    enqueueSnackbar('Delete store successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Delete store error', {
-      variant: 'error',
-    });
-  };
   const searchText = useSelector(searchTextSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
-  const mutationDetele = useDeletePrizeHistoryAdmin({ onSuccess, onError });
   const searchParams: IPrizeHistoryParams = {
     page: page,
     size: rowsPerPage,

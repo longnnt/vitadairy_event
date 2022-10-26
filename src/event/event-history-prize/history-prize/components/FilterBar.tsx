@@ -1,7 +1,8 @@
-import { LoadingButton } from '@mui/lab';
+import {  LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { FormProvider } from 'src/common/components/hook-form';
+import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from 'src/common/components/Iconify';
 import { Controller, useForm } from 'react-hook-form';
@@ -91,7 +92,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <MobileDateTimePicker
+                    <DatePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
@@ -108,7 +109,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <MobileDateTimePicker
+                  <DatePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"

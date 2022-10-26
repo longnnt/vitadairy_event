@@ -4,7 +4,7 @@ import { IDataPrizeHistory, IHistoryListEventParams, IPrizeHistoryActive, IPrize
 
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
-  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}/all`, { params });
+  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}`, { params });
 };
 export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
   return axiosInstance.get(`${API_PRIZE_HISTORY}/export/csv`, {
