@@ -1,4 +1,4 @@
-import { IEvent } from './interface';
+import { IEventFormData } from './interface';
 import axiosInstance from 'src/common/utils/axios';
 import { API_EVENT_ADMIN } from './../common/constants/apis';
 
@@ -21,7 +21,7 @@ export const editEventService = async ({
   id,
 }: {
   id: number;
-  formEditData: IEvent;
+  formEditData: IEventFormData;
 }) => {
   const data = await axiosInstance.patch(`${API_EVENT_ADMIN}/${id}`, formEditData);
   return data;

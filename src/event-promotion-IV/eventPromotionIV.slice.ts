@@ -3,8 +3,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialValueProps, TimeProps, IEventFormData } from './interface';
 
 const initialValue: initialValueProps = {
-  timeStartValue: new Date(),
-  timeEndValue: new Date(),
+  timeStartValue: null,
+  timeEndValue: null,
   searchInputValue: '',
   isFilter: false,
   isDeleteSelected: false,

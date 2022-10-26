@@ -35,9 +35,23 @@ export interface IEventCallback {
   onError: VoidFunction;
 }
 
+export interface FormNewEventProps {
+  nameEvent: string;
+  startDate: TimeProps;
+  endDate: TimeProps;
+  skus: string[];
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
+  typeUser: TimeProps | null;
+  userRegisterDate: TimeProps;
+  userLimit: number;
+  id: 0;
+}
+
 export interface IEventFormData {
   name: string;
-  startDate: Date;
+  startDate: Date | null;
   endDate: Date;
   defaultWinRate: number;
   upRate: number;

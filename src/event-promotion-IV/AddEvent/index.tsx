@@ -14,7 +14,9 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
+import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { schemaAddEvent } from '../schema';
@@ -25,15 +27,12 @@ import {
   RHFTextField,
 } from 'src/common/components/hook-form';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { useAddNewEvent } from '../hooks/useAddNewEvent';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import uuidv4 from 'src/common/utils/uuidv4';
 import { defaultValues } from '../constant';
-import { useSelector } from 'src/common/redux/store';
-import { eventDetailState } from '../eventPromotionIV.slice';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import id from 'date-fns/esm/locale/id/index.js';
-import { useEditEvent } from '../hooks/useEditEvent';
+import { IEventFormData } from '../interface';
 
 const names = [
   'Oliver Hansen',
@@ -47,27 +46,23 @@ const names = [
   'Virginia Andrews',
   'Kelly Snyder',
 ];
-export const EditEventForm = () => {
+
+export const AddEvent = () => {
   const navigate = useNavigate();
   const methods = useForm({
     resolver: yupResolver(schemaAddEvent),
     defaultValues,
   });
 
-  const params = useParams();
-  const id = params?.id;
-  const dataEventDetail = useSelector(eventDetailState);
-
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = methods;
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const { mutate, isSuccess } = useEditEvent({
+  const { mutate, isSuccess } = useAddNewEvent({
     onSuccess: () => {
       showSuccessSnackbar('Tạo mới thành công');
     },
@@ -75,11 +70,9 @@ export const EditEventForm = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
-
-  const { useDeepCompareEffect } = useDeepEffect();
   const onSubmit = (data: any) => {
-    const formDataAddNewEvent = {
-      name: data.nameEvent,
+    const formDataAddNewEvent: IEventFormData = {
+      name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
       skus: data.skus,
@@ -90,28 +83,23 @@ export const EditEventForm = () => {
       userLimit: data.userLimit,
       id: uuidv4(),
     };
-    mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
+    mutate(formDataAddNewEvent);
   };
-
-  useDeepCompareEffect(() => {
-    if (dataEventDetail?.name) setValue('name', dataEventDetail?.name);
-    if (dataEventDetail.startDate) setValue('startDate', dataEventDetail.startDate);
-    if (dataEventDetail?.endDate) setValue('endDate', dataEventDetail.endDate);
-    if (dataEventDetail?.defaultWinRate)
-      setValue('defaultWinRate', dataEventDetail?.defaultWinRate);
-    if (dataEventDetail?.upRate) setValue('upRate', dataEventDetail.upRate);
-    if (dataEventDetail?.downRate) setValue('downRate', dataEventDetail.downRate);
-    if (dataEventDetail?.userRegisterDate)
-      setValue('userRegisterDate', dataEventDetail?.userRegisterDate);
-    if (dataEventDetail?.userLimit) setValue('userLimit', dataEventDetail?.userLimit);
-    if (dataEventDetail?.skus) setValue('skus', dataEventDetail?.skus);
-  }, [dataEventDetail]);
 
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
   }, [isSuccess]);
+
   return (
     <>
+      <HeaderBreadcrumbs
+        heading="DANH SÁCH SỰ KIỆN"
+        links={[
+          { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
+          { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
+          { name: BREADCUMBS.CREATE_EVENT },
+        ]}
+      />
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
@@ -173,7 +161,7 @@ export const EditEventForm = () => {
               </Stack>
 
               <FormControl>
-                <InputLabel error={!!errors.skus}>Mã sản phẩm</InputLabel>
+                <InputLabel error={errors.skus ? true : false}>Mã sản phẩm</InputLabel>
                 <Controller
                   name="skus"
                   control={control}

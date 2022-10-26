@@ -88,6 +88,7 @@ export default function Router() {
             { path: 'event-promotion-IV', element: <ListEventPromotion /> },
             { path: 'event-promotion-IV/:id', element: <ViewEventPromotion /> },
             { path: 'event-promotion-IV/edit/:id', element: <EditEventPromotion /> },
+            { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
           ],
         },
         {
@@ -158,6 +159,9 @@ const ViewEventPromotion = Loadable(
 );
 const EditEventPromotion = Loadable(
   lazy(() => import('../pages/event-promotion-IV/editEventPromotion'))
+);
+const AddEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))
 );
 
 // ADMIN
