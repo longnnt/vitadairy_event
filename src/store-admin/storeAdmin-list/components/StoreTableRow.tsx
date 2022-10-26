@@ -1,11 +1,9 @@
-import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
+import { Switch, TableCell, TableRow } from '@mui/material';
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
-import Iconify from 'src/common/components/Iconify';
-import { TableMoreMenu } from 'src/common/components/table';
-import { FormatDate } from 'src/store-admin/constants';
+import { useState } from 'react';
+import { formatCreateDate } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
-import { IPropsStoreTableRow, IStoreActive } from '../../interfaces';
+import { IPropsStoreTableRow } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -19,9 +17,7 @@ function StoreTableRow({
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-  // const temp :IStoreActive = {
-  //   isActive : isActive,
-  // }
+  
   const {mutate} = useGetStoreActive();
 
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
@@ -46,7 +42,7 @@ function StoreTableRow({
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(createdDate).format(FormatDate)}
+        {dayjs(createdDate).format(formatCreateDate)}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
@@ -66,7 +62,7 @@ function StoreTableRow({
         />
       </TableCell>
 
-      <TableCell align="right">
+      {/* <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -95,9 +91,10 @@ function StoreTableRow({
             </>
           }
         />
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 }
 
 export { StoreTableRow };
+

@@ -93,7 +93,7 @@ function StoreAdminListDashboard() {
   if (searchText) searchParams.searchText = searchText;
 
   const { data, refetch } = useGetStoreAdmin(searchParams);
-  console.log(data)
+
 
   const listStoreAdmin = data?.data?.response?.response || [];
   
