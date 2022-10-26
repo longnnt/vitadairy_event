@@ -83,7 +83,6 @@ function EventPrizeHistoryDashboard() {
     startDate: firstScanStart,
     searchText: searchText,
   };
-  console.log(searchParams)
   if (searchText) searchParams.searchText = searchText;
   else {
     delete searchParams.searchText
@@ -110,14 +109,9 @@ function EventPrizeHistoryDashboard() {
   };
 
   const handleDeleteRows = (ids: string[]) => {
-    // for (let i = 0; i < ids.length; i++){
-    //   mutationDetele.mutate(ids[i]);
-    //   resetSelect();
-    // }
   };
 
   const handleEditRow = (id: string) => {
-    // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
 
   const { totalRecords } = data?.data?.pagination || {
