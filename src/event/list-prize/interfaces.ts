@@ -1,6 +1,6 @@
 
 export interface IListPrizeEventParams {
-  eventId?: number;
+  eventId?: number| string;
   page?: number;
   searchText?: string;
   size?: number;
@@ -22,7 +22,7 @@ export type IListPrizeCallback = {
 export type IListPrizeArray = Array<IListPrize>;
 
 export interface IListPrizeParams {
-  eventId?: number;
+  eventId?: number | string;
   page?: number;
   searchText?: string;
   size?: number;
