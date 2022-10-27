@@ -24,22 +24,21 @@ export const EventTableRow = ({
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (e: MouseEvent<HTMLElement>) => {
-    dispatch(udpateStatusMenu(e.currentTarget));
-    setOpenMenuActions(e.currentTarget)
+    setOpenMenuActions(e.currentTarget);
   };
   const handleCloseMenu = () => {
-    dispatch(udpateStatusMenu(null));
+    setOpenMenuActions(null);
   };
 
   const handleEditEventAction = (id: number) => {
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
-    dispatch(udpateStatusMenu(null));
+    setOpenMenuActions(null);
   };
 
   const handleClickView = () => {
     onViewRow(row);
-    handleCloseMenu();
-  }
+    setOpenMenuActions(null);
+  };
 
   return (
     <TableRow hover selected={selected}>
@@ -56,9 +55,7 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem
-                onClick={handleClickView}
-              >
+              <MenuItem onClick={handleClickView}>
                 <Iconify icon={'akar-icons:eye'} />
                 View
               </MenuItem>

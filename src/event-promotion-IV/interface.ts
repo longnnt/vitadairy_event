@@ -15,14 +15,16 @@ export interface EventTableRowProps {
 }
 
 export interface initialValueProps {
-  searchParams: EventSearchParams;
+  startDate: Date | null;
+  endDate: Date | null;
+  searchText: string;
   isFilter: boolean;
   isDeleteSelected: boolean;
   isOpenMenu: HTMLElement | null;
   eventDetail: IEventFormData;
 }
 
-export type TimeProps = Date | null | undefined;
+export type TimeProps = Date | null;
 
 export interface IResEvents {
   data: Array<IEventFormData>;

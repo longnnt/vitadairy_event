@@ -27,15 +27,28 @@ import { EventTableRow } from './EventTableRow';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'src/common/redux/store';
+import { endDateState, searchTextState, startDateState } from '../eventPromotionIV.slice';
+import { useGetProductCode } from '../hooks/useGetProductCode';
 
 export const EventTable = () => {
   const navigate = useNavigate();
   const { onChangeRowsPerPage, dense, onChangeDense, page, rowsPerPage, onChangePage } =
     useTable();
-  const { enqueueSnackbar } = useSnackbar();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const searchParams: EventSearchParams = { page: page, size: rowsPerPage };
+  const startDateValue = useSelector(startDateState);
+  const endDateValue = useSelector(endDateState);
+  const searchTextValue = useSelector(searchTextState);
+
+  const searchParams: EventSearchParams = {
+    page: page,
+    size: rowsPerPage,
+    startDate: startDateValue,
+    endDate: endDateValue,
+    searchText: searchTextValue,
+  };
+
   const { data } = useGetListEvent({
     params: searchParams,
     callback: {
@@ -57,23 +70,27 @@ export const EventTable = () => {
   );
 
   const onSuccess = () => showSuccessSnackbar('Detele events successfully');
-  const onError = () => showErrorSnackbar('Detele events successfully');
+  const onError = () => showErrorSnackbar('Detele error successfully');
 
   const { totalRecords, totalPages }: PaginationProps = data?.data.pagination || {
     totalRecords: 0,
   };
 
   const isNotFound = !dataListEvent.length;
-  const mutationDelete = useDeleteEvents({ onSuccess, onError });
+  // const mutationDelete = useDeleteEvents({ onSuccess, onError });
+  const { mutate: mutationDelete } = useDeleteEvents();
   const handleDeleteRows = (idsRowSeleted: number[]) => {
+    console.log(idsRowSeleted);
     if (idsRowSeleted.length) {
-      mutationDelete.mutate(idsRowSeleted);
+      // mutationDelete.mutate(idsRowSeleted);
+      mutationDelete(idsRowSeleted);
       resetSelect();
     }
   };
 
-  console.log('data list', dataListEvent);
-  const handleViewRow = (id: number) => navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
+  const handleViewRow = (id: number) => {
+    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
+  };
 
   return (
     <>
@@ -108,7 +125,7 @@ export const EventTable = () => {
               numSelected={selectedIds.length}
             />
             <TableBody>
-              {dataListEvent.map((row1: RowProps, index: number) => (
+              {dataListEvent.map((row1: RowProps) => (
                 <EventTableRow
                   key={row1.id}
                   row={row1}

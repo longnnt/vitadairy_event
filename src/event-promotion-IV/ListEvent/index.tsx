@@ -16,36 +16,16 @@ import Iconify from 'src/common/components/Iconify';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { EventTable } from './EventTable';
-import {
-  resetFormFilter,
-  searchInputState,
-  timeEndState,
-  timeStartState,
-  updateSearchInput,
-  updateTimeEnd,
-  updateTimeStart,
-} from '../eventPromotionIV.slice';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'src/common/redux/store';
+
 import { useNavigate } from 'react-router-dom';
-import { TimeProps } from '../interface';
+import { EventTableToolbar } from './EventTableToolbar';
 
 export default function ListEventPromotionDashboard() {
   const navigate = useNavigate();
-  const timeStartValue = useSelector(timeStartState);
-  const timeEndValue = useSelector(timeEndState);
-  const searchInputValue = useSelector(searchInputState);
-  const dispatch = useDispatch();
-  const handleUpdateTimeStart = (newTimeStartValue: TimeProps) => 
-    dispatch(updateTimeStart(newTimeStartValue));  
-  const handleUpdateTimeEnd = (newTimeEndValue: TimeProps) => 
-    dispatch(updateTimeEnd(newTimeEndValue));
 
-  const handleUpdateSearchInput = (newSearchInputValue: string) => 
-    dispatch(updateSearchInput(newSearchInputValue));
-
-  const handleDeleteFormFilter = () => dispatch(resetFormFilter());
-  const handleCreateEvent = () => navigate(PATH_DASHBOARD.eventPromotionIV.new);
+  const handleCreateEvent = () => {
+    navigate(PATH_DASHBOARD.eventPromotionIV.new);
+  };
 
   return (
     <>
@@ -76,7 +56,7 @@ export default function ListEventPromotionDashboard() {
         }
       />
       <Card sx={{ p: '10px', w: '100%' }}>
-        <Stack spacing={'10px'} direction="row">
+        {/* <Stack spacing={'10px'} direction="row">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               renderInput={(props) => <TextField {...props} />}
@@ -109,21 +89,8 @@ export default function ListEventPromotionDashboard() {
               }
             />
           </FormControl>
-        </Stack>
-        <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }}>
-          <Button
-            variant="contained"
-            color="info"
-            onClick={() => console.log(timeStartValue, timeEndValue, searchInputValue)}
-          >
-            Lọc
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleDeleteFormFilter}>
-            Xóa
-          </Button>
-        </Stack>
-
-
+        </Stack> */}
+        <EventTableToolbar />
         <EventTable />
       </Card>
     </>
