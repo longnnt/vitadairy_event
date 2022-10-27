@@ -1,17 +1,16 @@
 import { Container } from '@mui/material';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
-import { ListPrizeDashboard } from './list-prize-dashboard/ListPrize';
-
+import { ViewEvent } from 'src/event-promotion-IV/ViewEvent';
 // --------------------------------------------
 
-export default function ListPrize() {
+export default function ListEventPromotion() {
   const { themeStretch } = useSettings();
 
   return (
     <Page title="Categories">
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <ListPrizeDashboard />
+        <ViewEvent />
       </Container>
     </Page>
   );

@@ -5,7 +5,7 @@ function path(root: string, sublink: string) {
 }
 
 const ROOTS_AUTH = '/auth';
-const ROOTS_DASHBOARD = '/dashboard';
+export const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -60,14 +60,17 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
     list: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
     new: path(ROOTS_DASHBOARD, '/event-promotion-IV/new'),
-    edit: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+    view: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+    edit: (eventId: number) =>
+      path(ROOTS_DASHBOARD, `/event-promotion-IV/edit/${eventId}`),
   },
 
   eventAdmin: {
-    root: path(ROOTS_DASHBOARD, '/event-list'),
-    list: path(ROOTS_DASHBOARD, '/events-list'),
+    root: path(ROOTS_DASHBOARD, '/event-history'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
-    listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
+    // listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
     editEventPrize: path(ROOTS_DASHBOARD, '/event/event-prize-edit/:id'),
+    listPrize: (eventID: number) =>
+      path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
   },
 };

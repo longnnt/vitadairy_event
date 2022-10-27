@@ -13,9 +13,8 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
@@ -60,15 +59,17 @@ function ListPrizeDashboard() {
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const mutationDetele = useDeleteListPrizeAdmin({
     onSuccess: () => {
-      showSuccessSnackbar('Delete store successfully');
+      showSuccessSnackbar('Delete prize successfully');
     },
     onError: () => {
-      showErrorSnackbar('Delete store fail');
+      showErrorSnackbar('Delete prize fail');
     },
   });
 
+  const params = useParams();
+  const id = params?.id;
   const searchParams: IListPrizeParams = {
-    eventId: 1,
+    eventId: id,
   };
   const filterName = useSelector(filterNameSelector);
   if (filterName) searchParams.searchText = filterName;
@@ -97,9 +98,8 @@ function ListPrizeDashboard() {
       resetSelect();
     }
   };
-  const navigate = useNavigate();
   const handleEditRow = (id: string) => {
-    navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
+    // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
@@ -111,18 +111,15 @@ function ListPrizeDashboard() {
         links={[
           {
             name: BREADCUMBS.EVENT_PROMOTION_Q4,
-            href: PATH_DASHBOARD.eventAdmin.listPrize,
+            href: PATH_DASHBOARD.eventPromotionIV.root,
           },
-          { name: 'Danh sách sự kiện' },
+          { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Quà tặng sự kiện' },
         ]}
         action={
           <Stack direction="row" spacing={'10px'}>
             <Button variant="contained" to={'#'} component={RouterLink}>
               Tạo mới
-            </Button>
-            <Button variant="contained" to={'#'} component={RouterLink}>
-              Xóa
             </Button>
           </Stack>
         }

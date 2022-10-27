@@ -1,21 +1,19 @@
-
 export interface IHistoryListEventParams {
-  endDate?: Date | string;
+  endDate?: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
+  startDate?: Date | null;
 }
 
-
 export interface IPrizeHistory {
-  code: string;
-  name: string;
+  id: string;
+  userName: string;
   phoneNumber: number;
-  address: string;
-  qrLink: string;
-  isActive: boolean;
-  createdDate: string;
+  giftName: string;
+  qr: string;
+  giftReceivedDate: string;
+  spoonCode: string;
 }
 
 export interface IPrizeHistoryActive {
@@ -31,11 +29,11 @@ export type IStoreAdminCallback = {
 export type IListPrizeHistory = Array<IPrizeHistory>;
 
 export interface IPrizeHistoryParams {
-  endDate?: Date | string;
+  endDate?: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
+  startDate?: Date | null;
 }
 
 export interface IDataPrizeHistory {
@@ -44,21 +42,15 @@ export interface IDataPrizeHistory {
       status: number;
       msg: string;
     };
-    response: {
-      meta: {
-        status: number;
-        msg: string;
-      };
-      pagination: {
-        totalPages: number;
-        totalRecords: number;
-        currentPage: number;
-        recordsPerPage: number;
-        last: boolean;
-      };
-      response: IListPrizeHistory;
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
     };
-  }
+    response: IListPrizeHistory;
+  };
 }
 
 export type IPropsPrizeHistoryTableRow = {
@@ -69,3 +61,19 @@ export type IPropsPrizeHistoryTableRow = {
   onDeleteRow: VoidFunction;
 };
 
+export interface IPayloadSearch {
+  payload: string;
+  type: string;
+}
+export interface IPayloadDate {
+  payload: Date | null;
+  type: string;
+}
+
+
+export interface IFormFilter {
+  searchText:string;
+  endDate:Date | null ;
+  startDate:Date | null ;
+
+}
