@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 export type RowProps = {
   id: number;
-  nameEvent: string;
+  name: string;
   startDate: number;
   endDate: number;
 };
@@ -10,20 +10,19 @@ export interface EventTableRowProps {
   row: RowProps;
   onSelectRow: (checked: boolean) => void;
   selected: boolean;
-  onDeleteRow: () => void;
+  onDeleteRow: VoidFunction;
+  onViewRow: (r: RowProps) => void;
 }
 
 export interface initialValueProps {
-  timeStartValue: TimeProps;
-  timeEndValue: TimeProps;
-  searchInputValue: string;
+  searchParams: EventSearchParams;
   isFilter: boolean;
   isDeleteSelected: boolean;
   isOpenMenu: HTMLElement | null;
   eventDetail: IEventFormData;
 }
 
-export type TimeProps = Dayjs | Date | null;
+export type TimeProps = Date | null | undefined;
 
 export interface IResEvents {
   data: Array<IEventFormData>;
@@ -46,7 +45,7 @@ export interface FormNewEventProps {
   typeUser: TimeProps | null;
   userRegisterDate: TimeProps;
   userLimit: number;
-  id: 0;
+  id: number;
 }
 
 export interface IEventFormData {
@@ -58,6 +57,37 @@ export interface IEventFormData {
   downRate: number;
   userRegisterDate: Date;
   userLimit: number;
-  id: string;
+  id: number;
   skus: string[];
+}
+
+export interface IEventDetailFormData {
+  response: {
+    name: string;
+    startDate: Date;
+    endDate: Date;
+    defaultWinRate: number;
+    upRate: number;
+    downRate: number;
+    userRegisterDate: Date;
+    userLimit: number;
+    id: number;
+    skus: string[];
+  };
+}
+
+export interface EventSearchParams {
+  startDate?: TimeProps;
+  page?: number;
+  endDate?: TimeProps;
+  searchText?: string;
+  size?: number;
+}
+
+export interface PaginationProps {
+  totalPages?: number;
+  totalRecords?: number;
+  currentPage?: number;
+  recordsPerPage?: number;
+  last?: boolean;
 }

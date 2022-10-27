@@ -3,9 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialValueProps, TimeProps, IEventFormData } from './interface';
 
 const initialValue: initialValueProps = {
-  timeStartValue: null,
-  timeEndValue: null,
-  searchInputValue: '',
+  searchParams: {
+    startDate: null,
+    endDate: null,
+    searchText: '',
+  },
   isFilter: false,
   isDeleteSelected: false,
   isOpenMenu: null,
@@ -17,18 +19,18 @@ const eventPromotionIVSlice = createSlice({
   initialState: initialValue,
   reducers: {
     updateTimeStart: (state, action: PayloadAction<TimeProps>) => {
-      state.timeStartValue = action.payload;
+      state.searchParams.startDate = action.payload;
     },
     updateTimeEnd: (state, action: PayloadAction<TimeProps>) => {
-      state.timeEndValue = action.payload;
+      state.searchParams.endDate = action.payload;
     },
     updateSearchInput: (state, action: PayloadAction<string>) => {
-      state.searchInputValue = action.payload;
+      state.searchParams.searchText = action.payload;
     },
     resetFormFilter: (state) => {
-      state.timeEndValue = new Date();
-      state.timeStartValue = new Date();
-      state.searchInputValue = '';
+      state.searchParams.startDate = new Date();
+      state.searchParams.endDate = new Date();
+      state.searchParams.searchText = '';
     },
     udpateStatusMenu: (state, action) => {
       state.isOpenMenu = action.payload;
@@ -49,9 +51,11 @@ export const {
   setEventDetail,
 } = eventPromotionIVSlice.actions;
 
-export const timeStartState = (state: RootState) => state.eventPromotionIV.timeStartValue;
-export const timeEndState = (state: RootState) => state.eventPromotionIV.timeEndValue;
+export const timeStartState = (state: RootState) =>
+  state.eventPromotionIV.searchParams.startDate;
+export const timeEndState = (state: RootState) =>
+  state.eventPromotionIV.searchParams.endDate;
 export const searchInputState = (state: RootState) =>
-  state.eventPromotionIV.searchInputValue;
+  state.eventPromotionIV.searchParams.searchText;
 export const openMenuState = (state: RootState) => state.eventPromotionIV.isOpenMenu;
 export const eventDetailState = (state: RootState) => state.eventPromotionIV.eventDetail;

@@ -5,6 +5,7 @@ import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { fDate } from 'src/common/utils/formatTime';
 import { openMenuState, udpateStatusMenu } from '../eventPromotionIV.slice';
 import { EventTableRowProps } from '../interface';
 
@@ -13,9 +14,11 @@ export const EventTableRow = ({
   onSelectRow,
   selected,
   onDeleteRow,
+  onViewRow,
 }: EventTableRowProps) => {
   const navigate = useNavigate();
-  const { nameEvent, startDate, endDate, id } = row;
+  const { name, startDate, endDate, id } = row;
+
   const dispatch = useDispatch();
   const openMenu = useSelector(openMenuState);
 
@@ -26,10 +29,6 @@ export const EventTableRow = ({
     dispatch(udpateStatusMenu(null));
   };
 
-  const handleViewEvent = (id: number) => {
-    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
-    dispatch(udpateStatusMenu(null));
-  };
   const handleEditEventAction = (id: number) => {
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
     dispatch(udpateStatusMenu(null));
@@ -39,9 +38,9 @@ export const EventTableRow = ({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="left">{nameEvent}</TableCell>
-      <TableCell align="left">{startDate}</TableCell>
-      <TableCell align="left">{endDate}</TableCell>
+      <TableCell align="left">{name}</TableCell>
+      <TableCell align="left">{fDate(startDate)}</TableCell>
+      <TableCell align="left">{fDate(endDate)}</TableCell>
       <TableCell align="left">
         <TableMoreMenu
           open={openMenu}
@@ -49,7 +48,13 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem onClick={() => handleViewEvent(id)}>
+              <MenuItem
+                onClick={() => {
+                  console.log('first', row);
+                  onViewRow(row);
+                  handleCloseMenu();
+                }}
+              >
                 <Iconify icon={'akar-icons:eye'} />
                 View
               </MenuItem>

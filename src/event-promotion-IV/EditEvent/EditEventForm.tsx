@@ -89,7 +89,7 @@ export const EditEventForm = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      id: uuidv4(),
+      id: 100,
     };
     mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
   };

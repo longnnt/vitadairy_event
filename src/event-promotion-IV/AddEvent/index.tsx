@@ -81,7 +81,7 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      id: uuidv4(),
+      id: 100,
     };
     mutate(formDataAddNewEvent);
   };

@@ -36,7 +36,7 @@ export const EditEvent = () => {
     downRate: 1,
     userRegisterDate: '2022-09-30T17:00:00.000Z',
     userLimit: 1,
-    id: '172ce2e3-2cb5-4815-9b27-888fc77594af',
+    id: 100,
   };
   const data: IEventFormData = {
     ...fakeData,

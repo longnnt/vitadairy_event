@@ -10,7 +10,7 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -20,23 +20,20 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions
+  TableSelectedActions,
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import {
-  filterNameSelector,
-  setFilterName
-} from '../admin.slice';
+import { filterNameSelector, setFilterName } from '../admin.slice';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
 import { useGetAdmin } from '../hooks/useGetAdmin';
 import { IAdminParams, IFormAdmin } from '../interfaces';
 import { AdminTableRow } from './components/AdminTableRow';
-import  useMessage from 'src/store-admin/hooks/useMessage';
+import useMessage from 'src/store-admin/hooks/useMessage';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -63,10 +60,10 @@ function AdminListDashboard() {
 
   const mutationDetele = useDeleteAdmin({
     onSuccess: () => {
-      showSuccessSnackbar('Delete admin successfully')
+      showSuccessSnackbar('Delete admin successfully');
     },
     onError: () => {
-      showErrorSnackbar('Delete admin fail')
+      showErrorSnackbar('Delete admin fail');
     },
   });
 
@@ -79,6 +76,7 @@ function AdminListDashboard() {
 
   const { data } = useGetAdmin(searchParams);
   const listAdmin = data?.data?.response?.response || [];
+
   const {
     isCheckedAll,
     reset: resetSelect,
@@ -124,7 +122,7 @@ function AdminListDashboard() {
             to={PATH_DASHBOARD.admin.create}
             component={RouterLink}
           >
-            Thêm mới 
+            Thêm mới
           </Button>
         }
       />
@@ -175,7 +173,9 @@ function AdminListDashboard() {
                       handleSelectItem(row.id, e);
                     }}
                     onDeleteRow={() => handleDeleteRows([row.id])}
-                    onEditRow={() => handleEditRow(row.id)}
+                    onEditRow={() => {
+                      handleEditRow(row.id);
+                    }}
                   />
                 ))}
 

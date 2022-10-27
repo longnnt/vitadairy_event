@@ -106,6 +106,7 @@ export default function ListEventPromotionDashboard() {
               id="outlined-adorment-search"
               onChange={(e) => handleUpdateSearchInput(e.target.value)}
               value={searchInputValue}
+              label="Tìm kiếm sự kiện"
               startAdornment={
                 <InputAdornment position="end">
                   <SearchOutlinedIcon />

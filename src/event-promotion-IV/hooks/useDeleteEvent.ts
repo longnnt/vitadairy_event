@@ -8,9 +8,9 @@ import { cancelMultiQueries } from 'src/common/utils/cacelCategoryInvalidate';
 export function useDeleteEvents(callback: IEventCallback) {
   const queryClient = useQueryClient();
 
-  return useMutation(deleteEvents, {
+  return useMutation((eventIds) => deleteEvents(eventIds), {
     onMutate: async (eventIds: number[]) => {
-      const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_LIST);
+      const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.DELETE_EVENT_LIST);
       cancelMultiQueries(queryClient, keys);
 
       const previousEvent = keys.map(
