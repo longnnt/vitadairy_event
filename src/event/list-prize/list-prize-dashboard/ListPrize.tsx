@@ -66,72 +66,6 @@ function ListPrizeDashboard() {
     },
   });
 
-<<<<<<< HEAD
-    const params= useParams();
-    const id= params?.id;
-    const searchParams: IListPrizeParams = {
-      eventId: id,
-    };
-    const filterName = useSelector(filterNameSelector);
-    if (filterName) searchParams.searchText = filterName;
-    
-    const { data } = useGetListPrize(searchParams);
-    const listPrize = data?.data?.response || [];   
-    
-    const {
-      isCheckedAll,
-      reset: resetSelect,
-      selectedIds,
-      handleSelectItem,
-      handleCheckAll,
-    } = useSelectMultiple(
-      listPrize.map((item) => item.id),
-      page + 1
-    );
-  
-    const handleFilterName = (filterName: string) => {
-      dispatch(setFilterName(filterName));
-      setPage(0);
-    };
-    const handleDeleteRows = (ids: string[]) => {
-      for (let i = 0; i < ids.length; i++){
-        mutationDetele.mutate(ids[i]);
-        resetSelect();
-      }
-    };
-    const handleEditRow = (id: string) => {
-      // navigate(PATH_DASHBOARD.policy.editCategory(id));
-    };
-  
-    const  totalRecords  = data?.data?.pagination?.totalRecords || 0;
-    const isNotFound = !listPrize.length;
-    return (
-      <>
-        <HeaderBreadcrumbs
-          heading="Quà tặng sự kiện"
-          links={[
-            { name: BREADCUMBS.EVENT_PROMOTION_Q4, href: PATH_DASHBOARD.eventPromotionIV.root },
-            { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root},
-            { name: 'Quà tặng sự kiện' },
-          ]}
-          action={
-            <Stack direction='row' spacing={'10px'}>
-              <Button
-                variant="contained"
-                to={PATH_DASHBOARD.eventAdmin.createPrize}
-                component={RouterLink}
-              >
-                Tạo mới
-              </Button>
-            </Stack>
-          }
-        />
-        <Card>
-          <Divider />
-          <ListPrizeFilterBar
-            filterName={filterName}
-            onFilterName={handleFilterName}
-=======
   const params = useParams();
   const id = params?.id;
   const searchParams: IListPrizeParams = {
@@ -256,7 +190,6 @@ function ListPrizeDashboard() {
             page={page}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
->>>>>>> 57d7e673e957c60fa93c79d3448957d4b87f57da
           />
 
           <FormControlLabel

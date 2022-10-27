@@ -16,13 +16,9 @@ export const API_STORE_ADMIN = '/admin/store';
 export const API_ADMIN_FORGOTPASSWORD = '/admin/forgot-password';
 export const API_PRIZE_HISTORY = '/admin/event-point-history';
 export const API_LIST_PRiZE = '/admin/events/details';
-<<<<<<< HEAD
 export const API_TRANSACTION_TYPE = '/admin/crm-transaction-type';
 export const API_PROVINCE = '/province';
 export const API_CREATE_EVENT = '/admin/events/details';
-=======
 export const API_PRIZE_EDIT = 'admin/events/details';
-export const API_TRANSACTION_TYPE = 'admin/crm-transaction-type';
 export const API_EDIT_EVENT_PRIZE = 'admin/events/details';
 export const API_PROVINCE_VN = 'province/vn';
->>>>>>> 57d7e673e957c60fa93c79d3448957d4b87f57da
