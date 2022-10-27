@@ -16,9 +16,13 @@ import {
 } from './interfaces';
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
+<<<<<<< HEAD
   return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}`, {
     params,
   });
+=======
+  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}/v2`, { params });
+>>>>>>> a8ca82485c29c9ada3b355190426fd414e0fbb03
 };
 
 export const deletePrizeHistoryAdmin = (id: string) => {
@@ -32,7 +36,7 @@ export const getActivePrizeHistory = (params: IPrizeHistoryActive) => {
 };
 
 export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
-  return axiosInstance.get(`${API_PRIZE_HISTORY}/export/csv`, {
+  return axiosInstance.get(`${API_PRIZE_HISTORY}/export/csv/v2`, {
     params,
     headers: { responseType: 'blob' },
   });
