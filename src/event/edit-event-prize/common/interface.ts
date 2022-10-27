@@ -12,6 +12,7 @@ export interface IEventProvince {
   quantity: number;
   startDate: Date;
   endDate: Date;
+  extraquantity?: number;
 }
 
 export interface IFormEdit {
@@ -30,6 +31,8 @@ export interface IFormEdit {
   probability: number;
   quantity: number;
   transactionTypeId: number;
+  winnerAmout: number;
+  typeUser?: string;
 }
 
 export interface IResProvince {

@@ -13,8 +13,9 @@ import {
   RHFSelect,
   RHFTextField,
 } from 'src/common/components/hook-form';
-import { popupTypeOption, POPUP_TYPE } from '../common/constants';
+import { DEFAULT_FORM_VALUE, popupTypeOption, POPUP_TYPE } from '../common/constants';
 import {
+  IEventProvince,
   IFormEdit,
   IProvince,
   ISelect,
@@ -25,9 +26,11 @@ import { eidtEventPrizeSchema } from '../editEvent.Schema';
 import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
 import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
-import { getAllProvinceVN } from '../service';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { useEditEventPrize } from '../hooks/useEditEventPrize';
 
 export const EditEventPrizeForm = () => {
+  const { useDeepCompareEffect } = useDeepEffect();
   const [provinceCount, setProvinceCount] = useState<number>(1);
   const [giftPoint, setGiftPoint] = useState<string>('gift');
   const [popupTypeOp, setPopupTypeOp] = useState<string>(POPUP_TYPE.HTML_LINK);
@@ -35,9 +38,8 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data } = useGetEventPrizeById(idEventPrize);
-  // console.log('databyid', data);
-
+  const { data: dtaEventPrizeById } = useGetEventPrizeById(idEventPrize);
+  console.log('databyid', dtaEventPrizeById);
   const { data: dtaProvince } = useGetAllProvinceVN();
   const provinceOptions = dtaProvince?.data?.response?.provinces?.map(
     (item: IProvince) => ({
@@ -56,18 +58,40 @@ export const EditEventPrizeForm = () => {
 
   const methods = useForm<IFormEdit>({
     resolver: yupResolver(eidtEventPrizeSchema),
-    // defaultValues: FORM_DEFAULT_VALUE,
+    defaultValues: DEFAULT_FORM_VALUE,
   });
   const {
     setValue,
     handleSubmit,
     setError,
+    reset,
     control,
     formState: { isSubmitting, errors },
   } = methods;
 
+  useDeepCompareEffect(() => {
+    if (dtaEventPrizeById?.data?.response) {
+      setProvinceCount(dtaEventPrizeById?.data?.response?.eventDetailProvinces?.length);
+      reset(dtaEventPrizeById?.data?.response);
+    }
+  }, [dtaEventPrizeById]);
+  const { mutate } = useEditEventPrize();
   const onSubmit = (data: IFormEdit) => {
     console.log('form data', data);
+    const tempDta = { ...data };
+    delete tempDta.typeUser;
+    const temp = data?.eventDetailProvinces?.map((item: IEventProvince) => {
+      if (!item.extraquantity) {
+        delete item.extraquantity;
+        return item;
+      } else {
+        const quantities = item.quantity + item.extraquantity;
+        item = { ...item, quantity: quantities };
+        return item;
+      }
+    });
+    tempDta.eventDetailProvinces = temp;
+    console.log('temp>>>>', tempDta);
   };
 
   const handleCountProvince = () => {
@@ -100,8 +124,8 @@ export const EditEventPrizeForm = () => {
                     label="Tổng số lượng quà..."
                   />
                   <RHFTextField
-                    name="WinnerAmout"
-                    key={'WinnerAmout'}
+                    name="winnerAmout"
+                    key={'winnerAmout'}
                     label="Số lượng user đã trúng"
                   />
                   <RHFSelect
@@ -138,15 +162,11 @@ export const EditEventPrizeForm = () => {
                     }}
                   >
                     <option value="" />
-                    {popupTypeOption.map((item: ISelectPopup) => {
-                      // console.log('item', item);
-
-                      return (
-                        <option key={item.value} value={item.value}>
-                          {item.label}
-                        </option>
-                      );
-                    })}
+                    {popupTypeOption.map((item: ISelectPopup) => (
+                      <option key={item.value} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
                   </RHFSelect>
                   {popupTypeOp === POPUP_TYPE.HTML_LINK && (
                     <RHFTextField
@@ -234,22 +254,24 @@ export const EditEventPrizeForm = () => {
             <Typography fontWeight={'bold'}>Tỉnh thành</Typography>
             <Card sx={{ p: 3 }}>
               <Stack direction={'column'} spacing="15px">
-                <Box sx={{ display: 'inline-flex' }}>
-                  <Stack direction={'row'} spacing={1.5} sx={{ mt: 3 }}>
-                    <Button fullWidth color="secondary" variant="contained" size="large">
-                      Nhập
-                    </Button>
-                    <Button
-                      fullWidth
-                      color="success"
-                      variant="contained"
-                      size="medium"
-                      onClick={handleCountProvince}
-                    >
-                      +
-                    </Button>
-                  </Stack>
-                </Box>
+                <Stack
+                  direction={'row'}
+                  spacing={1.5}
+                  sx={{ mt: 3, alignSelf: 'flex-end' }}
+                >
+                  <Button fullWidth color="secondary" variant="contained" size="large">
+                    Nhập
+                  </Button>
+                  <Button
+                    fullWidth
+                    color="success"
+                    variant="contained"
+                    size="medium"
+                    onClick={handleCountProvince}
+                  >
+                    +
+                  </Button>
+                </Stack>
                 <Box>
                   {Array.from(Array(provinceCount)).map((c, index) => {
                     return (
@@ -268,6 +290,7 @@ export const EditEventPrizeForm = () => {
                             ))}
                           </RHFSelect>
                           <RHFTextField
+                            disabled
                             name={`eventDetailProvinces.${index}.quantity`}
                             key={`eventDetailProvinces.${index}.quantity`}
                             label="Tổng số lượng giải theo tỉnh"
@@ -314,12 +337,17 @@ export const EditEventPrizeForm = () => {
                     );
                   })}
                 </Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{ width: '20%', alignSelf: 'flex-end' }}
+                >
+                  Lưu
+                </Button>
               </Stack>
             </Card>
           </Box>
-          <Button fullWidth type="submit" variant="contained" size="large">
-            Lưu
-          </Button>
         </FormProvider>
       </Container>
     </>

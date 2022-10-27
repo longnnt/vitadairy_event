@@ -12,7 +12,7 @@ export const eidtEventPrizeSchema = Yup.object().shape({
   popupCode: Yup.string().required('This field is requiered'),
   popupImageLink: Yup.string().required('This field is requiered'),
   popupLink: Yup.string().required('This field is requiered'),
-  // popupType: Yup.string().required('This field is requiered'),
+  popupType: Yup.string().required('This field is requiered'),
 
   notificationContent: Yup.string()
     .required('This field is requiered')
@@ -24,7 +24,7 @@ export const eidtEventPrizeSchema = Yup.object().shape({
   probability: Yup.number().required('This field is requiered'),
   quantity: Yup.number().required('This field is requiered'),
   transactionTypeId: Yup.number().required('This field is requiered'),
-  WinnerAmout: Yup.number().required('This field is requiered'),
+  winnerAmout: Yup.number().required('This field is requiered'),
 
   eventDetailProvinces: Yup.array()
     .of(eventDetailProvincesSchema)
