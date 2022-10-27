@@ -77,13 +77,11 @@ export const EventTable = () => {
   };
 
   const isNotFound = !dataListEvent.length;
-  // const mutationDelete = useDeleteEvents({ onSuccess, onError });
-  const { mutate: mutationDelete } = useDeleteEvents();
+  const mutationDelete = useDeleteEvents({ onSuccess, onError });
   const handleDeleteRows = (idsRowSeleted: number[]) => {
     console.log(idsRowSeleted);
     if (idsRowSeleted.length) {
-      // mutationDelete.mutate(idsRowSeleted);
-      mutationDelete(idsRowSeleted);
+      mutationDelete.mutate(idsRowSeleted);
       resetSelect();
     }
   };
