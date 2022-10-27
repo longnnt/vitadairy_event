@@ -231,7 +231,7 @@ function StoreAdminListDashboard() {
                 // isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={listStoreAdmin.length}
-                // numSelected={selectedIds.length}
+                numSelected={selectedIds.length}
                 onSort={onSort}
                 // onSelectAllRows={handleCheckAll}
               />

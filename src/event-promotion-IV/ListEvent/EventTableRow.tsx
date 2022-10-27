@@ -35,7 +35,7 @@ export const EventTableRow = ({
     dispatch(udpateStatusMenu(null));
   };
   const handleViewListPrize =(id: number) =>{ 
-    navigate(PATH_DASHBOARD.eventAdmin.listPrize(id));
+    navigate(PATH_DASHBOARD.eventAdmin.listPrize1(id));
   }
   return (
     <TableRow hover selected={selected}>

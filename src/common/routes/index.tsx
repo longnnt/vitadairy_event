@@ -96,6 +96,8 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/event" replace />, index: true },
             { path: 'event-history', element: <History /> },
+            { path: 'event-list-prize', element: <ListPrize />},
+            { path: 'event-create-prize', element: <CreatePrize />},
             // { path: 'event-list-prize', element: <ListPrize /> },
             { path: 'event/event-prize-edit/:id', element: <EditEventPrize /> },
             { path: 'event-list-prize/event-:id', element: <ListPrize /> },
@@ -140,6 +142,7 @@ const ListStore = Loadable(
 // EVENT ADMIN
 const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));
 const ListPrize = Loadable(lazy(() => import('../../event/list-prize/index')));
+const CreatePrize = Loadable(lazy(() => import('../../event/event-history-prize/history-prize-create/create')))
 const EditEventPrize = Loadable(lazy(() => import('../../event/edit-event-prize/index')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
