@@ -66,9 +66,9 @@ export const PATH_DASHBOARD = {
   },
 
   eventAdmin: {
-    root: path(ROOTS_DASHBOARD, '/event-list'),
-    list: path(ROOTS_DASHBOARD, '/events-list'),
+    root: path(ROOTS_DASHBOARD, '/event-history'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
-    listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
+    listPrize: (eventID: number) => path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
+  
   },
 };

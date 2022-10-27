@@ -13,9 +13,8 @@ import {
     TablePagination,
     Tooltip,
   } from '@mui/material';
-  import { useSnackbar } from 'notistack';
-  import React from 'react';
-  import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
+  import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
   import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
   import Iconify from 'src/common/components/Iconify';
   import Scrollbar from 'src/common/components/Scrollbar';
@@ -39,7 +38,8 @@ import ListPrizeFilterBar from './components/ListPrizeFilterBar';
 import { ListPrizeTableRow } from './components/ListPrizeTable';
 
 
-  function ListPrizeDashboard() {
+  function ListPrizeDashboard(
+  ) {
     const {
       dense,
       page,
@@ -60,15 +60,17 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
     const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
     const mutationDetele = useDeleteListPrizeAdmin({
       onSuccess: () => {
-        showSuccessSnackbar('Delete store successfully')
+        showSuccessSnackbar('Delete prize successfully')
       },
       onError: () => {
-        showErrorSnackbar('Delete store fail')
+        showErrorSnackbar('Delete prize fail')
       },
     });
 
+    const params= useParams();
+    const id= params?.id;
     const searchParams: IListPrizeParams = {
-      eventId: 1
+      eventId: id,
     };
     const filterName = useSelector(filterNameSelector);
     if (filterName) searchParams.searchText = filterName;
@@ -108,8 +110,8 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
         <HeaderBreadcrumbs
           heading="Quà tặng sự kiện"
           links={[
-            { name: BREADCUMBS.EVENT_PROMOTION_Q4, href: PATH_DASHBOARD.eventAdmin.listPrize },
-            { name: 'Danh sách sự kiện'},
+            { name: BREADCUMBS.EVENT_PROMOTION_Q4, href: PATH_DASHBOARD.eventPromotionIV.root },
+            { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root},
             { name: 'Quà tặng sự kiện' },
           ]}
           action={
@@ -120,13 +122,6 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
                 component={RouterLink}
               >
                 Tạo mới
-              </Button>
-              <Button
-              variant="contained"
-              to={'#'}
-              component={RouterLink}
-              >
-                Xóa
               </Button>
             </Stack>
           }
@@ -184,7 +179,7 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
                       onEditRow={() => handleEditRow(row.id)}
                     />
                   ))}
-  
+
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
               </Table>

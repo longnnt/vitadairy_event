@@ -34,12 +34,20 @@ export const EventTableRow = ({
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
     dispatch(udpateStatusMenu(null));
   };
+  const handleViewListPrize =(id: number) =>{ 
+    navigate(PATH_DASHBOARD.eventAdmin.listPrize(id));
+  }
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="left">{nameEvent}</TableCell>
+      <TableCell 
+        align="left" 
+        onClick={() =>handleViewListPrize(id)}
+        >
+          {nameEvent}
+      </TableCell>
       <TableCell align="left">{startDate}</TableCell>
       <TableCell align="left">{endDate}</TableCell>
       <TableCell align="left">

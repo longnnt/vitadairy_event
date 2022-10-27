@@ -96,7 +96,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/event" replace />, index: true },
             { path: 'event-history', element: <History /> },
-            { path: 'event-list-prize', element: <ListPrize /> },
+            { path: 'event-list-prize/event-:id', element: <ListPrize /> },
           ],
         },
       ],
