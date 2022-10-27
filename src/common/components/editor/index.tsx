@@ -66,7 +66,10 @@ export default function Editor({
       maxStack: 100,
       userOnly: true,
     },
+<<<<<<< HEAD
     // syntax: { highlight: (text: any) => hljs.highlightAuto(text).value},
+=======
+>>>>>>> 57d7e673e957c60fa93c79d3448957d4b87f57da
     syntax: false,
     clipboard: {
       matchVisual: false,

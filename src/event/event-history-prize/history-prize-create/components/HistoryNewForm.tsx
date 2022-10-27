@@ -134,9 +134,9 @@ export default function HistoryNewForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  console.log(getValues())
 
   const onSubmit = async (data: IFormCreateEvent) => {
-    console.log('data', data)
     const dataEvent: IFormCreateEvent = {
       eventDetailProvinces: data.eventDetailProvinces,
       eventId: data.eventId,

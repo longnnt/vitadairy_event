@@ -2,6 +2,8 @@
 import './common/locales/i18n';
 // scroll bar
 import 'simplebar/src/simplebar.css';
+// editor
+import 'react-quill/dist/quill.snow.css';
 
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
