@@ -43,9 +43,9 @@ export const getTransactionTypeId = async () => {
 };
 
 export const getProvince = async () => {
-  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE}?page=0&size=20`);
+  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE}`);
 };
 
 export const addEvent = (data: IFormCreateEvent) => {
-  return axiosInstance.post(API_CREATE_EVENT, data);
+  return axiosInstance.post(`${API_CREATE_EVENT}`, data);
 };

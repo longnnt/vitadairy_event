@@ -158,3 +158,8 @@ export interface IFormFilter {
   endDate: Date | null;
   startDate: Date | null;
 }
+
+export interface ISelectPopup {
+  value: string;
+  label: string;
+}

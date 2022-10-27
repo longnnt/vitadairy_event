@@ -1,18 +1,32 @@
 import * as Yup from 'yup';
 
-export const NewEventSchema = Yup.object().shape({
-  eventId: Yup.number().required('eventId is required'),
-  giftId: Yup.number().required('giftId is required'),
-  id: Yup.number().required('id is required'),
-  notificationContent: Yup.string().required('notificationContent is required'),
-  notificationDescription: Yup.string().required('notificationDescription is required'),
-  notificationTitle: Yup.string().required('notificationTitle is required'),
-  ordinal: Yup.number().required('ordinal is required'),
-  // popupCode: Yup.string().required('popupCode is required'),
-  popupImageLink: Yup.string().required('popupImageLink is required'),
-  popupLink: Yup.string().required('popupLink is required'),
-  // popupType: Yup.string().required('popupType is required'),
-  probability: Yup.number().required('probability is required'),
-  quantity: Yup.number().required('quantity is required'),
-  transactionTypeId: Yup.number().required('transactionTypeId is required'),
+export const eventDetailProvincesSchema = Yup.object().shape({
+  endDate: Yup.string().required('This field is requiered'),
+  provinceId: Yup.number().required('This field is requiered'),
+  quantity: Yup.number().required('This field is requiered'),
+  startDate: Yup.string().required('This field is requiered'),
+});
+
+export const eventPrizeSchema = Yup.object().shape({
+  giftId: Yup.number().required('This field is requiered'),
+  // popupCode: Yup.string().required('This field is requiered'),
+  popupImageLink: Yup.string().required('This field is requiered'),
+  popupLink: Yup.string().required('This field is requiered'),
+  // popupType: Yup.string().required('This field is requiered'),
+
+  notificationContent: Yup.string()
+    .required('This field is requiered')
+    .test('test empty', 'Content is required', (val) => val !== '<p><br></p>'),
+  notificationDescription: Yup.string().required('This field is requiered'),
+  notificationTitle: Yup.string().required('This field is requiered'),
+
+  ordinal: Yup.number().required('This field is requiered'),
+  probability: Yup.number().required('This field is requiered'),
+  quantity: Yup.number().required('This field is requiered'),
+  transactionTypeId: Yup.number().required('This field is requiered'),
+  winnerAmount: Yup.number().required('This field is requiered'),
+
+  eventDetailProvinces: Yup.array()
+    .of(eventDetailProvincesSchema)
+    .required('This field is requiered'),
 });

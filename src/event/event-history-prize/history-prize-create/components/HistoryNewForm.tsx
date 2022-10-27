@@ -7,12 +7,12 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Typography,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
-import { DateTimePicker, DesktopDatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -22,17 +22,15 @@ import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField,
+  RHFTextField
 } from 'src/common/components/hook-form';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { string } from 'yup/lib/locale';
-import { defaultValues } from '../../constants';
-import { NewEventSchema } from '../../event.schema';
-// import { NewEventSchema } from '../../event.schema';
+import { defaultValues, popupTypeOption, POPUP_TYPE } from '../../constants';
+import { eventPrizeSchema } from '../../event.schema';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { IFormCreateEvent } from '../../interfaces';
+import { IFormCreateEvent, ISelectPopup } from '../../interfaces';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -49,7 +47,7 @@ export default function HistoryNewForm() {
 
   const [valueStartDate, setValueStartDate] = React.useState<Dayjs | null>(null);
   const [valueEndDate, setValueEndDate] = React.useState<Dayjs | null>(null);
-  const [popUpType, setPopUpType] = React.useState<string | null>('nl');
+  const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.HTML_LINK);
   const [popUpCode, setPopUpCode] = React.useState<string | null>('');
   const [idHolder, setidHolder] = React.useState<number | undefined>(0);
   const [provinceCount, setProvinCount] = useState<
@@ -72,19 +70,11 @@ export default function HistoryNewForm() {
     },
   ]);
 
-  const handleChangeStartDate = (newValue: Dayjs | null) => {
-    setValueStartDate(newValue);
-  };
-
   const removeCount = (index: number) => {
     setidHolder(index);
     console.log(index);
     console.log([...provinceCount].filter((item) => item.id !== idHolder));
     setProvinCount([...provinceCount].filter((item) => item.id !== idHolder));
-  };
-
-  const handleChangeEndDate = (newValue: Dayjs | null) => {
-    setValueEndDate(newValue);
   };
 
   const changePopUpType = (
@@ -132,7 +122,7 @@ export default function HistoryNewForm() {
   }));
 
   const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(NewEventSchema),
+    resolver: yupResolver(eventPrizeSchema),
     defaultValues,
   });
 
@@ -146,6 +136,7 @@ export default function HistoryNewForm() {
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
+    console.log(data)
     const dataEvent: IFormCreateEvent = {
       eventDetailProvinces: data.eventDetailProvinces,
       eventId: data.eventId,
@@ -221,25 +212,33 @@ export default function HistoryNewForm() {
                     label="Pop up Type"
                     placeholder="Pop up Type"
                     margin="dense"
-                    onChange={(e) => changePopUpType(e)}
-                    value={popUpType}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setPopUpType(val);
+                      setValue('popupType', val);
+                    }}
                   >
-                    <option value="dl">DEEP_LINK</option>
-                    <option value="hl">HTML_LINK</option>
-                    <option value="nl">NULL</option>
+                    <option value="" />
+                    {popupTypeOption.map((item: ISelectPopup) => (
+                      <option key={item.value} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
                   </RHFSelect>
-                  <RHFTextField
-                    name={'popupLink'}
-                    label="Pop up html link..."
-                    margin="dense"
-                    disabled={popUpType !== 'hl'}
-                  />
-                  <RHFTextField
-                    name={'popupLink'}
-                    label="Pop up deep link..."
-                    margin="dense"
-                    disabled={popUpType !== 'dl'}
-                  />
+                  {popUpType === POPUP_TYPE.HTML_LINK && (
+                    <RHFTextField
+                      name="popupLink"
+                      key={'PopupHtmllink'}
+                      label="Popup html link"
+                    />
+                  )}
+                  {popUpType === POPUP_TYPE.DEEP_LINK && (
+                    <RHFTextField
+                      name="popupLink"
+                      key={'popupDeepLink'}
+                      label="Popup deep link"
+                    />
+                  )}
                   <RHFSelect
                     name="popupCode"
                     label="Pop up Code"
@@ -446,12 +445,12 @@ export default function HistoryNewForm() {
 
           <Grid direction="row" justifyContent="flex-end" container mt={2}>
             <Box sx={{ paddingRight: 2 }}>
-              <Button color="inherit" variant="outlined" size="large" type="submit">
+              <LoadingButton color="inherit" variant="outlined" size="large" type="submit">
                 Lưu
-              </Button>
+              </LoadingButton>
             </Box>
             <Box>
-              <LoadingButton color="inherit" variant="outlined" size="large">
+              <LoadingButton color="inherit" variant="outlined" size="large" type='submit'>
                 Lưu & Chỉnh sửa
               </LoadingButton>
             </Box>
