@@ -36,21 +36,16 @@ export default function ListEventPromotionDashboard() {
   const timeEndValue = useSelector(timeEndState);
   const searchInputValue = useSelector(searchInputState);
   const dispatch = useDispatch();
-  const handleUpdateTimeStart = (newTimeStartValue: TimeProps) => {
-    dispatch(updateTimeStart(newTimeStartValue));
-  };
-  const handleUpdateTimeEnd = (newTimeEndValue: TimeProps) => {
+  const handleUpdateTimeStart = (newTimeStartValue: TimeProps) => 
+    dispatch(updateTimeStart(newTimeStartValue));  
+  const handleUpdateTimeEnd = (newTimeEndValue: TimeProps) => 
     dispatch(updateTimeEnd(newTimeEndValue));
-  };
-  const handleUpdateSearchInput = (newSearchInputValue: string) => {
+
+  const handleUpdateSearchInput = (newSearchInputValue: string) => 
     dispatch(updateSearchInput(newSearchInputValue));
-  };
-  const handleDeleteFormFilter = () => {
-    dispatch(resetFormFilter());
-  };
-  const handleCreateEvent = () => {
-    navigate(PATH_DASHBOARD.eventPromotionIV.new);
-  };
+
+  const handleDeleteFormFilter = () => dispatch(resetFormFilter());
+  const handleCreateEvent = () => navigate(PATH_DASHBOARD.eventPromotionIV.new);
 
   return (
     <>
@@ -127,6 +122,8 @@ export default function ListEventPromotionDashboard() {
             Xóa
           </Button>
         </Stack>
+
+
         <EventTable />
       </Card>
     </>

@@ -56,16 +56,8 @@ export const EventTable = () => {
     page + 1
   );
 
-  const onSuccess = () => {
-    enqueueSnackbar('Detele events successfully', {
-      variant: 'success',
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Detele events successfully', {
-      variant: 'error',
-    });
-  };
+  const onSuccess = () => showSuccessSnackbar('Detele events successfully');
+  const onError = () => showErrorSnackbar('Detele events successfully');
 
   const { totalRecords, totalPages }: PaginationProps = data?.data.pagination || {
     totalRecords: 0,
@@ -81,9 +73,7 @@ export const EventTable = () => {
   };
 
   console.log('data list', dataListEvent);
-  const handleViewRow = (id: number) => {
-    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
-  };
+  const handleViewRow = (id: number) => navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
 
   return (
     <>
@@ -118,7 +108,7 @@ export const EventTable = () => {
               numSelected={selectedIds.length}
             />
             <TableBody>
-              {dataListEvent.map((row1: RowProps) => (
+              {dataListEvent.map((row1: RowProps, index: number) => (
                 <EventTableRow
                   key={row1.id}
                   row={row1}
@@ -126,16 +116,17 @@ export const EventTable = () => {
                   onSelectRow={(e) => handleSelectItem(row1.id, e)}
                   onDeleteRow={() => handleDeleteRows([row1.id])}
                   onViewRow={(r: any) => {
-                    console.log(r.name);
                     handleViewRow(r.id);
                   }}
                 />
               ))}
+
               <TableNoData isNotFound={isNotFound} />
             </TableBody>
           </Table>
         </TableContainer>
       </Scrollbar>
+
       <Box sx={{ position: 'relative' }}>
         {!!totalPages && (
           <TablePagination

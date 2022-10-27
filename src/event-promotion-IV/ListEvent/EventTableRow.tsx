@@ -1,5 +1,5 @@
 import { TableCell, Checkbox, TableRow, MenuItem } from '@mui/material';
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
@@ -20,10 +20,12 @@ export const EventTableRow = ({
   const { name, startDate, endDate, id } = row;
 
   const dispatch = useDispatch();
-  const openMenu = useSelector(openMenuState);
+  // const openMenu = useSelector(openMenuState);
+  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (e: MouseEvent<HTMLElement>) => {
     dispatch(udpateStatusMenu(e.currentTarget));
+    setOpenMenuActions(e.currentTarget)
   };
   const handleCloseMenu = () => {
     dispatch(udpateStatusMenu(null));
@@ -33,6 +35,12 @@ export const EventTableRow = ({
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
     dispatch(udpateStatusMenu(null));
   };
+
+  const handleClickView = () => {
+    onViewRow(row);
+    handleCloseMenu();
+  }
+
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -49,11 +57,7 @@ export const EventTableRow = ({
           actions={
             <>
               <MenuItem
-                onClick={() => {
-                  console.log('first', row);
-                  onViewRow(row);
-                  handleCloseMenu();
-                }}
+                onClick={handleClickView}
               >
                 <Iconify icon={'akar-icons:eye'} />
                 View
