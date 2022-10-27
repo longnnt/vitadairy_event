@@ -1,20 +1,18 @@
-import {  LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Card, Grid, Stack, TextField } from '@mui/material';
 
-import { FormProvider } from 'src/common/components/hook-form';
 import { DatePicker } from '@mui/x-date-pickers';
+import { FormProvider } from 'src/common/components/hook-form';
 // components
-import Iconify from 'src/common/components/Iconify';
 import { Controller, useForm } from 'react-hook-form';
-import { dispatch, useSelector } from 'src/common/redux/store';
+import { dispatch } from 'src/common/redux/store';
+import { formatDateNews } from '../../constants';
 import {
-  initialState,
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText,
+  setSearchText
 } from '../../event.slice';
-import { IHistoryListEventParams } from '../../interfaces';
-import { formatDateNews } from '../../constants';
+import { IFormFilter, IHistoryListEventParams } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -26,22 +24,40 @@ type Props = {
 
 export const FilterBar = (props: { handleSearch: Function }) => {
   const { handleSearch } = { ...props };
-  const methods = useForm({
-    defaultValues: initialState,
+  const methods = useForm<IFormFilter>({
+    defaultValues: {
+      searchText: '',
+      startDate: null,
+      endDate:null
+    }
   });
 
   const {
     control,
     handleSubmit,
+    register,
     reset,
     formState: { isSubmitting, errors },
   } = methods;
 
-  const onSubmit = (data: IHistoryListEventParams) => {
-    dispatch(setSearchText(data.searchText as string));
-    dispatch(setFirstScanStartDate(data.startDate as string));
-    dispatch(setFirstScanEndDate(data.endDate as string));
+  const onSubmit = (data: IFormFilter) => {
+    dispatch(setSearchText(data.searchText));
+    dispatch(setFirstScanStartDate(data.startDate));
+    dispatch(setFirstScanEndDate(data.endDate));
   };
+
+  const handleCancel = ()=>{
+    reset(
+      {
+        searchText: '',
+        startDate: null,
+        endDate:null
+      }
+    )
+    dispatch(setSearchText(''));
+    dispatch(setFirstScanStartDate(null));
+    dispatch(setFirstScanEndDate(null));
+  }
 
   return (
     <>
@@ -51,24 +67,14 @@ export const FilterBar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={4} ml="20px">
               <Stack spacing={'20px'}>
                 <Controller
-                  name="searchText"
+                  {...register("searchText")}
                   control={control}
                   render={({ field: { onChange } }) => (
                     <TextField
                       fullWidth
-                      onChange={onChange}
-                      name="searchText"
+                      {...register("searchText")}
                       placeholder="Search..."
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Iconify
-                              icon={'eva:search-fill'}
-                              sx={{ color: 'text.disabled', width: 20, height: 20 }}
-                            />
-                          </InputAdornment>
-                        ),
-                      }}
+                      
                     />
                   )}
                 />
@@ -82,13 +88,23 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                   >
                     Tìm kiếm
                   </LoadingButton>
+                  <LoadingButton
+                    sx={{ size: '30px' , margin:2 }}
+                    color="inherit"
+                    variant="contained"
+                    size="medium"
+                    onClick={handleCancel}
+                  >
+                    Xóa
+                  </LoadingButton>
                 </Box>
               </Stack>
             </Grid>
             <Grid item xs={10} md={3}>
               <Stack spacing={'20px'}>
                 <Controller
-                  name="startDate"
+                  // name="startDate"
+                  {...register("startDate")}
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
@@ -105,7 +121,8 @@ export const FilterBar = (props: { handleSearch: Function }) => {
             </Grid>
             <Grid item xs={10} md={3}>
               <Controller
-                name="endDate"
+                // name="endDate"
+                {...register("endDate")}
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (

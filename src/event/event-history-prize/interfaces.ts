@@ -1,9 +1,9 @@
 export interface IHistoryListEventParams {
-  endDate?: Date | string;
+  endDate?: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
+  startDate?: Date | null;
 }
 
 export interface IPrizeHistory {
@@ -29,11 +29,11 @@ export type IStoreAdminCallback = {
 export type IListPrizeHistory = Array<IPrizeHistory>;
 
 export interface IPrizeHistoryParams {
-  endDate?: Date | string;
+  endDate?: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
+  startDate?: Date | null;
 }
 
 export interface IDataPrizeHistory {
@@ -66,6 +66,14 @@ export interface IPayloadSearch {
   type: string;
 }
 export interface IPayloadDate {
-  payload: Date | string;
+  payload: Date | null;
   type: string;
+}
+
+
+export interface IFormFilter {
+  searchText:string;
+  endDate:Date | null ;
+  startDate:Date | null ;
+
 }

@@ -72,10 +72,10 @@ function EventPrizeHistoryDashboard() {
     startDate: firstScanStart,
     searchText: searchText,
   };
-  if (searchText) searchParams.searchText = searchText;
-  else {
-    delete searchParams.searchText
-  }
+  if (!searchText)  delete searchParams.searchText;
+  if (!firstScanEnd) delete searchParams.endDate;
+  if (!firstScanStart) delete searchParams.startDate;
+
 
 
   const { data,refetch } = useGetPrizeHistory(searchParams);

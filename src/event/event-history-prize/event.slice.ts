@@ -4,14 +4,14 @@ import { IPayloadDate, IPayloadSearch } from './interfaces';
 
 type StateProps = {
   searchText: string;
-  startDate: Date | string;
-  endDate: Date | string;
+  startDate: Date | null;
+  endDate: Date | null;
 };
 
 export const initialState: StateProps = {
   searchText: '',
-  startDate: new Date("2022-01-01T00:00:00Z"),
-  endDate: new Date().toISOString(),
+  startDate: null,
+  endDate: null,
 };
 
 export const eventAdminSlice = createSlice({
