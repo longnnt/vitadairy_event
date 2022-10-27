@@ -90,8 +90,8 @@ export const EditEventPrizeForm = () => {
         delete item.extraquantity;
         return item;
       } else {
-        const quantities = +item.quantity + +item.extraquantity;
-        item = { ...item, quantity: quantities };
+        const totalQuantities = +item.quantity + +item.extraquantity;
+        item = { ...item, quantity: totalQuantities };
         return item;
       }
     });
