@@ -1,9 +1,11 @@
 export interface IResEventPrizeById {
-  meta: {
-    status: number;
-    msg: string;
+  data: {
+    meta: {
+      status: number;
+      msg: string;
+    };
+    response: IFormEdit;
   };
-  response: IFormEdit;
 }
 
 export interface IEventProvince {
@@ -36,12 +38,14 @@ export interface IFormEdit {
 }
 
 export interface IResProvince {
-  meta: {
-    status: number;
-    msg: string;
-  };
-  response: {
-    provinces: IProvince[];
+  data: {
+    meta: {
+      status: number;
+      msg: string;
+    };
+    response: {
+      provinces: IProvince[];
+    };
   };
 }
 export interface IProvince {
@@ -67,11 +71,13 @@ export interface ITransactionType {
 }
 
 export interface IResTransactionType {
-  meta: {
-    msg: string;
-    status: number;
+  data: {
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: ITransactionType[];
   };
-  response: ITransactionType[];
 }
 
 export interface ISelectPopup {

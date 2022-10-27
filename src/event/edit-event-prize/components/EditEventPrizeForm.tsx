@@ -43,7 +43,8 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data: dtaEventPrizeById } = useGetEventPrizeById(idEventPrize);
+  const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
+  const dtaEventPrizeById = dataEventPrizeById?.data;
   // console.log('databyid', dtaEventPrizeById);
   const { data: dtaProvince } = useGetAllProvinceVN();
   const provinceOptions = dtaProvince?.data?.response?.provinces?.map(
@@ -74,10 +75,10 @@ export const EditEventPrizeForm = () => {
   } = methods;
 
   useDeepCompareEffect(() => {
-    if (dtaEventPrizeById?.data?.response) {
-      setProvinceCount(dtaEventPrizeById?.data?.response?.eventDetailProvinces?.length);
-      reset(dtaEventPrizeById?.data?.response);
-      setGiftProvince(dtaEventPrizeById?.data?.response?.eventDetailProvinces);
+    if (dtaEventPrizeById?.response) {
+      setProvinceCount(dtaEventPrizeById?.response?.eventDetailProvinces?.length);
+      reset(dtaEventPrizeById?.response);
+      setGiftProvince(dtaEventPrizeById?.response?.eventDetailProvinces);
     }
   }, [dtaEventPrizeById]);
   const { mutate } = useEditEventPrize();
