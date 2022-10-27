@@ -118,7 +118,7 @@ import { ListPrizeTableRow } from './components/ListPrizeTable';
             <Stack direction='row' spacing={'10px'}>
               <Button
                 variant="contained"
-                to={'#'}
+                to={PATH_DASHBOARD.eventAdmin.createPrize}
                 component={RouterLink}
               >
                 Tạo mới
