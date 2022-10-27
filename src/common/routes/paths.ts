@@ -60,14 +60,17 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
     list: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
     new: path(ROOTS_DASHBOARD, '/event-promotion-IV/new'),
-    edit: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+    view: (eventId: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${eventId}`),
+    edit: (eventId: number) =>
+      path(ROOTS_DASHBOARD, `/event-promotion-IV/edit/${eventId}`),
   },
 
   eventAdmin: {
-    root: path(ROOTS_DASHBOARD, '/event-list'),
-    list: path(ROOTS_DASHBOARD, '/events-list'),
+    root: path(ROOTS_DASHBOARD, '/event-history'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
     listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
-    createPrize: path(ROOTS_DASHBOARD, '/event-create-prize')
-  }
+    createPrize: path(ROOTS_DASHBOARD, '/event-create-prize'),
+    listPrize1: (eventID: number) =>
+      path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
+  },
 };

@@ -114,7 +114,7 @@ export default function HistoryNewForm() {
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
 
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.list);
+    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize);
   }, [isSuccess]);
 
   const { data: addTransaction } = useGetAllTranSacTion();

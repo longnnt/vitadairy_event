@@ -9,7 +9,7 @@ import { setAdmintDetail } from '../admin.slice';
 import { useEffect } from 'react';
 import { dispatch } from 'src/common/redux/store';
 import { EditFormAdmin } from './components/EditAdminForm';
-import useMessage from 'src/store-admin/hooks/useMessage'
+import useMessage from 'src/store-admin/hooks/useMessage';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 export default function EditAdminDashboard() {
@@ -21,8 +21,8 @@ export default function EditAdminDashboard() {
   const { data } = useGetAdminById({
     id: parseInt(id as string),
     callback: {
-      onSuccess: () =>  showSuccessSnackbar('Get Admin successfully'),
-      onError: () =>  showErrorSnackbar('Get admin fail'),
+      onSuccess: () => showSuccessSnackbar('Get Admin successfully'),
+      onError: () => showErrorSnackbar('Get admin fail'),
     },
   });
   const adminDetail: IResEditAdmin = data?.data;

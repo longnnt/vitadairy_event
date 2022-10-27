@@ -3,6 +3,7 @@ import {
   API_PROVINCE,
   API_STORE_ADMIN,
   API_TRANSACTION_TYPE,
+  API_PRIZE_HISTORY,
 } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import {
@@ -15,7 +16,9 @@ import {
 } from './interfaces';
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
-  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_STORE_ADMIN}`, { params });
+  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}`, {
+    params,
+  });
 };
 
 export const deletePrizeHistoryAdmin = (id: string) => {
@@ -28,6 +31,13 @@ export const getActivePrizeHistory = (params: IPrizeHistoryActive) => {
   );
 };
 
+export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
+  return axiosInstance.get(`${API_PRIZE_HISTORY}/export/csv`, {
+    params,
+    headers: { responseType: 'blob' },
+  });
+};
+
 export const getTransactionTypeId = async () => {
   return axiosInstance.get<unknown, IResTransaction>(`${API_TRANSACTION_TYPE}`);
 };
@@ -36,5 +46,6 @@ export const getProvince = async () => {
   return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE}?page=0&size=20`);
 };
 
-export const addEvent = (data: IFormCreateEvent) =>
-  axiosInstance.post(API_CREATE_EVENT, data);
+export const addEvent = (data: IFormCreateEvent) => {
+  return axiosInstance.post(API_CREATE_EVENT, data);
+};

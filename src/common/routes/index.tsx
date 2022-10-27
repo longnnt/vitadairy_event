@@ -11,7 +11,6 @@ import GuestGuard from '../guards/GuestGuard';
 // config
 // components
 import LoadingScreen from '../components/LoadingScreen';
-import ListEventPromotionDashboard from 'src/event-promotion-IV/ListEvent';
 
 // ----------------------------------------------------------------------
 
@@ -87,6 +86,8 @@ export default function Router() {
               index: true,
             },
             { path: 'event-promotion-IV', element: <ListEventPromotion /> },
+            { path: 'event-promotion-IV/:id', element: <ViewEventPromotion /> },
+            { path: 'event-promotion-IV/edit/:id', element: <EditEventPromotion /> },
             { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
           ],
         },
@@ -97,6 +98,7 @@ export default function Router() {
             { path: 'event-history', element: <History /> },
             { path: 'event-list-prize', element: <ListPrize />},
             { path: 'event-create-prize', element: <CreatePrize />},
+            { path: 'event-list-prize/event-:id', element: <ListPrize /> },
           ],
         },
       ],
@@ -153,6 +155,13 @@ const ShopInvitation = Loadable(
 
 const ListEventPromotion = Loadable(
   lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
+);
+
+const ViewEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/viewEventPromotion'))
+);
+const EditEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/editEventPromotion'))
 );
 const AddEventPromotion = Loadable(
   lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))

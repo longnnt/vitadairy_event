@@ -98,3 +98,5 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
   { id: 'qrCode', label: 'QR', align: 'left' },
   { id: 'xCode', label: 'Mã muỗng', align: 'left' },
 ];
+
+export const formatDateNews = 'dd-MM-yyyy ';
