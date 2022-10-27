@@ -72,10 +72,10 @@ const navConfig = [
             title: 'Lịch sử trúng giải',
             path: PATH_DASHBOARD.eventAdmin.historyPrize,
           },
-          {
-            title: 'Quà tặng Sự kiện',
-            path: PATH_DASHBOARD.eventAdmin.listPrize,
-          },
+          // {
+          //   title: 'Quà tặng Sự kiện',
+          //   path: PATH_DASHBOARD.eventAdmin.listPrize,
+          // },
           {
             title: 'Chỉnh sửa quà tặng',
             path: PATH_DASHBOARD.eventAdmin.editEventPrize,
