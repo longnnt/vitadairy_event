@@ -1,5 +1,5 @@
 
-import { Stack, InputAdornment, TextField, MenuItem, Box, Button } from '@mui/material';
+import { Stack, InputAdornment, TextField} from '@mui/material';
 // components
 import Iconify from 'src/common/components/Iconify';
 // ----------------------------------------------------------------------
@@ -14,7 +14,7 @@ export default function ListPrizeFilterBar({
   onFilterName,
 }: Props) {
   return (
-      <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: '11px', px: 3 }}>
+      <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2 , px: 1}}>
         <TextField
           fullWidth
           value={filterName}

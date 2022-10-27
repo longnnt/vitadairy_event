@@ -5,6 +5,7 @@ import { Box, BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 //
 import EditorToolbar, { formats, redoChange, undoChange } from './EditorToolbar';
+import hljs from 'highlight.js';
 
 // ----------------------------------------------------------------------
 
@@ -65,7 +66,8 @@ export default function Editor({
       maxStack: 100,
       userOnly: true,
     },
-    syntax: true,
+    // syntax: { highlight: (text: any) => hljs.highlightAuto(text).value},
+    syntax: false,
     clipboard: {
       matchVisual: false,
     },
@@ -87,6 +89,7 @@ export default function Editor({
           onChange={onChange}
           modules={modules}
           formats={formats}
+          bounds={'.category__text-editor'}
           placeholder="Write something awesome..."
           {...other}
         />

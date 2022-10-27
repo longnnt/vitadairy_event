@@ -30,7 +30,7 @@ function ListPrizeTableRow({
       <TableCell align="left">{giftName}</TableCell>
       <TableCell align="left">{ordinal}</TableCell>
       <TableCell align="left">{quantity}</TableCell>
-      <TableCell align="left">{probability}</TableCell>
+      <TableCell align="left">{probability} %</TableCell>
       <TableCell align="left">
         <TableMoreMenu
           open={openMenu}
@@ -38,15 +38,6 @@ function ListPrizeTableRow({
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'carbon:view-filled'} />
-                View
-              </MenuItem>
               <MenuItem
                 onClick={() => {
                   onEditRow();

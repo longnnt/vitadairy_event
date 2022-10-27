@@ -48,4 +48,6 @@ export const BREADCUMBS = {
   EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4',
 
   NEW_ADMIN: 'create admin',
+  EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
+  LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
 };

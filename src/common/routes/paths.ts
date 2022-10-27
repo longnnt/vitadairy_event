@@ -5,7 +5,7 @@ function path(root: string, sublink: string) {
 }
 
 const ROOTS_AUTH = '/auth';
-const ROOTS_DASHBOARD = '/dashboard';
+export const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -66,9 +66,13 @@ export const PATH_DASHBOARD = {
   },
 
   eventAdmin: {
-    root: path(ROOTS_DASHBOARD, '/event-list'),
-    list: path(ROOTS_DASHBOARD, '/events-list'),
+    root: path(ROOTS_DASHBOARD, '/event-history'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
     listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
+    createPrize: path(ROOTS_DASHBOARD, '/event-create-prize'),
+    listPrize1: (eventID: number) =>
+      path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
+    // listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
+    editEventPrize: path(ROOTS_DASHBOARD, '/event/event-prize-edit/:id'),
   },
 };
