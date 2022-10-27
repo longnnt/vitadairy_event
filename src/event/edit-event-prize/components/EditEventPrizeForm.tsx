@@ -45,7 +45,6 @@ export const EditEventPrizeForm = () => {
   const idEventPrize = parseInt(idParams as string);
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
-  // console.log('databyid', dtaEventPrizeById);
   const { data: dtaProvince } = useGetAllProvinceVN();
   const provinceOptions = dtaProvince?.data?.response?.provinces?.map(
     (item: IProvince) => ({
@@ -97,7 +96,6 @@ export const EditEventPrizeForm = () => {
       }
     });
     tempDta.eventDetailProvinces = temp;
-    // console.log('temp>>>>', tempDta);
 
     mutate(tempDta, {
       onSuccess: () => {
