@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
-import { time } from 'console';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -28,18 +27,24 @@ import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
 import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useEditEventPrize } from '../hooks/useEditEventPrize';
+import useShowSnackbar from 'src/common/hooks/useMessage';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
+// -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
   const { useDeepCompareEffect } = useDeepEffect();
+  const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const [provinceCount, setProvinceCount] = useState<number>(1);
   const [giftPoint, setGiftPoint] = useState<string>('gift');
   const [popupTypeOp, setPopupTypeOp] = useState<string>(POPUP_TYPE.HTML_LINK);
+  const [giftProvince, setGiftProvince] = useState<IEventProvince[]>([]);
 
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
   const { data: dtaEventPrizeById } = useGetEventPrizeById(idEventPrize);
-  console.log('databyid', dtaEventPrizeById);
+  // console.log('databyid', dtaEventPrizeById);
   const { data: dtaProvince } = useGetAllProvinceVN();
   const provinceOptions = dtaProvince?.data?.response?.provinces?.map(
     (item: IProvince) => ({
@@ -63,7 +68,6 @@ export const EditEventPrizeForm = () => {
   const {
     setValue,
     handleSubmit,
-    setError,
     reset,
     control,
     formState: { isSubmitting, errors },
@@ -73,31 +77,50 @@ export const EditEventPrizeForm = () => {
     if (dtaEventPrizeById?.data?.response) {
       setProvinceCount(dtaEventPrizeById?.data?.response?.eventDetailProvinces?.length);
       reset(dtaEventPrizeById?.data?.response);
+      setGiftProvince(dtaEventPrizeById?.data?.response?.eventDetailProvinces);
     }
   }, [dtaEventPrizeById]);
   const { mutate } = useEditEventPrize();
   const onSubmit = (data: IFormEdit) => {
-    console.log('form data', data);
+    // console.log('form data', data);
     const tempDta = { ...data };
     delete tempDta.typeUser;
     const temp = data?.eventDetailProvinces?.map((item: IEventProvince) => {
-      if (!item.extraquantity) {
+      if (!(typeof item.extraquantity === 'string')) {
         delete item.extraquantity;
         return item;
       } else {
-        const quantities = item.quantity + item.extraquantity;
+        const quantities = +item.quantity + +item.extraquantity;
         item = { ...item, quantity: quantities };
         return item;
       }
     });
     tempDta.eventDetailProvinces = temp;
-    console.log('temp>>>>', tempDta);
+    // console.log('temp>>>>', tempDta);
+
+    mutate(tempDta, {
+      onSuccess: () => {
+        showSuccessSnackbar('edit successfully');
+      },
+      onError: () => {
+        showErrorSnackbar('edit fail');
+      },
+    });
   };
 
   const handleCountProvince = () => {
     const temp = provinceCount;
     setProvinceCount(temp + 1);
   };
+  const handleRemoveProvince = (index: number) => {
+    const tempArr = [...giftProvince];
+    tempArr.splice(index, 1);
+    setGiftProvince(tempArr);
+  };
+  useDeepCompareEffect(() => {
+    setValue('eventDetailProvinces', giftProvince);
+    setProvinceCount(giftProvince.length);
+  }, [giftProvince]);
 
   return (
     <>
@@ -124,8 +147,8 @@ export const EditEventPrizeForm = () => {
                     label="Tổng số lượng quà..."
                   />
                   <RHFTextField
-                    name="winnerAmout"
-                    key={'winnerAmout'}
+                    name="winnerAmount"
+                    key={'winnerAmount'}
                     label="Số lượng user đã trúng"
                   />
                   <RHFSelect
@@ -262,6 +285,7 @@ export const EditEventPrizeForm = () => {
                   <Button fullWidth color="secondary" variant="contained" size="large">
                     Nhập
                   </Button>
+
                   <Button
                     fullWidth
                     color="success"
@@ -269,7 +293,7 @@ export const EditEventPrizeForm = () => {
                     size="medium"
                     onClick={handleCountProvince}
                   >
-                    +
+                    <AddIcon />
                   </Button>
                 </Stack>
                 <Box>
@@ -296,8 +320,8 @@ export const EditEventPrizeForm = () => {
                             label="Tổng số lượng giải theo tỉnh"
                           />
                           <RHFTextField
-                            name="extraquantity"
-                            key={'extraquantity'}
+                            name={`eventDetailProvinces.${index}.extraquantity`}
+                            key={`eventDetailProvinces.${index}.extraquantity`}
                             label="Số giải nhập thêm"
                           />
                           <Controller
@@ -332,6 +356,16 @@ export const EditEventPrizeForm = () => {
                               />
                             )}
                           />
+                          <Button
+                            fullWidth
+                            color="error"
+                            variant="contained"
+                            size="small"
+                            sx={{ width: '10px' }}
+                            onClick={() => handleRemoveProvince(index)}
+                          >
+                            <RemoveRoundedIcon />
+                          </Button>
                         </Stack>
                       </Box>
                     );

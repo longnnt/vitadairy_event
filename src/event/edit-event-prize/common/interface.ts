@@ -7,7 +7,7 @@ export interface IResEventPrizeById {
 }
 
 export interface IEventProvince {
-  id: number;
+  id?: number;
   provinceId: number;
   quantity: number;
   startDate: Date;
@@ -31,7 +31,7 @@ export interface IFormEdit {
   probability: number;
   quantity: number;
   transactionTypeId: number;
-  winnerAmout: number;
+  winnerAmount: number;
   typeUser?: string;
 }
 

@@ -42,5 +42,5 @@ export const DEFAULT_FORM_VALUE = {
   probability: 0,
   quantity: 0,
   transactionTypeId: 0,
-  winnerAmout: 0,
+  winnerAmount: 0,
 };

@@ -24,7 +24,7 @@ export const eidtEventPrizeSchema = Yup.object().shape({
   probability: Yup.number().required('This field is requiered'),
   quantity: Yup.number().required('This field is requiered'),
   transactionTypeId: Yup.number().required('This field is requiered'),
-  winnerAmout: Yup.number().required('This field is requiered'),
+  winnerAmount: Yup.number().required('This field is requiered'),
 
   eventDetailProvinces: Yup.array()
     .of(eventDetailProvincesSchema)
