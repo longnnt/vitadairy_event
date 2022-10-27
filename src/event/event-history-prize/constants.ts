@@ -22,37 +22,35 @@ export const TABLE_HEAD = [
 //   { id: '' },
 // ];
 
-
 export const LIST_HISTORY_PRIZE = [
-    {
-        id: '12411251',
-        name: 'Người 1',
-        phoneNumber: 1241241242,
-        prize: 'Quà 1',
-        receivedDate: '12-02-20',
-        qrCode: '2414214214',
-        xCode: '012581275',
-    },
-    {
-        id: '23123123',
-        name: 'Người 2',
-        phoneNumber: 1241241242,
-        prize: 'Quà 1',
-        receivedDate: '12-02-20',
-        qrCode: '2414214214',
-        xCode: '012581275',
-    },
-    {
-        id: '95812843',
-        name: 'Người 3',
-        phoneNumber: 1241241242,
-        prize: 'Quà 1',
-        receivedDate: '12-02-20',
-        qrCode: '2414214214',
-        xCode: '012581275',
-    },
+  {
+    id: '12411251',
+    name: 'Người 1',
+    phoneNumber: 1241241242,
+    prize: 'Quà 1',
+    receivedDate: '12-02-20',
+    qrCode: '2414214214',
+    xCode: '012581275',
+  },
+  {
+    id: '23123123',
+    name: 'Người 2',
+    phoneNumber: 1241241242,
+    prize: 'Quà 1',
+    receivedDate: '12-02-20',
+    qrCode: '2414214214',
+    xCode: '012581275',
+  },
+  {
+    id: '95812843',
+    name: 'Người 3',
+    phoneNumber: 1241241242,
+    prize: 'Quà 1',
+    receivedDate: '12-02-20',
+    qrCode: '2414214214',
+    xCode: '012581275',
+  },
 ];
-
 
 export const TABLE_HEAD_REGISTER_EVENT = [
   { id: 'fullName', label: 'Full name', align: 'left' },
@@ -66,24 +64,29 @@ export enum LANG {
   EN = 'en',
 }
 export const defaultValues = {
-  thumbnail: null,
-  isFeature: false,
-  location: '',
-  timeStart: new Date(),
-  translations: {
-    [LANG.VI]: {
-      title: '',
-      slug: '',
-      shortDesc: '',
-      content: '',
+  eventDetailProvinces: [
+    {
+      endDate: new Date(),
+      id: 0,
+      provinceId: 0,
+      quantity: 0,
+      startDate: new Date(2000, 1, 1),
     },
-    [LANG.EN]: {
-      title: '',
-      slug: '',
-      shortDesc: '',
-      content: '',
-    },
-  },
+  ],
+  eventId: 0,
+  giftId: 0,
+  id: 0,
+  notificationContent: '',
+  notificationDescription: '',
+  notificationTitle: '',
+  ordinal: 0,
+  popupCode: '',
+  popupImageLink: '',
+  popupLink: '',
+  popupType: '',
+  probability: 0,
+  quantity: 0,
+  transactionTypeId: '',
 };
 
 export const TABLE_HISTORY_PRIZE_EVENT = [
@@ -94,5 +97,4 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
   { id: 'receivedDate', label: 'Ngày nhận', align: 'left' },
   { id: 'qrCode', label: 'QR', align: 'left' },
   { id: 'xCode', label: 'Mã muỗng', align: 'left' },
-
 ];

@@ -7,33 +7,32 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Typography
+  Typography,
 } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
-import { DateTimePicker, DesktopDatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+import { DateTimePicker, DesktopDatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField
+  RHFTextField,
 } from 'src/common/components/hook-form';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { string } from 'yup/lib/locale';
 import { defaultValues } from '../../constants';
 import { NewEventSchema } from '../../event.schema';
+// import { NewEventSchema } from '../../event.schema';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import {
-  IFormCreateEvent,
-  IFormEventValuesProps,
-  ITransactionType
-} from '../../interfaces';
-import { useGetAllNewEvent } from '../../hooks/useGetAllNewEvent';
+import { useGetAllProvince } from '../../hooks/useGetAllProvince';
+import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
+import { IFormCreateEvent } from '../../interfaces';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -43,45 +42,72 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 export default function HistoryNewForm() {
   const navigate = useNavigate();
-  const [valueChoice, setValueChoice] = React.useState("all");
+  const [valueChoice, setValueChoice] = React.useState('all');
   const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setValueChoice((event.target as HTMLInputElement).value);
   };
 
   const [valueStartDate, setValueStartDate] = React.useState<Dayjs | null>(null);
+  const [valueEndDate, setValueEndDate] = React.useState<Dayjs | null>(null);
+  const [popUpType, setPopUpType] = React.useState<string | null>('nl');
+  const [popUpCode, setPopUpCode] = React.useState<string | null>('');
+  const [idHolder, setidHolder] = React.useState<number | undefined>(0);
+  const [provinceCount, setProvinCount] = useState<
+    Array<{
+      id: number;
+      startDate: Dayjs | null;
+      endDate: Dayjs | null;
+      transactionType: string;
+      countProvince: number;
+      morePrize: number;
+    }>
+  >([
+    {
+      id: 0,
+      startDate: null,
+      endDate: null,
+      transactionType: '',
+      countProvince: 1,
+      morePrize: 0,
+    },
+  ]);
 
   const handleChangeStartDate = (newValue: Dayjs | null) => {
     setValueStartDate(newValue);
   };
-  const [valueEndDate, setValueEndDate] = React.useState<Dayjs | null>(null);
-  const [popUpType, setPopUpType] = React.useState<string | null>('');
-  const [popUpCode, setPopUpCode] = React.useState<string | null>('');
-  const [giftPoint, setGiftPoint] = React.useState<string | null>('');
+
+  const removeCount = (index: number) => {
+    setidHolder(index);
+    console.log(index);
+    console.log([...provinceCount].filter((item) => item.id !== idHolder));
+    setProvinCount([...provinceCount].filter((item) => item.id !== idHolder));
+  };
 
   const handleChangeEndDate = (newValue: Dayjs | null) => {
     setValueEndDate(newValue);
   };
 
-  const changePopUpType = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const changePopUpType = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setPopUpType(event.target.value);
+    setValue('popupType', event.target.value);
   };
-  const changePopUpCode = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const changePopUpCode = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setPopUpCode(event.target.value);
-  };
-
-  const changeGiftPoint = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setGiftPoint(event.target.value);
+    setValue('popupCode', event.target.value);
   };
 
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = () => {
-    enqueueSnackbar('Add events successfully', {
+    enqueueSnackbar('Add event successfully', {
       variant: 'success',
     });
   };
   const onError = () => {
-    enqueueSnackbar('Add error', {
+    enqueueSnackbar('Add event error', {
       variant: 'error',
     });
   };
@@ -91,18 +117,21 @@ export default function HistoryNewForm() {
     if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.list);
   }, [isSuccess]);
 
-  const { data: addNewEventData } = useGetAllNewEvent();
-  console.log( addNewEventData)
+  const { data: addTransaction } = useGetAllTranSacTion();
+  const dataTransaction = addTransaction?.data?.response || [];
+  const addNewOption1 = dataTransaction.map((item) => ({
+    key: item.id,
+    name: item.description,
+  }));
 
-  // console.log(JSON.parse( addNewEventData?.data || {}))
-  // const accounts = addNewEventData?.data?.response || [];
-  // const addNewOption = accounts.map((item: ITransactionType) => ({
-  //   key: item.id,
-  //   name: item.name,
-  // }));
-  // console.log(addNewOption);
+  const { data: addProvince } = useGetAllProvince();
+  const dataProvince = addProvince?.data?.response || [];
+  const addNewOption2 = dataProvince.map((item) => ({
+    key: item.id,
+    name: item.name,
+  }));
 
-  const methods = useForm<IFormEventValuesProps>({
+  const methods = useForm<IFormCreateEvent>({
     resolver: yupResolver(NewEventSchema),
     defaultValues,
   });
@@ -111,20 +140,14 @@ export default function HistoryNewForm() {
     reset,
     setValue,
     control,
+    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
-    console.log(data);
     const dataEvent: IFormCreateEvent = {
-      eventDetailProvinces: {
-        endDate: data.eventDetailProvinces.endDate,
-        id: data.eventDetailProvinces.id,
-        provinceId: data.eventDetailProvinces.provinceId,
-        quantity: data.eventDetailProvinces.quantity,
-        startDate: data.eventDetailProvinces.startDate,
-      },
+      eventDetailProvinces: data.eventDetailProvinces,
       eventId: data.eventId,
       giftId: data.giftId,
       id: data.id,
@@ -138,14 +161,14 @@ export default function HistoryNewForm() {
       popupType: data.popupType,
       probability: data.probability,
       quantity: data.quantity,
-      transactionTypeId: 0,
+      transactionTypeId: data.transactionTypeId,
     };
     mutate(dataEvent);
   };
 
   return (
     <>
-      <FormProvider methods={methods}>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Grid spacing={3} container>
@@ -164,22 +187,25 @@ export default function HistoryNewForm() {
                     margin="dense"
                   />
                   <RHFTextField
-                    name={'quantity'}
+                    name={''}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     label="Số lượng quà user đã trúng"
                     margin="dense"
                   />
                   <RHFSelect
-                    name="transactionTypeId"
+                    name={'transactionTypeId'}
                     label="Transaction type"
                     placeholder="Transaction type"
                     margin="dense"
                   >
-                    {/* <option value="" />
-                    {addNewOption.map((option: ITransactionType) => (
-                      <option key={option.id} value={option.id}>
+                    <option value="" />
+                    {addNewOption1.map((option) => (
+                      <option key={option.key} value={option.key}>
                         {option.name}
                       </option>
-                    ))} */}
+                    ))}
                   </RHFSelect>
                 </Card>
               </Grid>
@@ -190,7 +216,7 @@ export default function HistoryNewForm() {
                     label="Link hình ảnh Pop up..."
                     margin="dense"
                   />
-                 <RHFSelect
+                  <RHFSelect
                     name="popupType"
                     label="Pop up Type"
                     placeholder="Pop up Type"
@@ -198,7 +224,6 @@ export default function HistoryNewForm() {
                     onChange={(e) => changePopUpType(e)}
                     value={popUpType}
                   >
-                    <option value=""></option>
                     <option value="dl">DEEP_LINK</option>
                     <option value="hl">HTML_LINK</option>
                     <option value="nl">NULL</option>
@@ -207,13 +232,13 @@ export default function HistoryNewForm() {
                     name={'popupLink'}
                     label="Pop up html link..."
                     margin="dense"
-                    disabled={popUpType !== "hl"}
+                    disabled={popUpType !== 'hl'}
                   />
                   <RHFTextField
                     name={'popupLink'}
                     label="Pop up deep link..."
                     margin="dense"
-                    disabled={popUpType !== "dl"}
+                    disabled={popUpType !== 'dl'}
                   />
                   <RHFSelect
                     name="popupCode"
@@ -228,13 +253,13 @@ export default function HistoryNewForm() {
                     <option value="o">OGGI</option>
                     <option value="fs">FULL_SCREEN</option>
                   </RHFSelect>
-                  <RadioGroup row name="gifts" value={valueChoice} onChange={handleChangeChoice}>
-                    <FormControlLabel
-                      value="gift"
-                      control={<Radio />}
-                      label="Tặng Quà"
-                      
-                    />
+                  <RadioGroup
+                    row
+                    name="gifts"
+                    value={valueChoice}
+                    onChange={handleChangeChoice}
+                  >
+                    <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
                     <FormControlLabel
                       value="point"
                       control={<Radio />}
@@ -248,20 +273,23 @@ export default function HistoryNewForm() {
                   </RadioGroup>
                   <Grid container spacing={3}>
                     <Grid item xs>
-                      <Button fullWidth sx={{display: (valueChoice !== "point" ? "block" : "none")}} variant="contained" color="info" size="large">
+                      <Button
+                        fullWidth
+                        sx={{ display: valueChoice !== 'point' ? 'block' : 'none' }}
+                        variant="contained"
+                        color="info"
+                        size="large"
+                      >
                         Chọn quà
                       </Button>
                     </Grid>
                     <Grid item xs>
-                      {/* <Button fullWidth color="info" variant="outlined" size="large">
-                        Nhập điểm
-                      </Button> */}
                       <RHFTextField
-                        type='number'
+                        type="number"
                         name={'point'}
                         label="Nhập điểm."
                         margin="dense"
-                        sx={{display: (valueChoice !== "gift" ? "block" : "none")}}
+                        sx={{ display: valueChoice !== 'gift' ? 'block' : 'none' }}
                       />
                     </Grid>
                   </Grid>
@@ -271,11 +299,23 @@ export default function HistoryNewForm() {
             <LabelStyle>Thông báo</LabelStyle>
             <Card sx={{ p: 3, width: '100%', my: 3 }}>
               <Grid>
-                <RHFTextField name={'notificationTitle'} label="Tiêu đề thông báo" margin="dense" />
-                <RHFTextField name={'notificationContent'} label="Nội dung thông báo" margin="dense" />
+                <RHFTextField
+                  name={'notificationTitle'}
+                  label="Tiêu đề thông báo"
+                  margin="dense"
+                />
+                <RHFTextField
+                  name={'notificationContent'}
+                  label="Nội dung thông báo"
+                  margin="dense"
+                />
                 <div>
                   <LabelStyle>Mô tả thông báo</LabelStyle>
-                  <RHFEditor className="category__text-editor" simple name={'notificationDescription'} />
+                  <RHFEditor
+                    className="category__text-editor"
+                    simple
+                    name={'notificationDescription'}
+                  />
                 </div>
               </Grid>
             </Card>
@@ -289,59 +329,124 @@ export default function HistoryNewForm() {
                     </Button>
                   </Box>
                   <Box>
-                    <Button color="inherit" variant="outlined" size="large">
+                    <Button
+                      color="inherit"
+                      onClick={() => {
+                        setidHolder((idHolder || 0) + 1);
+                        setProvinCount([
+                          ...provinceCount,
+                          {
+                            id: (idHolder || 0) + 1,
+                            startDate: valueStartDate,
+                            endDate: valueEndDate,
+                            transactionType: '',
+                            countProvince: 1,
+                            morePrize: 1,
+                          },
+                        ]);
+                      }}
+                      variant="outlined"
+                      size="large"
+                    >
                       +
                     </Button>
                   </Box>
                 </Grid>
-                <Grid container spacing={3} sx={{ mt: 0.5 }}>
-                  <Grid item xs>
-                    <RHFSelect
-                      name="userType"
-                      label="Tỉnh thành"
-                      placeholder="Tỉnh thành"
-                    >
-                      <option value=""></option>
-                     
-                    </RHFSelect>
-                  </Grid>
-                  <Grid item xs>
-                    <RHFTextField name={'quantity'} label="Tổng Số lượng giải theo tỉnh" />
-                  </Grid>
-                  <Grid item xs>
-                    <RHFTextField name={'provinceId'} label="Số giải nhập thêm" />
-                  </Grid>
-                  <Grid item xs>
-                  <DateTimePicker
-                    label="Ngày bắt đầu"
-                    inputFormat="MM/dd/yyyy"
-                    value={valueStartDate}
-                    onChange={handleChangeStartDate}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                  </Grid>
-                  <Grid item xs>
-                  <DesktopDatePicker
-                    label="Ngày kết thúc"
-                    inputFormat="MM/dd/yyyy"
-                    value={valueEndDate}
-                    onChange={handleChangeEndDate}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                  </Grid>
-                  <Grid item xs={1}>
-                    <Button color="inherit" variant="contained" size="large">
-                      -
-                    </Button>
-                  </Grid>
-                </Grid>
+                {provinceCount.map((item, index) => {
+                  return (
+                    <>
+                      <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
+                        <Grid item xs>
+                          <RHFSelect
+                            name={`eventDetailProvinces.${index}.provinceId`}
+                            key={`eventDetailProvinces.${index}.provinceId`}
+                            label="Tỉnh thành"
+                            placeholder="Tỉnh thành"
+                          >
+                            <option value="" />
+                            {addNewOption2.map((option) => (
+                              <option key={option.key} value={option.key}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </RHFSelect>
+                        </Grid>
+                        <Grid item xs>
+                          <RHFTextField
+                            name={`eventDetailProvinces.${index}.quantity`}
+                            key={`eventDetailProvinces.${index}.quantity`}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            label="Tổng Số lượng giải theo tỉnh"
+                          />
+                        </Grid>
+                        <Grid item xs>
+                          <RHFTextField
+                            name={`eventDetailProvinces.${index}.quantity`}
+                            key={`eventDetailProvinces.${index}.quantity`}
+                            label="Số giải nhập thêm"
+                          />
+                        </Grid>
+                        <Grid item xs>
+                        <Controller
+                            name={`eventDetailProvinces.${index}.startDate`}
+                            key={`eventDetailProvinces.${index}}.startDate`}
+                            control={control}
+                            render={({ field }: { field: any }) => (
+                              <MobileDateTimePicker
+                                {...field}
+                                key="startDate"
+                                label="Ngày bắt đầu"
+                                inputFormat="dd/MM/yyyy hh:mm a"
+                                renderInput={(params: any) => (
+                                  <TextField {...params} fullWidth />
+                                )}
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs>
+                        <Controller
+                            name={`eventDetailProvinces.${index}.endDate`}
+                            key={`eventDetailProvinces.${index}.endDate`}
+                            control={control}
+                            render={({ field }: { field: any }) => (
+                              <MobileDateTimePicker
+                                {...field}
+                                key="endDate"
+                                label="Ngày kết thúc"
+                                inputFormat="dd/MM/yyyy hh:mm a"
+                                renderInput={(params: any) => (
+                                  <TextField {...params} fullWidth />
+                                )}
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button
+                            color="inherit"
+                            onClick={() => {
+                              removeCount(item.id);
+                            }}
+                            variant="contained"
+                            size="large"
+                          >
+                            -
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </>
+                  );
+                })}
               </Grid>
             </Card>
           </Grid>
 
           <Grid direction="row" justifyContent="flex-end" container mt={2}>
             <Box sx={{ paddingRight: 2 }}>
-              <Button color="inherit" variant="outlined" size="large">
+              <Button color="inherit" variant="outlined" size="large" type="submit">
                 Lưu
               </Button>
             </Box>

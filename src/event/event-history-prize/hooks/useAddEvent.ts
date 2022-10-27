@@ -6,7 +6,7 @@ import { addEvent } from '../services';
 
 export const useAddEvent = (callback: IStoreAdminCallback) => {
   const queryClient = useQueryClient();
-  const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_LIST);
+  const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_CREATE_PRIZE);
   return {
     ...useMutation(addEvent, {
       onSuccess: (_result, _variables, context) => {

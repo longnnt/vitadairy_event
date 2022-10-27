@@ -36,6 +36,11 @@ export interface IPrizeHistoryParams {
   startDate?: Date | string;
 }
 
+export interface IGetPage {
+  page?: number;
+  size?: number;
+}
+
 export interface IDataPrizeHistory {
   data: {
     meta: {
@@ -67,13 +72,6 @@ export type IPropsPrizeHistoryTableRow = {
   onDeleteRow: VoidFunction;
 };
 
-export type IFormEventValuesProps = {
-  thumbnail: string | null;
-  isFeature: boolean;
-  location: string;
-  timeStart: Date | null;
-};
-
 export interface IFormCreateEvent {
   eventDetailProvinces: {
     endDate: Date | string;
@@ -81,26 +79,73 @@ export interface IFormCreateEvent {
     provinceId: number;
     quantity: number;
     startDate: Date | string;
-  };
-  eventId: number,
-  giftId: number,
-  id: number,
-  notificationContent: string,
-  notificationDescription: string,
-  notificationTitle: string,
-  ordinal: 0,
-  popupCode: string,
-  popupImageLink: string,
-  popupLink: string,
-  popupType: string,
-  probability: number,
-  quantity: number,
-  transactionTypeId: number
-};
+  }[];
+  eventId: number;
+  giftId: number;
+  id: number;
+  notificationContent: string;
+  notificationDescription: string;
+  notificationTitle: string;
+  ordinal: number;
+  popupCode: string;
+  popupImageLink: string;
+  popupLink: string;
+  popupType: string;
+  probability: number;
+  quantity: number;
+  transactionTypeId: string;
+}
 
 export interface ITransactionType {
-  id: number,
-  code: string,
-  name: string,
-  description: string
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+}
+
+export interface IProvinceType {
+  id: number;
+  code: string;
+  name: string;
+  type: string;
+  parentId: number;
+  regionId: null;
+}
+
+export interface IResTransaction {
+  data: {
+    meta: {
+      status: number;
+      msg: string;
+    };
+    response: ITranSacTion[];
+  };
+}
+
+export interface IResProvince {
+  data: {
+    meta: {
+      status: number;
+      msg: string;
+    };
+    response: IProvince[];
+  };
+}
+
+interface ITranSacTion {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  mainCode: string;
+  eventDetail: null;
+}
+
+interface IProvince {
+  id: number;
+  code: number;
+  name: string;
+  type: string;
+  parentId: number;
+  regionId: null;
 }

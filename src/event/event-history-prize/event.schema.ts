@@ -1,15 +1,18 @@
 import * as Yup from 'yup';
 
-const validationObject: any = {};
-const TranslateObjectSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  slug: Yup.string().required('Slug is required'),
-  shortDesc: Yup.string().required('Short description is required'),
-  content: Yup.string().required('Content is required'),
-});
-
 export const NewEventSchema = Yup.object().shape({
-  thumbnail: Yup.mixed().required('Thumbnail is required'),
-  location: Yup.string().required('Location is required'),
-  timeStart: Yup.string().required('Start time is required'),
+  eventId: Yup.number().required('eventId is required'),
+  giftId: Yup.number().required('giftId is required'),
+  id: Yup.number().required('id is required'),
+  notificationContent: Yup.string().required('notificationContent is required'),
+  notificationDescription: Yup.string().required('notificationDescription is required'),
+  notificationTitle: Yup.string().required('notificationTitle is required'),
+  ordinal: Yup.number().required('ordinal is required'),
+  // popupCode: Yup.string().required('popupCode is required'),
+  popupImageLink: Yup.string().required('popupImageLink is required'),
+  popupLink: Yup.string().required('popupLink is required'),
+  // popupType: Yup.string().required('popupType is required'),
+  probability: Yup.number().required('probability is required'),
+  quantity: Yup.number().required('quantity is required'),
+  transactionTypeId: Yup.number().required('transactionTypeId is required'),
 });
