@@ -16,13 +16,9 @@ import {
 } from './interfaces';
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
-<<<<<<< HEAD
-  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}`, {
+  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}/v2`, {
     params,
   });
-=======
-  return axiosInstance.get<unknown, IDataPrizeHistory>(`${API_PRIZE_HISTORY}/v2`, { params });
->>>>>>> a8ca82485c29c9ada3b355190426fd414e0fbb03
 };
 
 export const deletePrizeHistoryAdmin = (id: string) => {
