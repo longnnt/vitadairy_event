@@ -12,10 +12,16 @@ import {
   RHFSelect,
   RHFTextField,
 } from 'src/common/components/hook-form';
-import { DEFAULT_FORM_VALUE, popupTypeOption, POPUP_TYPE } from '../common/constants';
+import {
+  DEDAULT_PROVINCE,
+  DEFAULT_FORM_VALUE,
+  popupTypeOption,
+  POPUP_TYPE,
+} from '../common/constants';
 import {
   IEventProvince,
   IFormEdit,
+  IGiftDetail,
   IProvince,
   ISelect,
   ISelectPopup,
@@ -30,6 +36,7 @@ import { useEditEventPrize } from '../hooks/useEditEventPrize';
 import useShowSnackbar from 'src/common/hooks/useMessage';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
+import { GiftModal } from './GìiftModal';
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
@@ -38,7 +45,7 @@ export const EditEventPrizeForm = () => {
   const [provinceCount, setProvinceCount] = useState<number>(1);
   const [giftPoint, setGiftPoint] = useState<string>('gift');
   const [popupTypeOp, setPopupTypeOp] = useState<string>(POPUP_TYPE.HTML_LINK);
-  const [giftProvince, setGiftProvince] = useState<IEventProvince[]>([]);
+  const [choosenGift, setChoosenGift] = useState<IGiftDetail>();
 
   const params = useParams();
   const idParams = params?.id;
@@ -70,6 +77,7 @@ export const EditEventPrizeForm = () => {
     handleSubmit,
     reset,
     control,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
 
@@ -77,23 +85,32 @@ export const EditEventPrizeForm = () => {
     if (dtaEventPrizeById?.response) {
       setProvinceCount(dtaEventPrizeById?.response?.eventDetailProvinces?.length);
       reset(dtaEventPrizeById?.response);
-      setGiftProvince(dtaEventPrizeById?.response?.eventDetailProvinces);
     }
   }, [dtaEventPrizeById]);
   const { mutate } = useEditEventPrize();
   const onSubmit = (data: IFormEdit) => {
-    // console.log('form data', data);
     const tempDta = { ...data };
     delete tempDta.typeUser;
+
     const temp = data?.eventDetailProvinces?.map((item: IEventProvince) => {
+      if (item.endDate || item.startDate) {
+        const startDate = new Date(item.startDate).toISOString();
+        const endDate = new Date(item.endDate).toISOString();
+
+        item = { ...item, startDate: startDate, endDate: endDate };
+      }
+      if (typeof item.provinceId === 'string') {
+        const provId = parseInt(item.provinceId);
+        item = { ...item, provinceId: provId };
+      }
       if (!(typeof item.extraquantity === 'string')) {
         delete item.extraquantity;
-        return item;
+        item = { ...item, quantity: 0 };
       } else {
-        const totalQuantities = +item.quantity + +item.extraquantity;
+        const totalQuantities = +item.extraquantity;
         item = { ...item, quantity: totalQuantities };
-        return item;
       }
+      return item;
     });
     tempDta.eventDetailProvinces = temp;
 
@@ -110,16 +127,26 @@ export const EditEventPrizeForm = () => {
   const handleCountProvince = () => {
     const temp = provinceCount;
     setProvinceCount(temp + 1);
+    setValue(`eventDetailProvinces.${temp}`, DEDAULT_PROVINCE);
   };
+  const provinceWatch = watch('eventDetailProvinces');
   const handleRemoveProvince = (index: number) => {
-    const tempArr = [...giftProvince];
+    const tempArr = [...provinceWatch];
     tempArr.splice(index, 1);
-    setGiftProvince(tempArr);
+    setValue('eventDetailProvinces', tempArr);
+    const temp = provinceCount;
+    setProvinceCount(temp - 1);
   };
+
   useDeepCompareEffect(() => {
-    setValue('eventDetailProvinces', giftProvince);
-    setProvinceCount(giftProvince.length);
-  }, [giftProvince]);
+    if (choosenGift) {
+      setValue('giftId', choosenGift.id);
+    }
+  }, [choosenGift]);
+
+  const [open, setOpen] = useState<boolean>(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -220,30 +247,53 @@ export const EditEventPrizeForm = () => {
                     ]}
                   />
                   {giftPoint === 'gift' && (
-                    <RHFSelect name={'giftId'} key="giftId" label={'Chọn quà'}>
-                      <option value="" />
-                      <option value="1">test</option>
-                    </RHFSelect>
+                    <Stack direction={'column'} spacing="10px">
+                      <Button
+                        variant="contained"
+                        size="large"
+                        sx={{ width: '30%', alignSelf: 'flex-start' }}
+                        onClick={handleOpen}
+                      >
+                        Chọn quà
+                      </Button>
+                      {choosenGift && (
+                        <Card sx={{ p: 3 }}>
+                          <Typography fontWeight="bold">
+                            Name: {choosenGift.name}
+                          </Typography>
+                          <Typography fontWeight="bold">
+                            Price: {choosenGift.money}-VND
+                          </Typography>
+                        </Card>
+                      )}
+                    </Stack>
                   )}
                   {giftPoint === 'point' && (
                     <RHFTextField name="point" key={'point'} label="Nhập điểm" />
                   )}
                   {giftPoint === 'giftandpoint' && (
-                    <Stack direction={'row'} spacing={2}>
-                      <RHFSelect
-                        name={' giftIdandpoint'}
-                        key=" giftIdandpoint"
-                        label={'Chọn quà'}
+                    <Stack direction={'row'} justifyContent="space-between">
+                      <Button
+                        variant="contained"
+                        size="large"
+                        sx={{ width: '30%', alignSelf: 'flex-start' }}
                       >
-                        <option value="" />
-                      </RHFSelect>
+                        Chọn quà
+                      </Button>
                       <RHFTextField
+                        sx={{ width: '30%' }}
+                        size="medium"
                         name="giftandpoint"
                         key={'giftandpoint'}
                         label="Nhập điểm"
                       />
                     </Stack>
                   )}
+                  <GiftModal
+                    open={open}
+                    handleClose={handleClose}
+                    setChoosenGift={setChoosenGift}
+                  />
                 </Stack>
               </Card>
             </Grid>
@@ -356,11 +406,11 @@ export const EditEventPrizeForm = () => {
                             )}
                           />
                           <Button
-                            fullWidth
+                            // fullWidth
                             color="error"
                             variant="contained"
                             size="small"
-                            sx={{ width: '10px' }}
+                            sx={{ width: '50px', height: '50px' }}
                             onClick={() => handleRemoveProvince(index)}
                           >
                             <RemoveRoundedIcon />

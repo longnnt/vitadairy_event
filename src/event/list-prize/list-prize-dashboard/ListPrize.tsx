@@ -99,7 +99,7 @@ function ListPrizeDashboard() {
     }
   };
   const handleEditRow = (id: string) => {
-    navigate(PATH_DASHBOARD.eventAdmin.editEventPrize);
+    navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
@@ -118,7 +118,11 @@ function ListPrizeDashboard() {
         ]}
         action={
           <Stack direction="row" spacing={'10px'}>
-            <Button variant="contained" to={PATH_DASHBOARD.eventAdmin.createPrize(id as string)} component={RouterLink}>
+            <Button
+              variant="contained"
+              to={PATH_DASHBOARD.eventAdmin.createPrize(id as string)}
+              component={RouterLink}
+            >
               Tạo mới
             </Button>
           </Stack>
