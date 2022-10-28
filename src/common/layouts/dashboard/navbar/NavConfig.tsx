@@ -69,16 +69,12 @@ const navConfig = [
         icon: ICONS.calendar,
         children: [
           {
+            title: 'Danh sách Event',
+            path: PATH_DASHBOARD.eventPromotionIV.list,
+          },
+          {
             title: 'Lịch sử trúng giải',
             path: PATH_DASHBOARD.eventAdmin.historyPrize,
-          },
-          // {
-          //   title: 'Quà tặng Sự kiện',
-          //   path: PATH_DASHBOARD.eventAdmin.listPrize,
-          // },
-          {
-            title: 'Chỉnh sửa quà tặng',
-            path: PATH_DASHBOARD.eventAdmin.editEventPrize,
           },
         ],
       },
@@ -88,17 +84,17 @@ const navConfig = [
         icon: ICONS.policy,
         children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
       },
-      {
-        title: 'Event Promotion Quý 4',
-        path: PATH_DASHBOARD.eventPromotionIV.root,
-        icon: ICONS.policy,
-        children: [
-          {
-            title: 'Danh sách Event',
-            path: PATH_DASHBOARD.eventPromotionIV.list,
-          },
-        ],
-      },
+      // {
+      //   title: 'Event Promotion Quý 4',
+      //   path: PATH_DASHBOARD.eventPromotionIV.root,
+      //   icon: ICONS.policy,
+      //   children: [
+      //     {
+      //       title: 'Danh sách Event',
+      //       path: PATH_DASHBOARD.eventPromotionIV.list,
+      //     },
+      //   ],
+      // },
     ],
   },
 ];
