@@ -107,12 +107,7 @@ function EventPrizeHistoryDashboard() {
     totalRecords: 0,
   };
   const exportFile = () => {
-    const expData: IPrizeHistoryParams = {
-      page: page,
-      size: totalRecords,
-    };
-
-    const response = exportPrizeHistory(expData);
+    const response = exportPrizeHistory(searchParams);
     response
       .then((data) => {
         const fileLink = document.createElement('a');
