@@ -1,10 +1,11 @@
 import { TableCell, Checkbox, TableRow, MenuItem } from '@mui/material';
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { fDate } from 'src/common/utils/formatTime';
 import { openMenuState, udpateStatusMenu } from '../eventPromotionIV.slice';
 import { EventTableRowProps } from '../interface';
 
@@ -13,43 +14,40 @@ export const EventTableRow = ({
   onSelectRow,
   selected,
   onDeleteRow,
+  onViewRow,
 }: EventTableRowProps) => {
   const navigate = useNavigate();
-  const { nameEvent, startDate, endDate, id } = row;
+  const { name, startDate, endDate, id } = row;
+
   const dispatch = useDispatch();
-  const openMenu = useSelector(openMenuState);
+  // const openMenu = useSelector(openMenuState);
+  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (e: MouseEvent<HTMLElement>) => {
-    dispatch(udpateStatusMenu(e.currentTarget));
+    setOpenMenuActions(e.currentTarget);
   };
   const handleCloseMenu = () => {
-    dispatch(udpateStatusMenu(null));
+    setOpenMenuActions(null);
   };
 
-  const handleViewEvent = (id: number) => {
-    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
-    dispatch(udpateStatusMenu(null));
-  };
   const handleEditEventAction = (id: number) => {
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
-    dispatch(udpateStatusMenu(null));
+    setOpenMenuActions(null);
   };
-  const handleViewListPrize =(id: number) =>{ 
-    navigate(PATH_DASHBOARD.eventAdmin.listPrize1(id));
-  }
+
+  const handleClickView = () => {
+    onViewRow(row);
+    setOpenMenuActions(null);
+  };
+
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell 
-        align="left" 
-        onClick={() =>handleViewListPrize(id)}
-        >
-          {nameEvent}
-      </TableCell>
-      <TableCell align="left">{startDate}</TableCell>
-      <TableCell align="left">{endDate}</TableCell>
+      <TableCell align="left">{name}</TableCell>
+      <TableCell align="left">{fDate(startDate)}</TableCell>
+      <TableCell align="left">{fDate(endDate)}</TableCell>
       <TableCell align="left">
         <TableMoreMenu
           open={openMenu}
@@ -57,7 +55,7 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem onClick={() => handleViewEvent(id)}>
+              <MenuItem onClick={handleClickView}>
                 <Iconify icon={'akar-icons:eye'} />
                 View
               </MenuItem>

@@ -32,6 +32,7 @@ export const BREADCUMBS = {
   DASHBOARD: 'Dashboard',
   LIST_EVENT: 'Sự kiện Promotion quý 4',
   CREATE_EVENT: 'Tạo mới sự kiện',
+  VIEW_EVENT: 'Xem sự kiện',
   LIST_REGISTER_EVENT: 'List register event',
   LIST_POLICY_CATEGORY: 'List category policy',
   ADD_POLICY_CATEGORY: 'Add category',

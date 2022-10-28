@@ -1,16 +1,16 @@
-import { IEventCallback } from './../interface';
-import { getEventById } from './../service';
+import { IEventCallback, EventSearchParams } from './../interface';
+import { getProductCode } from './../service';
 import { useQuery } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 
-export const useGetEventById: any = ({
-  id,
+export const useGetProductCode = ({
+  params,
   callback,
 }: {
-  id: number;
+  params: EventSearchParams;
   callback: IEventCallback;
 }) =>
-  useQuery([QUERY_KEYS.EDIT_EVENT_ADMIN, id], () => getEventById(id), {
+  useQuery([QUERY_KEYS.PRODUCT_CODE, params], () => getProductCode(params), {
     onSuccess() {
       callback.onSuccess && callback.onSuccess();
     },
