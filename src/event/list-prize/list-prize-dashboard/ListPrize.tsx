@@ -55,7 +55,7 @@ function ListPrizeDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-
+  const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const mutationDetele = useDeleteListPrizeAdmin({
     onSuccess: () => {
@@ -99,7 +99,7 @@ function ListPrizeDashboard() {
     }
   };
   const handleEditRow = (id: string) => {
-    // navigate(PATH_DASHBOARD.policy.editCategory(id));
+    navigate(PATH_DASHBOARD.eventAdmin.editEventPrize);
   };
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;

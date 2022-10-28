@@ -4,7 +4,6 @@ import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { IPropsAdminTableRow } from '../../interfaces';
 
-
 function AdminTableRow({
   row,
   selected,
@@ -12,7 +11,7 @@ function AdminTableRow({
   onSelectRow,
   onDeleteRow,
 }: IPropsAdminTableRow) {
-  const { email, firstName, lastName, status } = row;
+  const { email, firstName, lastName, status, id } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -56,6 +55,7 @@ function AdminTableRow({
               </MenuItem>
               <MenuItem
                 onClick={() => {
+                  console.log(id);
                   onEditRow();
                   handleCloseMenu();
                 }}

@@ -77,12 +77,7 @@ export interface IResEventById {
 }
 
 export interface IFormCreateEvent {
-  eventDetailProvinces: {
-    endDate: Date | string;
-    provinceId: number;
-    quantity: number;
-    startDate: Date | string;
-  }[];
+  eventDetailProvinces: IEventDetail[];
   eventId: number;
   giftId: number;
   notificationContent: string;
@@ -112,6 +107,13 @@ export interface IProvinceType {
   type: string;
   parentId: number;
   regionId: null;
+}
+
+export interface IEventDetail {
+  endDate: Date | string;
+  provinceId: number;
+  quantity: number;
+  startDate: Date | string;
 }
 
 export interface IResTransaction {
@@ -194,6 +196,7 @@ export interface IResGift {
 
 export type IPropsGiftTableRow = {
   row: IGift;
+  handleClose: Function;
 };
 
 export type IGiftParams = {

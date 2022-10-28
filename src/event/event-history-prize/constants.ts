@@ -67,7 +67,6 @@ export const defaultValues = {
   eventDetailProvinces: [
     {
       endDate: new Date(),
-      // id: 0,
       provinceId: 0,
       quantity: 0,
       startDate: new Date(),
@@ -75,7 +74,6 @@ export const defaultValues = {
   ],
   eventId: 0,
   giftId: 0,
-  // id: 0,
   notificationContent: '',
   notificationDescription: '',
   notificationTitle: '',

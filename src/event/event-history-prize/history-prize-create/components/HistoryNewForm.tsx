@@ -17,7 +17,7 @@ import {
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +32,7 @@ import {
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
+import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import {
   defaultValues,
@@ -39,12 +40,12 @@ import {
   POPUP_TYPE, TABLE_HEAD_GIFT
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
+import { giftSelecttor } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { useGetEventById } from '../../hooks/useGetEventById';
 import { useGetGilf } from '../../hooks/useGetGilf';
-import { IFormCreateEvent, IGiftParams, ISelectPopup } from '../../interfaces';
+import { IEventDetail, IFormCreateEvent, IGiftParams, ISelectPopup } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -78,6 +79,8 @@ export default function HistoryNewForm() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const gift = useSelector(giftSelecttor)
+  console.log(gift);
   const [provinceCount, setProvinCount] = useState<
     Array<{
       id: number;
@@ -128,12 +131,12 @@ export default function HistoryNewForm() {
     });
   };
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
-  useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
-  }, [isSuccess]);
 
-  const params = useParams();
+  const params= useParams();
   const id = params?.id;
+  useEffect(() => {
+    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
+  }, [isSuccess]);
   const idEventPrize = parseInt(id as string);
   // const { data: dataEventById } = useGetEventById(idEventPrize);
 
@@ -176,10 +179,17 @@ export default function HistoryNewForm() {
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
+    const eventDetailProvinces = data.eventDetailProvinces.map(item => {
+      if (item.endDate || item.startDate) {
+        const startDate = new Date(item.startDate).toISOString();
+        const endDate = new Date(item.endDate).toISOString();
+        return { ...item, startDate: startDate, endDate: endDate };
+      }
+    })
     const dataEvent: IFormCreateEvent = {
-      eventDetailProvinces: data.eventDetailProvinces,
+      eventDetailProvinces: eventDetailProvinces as Array<IEventDetail>,
       eventId: idEventPrize,
-      giftId: 5,
+      giftId: gift.id,
       notificationContent: data.notificationContent,
       notificationDescription: data.notificationDescription,
       notificationTitle: data.notificationTitle,
@@ -193,8 +203,8 @@ export default function HistoryNewForm() {
       transactionTypeId: data.transactionTypeId,
     };
     mutate(dataEvent);
+    console.log(dataEvent);
   };
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -328,6 +338,9 @@ export default function HistoryNewForm() {
                       >
                         Chọn quà
                       </Button>
+                      <Box sx={{color: 'white', marginTop: '5px'}}>
+                        {gift.name}
+                      </Box>
                       <Modal
                         open={open}
                         onClose={handleClose}
@@ -342,7 +355,7 @@ export default function HistoryNewForm() {
                               </Table>
                               <TableBody>
                                 {dataGift.map((row) => (
-                                  <GiftTableRow key={row.id} row={row} />
+                                  <GiftTableRow key={row.id} row={row} handleClose={handleClose}/>
                                 ))}
                               </TableBody>
                             </TableContainer>
@@ -475,7 +488,7 @@ export default function HistoryNewForm() {
                             key={`eventDetailProvinces.${index}}.startDate`}
                             control={control}
                             render={({ field }: { field: any }) => (
-                              <MobileDateTimePicker
+                              <DatePicker
                                 {...field}
                                 key="startDate"
                                 label="Ngày bắt đầu"
@@ -493,7 +506,7 @@ export default function HistoryNewForm() {
                             key={`eventDetailProvinces.${index}.endDate`}
                             control={control}
                             render={({ field }: { field: any }) => (
-                              <MobileDateTimePicker
+                              <DatePicker
                                 {...field}
                                 key="endDate"
                                 label="Ngày kết thúc"

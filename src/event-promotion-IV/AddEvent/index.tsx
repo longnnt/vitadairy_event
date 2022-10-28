@@ -33,19 +33,10 @@ import { useNavigate } from 'react-router-dom';
 import uuidv4 from 'src/common/utils/uuidv4';
 import { defaultValues } from '../constant';
 import { IEventFormData } from '../interface';
+import { useGetProductCode } from '../hooks/useGetProductCode';
+import { useProductCode } from '../hooks/useProductCode';
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+const names = ['VCLG8S01', 'VMOM4S01', 'VCLG8S04', 'VCLG8S02', 'VCLG8S03'];
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -81,7 +72,7 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      id: uuidv4(),
+      id: 100,
     };
     mutate(formDataAddNewEvent);
   };
@@ -89,6 +80,8 @@ export const AddEvent = () => {
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
   }, [isSuccess]);
+
+  const skusCodeDataEvent = useProductCode({ size: 20 });
 
   return (
     <>
@@ -179,9 +172,9 @@ export const AddEvent = () => {
                         {...field}
                         error={!!errors.skus}
                       >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            {name}
+                        {skusCodeDataEvent.map((item: string) => (
+                          <MenuItem key={item} value={item}>
+                            {item}
                           </MenuItem>
                         ))}
                       </Select>
