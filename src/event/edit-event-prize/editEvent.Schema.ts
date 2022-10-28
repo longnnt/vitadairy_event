@@ -3,7 +3,8 @@ import * as Yup from 'yup';
 export const eventDetailProvincesSchema = Yup.object().shape({
   endDate: Yup.string().required('This field is requiered'),
   provinceId: Yup.number().required('This field is requiered'),
-  quantity: Yup.number().required('This field is requiered'),
+  quantity: Yup.number(),
+  // .required('This field is requiered'),
   startDate: Yup.string().required('This field is requiered'),
 });
 

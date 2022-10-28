@@ -12,8 +12,8 @@ export interface IEventProvince {
   id?: number;
   provinceId: number;
   quantity: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   extraquantity?: number;
 }
 
@@ -83,4 +83,35 @@ export interface IResTransactionType {
 export interface ISelectPopup {
   value: string;
   label: string;
+}
+
+export interface IParamsGetGift {
+  page: number;
+  size: number;
+}
+
+export interface IGiftDetail {
+  id: number;
+  type: string;
+  money: number;
+  name: string;
+}
+
+interface IGiftPagiantion {
+  totalPages: number;
+  totalRecords: number;
+  currentPage: number;
+  recordsPerPage: number;
+  last: boolean;
+}
+
+export interface IResGetGifts {
+  data: {
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: IGiftDetail[];
+    pagination: IGiftPagiantion;
+  };
 }

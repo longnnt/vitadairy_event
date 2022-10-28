@@ -18,7 +18,7 @@ export const popupTypeOption = [
     label: POPUP_TYPE.HTML_LINK,
   },
 ];
-const DEDAULT_PROVINCE = {
+export const DEDAULT_PROVINCE = {
   id: 0,
   provinceId: 0,
   quantity: 0,
