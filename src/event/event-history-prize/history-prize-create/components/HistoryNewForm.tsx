@@ -17,7 +17,7 @@ import { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   FormProvider,
   RHFEditor,
@@ -72,8 +72,8 @@ export default function HistoryNewForm() {
 
   const removeCount = (index: number) => {
     setidHolder(index);
-    console.log(index);
-    console.log([...provinceCount].filter((item) => item.id !== idHolder));
+    // console.log(index);
+    // console.log([...provinceCount].filter((item) => item.id !== idHolder));
     setProvinCount([...provinceCount].filter((item) => item.id !== idHolder));
   };
 
@@ -103,8 +103,10 @@ export default function HistoryNewForm() {
   };
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
 
+  const params= useParams();
+  const id = params?.id;
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize);
+    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
   }, [isSuccess]);
 
   const { data: addTransaction } = useGetAllTranSacTion();
@@ -134,7 +136,7 @@ export default function HistoryNewForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  console.log(getValues())
+  // console.log(getValues())
 
   const onSubmit = async (data: IFormCreateEvent) => {
     const dataEvent: IFormCreateEvent = {
@@ -155,8 +157,8 @@ export default function HistoryNewForm() {
       transactionTypeId: data.transactionTypeId,
     };
     mutate(dataEvent);
+    console.log(dataEvent);
   };
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
