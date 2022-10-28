@@ -17,7 +17,7 @@ import {
   TablePagination,
 } from '@mui/material';
 
-const style = {
+const styleGiftModal = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -33,16 +33,15 @@ const style = {
 export const GiftModal = ({
   open,
   handleClose,
-  //   handleOpen,
   setChoosenGift,
 }: {
   open: boolean;
   handleClose: () => void;
-  //   handleOpen: () => void;
   setChoosenGift: (value: IGiftDetail) => void;
 }) => {
+  const SIZE = 10;
   const [page, setPage] = React.useState<number>(0);
-  const params = { page: page, size: 10 };
+  const params = { page: page, size: SIZE };
   const { data } = useGetAllGift(params);
   const giftDta = data?.data?.response ? data?.data?.response : [];
   const handleOnclick = (id: number) => {
@@ -63,7 +62,7 @@ export const GiftModal = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={styleGiftModal}>
           <Typography
             id="modal-modal-title"
             variant="h6"

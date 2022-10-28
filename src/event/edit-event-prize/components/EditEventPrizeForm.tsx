@@ -292,7 +292,6 @@ export const EditEventPrizeForm = () => {
                   <GiftModal
                     open={open}
                     handleClose={handleClose}
-                    // handleOpen={handleOpen}
                     setChoosenGift={setChoosenGift}
                   />
                 </Stack>
