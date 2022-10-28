@@ -23,3 +23,4 @@ export const API_CREATE_EVENT = '/admin/events/details';
 export const API_PRIZE_EDIT = 'admin/events/details';
 export const API_EDIT_EVENT_PRIZE = 'admin/events/details';
 export const API_PROVINCE_VN = 'province/vn';
+export const API_GIFT = 'admin/gift';

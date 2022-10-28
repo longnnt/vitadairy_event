@@ -66,17 +66,20 @@ export type IPropsPrizeHistoryTableRow = {
   onDeleteRow: VoidFunction;
 };
 
+export interface IResEventById {
+  data: {
+    meta: {
+      status: number;
+      msg: string;
+    };
+    response: IFormCreateEvent;
+  };
+}
+
 export interface IFormCreateEvent {
-  eventDetailProvinces: {
-    endDate: Date | string;
-    id: number;
-    provinceId: number;
-    quantity: number;
-    startDate: Date | string;
-  }[];
+  eventDetailProvinces: IEventDetail[];
   eventId: number;
   giftId: number;
-  id: number;
   notificationContent: string;
   notificationDescription: string;
   notificationTitle: string;
@@ -87,7 +90,7 @@ export interface IFormCreateEvent {
   popupType: string;
   probability: number;
   quantity: number;
-  transactionTypeId: string;
+  transactionTypeId: number;
 }
 
 export interface ITransactionType {
@@ -106,6 +109,13 @@ export interface IProvinceType {
   regionId: null;
 }
 
+export interface IEventDetail {
+  endDate: Date | string;
+  provinceId: number;
+  quantity: number;
+  startDate: Date | string;
+}
+
 export interface IResTransaction {
   data: {
     meta: {
@@ -122,7 +132,9 @@ export interface IResProvince {
       status: number;
       msg: string;
     };
-    response: IProvince[];
+    response: {
+      provinces: IProvince[];
+    };
   };
 }
 
@@ -163,3 +175,33 @@ export interface ISelectPopup {
   value: string;
   label: string;
 }
+
+export interface IGift {
+  id: number;
+  type: string;
+  money: string;
+  name: string;
+}
+
+export interface IResGift {
+  data: {
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
+    };
+    response: IGift[];
+  };
+}
+
+export type IPropsGiftTableRow = {
+  row: IGift;
+  handleClose: Function;
+};
+
+export type IGiftParams = {
+  page?: number;
+  size?: number;
+};

@@ -68,7 +68,8 @@ export const PATH_DASHBOARD = {
   eventAdmin: {
     root: path(ROOTS_DASHBOARD, '/event-history'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
-    createPrize: path(ROOTS_DASHBOARD, '/event-create-prize'),
+    createPrize: (eventID: string) =>
+      path(ROOTS_DASHBOARD, `/event-create-prize/${eventID}`),
     listPrize: (eventID: string) =>
       path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
     editEventPrize: path(ROOTS_DASHBOARD, '/event/event-prize-edit/:id'),

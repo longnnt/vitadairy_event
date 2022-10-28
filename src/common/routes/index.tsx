@@ -97,7 +97,7 @@ export default function Router() {
             { element: <Navigate to="/dashboard/event" replace />, index: true },
             { path: 'event-history', element: <History /> },
             { path: 'event-list-prize', element: <ListPrize />},
-            { path: 'event-create-prize', element: <CreatePrize />},
+            { path: 'event-create-prize/:id', element: <CreatePrize />},
             // { path: 'event-list-prize', element: <ListPrize /> },
             { path: 'event/event-prize-edit/:id', element: <EditEventPrize /> },
             { path: 'event-list-prize/event-:id', element: <ListPrize /> },
