@@ -12,7 +12,7 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -27,7 +27,7 @@ import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField
+  RHFTextField,
 } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
@@ -37,7 +37,8 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import {
   defaultValues,
   popupTypeOption,
-  POPUP_TYPE, TABLE_HEAD_GIFT
+  POPUP_TYPE,
+  TABLE_HEAD_GIFT,
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
 import { giftSelecttor } from '../../event.slice';
@@ -45,7 +46,12 @@ import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
 import { useGetGilf } from '../../hooks/useGetGilf';
-import { IEventDetail, IFormCreateEvent, IGiftParams, ISelectPopup } from '../../interfaces';
+import {
+  IEventDetail,
+  IFormCreateEvent,
+  IGiftParams,
+  ISelectPopup,
+} from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -79,7 +85,7 @@ export default function HistoryNewForm() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const gift = useSelector(giftSelecttor)
+  const gift = useSelector(giftSelecttor);
   console.log(gift);
   const [provinceCount, setProvinCount] = useState<
     Array<{
@@ -132,7 +138,7 @@ export default function HistoryNewForm() {
   };
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
 
-  const params= useParams();
+  const params = useParams();
   const id = params?.id;
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
@@ -148,7 +154,7 @@ export default function HistoryNewForm() {
   }));
 
   const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response || [];
+  const dataProvince = addProvince?.data?.response?.provinces || [];
   const addNewOption2 = dataProvince.map((item) => ({
     key: item.id,
     name: item.name,
@@ -179,13 +185,13 @@ export default function HistoryNewForm() {
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
-    const eventDetailProvinces = data.eventDetailProvinces.map(item => {
+    const eventDetailProvinces = data.eventDetailProvinces.map((item) => {
       if (item.endDate || item.startDate) {
         const startDate = new Date(item.startDate).toISOString();
         const endDate = new Date(item.endDate).toISOString();
         return { ...item, startDate: startDate, endDate: endDate };
       }
-    })
+    });
     const dataEvent: IFormCreateEvent = {
       eventDetailProvinces: eventDetailProvinces as Array<IEventDetail>,
       eventId: idEventPrize,
@@ -338,16 +344,22 @@ export default function HistoryNewForm() {
                       >
                         Chọn quà
                       </Button>
-                      <Box sx={{color: 'white', marginTop: '5px'}}>
-                        {gift.name}
-                      </Box>
+                      <Box sx={{ color: 'white', marginTop: '5px' }}>{gift.name}</Box>
                       <Modal
                         open={open}
                         onClose={handleClose}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                       >
-                        <Box sx={StyleGift}>
+                        <Box
+                          sx={{
+                            width: 700,
+                            height: 500,
+                            backgroundColor: 'primary.dark',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
                           <Scrollbar>
                             <TableContainer sx={{ position: 'relative' }}>
                               <Table>
@@ -355,7 +367,11 @@ export default function HistoryNewForm() {
                               </Table>
                               <TableBody>
                                 {dataGift.map((row) => (
-                                  <GiftTableRow key={row.id} row={row} handleClose={handleClose}/>
+                                  <GiftTableRow
+                                    key={row.id}
+                                    row={row}
+                                    handleClose={handleClose}
+                                  />
                                 ))}
                               </TableBody>
                             </TableContainer>
@@ -565,16 +581,3 @@ export default function HistoryNewForm() {
     </>
   );
 }
-
-const StyleGift = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 700,
-  height: 500,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
