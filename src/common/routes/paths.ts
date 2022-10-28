@@ -69,10 +69,10 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/event-history'),
     historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
     listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
-    createPrize: path(ROOTS_DASHBOARD, '/event-create-prize'),
+    createPrize: (eventID: string) =>
+      path(ROOTS_DASHBOARD, `/event-create-prize/${eventID}`),
     listPrize1: (eventID: number) =>
       path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
-    // listPrize: path(ROOTS_DASHBOARD, '/event-list-prize'),
     editEventPrize: path(ROOTS_DASHBOARD, '/event/event-prize-edit/:id'),
   },
 };

@@ -5,8 +5,13 @@ import {
   Card,
   FormControlLabel,
   Grid,
+  Modal,
   Radio,
   RadioGroup,
+  Table,
+  TableBody,
+  TableContainer,
+  TablePagination,
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -17,20 +22,30 @@ import { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   FormProvider,
   RHFEditor,
   RHFSelect,
   RHFTextField
 } from 'src/common/components/hook-form';
+import Scrollbar from 'src/common/components/Scrollbar';
+import { TableHeadCustom } from 'src/common/components/table';
+import useTable from 'src/common/hooks/useTable';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { defaultValues, popupTypeOption, POPUP_TYPE } from '../../constants';
+import {
+  defaultValues,
+  popupTypeOption,
+  POPUP_TYPE, TABLE_HEAD_GIFT
+} from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { IFormCreateEvent, ISelectPopup } from '../../interfaces';
+import { useGetEventById } from '../../hooks/useGetEventById';
+import { useGetGilf } from '../../hooks/useGetGilf';
+import { IFormCreateEvent, IGiftParams, ISelectPopup } from '../../interfaces';
+import { GiftTableRow } from './GiftTableRow';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -44,12 +59,25 @@ export default function HistoryNewForm() {
   const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueChoice((event.target as HTMLInputElement).value);
   };
+  const {
+    dense,
+    page,
+    order,
+    orderBy,
+    rowsPerPage,
+    selected: selectedRows,
+    onChangePage,
+    onChangeRowsPerPage,
+  } = useTable();
 
   const [valueStartDate, setValueStartDate] = React.useState<Dayjs | null>(null);
   const [valueEndDate, setValueEndDate] = React.useState<Dayjs | null>(null);
   const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.HTML_LINK);
   const [popUpCode, setPopUpCode] = React.useState<string | null>('');
   const [idHolder, setidHolder] = React.useState<number | undefined>(0);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [provinceCount, setProvinCount] = useState<
     Array<{
       id: number;
@@ -72,8 +100,6 @@ export default function HistoryNewForm() {
 
   const removeCount = (index: number) => {
     setidHolder(index);
-    console.log(index);
-    console.log([...provinceCount].filter((item) => item.id !== idHolder));
     setProvinCount([...provinceCount].filter((item) => item.id !== idHolder));
   };
 
@@ -102,10 +128,14 @@ export default function HistoryNewForm() {
     });
   };
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
-
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize);
+    if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
   }, [isSuccess]);
+
+  const params = useParams();
+  const id = params?.id;
+  const idEventPrize = parseInt(id as string);
+  // const { data: dataEventById } = useGetEventById(idEventPrize);
 
   const { data: addTransaction } = useGetAllTranSacTion();
   const dataTransaction = addTransaction?.data?.response || [];
@@ -121,6 +151,16 @@ export default function HistoryNewForm() {
     name: item.name,
   }));
 
+  const searchParams: IGiftParams = {
+    page: page,
+    size: rowsPerPage,
+  };
+  const { data: ListGift } = useGetGilf(searchParams);
+  const dataGift = ListGift?.data?.response || [];
+  const { totalRecords } = ListGift?.data?.pagination || {
+    totalRecords: 0,
+  };
+
   const methods = useForm<IFormCreateEvent>({
     resolver: yupResolver(eventPrizeSchema),
     defaultValues,
@@ -134,14 +174,12 @@ export default function HistoryNewForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  console.log(getValues())
 
   const onSubmit = async (data: IFormCreateEvent) => {
     const dataEvent: IFormCreateEvent = {
       eventDetailProvinces: data.eventDetailProvinces,
-      eventId: data.eventId,
-      giftId: data.giftId,
-      id: data.id,
+      eventId: idEventPrize,
+      giftId: 5,
       notificationContent: data.notificationContent,
       notificationDescription: data.notificationDescription,
       notificationTitle: data.notificationTitle,
@@ -168,17 +206,20 @@ export default function HistoryNewForm() {
                 <Card sx={{ p: 3, width: '100%' }}>
                   <RHFTextField name={'ordinal'} label="Thứ tự ưu tiên" margin="dense" />
                   <RHFTextField
-                    name={'probability'}
+                    name="probability"
+                    key={'probability'}
                     label="Tỉ lệ trúng quà của sự kiện(%)"
                     margin="dense"
                   />
                   <RHFTextField
-                    name={'quantity'}
+                    name="quantity"
+                    key={'quantity'}
                     label="Tổng số lượng quà..."
                     margin="dense"
                   />
                   <RHFTextField
-                    name={''}
+                    name="id"
+                    key={'id'}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -187,7 +228,8 @@ export default function HistoryNewForm() {
                   />
                   <RHFSelect
                     name={'transactionTypeId'}
-                    label="Transaction type"
+                    key="transactionTypeId"
+                    label={'Transaction type'}
                     placeholder="Transaction type"
                     margin="dense"
                   >
@@ -203,12 +245,14 @@ export default function HistoryNewForm() {
               <Grid item xs={6}>
                 <Card sx={{ p: 3, width: '100%' }}>
                   <RHFTextField
-                    name={'popupImageLink'}
+                    name="popupImageLink"
+                    key={'popupImageLink'}
                     label="Link hình ảnh Pop up..."
                     margin="dense"
                   />
                   <RHFSelect
-                    name="popupType"
+                    name={'popupType'}
+                    key="popupType"
                     label="Pop up Type"
                     placeholder="Pop up Type"
                     margin="dense"
@@ -228,19 +272,20 @@ export default function HistoryNewForm() {
                   {popUpType === POPUP_TYPE.HTML_LINK && (
                     <RHFTextField
                       name="popupLink"
-                      key={'PopupHtmllink'}
+                      key={'popupLink'}
                       label="Popup html link"
                     />
                   )}
                   {popUpType === POPUP_TYPE.DEEP_LINK && (
                     <RHFTextField
                       name="popupLink"
-                      key={'popupDeepLink'}
+                      key={'popupLink'}
                       label="Popup deep link"
                     />
                   )}
                   <RHFSelect
                     name="popupCode"
+                    key={'popupCode'}
                     label="Pop up Code"
                     placeholder="Pop up Code"
                     margin="dense"
@@ -254,8 +299,9 @@ export default function HistoryNewForm() {
                   </RHFSelect>
                   <RadioGroup
                     row
-                    name="gifts"
-                    value={valueChoice}
+                    name={'giftId'}
+                    key="giftId"
+                    // value={valueChoice}
                     onChange={handleChangeChoice}
                   >
                     <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
@@ -278,9 +324,42 @@ export default function HistoryNewForm() {
                         variant="contained"
                         color="info"
                         size="large"
+                        onClick={handleOpen}
                       >
                         Chọn quà
                       </Button>
+                      <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={StyleGift}>
+                          <Scrollbar>
+                            <TableContainer sx={{ position: 'relative' }}>
+                              <Table>
+                                <TableHeadCustom headLabel={TABLE_HEAD_GIFT} />
+                              </Table>
+                              <TableBody>
+                                {dataGift.map((row) => (
+                                  <GiftTableRow key={row.id} row={row} />
+                                ))}
+                              </TableBody>
+                            </TableContainer>
+                          </Scrollbar>
+                          {!!ListGift?.data?.pagination?.totalPages && (
+                            <TablePagination
+                              rowsPerPageOptions={[10, 15]}
+                              component="div"
+                              count={totalRecords}
+                              rowsPerPage={rowsPerPage}
+                              page={page}
+                              onPageChange={onChangePage}
+                              onRowsPerPageChange={onChangeRowsPerPage}
+                            />
+                          )}
+                        </Box>
+                      </Modal>
                     </Grid>
                     <Grid item xs>
                       <RHFTextField
@@ -299,12 +378,14 @@ export default function HistoryNewForm() {
             <Card sx={{ p: 3, width: '100%', my: 3 }}>
               <Grid>
                 <RHFTextField
-                  name={'notificationTitle'}
+                  name="notificationTitle"
+                  key={'notificationTitle'}
                   label="Tiêu đề thông báo"
                   margin="dense"
                 />
                 <RHFTextField
-                  name={'notificationContent'}
+                  name={'notificationDescription'}
+                  key={'notificationDescription'}
                   label="Nội dung thông báo"
                   margin="dense"
                 />
@@ -313,7 +394,8 @@ export default function HistoryNewForm() {
                   <RHFEditor
                     className="category__text-editor"
                     simple
-                    name={'notificationDescription'}
+                    name="notificationContent"
+                    key={'notificationContent'}
                   />
                 </div>
               </Grid>
@@ -388,7 +470,7 @@ export default function HistoryNewForm() {
                           />
                         </Grid>
                         <Grid item xs>
-                        <Controller
+                          <Controller
                             name={`eventDetailProvinces.${index}.startDate`}
                             key={`eventDetailProvinces.${index}}.startDate`}
                             control={control}
@@ -406,7 +488,7 @@ export default function HistoryNewForm() {
                           />
                         </Grid>
                         <Grid item xs>
-                        <Controller
+                          <Controller
                             name={`eventDetailProvinces.${index}.endDate`}
                             key={`eventDetailProvinces.${index}.endDate`}
                             control={control}
@@ -445,12 +527,22 @@ export default function HistoryNewForm() {
 
           <Grid direction="row" justifyContent="flex-end" container mt={2}>
             <Box sx={{ paddingRight: 2 }}>
-              <LoadingButton color="inherit" variant="outlined" size="large" type="submit">
+              <LoadingButton
+                color="inherit"
+                variant="outlined"
+                size="large"
+                type="submit"
+              >
                 Lưu
               </LoadingButton>
             </Box>
             <Box>
-              <LoadingButton color="inherit" variant="outlined" size="large" type='submit'>
+              <LoadingButton
+                color="inherit"
+                variant="outlined"
+                size="large"
+                type="submit"
+              >
                 Lưu & Chỉnh sửa
               </LoadingButton>
             </Box>
@@ -460,3 +552,16 @@ export default function HistoryNewForm() {
     </>
   );
 }
+
+const StyleGift = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 700,
+  height: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};

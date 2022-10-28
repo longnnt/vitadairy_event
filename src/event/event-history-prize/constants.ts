@@ -67,15 +67,15 @@ export const defaultValues = {
   eventDetailProvinces: [
     {
       endDate: new Date(),
-      id: 0,
+      // id: 0,
       provinceId: 0,
       quantity: 0,
-      startDate: new Date(2000, 1, 1),
+      startDate: new Date(),
     },
   ],
   eventId: 0,
   giftId: 0,
-  id: 0,
+  // id: 0,
   notificationContent: '',
   notificationDescription: '',
   notificationTitle: '',
@@ -86,7 +86,7 @@ export const defaultValues = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  transactionTypeId: '',
+  transactionTypeId: 0,
 };
 
 export const TABLE_HISTORY_PRIZE_EVENT = [
@@ -97,6 +97,12 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
   { id: 'receivedDate', label: 'Ngày nhận', align: 'left' },
   { id: 'qrCode', label: 'QR', align: 'left' },
   { id: 'xCode', label: 'Mã muỗng', align: 'left' },
+];
+
+export const TABLE_HEAD_GIFT = [
+  { id: 'name', label: 'Name', align: 'left' },
+  { id: 'type', label: 'Type', align: 'left' },
+  { id: 'money', label: 'Money', align: 'left' },
 ];
 
 export const formatDateNews = 'dd-MM-yyyy ';

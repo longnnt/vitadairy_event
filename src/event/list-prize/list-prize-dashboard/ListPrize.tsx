@@ -118,7 +118,7 @@ function ListPrizeDashboard() {
         ]}
         action={
           <Stack direction="row" spacing={'10px'}>
-            <Button variant="contained" to={PATH_DASHBOARD.eventAdmin.createPrize} component={RouterLink}>
+            <Button variant="contained" to={PATH_DASHBOARD.eventAdmin.createPrize(id as string)} component={RouterLink}>
               Tạo mới
             </Button>
           </Stack>
