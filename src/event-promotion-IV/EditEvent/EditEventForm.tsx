@@ -35,19 +35,10 @@ import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import id from 'date-fns/esm/locale/id/index.js';
 import { useEditEvent } from '../hooks/useEditEvent';
 import { IEventFormData } from '../interface';
+import { useGetEventById } from '../hooks/useGetEventById';
+import { useGetProductCode } from '../hooks/useGetProductCode';
+import { useProductCode } from '../hooks/useProductCode';
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
 export const EditEventForm = () => {
   const navigate = useNavigate();
   const methods = useForm({
@@ -57,7 +48,18 @@ export const EditEventForm = () => {
 
   const params = useParams();
   const id = params?.id;
-  const dataEventDetail: IEventFormData = useSelector(eventDetailState);
+
+  const { data } = useGetEventById({
+    id: parseInt(id as string),
+    callback: {
+      onSuccess: () => showSuccessSnackbar('Tải sự kiện thành công'),
+      onError: () => showErrorSnackbar('Tải sự kiện thất bại'),
+    },
+  });
+
+  const skusCodeDataEvent = useProductCode({ size: 20 });
+
+  const dataEventDetail = data?.data?.response;
 
   const {
     control,
@@ -65,7 +67,6 @@ export const EditEventForm = () => {
     reset,
     formState: { errors },
   } = methods;
-
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const { mutate, isSuccess } = useEditEvent({
@@ -80,7 +81,7 @@ export const EditEventForm = () => {
   const { useDeepCompareEffect } = useDeepEffect();
   const onSubmit = (data: any) => {
     const formDataAddNewEvent = {
-      name: data.nameEvent,
+      name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
       skus: data.skus,
@@ -89,7 +90,7 @@ export const EditEventForm = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      id: uuidv4(),
+      id: Number(id),
     };
     mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
   };
@@ -184,9 +185,9 @@ export const EditEventForm = () => {
                         {...field}
                         error={!!errors.skus}
                       >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            {name}
+                        {skusCodeDataEvent.map((code: string) => (
+                          <MenuItem key={code} value={code}>
+                            {code}
                           </MenuItem>
                         ))}
                       </Select>

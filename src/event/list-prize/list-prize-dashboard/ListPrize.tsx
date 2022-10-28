@@ -55,7 +55,7 @@ function ListPrizeDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-
+  const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const mutationDetele = useDeleteListPrizeAdmin({
     onSuccess: () => {
@@ -98,7 +98,6 @@ function ListPrizeDashboard() {
       resetSelect();
     }
   };
-  const navigate = useNavigate();
   const handleEditRow = (id: string) => {
     navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
@@ -121,7 +120,7 @@ function ListPrizeDashboard() {
           <Stack direction="row" spacing={'10px'}>
             <Button
               variant="contained"
-              to={PATH_DASHBOARD.eventAdmin.createPrize}
+              to={PATH_DASHBOARD.eventAdmin.createPrize(id as string)}
               component={RouterLink}
             >
               Tạo mới

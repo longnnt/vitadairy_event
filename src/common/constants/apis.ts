@@ -8,6 +8,7 @@ export const API_EVENT = '/events';
 export const API_EVENT_ADMIN = '/admin/events';
 export const API_REGISTER_EVENT_ADMIN = '/admin/events/register';
 export const API_DOCUMENT = '/admin/documents';
+export const API_PRODUCT = '/admin/product/all';
 // -----------------
 export const API_SHOP_INVITATION = '/admin/store-invitation';
 export const API_SHOP_INVITATION_EXPORTCSV = '/admin/store-invitation/export/csv';
@@ -23,3 +24,4 @@ export const API_PRIZE_EDIT = 'admin/events/details';
 export const API_EDIT_EVENT_PRIZE = 'admin/events/details';
 export const API_PROVINCE_VN = 'province/vn';
 export const API_GET_ALL_GIFTS = 'admin/gift';
+export const API_GIFT = 'admin/gift';

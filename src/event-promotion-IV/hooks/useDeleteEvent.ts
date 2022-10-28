@@ -7,10 +7,9 @@ import { cancelMultiQueries } from 'src/common/utils/cacelCategoryInvalidate';
 
 export function useDeleteEvents(callback: IEventCallback) {
   const queryClient = useQueryClient();
-
-  return useMutation(deleteEvents, {
+  return useMutation((eventIds) => deleteEvents(eventIds), {
     onMutate: async (eventIds: number[]) => {
-      const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_LIST);
+      const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.DELETE_EVENT_LIST);
       cancelMultiQueries(queryClient, keys);
 
       const previousEvent = keys.map(
@@ -31,6 +30,7 @@ export function useDeleteEvents(callback: IEventCallback) {
       return { previousEvent, keys };
     },
     onSuccess: (_result, _variables, context) => {
+      console.log('im here');
       if (!context) return;
       context.keys.forEach((queryKey) => {
         queryClient.invalidateQueries(queryKey);

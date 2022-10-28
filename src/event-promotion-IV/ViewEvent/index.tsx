@@ -20,59 +20,48 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import useMessage from 'src/store-admin/hooks/useMessage';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import uuidv4 from 'src/common/utils/uuidv4';
-import { defaultValues } from '../constant';
 import { useGetEventById } from '../hooks/useGetEventById';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
-
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+import { defaultValues } from '../constant';
 
 export const ViewEvent = () => {
   const navigate = useNavigate();
 
-  // const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const params = useParams();
   const id = params?.id;
 
-  // const { data } = useGetEventById({
-  //   id: parseInt(id as string),
-  //   callback: {
-  //     onSuccess: () => showSuccessSnackbar('Get Admin successfully'),
-  //     onError: () => showErrorSnackbar('Get admin fail'),
-  //   },
-  // });
+  const { data } = useGetEventById({
+    id: parseInt(id as string),
+    callback: {
+      onSuccess: () => showSuccessSnackbar('Lấy thông tin sự kiện thành công'),
+      onError: () => showErrorSnackbar('Lấy thông tin sự kiện thất bại'),
+    },
+  });
+
+  const eventDetail = data?.data || [];
+
+  console.log(eventDetail);
+
+  const {
+    name,
+    startDate,
+    endDate,
+    defaultWinRate,
+    upRate,
+    downRate,
+    userRegisterDate,
+    userLimit,
+    skus,
+  } = eventDetail.response || defaultValues;
   const handleBackEventList = () => {
     navigate(PATH_DASHBOARD.eventPromotionIV.list);
   };
 
   const handleEditEventAction = (id: number) => {
     navigate(PATH_DASHBOARD.eventPromotionIV.edit(id));
-  };
-
-  const fakeData = {
-    name: 'soemthing',
-    startDate: '2022-10-06T20:13:00.000Z',
-    endDate: '2022-10-04T17:00:00.000Z',
-    skus: ['Ralph Hubbard'],
-    defaultWinRate: 1,
-    upRate: 1,
-    downRate: 1,
-    userRegisterDate: '2022-09-30T17:00:00.000Z',
-    userLimit: 1,
-    id: '172ce2e3-2cb5-4815-9b27-888fc77594af',
   };
 
   return (
@@ -82,7 +71,7 @@ export const ViewEvent = () => {
         links={[
           { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Xem sự kiện' },
+          { name: BREADCUMBS.VIEW_EVENT },
         ]}
       />
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -91,7 +80,7 @@ export const ViewEvent = () => {
       <Scrollbar sx={{ marginTop: '20px' }}>
         <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
           <Stack spacing="26px">
-            <TextField value={fakeData.name} label="Tên sự kiện" fullWidth disabled />
+            <TextField value={name} label="Tên sự kiện" fullWidth disabled />
             <Stack
               spacing={'10px'}
               direction="row"
@@ -102,7 +91,7 @@ export const ViewEvent = () => {
                 label="Ngày bắt đầu"
                 inputFormat="dd/MM/yyyy hh:mm a"
                 renderInput={(params) => <TextField {...params} fullWidth />}
-                value={fakeData.startDate}
+                value={startDate}
                 disabled
                 onChange={() => 0}
               />
@@ -114,7 +103,7 @@ export const ViewEvent = () => {
                 renderInput={(params) => <TextField {...params} fullWidth />}
                 onChange={() => 0}
                 disabled
-                value={fakeData.endDate}
+                value={endDate}
               />
             </Stack>
 
@@ -122,13 +111,13 @@ export const ViewEvent = () => {
               <InputLabel>Mã sản phẩm</InputLabel>
               <Select
                 multiple
-                input={<OutlinedInput label="Mã sản phẩm" value={fakeData.skus} />}
+                input={<OutlinedInput label="Mã sản phẩm" value={skus} />}
                 fullWidth
                 disabled
               >
-                {names.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    {name}
+                {skus.map((item: string, index: number) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
                   </MenuItem>
                 ))}
               </Select>
@@ -137,17 +126,17 @@ export const ViewEvent = () => {
             <TextField
               fullWidth
               label="Tỉ lệ trúng quà mặc định của người dùng %"
-              value={fakeData.defaultWinRate}
+              value={defaultWinRate}
               disabled
             />
             <TextField
-              value={fakeData.upRate}
+              value={upRate}
               fullWidth
               label="Tỉ lệ cộng thêm khi người dùng không trúng quà %"
               disabled
             />
             <TextField
-              value={fakeData.downRate}
+              value={downRate}
               fullWidth
               label="Tỉ lệ bị trừ đi khi người dùng trúng quà %"
               disabled
@@ -155,12 +144,11 @@ export const ViewEvent = () => {
             <FormControl>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="female"
                 name="radio-buttons-group"
                 sx={{ flexDirection: 'row' }}
               >
                 <FormControlLabel
-                  value="allUsre"
+                  value="allUser"
                   control={<Radio />}
                   label="Tất cả người dùng"
                   disabled
@@ -177,17 +165,17 @@ export const ViewEvent = () => {
 
             <DatePicker
               label="Ngày tính người dùng mới"
-              inputFormat="dd/MM/yyyy a"
+              inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField {...params} fullWidth disabled />}
               onChange={() => 0}
-              value={fakeData.userRegisterDate}
+              value={userRegisterDate}
               disabled
             />
 
             <TextField
               fullWidth
               label="Số lần người dùng nhận quà ..."
-              value={fakeData.userLimit}
+              value={userLimit}
               disabled
             />
           </Stack>
