@@ -86,7 +86,6 @@ export default function HistoryNewForm() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const gift = useSelector(giftSelecttor);
-  console.log(gift);
   const [provinceCount, setProvinCount] = useState<
     Array<{
       id: number;
@@ -144,7 +143,6 @@ export default function HistoryNewForm() {
     if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
   }, [isSuccess]);
   const idEventPrize = parseInt(id as string);
-  // const { data: dataEventById } = useGetEventById(idEventPrize);
 
   const { data: addTransaction } = useGetAllTranSacTion();
   const dataTransaction = addTransaction?.data?.response || [];
