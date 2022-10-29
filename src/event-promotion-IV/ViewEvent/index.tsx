@@ -43,8 +43,6 @@ export const ViewEvent = () => {
 
   const eventDetail = data?.data || [];
 
-  console.log(eventDetail);
-
   const {
     name,
     startDate,
@@ -146,6 +144,7 @@ export const ViewEvent = () => {
                 aria-labelledby="demo-radio-buttons-group-label"
                 name="radio-buttons-group"
                 sx={{ flexDirection: 'row' }}
+                defaultValue={(userRegisterDate !== null && 'newUser') || 'allUser'}
               >
                 <FormControlLabel
                   value="allUser"
@@ -158,7 +157,6 @@ export const ViewEvent = () => {
                   control={<Radio />}
                   label="Người dùng mới"
                   disabled
-                  checked
                 />
               </RadioGroup>
             </FormControl>
@@ -166,7 +164,14 @@ export const ViewEvent = () => {
             <DatePicker
               label="Ngày tính người dùng mới"
               inputFormat="dd/MM/yyyy"
-              renderInput={(params) => <TextField {...params} fullWidth disabled />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  disabled
+                  sx={{ display: `${(userRegisterDate === null && 'none') || 'block'}` }}
+                />
+              )}
               onChange={() => 0}
               value={userRegisterDate}
               disabled

@@ -22,6 +22,7 @@ export interface initialValueProps {
   isDeleteSelected: boolean;
   isOpenMenu: HTMLElement | null;
   eventDetail: IEventFormData;
+  userType: 'allUser' | 'newUser';
 }
 
 export type TimeProps = Date | null;
@@ -34,6 +35,7 @@ export interface IResEvents {
 export interface IEventCallback {
   onSuccess: VoidFunction;
   onError: VoidFunction;
+  onSuccessSend?: VoidFunction;
 }
 
 export interface FormNewEventProps {

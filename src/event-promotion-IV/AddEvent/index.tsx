@@ -12,6 +12,10 @@ import {
   TextField,
   Typography,
   FormHelperText,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
@@ -21,25 +25,20 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { schemaAddEvent } from '../schema';
 import { useForm, Controller } from 'react-hook-form';
-import {
-  FormProvider,
-  RHFRadioGroup,
-  RHFTextField,
-} from 'src/common/components/hook-form';
+import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import uuidv4 from 'src/common/utils/uuidv4';
 import { defaultValues } from '../constant';
 import { IEventFormData } from '../interface';
-import { useGetProductCode } from '../hooks/useGetProductCode';
 import { useProductCode } from '../hooks/useProductCode';
-
-const names = ['VCLG8S01', 'VMOM4S01', 'VCLG8S04', 'VCLG8S02', 'VCLG8S03'];
+import { useDispatch, useSelector } from 'src/common/redux/store';
+import { setUserType, userTypeState } from '../eventPromotionIV.slice';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const methods = useForm({
     resolver: yupResolver(schemaAddEvent),
     defaultValues,
@@ -82,6 +81,10 @@ export const AddEvent = () => {
   }, [isSuccess]);
 
   const skusCodeDataEvent = useProductCode({ size: 20 });
+  const handleStatusUserType = (userType: string) => {
+    dispatch(setUserType(userType));
+  };
+  const userTypeValue = useSelector(userTypeState);
 
   return (
     <>
@@ -205,19 +208,37 @@ export const AddEvent = () => {
                 type="number"
               />
 
-              <RHFRadioGroup
-                name="typeUser"
-                options={[
-                  { label: 'Toàn bộ người dùng', value: 'allUser' },
-                  { label: 'Người dùng mới', value: 'newUser' },
-                ]}
-              />
+              <FormControl>
+                <RadioGroup
+                  defaultValue="allUser"
+                  name="radio-buttons-group"
+                  sx={{ flexDirection: 'row' }}
+                  onChange={(e) => handleStatusUserType(e.target.value)}
+                >
+                  <FormControlLabel
+                    value="allUser"
+                    control={<Radio />}
+                    label="Toàn bộ người dùng"
+                  />
+                  <FormControlLabel
+                    value="newUser"
+                    control={<Radio />}
+                    label="Người dùng mới"
+                  />
+                </RadioGroup>
+              </FormControl>
 
               <Controller
                 name="userRegisterDate"
                 control={control}
                 render={({ field }) => (
-                  <Stack position={'relative'} width="100%">
+                  <Stack
+                    position={'relative'}
+                    width="100%"
+                    sx={{
+                      display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
+                    }}
+                  >
                     <DatePicker
                       {...field}
                       label="Ngày tính người dùng mới"
