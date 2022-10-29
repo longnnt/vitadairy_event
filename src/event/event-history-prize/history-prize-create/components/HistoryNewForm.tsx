@@ -23,7 +23,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { parse, ParseResult } from 'papaparse';
-import React, { useEffect, useState } from 'react';
+import React, { ReactHTMLElement, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -38,7 +38,7 @@ import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { string } from 'yup';
+import { number, string } from 'yup';
 import {
   defaultValues,
   popupTypeOption,
@@ -61,6 +61,7 @@ import {
 import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { Data } from 'react-csv/components/CommonPropTypes';
 
 dayjs.extend(customParseFormat);
 
@@ -133,10 +134,33 @@ export default function HistoryNewForm() {
   //   }>
   // >([]);
 
-  const removeCount = (index: number) => {
-    setidHolder(index);
-    setDataCities([...dataCities].filter((item) => item.id !== idHolder));
+  const removeCount = (id: number) => {
+    console.log([...dataCities].filter((item) => item.id !== id));
+    setDataCities([...dataCities].filter((item) => item.id !== id));
   };
+  const handleChangeCity = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number) => {
+    const newData = [...dataCities];
+    // const itemById = newData.find(element => element.id === id);
+    let itemById: DataCites = { id: 0, amount: 0, name: "", startDate: null, endDate: null };
+    let idx = 0;
+    newData.forEach((item, index) => {
+      if(item.id === id) {
+        itemById = item;
+        idx = index;
+      }
+    });
+    // console.log(e.target.value)
+    // console.log(typeof itemById?.amount)
+    // console.log(parseInt(e.target.value) + parseInt(itemById?.amount.toString()))
+    // console.log(typeof ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + itemById?.amount : itemById?.amount))
+    // var index = newData.indexOf((itemById || { startDate: null, endDate: null, id: number, amount: 0, name: ""}));
+    const itemFixed = {
+      ...itemById,
+      amount: ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + parseInt(itemById?.amount.toString()) : itemById?.amount),
+    };
+    newData[idx] = itemFixed;
+    setDataCities(newData);
+  }
 
   const changePopUpType = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -182,7 +206,7 @@ export default function HistoryNewForm() {
   }));
 
   const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response || [];
+  const dataProvince = addProvince?.data?.response?.provinces || [];
   const addNewOption2 = dataProvince.map((item) => ({
     key: item.id,
     name: item.name,
@@ -219,8 +243,9 @@ export default function HistoryNewForm() {
         download: true,
         skipEmptyLines: true,
         delimiter: ",",
+        fastMode: true,
         encoding: "utf-8",
-        complete: (results: ParseResult<DataCSV>) => {
+        complete: async (results: ParseResult<DataCSV>) => {
           const test : DataCSV[] = results.data;
           const data : any = test.map(item => ({
             name: item[keyName1],
@@ -497,7 +522,7 @@ export default function HistoryNewForm() {
             </Card>
             <LabelStyle>Tỉnh thành</LabelStyle>
             <Card sx={{ p: 3, width: '100%' }}>
-              <Grid sx={{maxHeight: 450}}>
+              <Grid sx={{maxHeight: 370}}>
                 <Grid direction="row" justifyContent="flex-end" container>
                   <Box sx={{ paddingRight: 2 }}>
                     <Button
@@ -566,9 +591,12 @@ export default function HistoryNewForm() {
                         </Grid>
                         <Grid item xs>
                           <RHFTextField
-                            name={`eventDetailProvinces.${index}.quantity`}
-                            key={`eventDetailProvinces.${index}.quantity`}
+                            // name={`eventDetailProvinces.${index}.quantity`}
+                            // key={`eventDetailProvinces.${index}.quantity`}
+                            name={`amount_test`}
+                            key={`amount_test`}
                             label="Số giải nhập thêm"
+                            onChange={(e) => handleChangeCity(e, item.id)}
                           />
                         </Grid>
                         <Grid item xs>
@@ -612,9 +640,7 @@ export default function HistoryNewForm() {
                         <Grid item xs={1}>
                           <Button
                             color="inherit"
-                            onClick={() => {
-                              removeCount(item?.id);
-                            }}
+                            onClick={() => removeCount(item?.id)}
                             variant="contained"
                             size="large"
                           >
