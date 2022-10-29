@@ -1,32 +1,33 @@
 import * as Yup from 'yup';
 
 export const eventDetailProvincesSchema = Yup.object().shape({
-  endDate: Yup.string().required('This field is requiered'),
-  provinceId: Yup.number().required('This field is requiered'),
-  quantity: Yup.number().required('This field is requiered'),
-  startDate: Yup.string().required('This field is requiered'),
+  endDate: Yup.string().required('This field is required'),
+  provinceId: Yup.number().required('This field is required'),
+  quantity: Yup.number(),
+  // .required('This field is requiered'),
+  startDate: Yup.string().required('This field is required'),
 });
 
 export const eidtEventPrizeSchema = Yup.object().shape({
-  giftId: Yup.number().required('This field is requiered'),
-  popupCode: Yup.string().required('This field is requiered'),
-  popupImageLink: Yup.string().required('This field is requiered'),
-  popupLink: Yup.string().required('This field is requiered'),
-  popupType: Yup.string().required('This field is requiered'),
+  giftId: Yup.number().required('This field is required'),
+  popupCode: Yup.string().required('This field is required'),
+  popupImageLink: Yup.string().required('This field is required'),
+  popupLink: Yup.string().required('This field is required'),
+  popupType: Yup.string().required('This field is required'),
 
   notificationContent: Yup.string()
-    .required('This field is requiered')
+    .required('This field is required')
     .test('test empty', 'Content is required', (val) => val !== '<p><br></p>'),
-  notificationDescription: Yup.string().required('This field is requiered'),
-  notificationTitle: Yup.string().required('This field is requiered'),
+  notificationDescription: Yup.string().required('This field is required'),
+  notificationTitle: Yup.string().required('This field is required'),
 
-  ordinal: Yup.number().required('This field is requiered'),
-  probability: Yup.number().required('This field is requiered'),
-  quantity: Yup.number().required('This field is requiered'),
-  transactionTypeId: Yup.number().required('This field is requiered'),
-  winnerAmount: Yup.number().required('This field is requiered'),
+  ordinal: Yup.number().required('This field is required'),
+  probability: Yup.number().required('This field is required'),
+  quantity: Yup.number().required('This field is required'),
+  transactionTypeId: Yup.number().required('This field is required'),
+  winnerAmount: Yup.number().required('This field is required'),
 
   eventDetailProvinces: Yup.array()
     .of(eventDetailProvincesSchema)
-    .required('This field is requiered'),
+    .required('This field is required'),
 });

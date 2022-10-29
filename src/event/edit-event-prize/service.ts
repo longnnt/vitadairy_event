@@ -1,5 +1,6 @@
 import {
   API_EDIT_EVENT_PRIZE,
+  API_GET_ALL_GIFTS,
   API_PRIZE_EDIT,
   API_PROVINCE_VN,
   API_TRANSACTION_TYPE,
@@ -7,7 +8,9 @@ import {
 import axiosInstance from 'src/common/utils/axios';
 import {
   IFormEdit,
+  IParamsGetGift,
   IResEventPrizeById,
+  IResGetGifts,
   IResProvince,
   IResTransactionType,
 } from './common/interface';
@@ -26,4 +29,8 @@ export const getAllProvinceVN = async () => {
 
 export const eidtEventPrize = (newData: IFormEdit) => {
   return axiosInstance.patch(API_EDIT_EVENT_PRIZE, newData);
+};
+
+export const getAllGifts = (params: IParamsGetGift) => {
+  return axiosInstance.get<unknown, IResGetGifts>(API_GET_ALL_GIFTS, { params });
 };

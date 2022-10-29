@@ -1,25 +1,30 @@
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Stack,
+  TextField,
+} from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
-import {
-  TextField,
-  Stack,
-  InputAdornment,
-  OutlinedInput,
-  Button,
-  InputLabel,
-  FormControl,
-} from '@mui/material';
-import Iconify from 'src/common/components/Iconify';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 import { dispatch } from 'src/common/redux/store';
 import { setEndDate, setSearchText, setStartDate } from '../eventPromotionIV.slice';
 
-const initialValue = {
+interface ISearchParamsProps {
+  searchText: string;
+  startDate: Date | null;
+  endDate: Date | null;
+}
+
+const initialValue: ISearchParamsProps = {
   searchText: '',
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: null,
+  endDate: null,
 };
 
 export const EventTableToolbar = () => {
@@ -31,10 +36,10 @@ export const EventTableToolbar = () => {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = methods;
-  const onSubmit = (data: any) => {
+
+  const onSubmit = (data: ISearchParamsProps) => {
     dispatch(setSearchText(data.searchText));
     dispatch(setStartDate(data.startDate));
     dispatch(setEndDate(data.endDate));
@@ -42,10 +47,13 @@ export const EventTableToolbar = () => {
 
   const handleResetForm = () => {
     reset({
-      endDate: new Date(),
-      startDate: new Date(),
+      endDate: null,
+      startDate: null,
       searchText: '',
     });
+    dispatch(setSearchText(''));
+    dispatch(setStartDate(null));
+    dispatch(setEndDate(null));
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
