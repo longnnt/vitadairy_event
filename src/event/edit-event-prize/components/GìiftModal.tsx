@@ -1,9 +1,7 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Scrollbar from 'src/common/components/Scrollbar';
-import { useGetAllGift } from '../hooks/useGetAllGift';
 import { IGiftDetail } from '../common/interface';
 import {
   Checkbox,
@@ -34,16 +32,19 @@ export const GiftModal = ({
   open,
   handleClose,
   setChoosenGift,
+  setPage,
+  giftDta,
+  page,
+  totalRecords,
 }: {
   open: boolean;
+  totalRecords: number;
+  page: number;
+  setPage: (value: number) => void;
+  giftDta: IGiftDetail[];
   handleClose: () => void;
   setChoosenGift: (value: IGiftDetail) => void;
 }) => {
-  const SIZE = 10;
-  const [page, setPage] = React.useState<number>(0);
-  const params = { page: page, size: SIZE };
-  const { data } = useGetAllGift(params);
-  const giftDta = data?.data?.response ? data?.data?.response : [];
   const handleOnclick = (id: number) => {
     const choosenGift = giftDta?.filter((item: IGiftDetail) => item.id === id);
     setChoosenGift(choosenGift[0]);
@@ -122,7 +123,7 @@ export const GiftModal = ({
             <TablePagination
               rowsPerPageOptions={[10]}
               component="div"
-              count={data ? data?.data?.pagination?.totalRecords : 0}
+              count={totalRecords}
               rowsPerPage={10}
               page={page}
               onPageChange={handleChangePage}
