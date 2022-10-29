@@ -4,13 +4,10 @@ import {
   Button,
   Card,
   FormControl,
-  FormControlLabel,
   FormHelperText,
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Radio,
-  RadioGroup,
   Select,
   Stack,
   TextField,
@@ -20,7 +17,7 @@ import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -58,14 +55,11 @@ export const EditEventForm = () => {
 
   const dataEventDetail = data?.data?.response;
 
-  console.log(dataEventDetail);
-
   const {
     control,
     handleSubmit,
     reset,
     setValue,
-    getValues,
     watch,
     formState: { errors },
   } = methods;
@@ -97,7 +91,6 @@ export const EditEventForm = () => {
       userLimit: data.userLimit,
       id: Number(id),
     };
-    console.log(data);
     mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
   };
 
