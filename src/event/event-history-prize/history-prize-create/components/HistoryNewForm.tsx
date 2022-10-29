@@ -36,7 +36,7 @@ import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
-import { useSelector } from 'src/common/redux/store';
+import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { number, string } from 'yup';
 import {
@@ -47,7 +47,7 @@ import {
   TABLE_HEAD_GIFT,
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
-import { giftSelecttor } from '../../event.slice';
+import { giftSelecttor, setGift } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
@@ -130,7 +130,6 @@ export default function HistoryNewForm() {
       quantity: ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + parseInt(itemEdit?.quantity.toString()) : itemEdit?.quantity),
     };
 
-    console.log(itemChanged);
     // update element in array
     newData[provinceIdx] = itemChanged;
 
@@ -167,9 +166,14 @@ export default function HistoryNewForm() {
 
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
 
-  // useEffect(() => {
-  //   setValue('eventDetailProvinces', dataCities)
-  // },[dataCities])
+  useEffect(() => {
+    dispatch(setGift({
+      id: 0,
+      name: '',
+      type: '',
+      money: '',
+    }));
+  },[])
 
   const params = useParams();
   const id = params?.id;
@@ -287,7 +291,12 @@ export default function HistoryNewForm() {
       quantity: data.quantity,
       transactionTypeId: data.transactionTypeId,
     };
-    console.log(dataEvent);
+    dispatch(setGift({
+      id: 0,
+      name: '',
+      type: '',
+      money: '',
+    }));
     mutate(dataEvent);
   };
   return (
@@ -397,16 +406,18 @@ export default function HistoryNewForm() {
                     row
                     name={'giftId'}
                     key="giftId"
-                    // value={valueChoice}
+                    value={valueChoice}
                     onChange={handleChangeChoice}
                   >
                     <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
                     <FormControlLabel
+                      name={'giftId'}
                       value="point"
                       control={<Radio />}
                       label="Tặng Điểm"
                     />
                     <FormControlLabel
+                      name={'giftId'}
                       value="all"
                       control={<Radio />}
                       label="Tặng Quà và Điểm"
