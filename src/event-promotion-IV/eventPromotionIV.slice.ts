@@ -6,11 +6,10 @@ const initialValue: initialValueProps = {
   startDate: null,
   endDate: null,
   searchText: '',
-  isFilter: false,
-  isDeleteSelected: false,
   isOpenMenu: null,
   eventDetail: {} as IEventFormData,
   userType: 'allUser',
+  buttonType: '',
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -40,6 +39,9 @@ const eventPromotionIVSlice = createSlice({
     setUserType: (state, action) => {
       state.userType = action.payload;
     },
+    setButtonType: (state, action) => {
+      state.buttonType = action.payload;
+    },
   },
 });
 
@@ -52,6 +54,7 @@ export const {
   udpateStatusMenu,
   setEventDetail,
   setUserType,
+  setButtonType,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -60,3 +63,4 @@ export const searchTextState = (state: RootState) => state.eventPromotionIV.sear
 export const openMenuState = (state: RootState) => state.eventPromotionIV.isOpenMenu;
 export const eventDetailState = (state: RootState) => state.eventPromotionIV.eventDetail;
 export const userTypeState = (state: RootState) => state.eventPromotionIV.userType;
+export const buttonTypeState = (state: RootState) => state.eventPromotionIV.buttonType;

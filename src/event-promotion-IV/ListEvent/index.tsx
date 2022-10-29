@@ -5,7 +5,6 @@ import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { EventTable } from './EventTable';
 
-import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EventTableToolbar } from './EventTableToolbar';
 
@@ -25,23 +24,13 @@ export default function ListEventPromotionDashboard() {
           { name: 'Danh sách sự kiện' },
         ]}
         action={
-          <>
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'akar-icons:file'} />}
-              onClick={handleCreateEvent}
-            >
-              Tạo mới
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'akar-icons:file'} />}
-              color="error"
-              sx={{ ml: '10px' }}
-            >
-              Xóa
-            </Button>
-          </>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon={'akar-icons:file'} />}
+            onClick={handleCreateEvent}
+          >
+            Tạo mới
+          </Button>
         }
       />
       <Card sx={{ p: '10px', w: '100%' }}>
