@@ -5,7 +5,6 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { parse, ParseResult } from 'papaparse';
 import {
   FormProvider,
   RHFEditor,
@@ -38,7 +37,6 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GiftModal } from './GìiftModal';
-<<<<<<< HEAD
 import {
   convertExcelFileToObj,
   convertNameProvinceToId,
@@ -47,16 +45,6 @@ import {
 import Iconify from 'src/common/components/Iconify';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
-=======
-import Iconify from 'src/common/components/Iconify';
-import { ProvinceCSV } from '../interfaces';
-// import { DataGrid, GridColumns, GridRowsProp } from '@mui/x-data-grid';
-// import {
-//   randomCreatedDate,
-//   randomTraderName,
-//   randomUpdatedDate,
-// } from '@mui/x-data-grid-generator';
->>>>>>> 4d5b0436d8a13afcd5b7b1809221d9b5611245c4
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
@@ -226,54 +214,54 @@ export const EditEventPrizeForm = () => {
     }
   }, [fileImport]);
 
-  const importFile = async (event: any) => {
-    try {
-      const allowedExtensions = ['csv'];
-      if (event.target.files.length) {
-        const inputFile = event.target.files[0];
+  // const importFile = async (event: any) => {
+  //   try {
+  //     const allowedExtensions = ['csv'];
+  //     if (event.target.files.length) {
+  //       const inputFile = event.target.files[0];
 
-        const fileExtension = inputFile?.type.split('/')[1];
-        if (!allowedExtensions.includes(fileExtension)) {
-          showErrorSnackbar('không phải file csv');
-          return;
-        }
-      }
+  //       const fileExtension = inputFile?.type.split('/')[1];
+  //       if (!allowedExtensions.includes(fileExtension)) {
+  //         showErrorSnackbar('không phải file csv');
+  //         return;
+  //       }
+  //     }
 
-      if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
+  //     if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
 
-      parse(event.target.files[0], {
-        header: true,
-        download: true,
-        skipEmptyLines: true,
-        delimiter: ',',
-        encoding: 'utf-8',
-        complete: (results: ParseResult<ProvinceCSV>) => {
-          const provinceImportData: ProvinceCSV[] = results.data;
-          console.log('results', results);
+  //     parse(event.target.files[0], {
+  //       header: true,
+  //       download: true,
+  //       skipEmptyLines: true,
+  //       delimiter: ',',
+  //       encoding: 'utf-8',
+  //       complete: (results: ParseResult<ProvinceCSV>) => {
+  //         const provinceImportData: ProvinceCSV[] = results.data;
+  //         console.log('results', results);
 
-          // setProvinceCount(provinceImportData.length);
-          // const customProvinceData = provinceImportData.map(item => ({
-          //   endDate: item.end_date,
-          //   id: item.id,
-          //   provinceName: item.province_name,
-          //   quantity: item.amount,
-          //   startDate: item.start_date,
-          // }))
+  //         // setProvinceCount(provinceImportData.length);
+  //         // const customProvinceData = provinceImportData.map(item => ({
+  //         //   endDate: item.end_date,
+  //         //   id: item.id,
+  //         //   provinceName: item.province_name,
+  //         //   quantity: item.amount,
+  //         //   startDate: item.start_date,
+  //         // }))
 
-          // const customDateEventPrize = {
-          //   ...dtaEventPrizeById,
-          //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
-          // }
+  //         // const customDateEventPrize = {
+  //         //   ...dtaEventPrizeById,
+  //         //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
+  //         // }
 
-          // reset(customDateEventPrize.response);
-          showSuccessSnackbar('import file thành công');
-        },
-      });
-    } catch (e) {
-      // console.log(e);
-      showErrorSnackbar('Không import file thành công!');
-    }
-  };
+  //         // reset(customDateEventPrize.response);
+  //         showSuccessSnackbar('import file thành công');
+  //       },
+  //     });
+  //   } catch (e) {
+  //     // console.log(e);
+  //     showErrorSnackbar('Không import file thành công!');
+  //   }
+  // };
 
   return (
     <>
