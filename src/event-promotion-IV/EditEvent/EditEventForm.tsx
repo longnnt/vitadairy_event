@@ -249,7 +249,7 @@ export const EditEventForm = () => {
                     <DatePicker
                       {...field}
                       label="Ngày tính người dùng mới"
-                      inputFormat="dd/MM/yyyy a"
+                      inputFormat="dd/MM/yyyy"
                       renderInput={(params) => (
                         <TextField
                           {...params}
