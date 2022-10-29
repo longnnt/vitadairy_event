@@ -5,6 +5,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import { parse, ParseResult } from 'papaparse';
 import {
   FormProvider,
   RHFEditor,
@@ -37,7 +38,16 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GiftModal } from './GìiftModal';
+import Iconify from 'src/common/components/Iconify';
+import { ProvinceCSV } from '../interfaces';
+// import { DataGrid, GridColumns, GridRowsProp } from '@mui/x-data-grid';
+// import {
+//   randomCreatedDate,
+//   randomTraderName,
+//   randomUpdatedDate,
+// } from '@mui/x-data-grid-generator';
 // -----------------------------------------------------------------------------
+
 
 export const EditEventPrizeForm = () => {
   const { useDeepCompareEffect } = useDeepEffect();
@@ -50,15 +60,19 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
-  const dtaEventPrizeById = dataEventPrizeById?.data;
   const { data: dtaProvince } = useGetAllProvinceVN();
-  const provinceOptions = dtaProvince?.data?.response?.provinces?.map(
+  const provincesData = dtaProvince?.data?.response?.provinces;
+  const provinceOptions = provincesData?.map(
     (item: IProvince) => ({
       value: item?.id,
       label: item?.name,
     })
   );
+  const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
+  const dtaEventPrizeById = dataEventPrizeById?.data;
+
+  console.log('dtaProvince', provincesData);
+  
   const { data: transactionType } = useGetAllTransactionType();
   const dtaTransactionType = transactionType?.data;
   const transactionTypeOptions = dtaTransactionType?.response?.map(
@@ -147,6 +161,55 @@ export const EditEventPrizeForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const importFile = async (event: any) => {
+    try {
+      const allowedExtensions = ['csv'];
+      if (event.target.files.length) {
+        const inputFile = event.target.files[0];
+
+        const fileExtension = inputFile?.type.split('/')[1];
+        if (!allowedExtensions.includes(fileExtension)) {
+          showErrorSnackbar('không phải file csv')
+          return;
+        }
+      }
+
+      if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
+      
+      parse(event.target.files[0], {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        delimiter: ",",
+        encoding: "utf-8",
+        complete: (results: ParseResult<ProvinceCSV>) => {
+          const provinceImportData : ProvinceCSV[] = results.data;
+          console.log('results', results)
+
+          // setProvinceCount(provinceImportData.length);
+          // const customProvinceData = provinceImportData.map(item => ({
+          //   endDate: item.end_date,
+          //   id: item.id,
+          //   provinceName: item.province_name,
+          //   quantity: item.amount,
+          //   startDate: item.start_date,
+          // }))
+          
+          // const customDateEventPrize = {
+          //   ...dtaEventPrizeById,
+          //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
+          // }
+
+          // reset(customDateEventPrize.response);
+          showSuccessSnackbar('import file thành công')
+        },
+      });
+    } catch (e) {
+      // console.log(e);
+      showErrorSnackbar('Không import file thành công!');
+    }
+  };
 
   return (
     <>
@@ -331,8 +394,17 @@ export const EditEventPrizeForm = () => {
                   spacing={1.5}
                   sx={{ mt: 3, alignSelf: 'flex-end' }}
                 >
-                  <Button fullWidth color="secondary" variant="contained" size="large">
-                    Nhập
+                  <Button
+                   fullWidth
+                   color="secondary"
+                   variant="contained" 
+                   size="large" 
+                   startIcon={<Iconify icon={'mdi:file-import'} />}
+                   component="label"
+                   >
+                    Import
+
+                    <input hidden type="file" onChange={importFile} />
                   </Button>
 
                   <Button

@@ -237,6 +237,7 @@ export default function HistoryNewForm() {
       console.log(e);
     }
   };
+
   const methods = useForm<IFormCreateEvent>({
     resolver: yupResolver(eventPrizeSchema),
     defaultValues,

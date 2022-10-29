@@ -10,7 +10,8 @@ export interface IResEventPrizeById {
 
 export interface IEventProvince {
   id?: number;
-  provinceId: number;
+  provinceId?: number;
+  provinceName?: string;
   quantity: number;
   startDate: Date | string;
   endDate: Date | string;
