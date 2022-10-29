@@ -144,19 +144,20 @@ export const ViewEvent = () => {
                 aria-labelledby="demo-radio-buttons-group-label"
                 name="radio-buttons-group"
                 sx={{ flexDirection: 'row' }}
-                defaultValue={(userRegisterDate !== null && 'newUser') || 'allUser'}
               >
                 <FormControlLabel
                   value="allUser"
                   control={<Radio />}
                   label="Tất cả người dùng"
                   disabled
+                  checked={userRegisterDate === null}
                 />
                 <FormControlLabel
                   value="newUser"
                   control={<Radio />}
                   label="Người dùng mới"
                   disabled
+                  checked={userRegisterDate !== null}
                 />
               </RadioGroup>
             </FormControl>
