@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export interface IHistoryListEventParams {
   endDate?: Date | null;
   page?: number;
@@ -91,6 +93,7 @@ export interface IFormCreateEvent {
   probability: number;
   quantity: number;
   transactionTypeId: number;
+  id?: number;
 }
 
 export interface ITransactionType {
@@ -110,10 +113,11 @@ export interface IProvinceType {
 }
 
 export interface IEventDetail {
-  endDate: Date | string;
   provinceId: number;
   quantity: number;
-  startDate: Date | string;
+  endDate: Dayjs | null | string;
+  startDate: Dayjs | null | string;
+  name: string;
 }
 
 export interface IResTransaction {

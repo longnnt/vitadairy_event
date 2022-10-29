@@ -88,62 +88,55 @@ export default function HistoryNewForm() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const [valueStartDate, setValueStartDate] = React.useState<Dayjs | null>(null);
-  const [valueEndDate, setValueEndDate] = React.useState<Dayjs | null>(null);
-  const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.HTML_LINK);
+  const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.NULL);
   const [popUpCode, setPopUpCode] = React.useState<string | null>('');
-  const [idHolder, setidHolder] = React.useState<number | undefined>(0);
   const [redirect, setRedirect] = React.useState<boolean>(true);
-  const [filesCsv, setfilesCsv] = React.useState<Array<unknown>>([]);
-  
+  const [_, setfilesCsv] = React.useState<Array<unknown>>([]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const gift = useSelector(giftSelecttor);
 
-  const keyName1 = 'Province name';
-  const keyName2 = 'start-date';
-  const keyName3 = 'end-date';
+  const [dataCities, setDataCities] = React.useState<IEventDetail[]>([]);
 
-  type DataCSV = {
-    id: number,
-    amount: number,
-    [keyName1] : string,
-    [keyName2] : string | Dayjs | null,
-    [keyName3] : string | Dayjs | null,
+  const removeCount = (provinceId: number) => {
+    setDataCities([...dataCities].filter((item) => item.provinceId !== provinceId));
   };
 
-  type DataCites = {
-    id: number;
-    name: string;
-    amount: number;
-    startDate: Dayjs | null;
-    endDate: Dayjs | null;
-  };
+  const handleChangeCity = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, province: IEventDetail) => {
+    const newData : IEventDetail[] = [...dataCities];
+    let itemEdit : IEventDetail = {...province};
 
-  const [dataCities, setDataCities] = React.useState<DataCites[]>([]);
-
-
-  const removeCount = (id: number) => {
-    setDataCities([...dataCities].filter((item) => item.id !== id));
-  };
-  const handleChangeCity = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number) => {
-    const newData = [...dataCities];
-    let itemById: DataCites = { id: 0, amount: 0, name: "", startDate: null, endDate: null };
-    let idx = 0;
+    // find edit index and item edit in array
+    let provinceIdx = 0;
     newData.forEach((item, index) => {
-      if(item.id === id) {
-        itemById = item;
-        idx = index;
+      if(item.provinceId === province.provinceId) {
+        itemEdit = item;
+        provinceIdx = index;
       }
     });
-  
-    const itemFixed = {
-      ...itemById,
-      amount: ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + parseInt(itemById?.amount.toString()) : itemById?.amount),
+
+    // get key edit
+    const keyEdit = e.target.name.split(".")[2];
+
+    // edit detail data
+    const itemChanged : IEventDetail = keyEdit !== "numberOfMorePrize" ? {
+      ...itemEdit, // spread
+      [keyEdit] : e.target.value,
+    } 
+    :
+    {
+      ...itemEdit, // spread
+      quantity: ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + parseInt(itemEdit?.quantity.toString()) : itemEdit?.quantity),
     };
-    newData[idx] = itemFixed;
+
+    console.log(itemChanged);
+    // update element in array
+    newData[provinceIdx] = itemChanged;
+
+    // update data array
     setDataCities(newData);
+    setValue('eventDetailProvinces', newData);
   }
 
   const changePopUpType = (
@@ -173,6 +166,10 @@ export default function HistoryNewForm() {
   };
 
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
+
+  // useEffect(() => {
+  //   setValue('eventDetailProvinces', dataCities)
+  // },[dataCities])
 
   const params = useParams();
   const id = params?.id;
@@ -206,7 +203,8 @@ export default function HistoryNewForm() {
     totalRecords: 0,
   };
 
-  
+  const columns: Array<string> = ["name", "provinceId", "quantity", "startDate", "endDate"];
+  const formatDate = "DD/MM/YYYY";
 
   const importFile = async (event: any) => {
     try {
@@ -214,7 +212,7 @@ export default function HistoryNewForm() {
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
 
-        const fileExtension = inputFile?.type.split('/')[1];
+        const fileExtension = inputFile?.type.split('/')[1];"DD/MM/YYYY"
         if (!allowedExtensions.includes(fileExtension)) {
           enqueueSnackbar('không phải file csv')
           return;
@@ -222,6 +220,7 @@ export default function HistoryNewForm() {
         setfilesCsv(inputFile);
       }
       if (!event.target.files[0]) return enqueueSnackbar('file không hợp lệ!!!');
+     
       parse(event.target.files[0], {
         header: true,
         download: true,
@@ -229,17 +228,18 @@ export default function HistoryNewForm() {
         delimiter: ",",
         fastMode: true,
         encoding: "utf-8",
-        complete: async (results: ParseResult<DataCSV>) => {
-          const test : DataCSV[] = results.data;
-          const data : any = test.map(item => ({
-            name: item[keyName1],
-            id: item.id,
-            amount: item.amount,
-            startDate: item[keyName2],
-            endDate: item[keyName3],
-          }));
+        transformHeader: (header:string, index: number) => columns[index],
+        complete: async (results: ParseResult<IEventDetail>) => {
+          const data : IEventDetail[] = results.data.map((item : IEventDetail) =>
+            ({
+              name: item.name,
+              provinceId: item.provinceId,
+              quantity: item.quantity,
+              startDate: dayjs(item.startDate, formatDate),
+              endDate: dayjs(item.endDate, formatDate),
+            }));
           setDataCities(data);
-          enqueueSnackbar('import file thành công')
+          setValue('eventDetailProvinces', data);
         },
       });
     } catch (e) {
@@ -261,15 +261,17 @@ export default function HistoryNewForm() {
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
-    const eventDetailProvinces = data.eventDetailProvinces.map((item) => {
+    const eventDetailProvinces : Array<IEventDetail> = data.eventDetailProvinces.map((item) => {
+      let startDate = new Date().toISOString();
+      let endDate = new Date().toISOString();
       if (item.endDate || item.startDate) {
-        const startDate = new Date(item.startDate).toISOString();
-        const endDate = new Date(item.endDate).toISOString();
-        return { ...item, startDate: startDate, endDate: endDate };
-      }
+        startDate = item.startDate ? item.startDate instanceof Date ? item.startDate.toISOString() : startDate : startDate ;
+        endDate = item.endDate ? item.endDate instanceof Date ? item.endDate.toISOString() : endDate : endDate ;
+      };
+      return { ...item, startDate: startDate, endDate: endDate };
     });
     const dataEvent: IFormCreateEvent = {
-      eventDetailProvinces: eventDetailProvinces as Array<IEventDetail>,
+      eventDetailProvinces,
       eventId: idEventPrize,
       giftId: gift.id,
       notificationContent: data.notificationContent,
@@ -284,6 +286,7 @@ export default function HistoryNewForm() {
       quantity: data.quantity,
       transactionTypeId: data.transactionTypeId,
     };
+    console.log(dataEvent);
     mutate(dataEvent);
   };
   return (
@@ -347,6 +350,7 @@ export default function HistoryNewForm() {
                     label="Pop up Type"
                     placeholder="Pop up Type"
                     margin="dense"
+                    value={popUpType}
                     onChange={(e) => {
                       const val = e.target.value;
                       setPopUpType(val);
@@ -450,7 +454,6 @@ export default function HistoryNewForm() {
                                 ))}
                               </TableBody>
                             </TableContainer>
-                          </Scrollbar>
                           {!!ListGift?.data?.pagination?.totalPages && (
                             <TablePagination
                               rowsPerPageOptions={[10, 15]}
@@ -462,6 +465,7 @@ export default function HistoryNewForm() {
                               onRowsPerPageChange={onChangeRowsPerPage}
                             />
                           )}
+                          </Scrollbar>
                         </Box>
                       </Modal>
                     </Grid>
@@ -522,15 +526,15 @@ export default function HistoryNewForm() {
                     <Button
                       color="inherit"
                       onClick={() => {
-                        setidHolder((idHolder || 0) + 1);
+                        // setidHolder((idHolder || 0) + 1);
                         setDataCities([
                           ...dataCities,
                           {
-                            id: (idHolder || 0) + 1,
-                            startDate: valueStartDate,
-                            endDate: valueEndDate,
+                            provinceId: dataCities.length,
+                            startDate: dayjs(),
+                            endDate: dayjs(),
                             name: "",
-                            amount: 0,
+                            quantity: 0,
                           },
                         ]);
                       }}
@@ -551,12 +555,12 @@ export default function HistoryNewForm() {
                             key={`eventDetailProvinces.${index}.provinceId`}
                             label="Tỉnh thành"
                             placeholder="Tỉnh thành"
-                            value={item.name}
-
+                            value={item.provinceId}
+                            onChange={(e) => handleChangeCity(e, item)}
                           >
                             <option value="" />
                             {addNewOption2.map((option) => (
-                              <option key={option.key} value={option.name} >
+                              <option key={option.key} value={option.key} >
                                 {option.name}
                               </option>
                             ))}
@@ -570,17 +574,17 @@ export default function HistoryNewForm() {
                               readOnly: true,
                             }}
                             label="Tổng Số lượng giải theo tỉnh"
-                            value={item.amount}
+                            value={item.quantity}
                           />
                         </Grid>
                         <Grid item xs>
                           <RHFTextField
-                            // name={`eventDetailProvinces.${index}.quantity`}
-                            // key={`eventDetailProvinces.${index}.quantity`}
-                            name={`amount_test`}
-                            key={`amount_test`}
+                            name={`eventDetailProvinces.${index}.numberOfMorePrize`}
+                            key={`eventDetailProvinces.${index}.numberOfMorePrize`}
+                            // name={`amount_test`}
+                            // key={`amount_test`}
                             label="Số giải nhập thêm"
-                            onChange={(e) => handleChangeCity(e, item.id)}
+                            onChange={(e) => handleChangeCity(e, item)}
                           />
                         </Grid>
                         <Grid item xs>
@@ -594,9 +598,10 @@ export default function HistoryNewForm() {
                                 key="startDate"
                                 label="Ngày bắt đầu"
                                 inputFormat="dd/MM/yyyy"
-                                value={dayjs(item.startDate  || null, "DD/MM/YYYY")}
+                                // value={dayjs(item.startDate  || null, formatDate)}
+                                
                                 renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth/>
+                                  <TextField {...params} fullWidth defaultValue={dayjs(item.startDate  || null, formatDate)} onChange={(e) => handleChangeCity(e, item)}  />
                                 )}
                               />
                             )}
@@ -613,9 +618,10 @@ export default function HistoryNewForm() {
                                 key="endDate"
                                 label="Ngày kết thúc"
                                 inputFormat="dd/MM/yyyy"
-                                value={dayjs(item.endDate  || null, "DD/MM/YYYY")}
+                                // value={dayjs(item.endDate  || null, formatDate)}
+                                // onChange={(e) => handleChangeCity(e, item)}
                                 renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth />
+                                  <TextField {...params} fullWidth defaultValue={dayjs(item.endDate  || null, formatDate)} onChange={(e) => handleChangeCity(e, item)} />
                                 )}
                               />
                             )}
@@ -624,7 +630,7 @@ export default function HistoryNewForm() {
                         <Grid item xs={1}>
                           <Button
                             color="inherit"
-                            onClick={() => removeCount(item?.id)}
+                            onClick={() => removeCount(item?.provinceId)}
                             variant="contained"
                             size="large"
                           >
