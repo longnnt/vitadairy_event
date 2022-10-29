@@ -1,6 +1,5 @@
-
 export interface IListPrizeEventParams {
-  eventId?: number| string;
+  eventId?: number | string;
   page?: number;
   searchText?: string;
   size?: number;
@@ -11,7 +10,7 @@ export interface IListPrize {
   giftName: string;
   ordinal: number;
   probability: number;
-  quantity: number; 
+  quantity: number;
 }
 
 export type IListPrizeCallback = {
@@ -42,7 +41,7 @@ export interface IDataListPrize {
       recordsPerPage: number;
       last: boolean;
     };
-  }
+  };
 }
 
 export type IPropsListPrizeTableRow = {

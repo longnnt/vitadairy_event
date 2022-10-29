@@ -35,8 +35,7 @@ export interface IStoreParams {
   searchText?: string;
   size?: number;
   startDate?: Date | string;
-};
-
+}
 
 export enum MessageType {
   ERROR = 'error',

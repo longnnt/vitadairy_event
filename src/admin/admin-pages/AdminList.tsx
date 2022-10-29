@@ -3,7 +3,6 @@ import { AdminListDashboard } from 'src/admin/admin-list/ListAdmin';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
 
-
 export default function AdminList() {
   const { themeStretch } = useSettings();
 

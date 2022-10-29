@@ -39,19 +39,16 @@ export const EventTableRow = ({
     onViewRow(row);
     setOpenMenuActions(null);
   };
-  const handleViewListPrize =(id: string) =>{ 
+  const handleViewListPrize = (id: string) => {
     navigate(PATH_DASHBOARD.eventAdmin.listPrize(id));
-  }
+  };
 
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell 
-        align="left"
-        onClick={() => handleViewListPrize(id.toString())}
-      >
+      <TableCell align="left" onClick={() => handleViewListPrize(id.toString())}>
         {name}
       </TableCell>
       <TableCell align="left">{fDate(startDate)}</TableCell>

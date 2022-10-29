@@ -48,7 +48,6 @@ import { ProvinceCSV } from '../interfaces';
 // } from '@mui/x-data-grid-generator';
 // -----------------------------------------------------------------------------
 
-
 export const EditEventPrizeForm = () => {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
@@ -62,17 +61,15 @@ export const EditEventPrizeForm = () => {
   const idEventPrize = parseInt(idParams as string);
   const { data: dtaProvince } = useGetAllProvinceVN();
   const provincesData = dtaProvince?.data?.response?.provinces;
-  const provinceOptions = provincesData?.map(
-    (item: IProvince) => ({
-      value: item?.id,
-      label: item?.name,
-    })
-  );
+  const provinceOptions = provincesData?.map((item: IProvince) => ({
+    value: item?.id,
+    label: item?.name,
+  }));
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
 
   console.log('dtaProvince', provincesData);
-  
+
   const { data: transactionType } = useGetAllTransactionType();
   const dtaTransactionType = transactionType?.data;
   const transactionTypeOptions = dtaTransactionType?.response?.map(
@@ -170,22 +167,22 @@ export const EditEventPrizeForm = () => {
 
         const fileExtension = inputFile?.type.split('/')[1];
         if (!allowedExtensions.includes(fileExtension)) {
-          showErrorSnackbar('không phải file csv')
+          showErrorSnackbar('không phải file csv');
           return;
         }
       }
 
       if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
-      
+
       parse(event.target.files[0], {
         header: true,
         download: true,
         skipEmptyLines: true,
-        delimiter: ",",
-        encoding: "utf-8",
+        delimiter: ',',
+        encoding: 'utf-8',
         complete: (results: ParseResult<ProvinceCSV>) => {
-          const provinceImportData : ProvinceCSV[] = results.data;
-          console.log('results', results)
+          const provinceImportData: ProvinceCSV[] = results.data;
+          console.log('results', results);
 
           // setProvinceCount(provinceImportData.length);
           // const customProvinceData = provinceImportData.map(item => ({
@@ -195,14 +192,14 @@ export const EditEventPrizeForm = () => {
           //   quantity: item.amount,
           //   startDate: item.start_date,
           // }))
-          
+
           // const customDateEventPrize = {
           //   ...dtaEventPrizeById,
           //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
           // }
 
           // reset(customDateEventPrize.response);
-          showSuccessSnackbar('import file thành công')
+          showSuccessSnackbar('import file thành công');
         },
       });
     } catch (e) {
@@ -395,15 +392,14 @@ export const EditEventPrizeForm = () => {
                   sx={{ mt: 3, alignSelf: 'flex-end' }}
                 >
                   <Button
-                   fullWidth
-                   color="secondary"
-                   variant="contained" 
-                   size="large" 
-                   startIcon={<Iconify icon={'mdi:file-import'} />}
-                   component="label"
-                   >
+                    fullWidth
+                    color="secondary"
+                    variant="contained"
+                    size="large"
+                    startIcon={<Iconify icon={'mdi:file-import'} />}
+                    component="label"
+                  >
                     Import
-
                     <input hidden type="file" onChange={importFile} />
                   </Button>
 

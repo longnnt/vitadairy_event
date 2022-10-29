@@ -23,4 +23,3 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
 }
 
 export { GiftTableRow };
-

@@ -6,13 +6,13 @@ export default function useShowSnackbar() {
   function showSuccessSnackbar(message: string, config?: IShowMessage) {
     enqueueSnackbar(message, {
       variant: MessageType.SUCCESS,
-      ...config
+      ...config,
     });
   }
   function showErrorSnackbar(message: string, config?: IShowMessage) {
     enqueueSnackbar(message, {
       variant: MessageType.ERROR,
-      ...config
+      ...config,
     });
   }
   return { showSuccessSnackbar, showErrorSnackbar };

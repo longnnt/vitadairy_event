@@ -30,11 +30,8 @@ export const storeAdminSlice = createSlice({
   },
 });
 
-export const {
-  setFirstScanEndDate,
-  setFirstScanStartDate,
-  setSearchText,
-} = storeAdminSlice.actions;
+export const { setFirstScanEndDate, setFirstScanStartDate, setSearchText } =
+  storeAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.storeAdmin.searchText;
 export const firstScanStartSelector = (state: RootState) => state.storeAdmin.startDate;
