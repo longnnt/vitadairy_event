@@ -25,14 +25,14 @@ export const TABLE_HEAD = [
 
 export const defaultValues = {
   name: '',
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: null,
+  endDate: null,
   skus: [] as string[],
   defaultWinRate: 0,
   upRate: 0,
   downRate: 0,
   typeUser: '',
-  userRegisterDate: new Date(),
+  userRegisterDate: null,
   userLimit: 0,
   id: 100,
 };

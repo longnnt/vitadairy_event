@@ -1,15 +1,16 @@
-import { getRelatedCacheKeys } from './../../common/utils/getRelatedCacheKeys';
-import { IEventCallback, IResEvents } from './../interface';
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
-import { deleteEvents } from '../service';
 import { cancelMultiQueries } from 'src/common/utils/cacelCategoryInvalidate';
+import { deleteEvents } from '../service';
+import { getRelatedCacheKeys } from './../../common/utils/getRelatedCacheKeys';
+import { IEventCallback, IResEvents } from './../interface';
 
 export function useDeleteEvents(callback: IEventCallback) {
   const queryClient = useQueryClient();
   return useMutation((eventIds) => deleteEvents(eventIds), {
     onMutate: async (eventIds: number[]) => {
       const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.DELETE_EVENT_LIST);
+
       cancelMultiQueries(queryClient, keys);
 
       const previousEvent = keys.map(
@@ -29,22 +30,22 @@ export function useDeleteEvents(callback: IEventCallback) {
 
       return { previousEvent, keys };
     },
-    onSuccess: (_result, _variables, context) => {
-      console.log('im here');
-      if (!context) return;
-      context.keys.forEach((queryKey) => {
-        queryClient.invalidateQueries(queryKey);
-      });
 
-      callback.onSuccess && callback.onSuccess();
+    onSuccess: (_rs, _variables) => {
+      if (_rs?.data.meta.msg === 'OK') {
+        queryClient
+          .getQueryCache()
+          .findAll([QUERY_KEYS.EVENT_LIST])
+          .forEach(({ queryKey }) => {
+            queryClient.invalidateQueries(queryKey);
+          });
+        callback.onSuccess && callback.onSuccess();
+      } else {
+        callback.onSuccessSend && callback.onSuccessSend();
+      }
     },
-    onError: (_error, _variables, context) => {
-      if (!context?.previousEvent || !context.previousEvent.length) return;
+    onError: (_error, _variables) => {
       callback.onError && callback.onError();
-
-      context.keys.forEach((key, index) => {
-        queryClient.setQueryData<IResEvents>(key, context?.previousEvent[index]);
-      });
     },
     retry: 2,
   });
