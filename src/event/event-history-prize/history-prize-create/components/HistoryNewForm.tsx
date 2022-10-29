@@ -1,5 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
+// import { } from 'fs';
+// import { readFileSync } from 'fs';
 import {
   Button,
   Card,
@@ -18,8 +20,9 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useSnackbar } from 'notistack';
+import { parse, ParseResult } from 'papaparse';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -29,15 +32,18 @@ import {
   RHFSelect,
   RHFTextField,
 } from 'src/common/components/hook-form';
+import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { string } from 'yup';
 import {
   defaultValues,
   popupTypeOption,
   POPUP_TYPE,
+  StyleGift,
   TABLE_HEAD_GIFT,
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
@@ -53,6 +59,10 @@ import {
   ISelectPopup,
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
+
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -82,33 +92,50 @@ export default function HistoryNewForm() {
   const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.HTML_LINK);
   const [popUpCode, setPopUpCode] = React.useState<string | null>('');
   const [idHolder, setidHolder] = React.useState<number | undefined>(0);
+  const [redirect, setRedirect] = React.useState<boolean>(true);
+  const [filesCsv, setfilesCsv] = React.useState<Array<unknown>>([]);
+  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const gift = useSelector(giftSelecttor);
-  const [provinceCount, setProvinCount] = useState<
-    Array<{
-      id: number;
-      startDate: Dayjs | null;
-      endDate: Dayjs | null;
-      transactionType: string;
-      countProvince: number;
-      morePrize: number;
-    }>
-  >([
-    {
-      id: 0,
-      startDate: null,
-      endDate: null,
-      transactionType: '',
-      countProvince: 1,
-      morePrize: 0,
-    },
-  ]);
+
+  const keyName1 = 'Province name';
+  const keyName2 = 'start-date';
+  const keyName3 = 'end-date';
+
+  type DataCSV = {
+    id: number,
+    amount: number,
+    [keyName1] : string,
+    [keyName2] : string | Dayjs | null,
+    [keyName3] : string | Dayjs | null,
+  };
+
+  type DataCites = {
+    id: number;
+    name: string;
+    amount: number;
+    startDate: Dayjs | null;
+    endDate: Dayjs | null;
+  };
+
+  const [dataCities, setDataCities] = React.useState<DataCites[]>([]);
+
+  // const [provinceCount, setProvinCount] = useState<
+  //   Array<{
+  //     id: number;
+  //     startDate: Dayjs | null;
+  //     endDate: Dayjs | null;
+  //     transactionType: string;
+  //     countProvince: number;
+  //     morePrize: number;
+  //   }>
+  // >([]);
 
   const removeCount = (index: number) => {
     setidHolder(index);
-    setProvinCount([...provinceCount].filter((item) => item.id !== idHolder));
+    setDataCities([...dataCities].filter((item) => item.id !== idHolder));
   };
 
   const changePopUpType = (
@@ -126,21 +153,24 @@ export default function HistoryNewForm() {
 
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = () => {
-    enqueueSnackbar('Add event successfully', {
+    enqueueSnackbar('Đã lưu thành công', {
       variant: 'success',
     });
   };
+
   const onError = () => {
-    enqueueSnackbar('Add event error', {
+    enqueueSnackbar('Lưu thất bại', {
       variant: 'error',
     });
   };
+
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
 
   const params = useParams();
   const id = params?.id;
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
+    if (isSuccess && redirect)
+      navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
   }, [isSuccess]);
   const idEventPrize = parseInt(id as string);
 
@@ -152,7 +182,7 @@ export default function HistoryNewForm() {
   }));
 
   const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const dataProvince = addProvince?.data?.response || [];
   const addNewOption2 = dataProvince.map((item) => ({
     key: item.id,
     name: item.name,
@@ -168,6 +198,45 @@ export default function HistoryNewForm() {
     totalRecords: 0,
   };
 
+  
+
+  const importFile = async (event: any) => {
+    try {
+      const allowedExtensions = ['csv'];
+      if (event.target.files.length) {
+        const inputFile = event.target.files[0];
+
+        const fileExtension = inputFile?.type.split('/')[1];
+        if (!allowedExtensions.includes(fileExtension)) {
+          enqueueSnackbar('không phải file csv')
+          return;
+        }
+        setfilesCsv(inputFile);
+      }
+      if (!event.target.files[0]) return enqueueSnackbar('file không hợp lệ!!!');
+      parse(event.target.files[0], {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        delimiter: ",",
+        encoding: "utf-8",
+        complete: (results: ParseResult<DataCSV>) => {
+          const test : DataCSV[] = results.data;
+          const data : any = test.map(item => ({
+            name: item[keyName1],
+            id: item.id,
+            amount: item.amount,
+            startDate: item[keyName2],
+            endDate: item[keyName3],
+          }));
+          setDataCities(data);
+          enqueueSnackbar('import file thành công')
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const methods = useForm<IFormCreateEvent>({
     resolver: yupResolver(eventPrizeSchema),
     defaultValues,
@@ -207,7 +276,6 @@ export default function HistoryNewForm() {
       transactionTypeId: data.transactionTypeId,
     };
     mutate(dataEvent);
-    console.log(dataEvent);
   };
   return (
     <>
@@ -342,22 +410,22 @@ export default function HistoryNewForm() {
                       >
                         Chọn quà
                       </Button>
-                      <Box sx={{ color: 'white', marginTop: '5px' }}>{gift.name}</Box>
+                      <Box
+                        sx={{
+                          color: 'white',
+                          marginTop: '5px',
+                          display: valueChoice !== 'point' ? 'block' : 'none',
+                        }}
+                      >
+                        {gift.name}
+                      </Box>
                       <Modal
                         open={open}
                         onClose={handleClose}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                       >
-                        <Box
-                          sx={{
-                            width: 700,
-                            height: 500,
-                            backgroundColor: 'primary.dark',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
+                        <Box sx={StyleGift}>
                           <Scrollbar>
                             <TableContainer sx={{ position: 'relative' }}>
                               <Table>
@@ -429,11 +497,16 @@ export default function HistoryNewForm() {
             </Card>
             <LabelStyle>Tỉnh thành</LabelStyle>
             <Card sx={{ p: 3, width: '100%' }}>
-              <Grid>
+              <Grid sx={{maxHeight: 450}}>
                 <Grid direction="row" justifyContent="flex-end" container>
                   <Box sx={{ paddingRight: 2 }}>
-                    <Button color="inherit" variant="outlined" size="large">
+                    <Button
+                      variant="contained"
+                      startIcon={<Iconify icon={'mdi:file-import'} />}
+                      component="label"
+                    >
                       Nhập
+                      <input hidden multiple type="file" onChange={importFile} />
                     </Button>
                   </Box>
                   <Box>
@@ -441,15 +514,14 @@ export default function HistoryNewForm() {
                       color="inherit"
                       onClick={() => {
                         setidHolder((idHolder || 0) + 1);
-                        setProvinCount([
-                          ...provinceCount,
+                        setDataCities([
+                          ...dataCities,
                           {
                             id: (idHolder || 0) + 1,
                             startDate: valueStartDate,
                             endDate: valueEndDate,
-                            transactionType: '',
-                            countProvince: 1,
-                            morePrize: 1,
+                            name: "",
+                            amount: 0,
                           },
                         ]);
                       }}
@@ -460,9 +532,9 @@ export default function HistoryNewForm() {
                     </Button>
                   </Box>
                 </Grid>
-                {provinceCount.map((item, index) => {
-                  return (
-                    <>
+                <Grid sx={{maxHeight: 450, overflow:'auto'}}>
+                  {dataCities && dataCities.map((item, index) => {
+                    return (
                       <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
                         <Grid item xs>
                           <RHFSelect
@@ -470,10 +542,12 @@ export default function HistoryNewForm() {
                             key={`eventDetailProvinces.${index}.provinceId`}
                             label="Tỉnh thành"
                             placeholder="Tỉnh thành"
+                            value={item.name}
+
                           >
                             <option value="" />
                             {addNewOption2.map((option) => (
-                              <option key={option.key} value={option.key}>
+                              <option key={option.key} value={option.name} >
                                 {option.name}
                               </option>
                             ))}
@@ -487,6 +561,7 @@ export default function HistoryNewForm() {
                               readOnly: true,
                             }}
                             label="Tổng Số lượng giải theo tỉnh"
+                            value={item.amount}
                           />
                         </Grid>
                         <Grid item xs>
@@ -506,9 +581,10 @@ export default function HistoryNewForm() {
                                 {...field}
                                 key="startDate"
                                 label="Ngày bắt đầu"
-                                inputFormat="dd/MM/yyyy hh:mm a"
+                                inputFormat="dd/MM/yyyy"
+                                value={dayjs(item.startDate  || null, "DD/MM/YYYY")}
                                 renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth />
+                                  <TextField {...params} fullWidth/>
                                 )}
                               />
                             )}
@@ -524,7 +600,8 @@ export default function HistoryNewForm() {
                                 {...field}
                                 key="endDate"
                                 label="Ngày kết thúc"
-                                inputFormat="dd/MM/yyyy hh:mm a"
+                                inputFormat="dd/MM/yyyy"
+                                value={dayjs(item.endDate  || null, "DD/MM/YYYY")}
                                 renderInput={(params: any) => (
                                   <TextField {...params} fullWidth />
                                 )}
@@ -536,7 +613,7 @@ export default function HistoryNewForm() {
                           <Button
                             color="inherit"
                             onClick={() => {
-                              removeCount(item.id);
+                              removeCount(item?.id);
                             }}
                             variant="contained"
                             size="large"
@@ -545,9 +622,9 @@ export default function HistoryNewForm() {
                           </Button>
                         </Grid>
                       </Grid>
-                    </>
-                  );
-                })}
+                    );
+                  })}
+                </Grid>
               </Grid>
             </Card>
           </Grid>
@@ -569,6 +646,9 @@ export default function HistoryNewForm() {
                 variant="outlined"
                 size="large"
                 type="submit"
+                onClick={(e) => {
+                  setRedirect(false);
+                }}
               >
                 Lưu & Chỉnh sửa
               </LoadingButton>
