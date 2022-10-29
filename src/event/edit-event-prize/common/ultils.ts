@@ -50,18 +50,18 @@ export const validateFileImportFormat = (file: any) => {
   const testProperties = Object.keys(file);
   let result = true;
   const found = testProperties?.every((t: string) => testArr.includes(t));
-  // console.log('found', found);
 
   if (found === false) {
     result = false;
     return result;
   }
-  // console.log('lfkdlsfkld', file.startDate instanceof Date);
+  const startTime = new Date(file.startDate);
+  const endTime = new Date(file.endDate);
 
-  // if (!(file.startDate instanceof Date) || !(file.endDate instanceof Date)) {
-  //   result = false;
-  //   return result;
-  // }
+  if (!(startTime instanceof Date) || !(endTime instanceof Date)) {
+    result = false;
+    return result;
+  }
 
   return result;
 };

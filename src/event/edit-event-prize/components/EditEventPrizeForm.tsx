@@ -67,8 +67,6 @@ export const EditEventPrizeForm = () => {
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
 
-  console.log('dtaProvince', provincesData);
-
   const { data: transactionType } = useGetAllTransactionType();
   const dtaTransactionType = transactionType?.data;
   const transactionTypeOptions = dtaTransactionType?.response?.map(
@@ -192,8 +190,6 @@ export const EditEventPrizeForm = () => {
         if (test === false) {
           showErrorSnackbar('File import  không đúng định dạng');
           return;
-        } else {
-          showSuccessSnackbar('Import file thành công');
         }
 
         const ID = convertNameProvinceToId(item.name, provinceOptions);
@@ -211,6 +207,7 @@ export const EditEventPrizeForm = () => {
       const temp = provinceCount;
       setProvinceCount(temp + fileImport.length);
       setValue('eventDetailProvinces', provinceWatch.concat(tempDta));
+      showSuccessSnackbar('import file thành công');
     }
   }, [fileImport]);
 
