@@ -60,6 +60,7 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
+
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
       name: data.name,
@@ -71,7 +72,7 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      id: 100,
+      id: 1,
     };
     mutate(formDataAddNewEvent);
   };
@@ -270,7 +271,7 @@ export const AddEvent = () => {
           <Button variant="contained" color="secondary" type="submit">
             Lưu
           </Button>
-          <Button variant="contained" sx={{ mx: '7px' }}>
+          <Button variant="contained" sx={{ mx: '7px' }} type="submit">
             Lưu & chỉnh sửa
           </Button>
         </Box>

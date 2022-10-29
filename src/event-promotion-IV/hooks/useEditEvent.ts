@@ -8,6 +8,7 @@ export const useEditEvent = (callback: IEventCallback) => {
   return {
     ...useMutation(editEventService, {
       onSuccess: (_result, variables) => {
+        console.log(_result);
         queryClient.invalidateQueries([QUERY_KEYS.EVENT_DETAIL, variables.id]);
 
         callback.onSuccess && callback.onSuccess();

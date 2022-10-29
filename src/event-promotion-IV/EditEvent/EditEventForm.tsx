@@ -58,15 +58,20 @@ export const EditEventForm = () => {
 
   const dataEventDetail = data?.data?.response;
 
+  console.log(dataEventDetail);
+
   const {
     control,
     handleSubmit,
     reset,
     setValue,
     getValues,
+    watch,
     formState: { errors },
   } = methods;
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+
+  const watchUserType = watch('typeUser');
 
   const { mutate, isSuccess } = useEditEvent({
     onSuccess: () => {
@@ -79,6 +84,7 @@ export const EditEventForm = () => {
 
   const { useDeepCompareEffect } = useDeepEffect();
   const onSubmit = (data: any) => {
+    if (data.typeUser === 'allUser') data.userRegisterDate = null;
     const formDataAddNewEvent = {
       name: data.name,
       startDate: data.startDate,
@@ -91,6 +97,7 @@ export const EditEventForm = () => {
       userLimit: data.userLimit,
       id: Number(id),
     };
+    console.log(data);
     mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
   };
 
@@ -236,25 +243,6 @@ export const EditEventForm = () => {
                   { label: 'Người dùng mới', value: 'newUser' },
                 ]}
               />
-              {/* <FormControl>
-                <RadioGroup
-                  name="radio-buttons-group"
-                  sx={{ flexDirection: 'row' }}
-                  value={userType}
-                  onChange={(e) => handleUserType(e.target.value)}
-                >
-                  <FormControlLabel
-                    value="allUser"
-                    control={<Radio />}
-                    label="Toàn bộ người dùng"
-                  />
-                  <FormControlLabel
-                    value="newUser"
-                    control={<Radio />}
-                    label="Người dùng mới"
-                  />
-                </RadioGroup>
-              </FormControl> */}
 
               <Controller
                 name="userRegisterDate"
@@ -263,9 +251,7 @@ export const EditEventForm = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
-                    display={`${
-                      (getValues().typeUser === 'allUser' && 'none') || 'display'
-                    }`}
+                    display={`${(watchUserType === 'allUser' && 'none') || 'display'}`}
                   >
                     <DatePicker
                       {...field}
