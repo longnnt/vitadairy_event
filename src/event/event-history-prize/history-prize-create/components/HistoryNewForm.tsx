@@ -123,24 +123,12 @@ export default function HistoryNewForm() {
 
   const [dataCities, setDataCities] = React.useState<DataCites[]>([]);
 
-  // const [provinceCount, setProvinCount] = useState<
-  //   Array<{
-  //     id: number;
-  //     startDate: Dayjs | null;
-  //     endDate: Dayjs | null;
-  //     transactionType: string;
-  //     countProvince: number;
-  //     morePrize: number;
-  //   }>
-  // >([]);
 
   const removeCount = (id: number) => {
-    console.log([...dataCities].filter((item) => item.id !== id));
     setDataCities([...dataCities].filter((item) => item.id !== id));
   };
   const handleChangeCity = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number) => {
     const newData = [...dataCities];
-    // const itemById = newData.find(element => element.id === id);
     let itemById: DataCites = { id: 0, amount: 0, name: "", startDate: null, endDate: null };
     let idx = 0;
     newData.forEach((item, index) => {
@@ -149,11 +137,7 @@ export default function HistoryNewForm() {
         idx = index;
       }
     });
-    // console.log(e.target.value)
-    // console.log(typeof itemById?.amount)
-    // console.log(parseInt(e.target.value) + parseInt(itemById?.amount.toString()))
-    // console.log(typeof ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + itemById?.amount : itemById?.amount))
-    // var index = newData.indexOf((itemById || { startDate: null, endDate: null, id: number, amount: 0, name: ""}));
+  
     const itemFixed = {
       ...itemById,
       amount: ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + parseInt(itemById?.amount.toString()) : itemById?.amount),
