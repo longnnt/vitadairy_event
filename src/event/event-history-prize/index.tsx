@@ -11,7 +11,7 @@ export default function HistoryListPrize() {
   return (
     <Page title="Categories">
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <EventPrizeHistoryDashboard/>
+        <EventPrizeHistoryDashboard />
       </Container>
     </Page>
   );

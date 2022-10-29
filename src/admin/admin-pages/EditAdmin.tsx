@@ -12,4 +12,5 @@ export default function EditEvent() {
         <EditAdminDashboard />
       </Container>
     </Page>
-  );}
+  );
+}

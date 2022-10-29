@@ -132,9 +132,7 @@ export interface IResProvince {
       status: number;
       msg: string;
     };
-    response: {
-      provinces: IProvince[];
-    };
+    response: IProvince[];
   };
 }
 

@@ -1,15 +1,15 @@
 import {
-  Table,
-  TableContainer,
-  TableBody,
-  Tooltip,
-  IconButton,
   Box,
-  TablePagination,
   FormControlLabel,
+  IconButton,
   Switch,
+  Table,
+  TableBody,
+  TableContainer,
+  TablePagination,
+  Tooltip,
 } from '@mui/material';
-import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
@@ -19,18 +19,15 @@ import {
 } from 'src/common/components/table';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
+import { useSelector } from 'src/common/redux/store';
+import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import useMessage from 'src/store-admin/hooks/useMessage';
 import { TABLE_HEAD } from '../constant';
+import { endDateState, searchTextState, startDateState } from '../eventPromotionIV.slice';
 import { useDeleteEvents } from '../hooks/useDeleteEvent';
 import { useGetListEvent } from '../hooks/useGetListEvent';
 import { EventSearchParams, PaginationProps, RowProps } from '../interface';
 import { EventTableRow } from './EventTableRow';
-import useMessage from 'src/store-admin/hooks/useMessage';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'src/common/redux/store';
-import { endDateState, searchTextState, startDateState } from '../eventPromotionIV.slice';
-import { useGetProductCode } from '../hooks/useGetProductCode';
-
 export const EventTable = () => {
   const navigate = useNavigate();
   const { onChangeRowsPerPage, dense, onChangeDense, page, rowsPerPage, onChangePage } =
@@ -69,17 +66,18 @@ export const EventTable = () => {
     page + 1
   );
 
-  const onSuccess = () => showSuccessSnackbar('Detele events successfully');
-  const onError = () => showErrorSnackbar('Detele error successfully');
-
   const { totalRecords, totalPages }: PaginationProps = data?.data.pagination || {
     totalRecords: 0,
   };
 
   const isNotFound = !dataListEvent.length;
-  const mutationDelete = useDeleteEvents({ onSuccess, onError });
+  const mutationDelete = useDeleteEvents({
+    onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
+    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
+    onSuccessSend: () => showErrorSnackbar('Sự kiện đã có người trúng không thể xóa'),
+  });
+
   const handleDeleteRows = (idsRowSeleted: number[]) => {
-    console.log(idsRowSeleted);
     if (idsRowSeleted.length) {
       mutationDelete.mutate(idsRowSeleted);
       resetSelect();
@@ -123,15 +121,15 @@ export const EventTable = () => {
               numSelected={selectedIds.length}
             />
             <TableBody>
-              {dataListEvent.map((row1: RowProps) => (
+              {dataListEvent.map((row: RowProps) => (
                 <EventTableRow
-                  key={row1.id}
-                  row={row1}
-                  selected={selectedIds.includes(row1.id)}
-                  onSelectRow={(e) => handleSelectItem(row1.id, e)}
-                  onDeleteRow={() => handleDeleteRows([row1.id])}
-                  onViewRow={(r: any) => {
-                    handleViewRow(r.id);
+                  key={row.id}
+                  row={row}
+                  selected={selectedIds.includes(row.id)}
+                  onSelectRow={(e) => handleSelectItem(row.id, e)}
+                  onDeleteRow={() => handleDeleteRows([row.id])}
+                  onViewRow={() => {
+                    handleViewRow(row.id);
                   }}
                 />
               ))}

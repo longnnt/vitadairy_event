@@ -31,7 +31,11 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { boolean, string } from 'yup';
 import { TABLE_HEAD } from '../constants';
-import { firstScanEndSelector, firstScanStartSelector, searchTextSelector} from '../event.slice';
+import {
+  firstScanEndSelector,
+  firstScanStartSelector,
+  searchTextSelector,
+} from '../event.slice';
 import { useDeletePrizeHistoryAdmin } from '../hooks/useDeletePrizeHistory';
 
 import { useGetPrizeHistory } from '../hooks/useGetPrizeHistory';
@@ -39,7 +43,6 @@ import { IPrizeHistory, IPrizeHistoryParams } from '../interfaces';
 import { exportPrizeHistory } from '../services';
 import { FilterBar } from './components/FilterBar';
 import { PrizeHistoryTableRow } from './components/HistoryTable';
-
 
 function EventPrizeHistoryDashboard() {
   const navigate = useNavigate();
@@ -72,14 +75,12 @@ function EventPrizeHistoryDashboard() {
     startDate: firstScanStart,
     searchText: searchText,
   };
-  if (!searchText)  delete searchParams.searchText;
+  if (!searchText) delete searchParams.searchText;
   if (!firstScanEnd) delete searchParams.endDate;
   if (!firstScanStart) delete searchParams.startDate;
 
-
-
-  const { data,refetch } = useGetPrizeHistory(searchParams);
-  const listStoreAdmin = data?.data?.response || [];  
+  const { data, refetch } = useGetPrizeHistory(searchParams);
+  const listStoreAdmin = data?.data?.response || [];
 
   const {
     isCheckedAll,
@@ -97,11 +98,9 @@ function EventPrizeHistoryDashboard() {
     setPage(0);
   };
 
-  const handleDeleteRows = (ids: string[]) => {
-  };
+  const handleDeleteRows = (ids: string[]) => {};
 
-  const handleEditRow = (id: string) => {
-  };
+  const handleEditRow = (id: string) => {};
 
   const { totalRecords } = data?.data?.pagination || {
     totalRecords: 0,
@@ -130,7 +129,10 @@ function EventPrizeHistoryDashboard() {
       <HeaderBreadcrumbs
         heading="Lịch sử trúng giải"
         links={[
-          { name: BREADCUMBS.EVENT_PROMOTION_Q4, href: PATH_DASHBOARD.eventAdmin.historyPrize },
+          {
+            name: BREADCUMBS.EVENT_PROMOTION_Q4,
+            href: PATH_DASHBOARD.eventAdmin.historyPrize,
+          },
           { name: 'Lịch sử trúng giải' },
         ]}
         action={
@@ -148,9 +150,7 @@ function EventPrizeHistoryDashboard() {
       />
       <Card>
         <Divider />
-        <FilterBar
-          handleSearch={handleSearch}
-        />
+        <FilterBar handleSearch={handleSearch} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -190,7 +190,10 @@ function EventPrizeHistoryDashboard() {
                 {listStoreAdmin.map((row: IPrizeHistory) => (
                   <PrizeHistoryTableRow
                     key={row.id}
-                    row={{ ...row, giftReceivedDate: new Date(row.giftReceivedDate).toLocaleString()}}
+                    row={{
+                      ...row,
+                      giftReceivedDate: new Date(row.giftReceivedDate).toLocaleString(),
+                    }}
                     selected={selectedIds.includes(row.id)}
                     onSelectRow={(e) => {
                       handleSelectItem(row.id, e);
@@ -228,4 +231,4 @@ function EventPrizeHistoryDashboard() {
   );
 }
 
-export { EventPrizeHistoryDashboard};
+export { EventPrizeHistoryDashboard };

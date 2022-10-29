@@ -11,7 +11,6 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
       onClick={() => {
         dispatch(setGift(row));
         handleClose();
-        console.log('abdkhsakl');
       }}
     >
       <TableCell align="left">{name}</TableCell>
@@ -24,4 +23,3 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
 }
 
 export { GiftTableRow };
-

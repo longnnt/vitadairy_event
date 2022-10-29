@@ -12,7 +12,7 @@ function ListPrizeTableRow({
   onSelectRow,
   onDeleteRow,
 }: IPropsListPrizeTableRow) {
-  const { id, giftName, ordinal, probability, quantity  } = row;
+  const { id, giftName, ordinal, probability, quantity } = row;
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(event.currentTarget);
@@ -65,4 +65,3 @@ function ListPrizeTableRow({
 }
 
 export { ListPrizeTableRow };
-

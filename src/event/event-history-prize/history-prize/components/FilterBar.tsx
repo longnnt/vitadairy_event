@@ -10,7 +10,7 @@ import { formatDateNews } from '../../constants';
 import {
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText
+  setSearchText,
 } from '../../event.slice';
 import { IFormFilter, IHistoryListEventParams } from '../../interfaces';
 
@@ -28,8 +28,8 @@ export const FilterBar = (props: { handleSearch: Function }) => {
     defaultValues: {
       searchText: '',
       startDate: null,
-      endDate:null
-    }
+      endDate: null,
+    },
   });
 
   const {
@@ -46,18 +46,16 @@ export const FilterBar = (props: { handleSearch: Function }) => {
     dispatch(setFirstScanEndDate(data.endDate));
   };
 
-  const handleCancel = ()=>{
-    reset(
-      {
-        searchText: '',
-        startDate: null,
-        endDate:null
-      }
-    )
+  const handleCancel = () => {
+    reset({
+      searchText: '',
+      startDate: null,
+      endDate: null,
+    });
     dispatch(setSearchText(''));
     dispatch(setFirstScanStartDate(null));
     dispatch(setFirstScanEndDate(null));
-  }
+  };
 
   return (
     <>
@@ -67,14 +65,13 @@ export const FilterBar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={4} ml="20px">
               <Stack spacing={'20px'}>
                 <Controller
-                  {...register("searchText")}
+                  {...register('searchText')}
                   control={control}
                   render={({ field: { onChange } }) => (
                     <TextField
                       fullWidth
-                      {...register("searchText")}
+                      {...register('searchText')}
                       placeholder="Search..."
-                      
                     />
                   )}
                 />
@@ -89,7 +86,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                     Tìm kiếm
                   </LoadingButton>
                   <LoadingButton
-                    sx={{ size: '30px' , margin:2 }}
+                    sx={{ size: '30px', margin: 2 }}
                     color="inherit"
                     variant="contained"
                     size="medium"
@@ -104,7 +101,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
               <Stack spacing={'20px'}>
                 <Controller
                   // name="startDate"
-                  {...register("startDate")}
+                  {...register('startDate')}
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
@@ -122,7 +119,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={3}>
               <Controller
                 // name="endDate"
-                {...register("endDate")}
+                {...register('endDate')}
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
