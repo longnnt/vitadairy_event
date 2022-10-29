@@ -40,7 +40,9 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { number, string } from 'yup';
 import {
+  Columns,
   defaultValues,
+  FormatDate,
   popupTypeOption,
   POPUP_TYPE,
   StyleGift,
@@ -207,9 +209,6 @@ export default function HistoryNewForm() {
     totalRecords: 0,
   };
 
-  const columns: Array<string> = ["name", "provinceId", "quantity", "startDate", "endDate"];
-  const formatDate = "DD/MM/YYYY";
-
   const importFile = async (event: any) => {
     try {
       const allowedExtensions = ['csv'];
@@ -232,15 +231,15 @@ export default function HistoryNewForm() {
         delimiter: ",",
         fastMode: true,
         encoding: "utf-8",
-        transformHeader: (header:string, index: number) => columns[index],
+        transformHeader: (header:string, index: number) => Columns[index],
         complete: async (results: ParseResult<IEventDetail>) => {
           const data : IEventDetail[] = results.data.map((item : IEventDetail) =>
             ({
               name: item.name,
               provinceId: item.provinceId,
               quantity: item.quantity,
-              startDate: dayjs(item.startDate, formatDate),
-              endDate: dayjs(item.endDate, formatDate),
+              startDate: dayjs(item.startDate, FormatDate),
+              endDate: dayjs(item.endDate, FormatDate),
             }));
           setDataCities(data);
           setValue('eventDetailProvinces', data);
@@ -613,7 +612,7 @@ export default function HistoryNewForm() {
                                 // value={dayjs(item.startDate  || null, formatDate)}
                                 
                                 renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth defaultValue={dayjs(item.startDate  || null, formatDate)} onChange={(e) => handleChangeCity(e, item)}  />
+                                  <TextField {...params} fullWidth defaultValue={dayjs(item.startDate  || null, FormatDate)} onChange={(e) => handleChangeCity(e, item)}  />
                                 )}
                               />
                             )}
@@ -633,7 +632,7 @@ export default function HistoryNewForm() {
                                 // value={dayjs(item.endDate  || null, formatDate)}
                                 // onChange={(e) => handleChangeCity(e, item)}
                                 renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth defaultValue={dayjs(item.endDate  || null, formatDate)} onChange={(e) => handleChangeCity(e, item)} />
+                                  <TextField {...params} fullWidth defaultValue={dayjs(item.endDate  || null, FormatDate)} onChange={(e) => handleChangeCity(e, item)} />
                                 )}
                               />
                             )}
