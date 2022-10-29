@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { getRelatedCacheKeys } from 'src/common/utils/getRelatedCacheKeys';
 import { IEventCallback } from '../interface';

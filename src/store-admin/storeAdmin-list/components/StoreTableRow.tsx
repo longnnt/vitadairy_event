@@ -17,8 +17,8 @@ function StoreTableRow({
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-  
-  const {mutate} = useGetStoreActive();
+
+  const { mutate } = useGetStoreActive();
 
   const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(store.currentTarget);
@@ -97,4 +97,3 @@ function StoreTableRow({
 }
 
 export { StoreTableRow };
-

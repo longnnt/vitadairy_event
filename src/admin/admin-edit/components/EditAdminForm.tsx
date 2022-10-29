@@ -1,8 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import {
-  Card, Grid, Stack, Typography
-} from '@mui/material';
+import { Card, Grid, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,7 +15,6 @@ import { IFormAdmin } from 'src/admin/interfaces';
 import { NewAdminSchema } from 'src/admin/schema';
 import useMessage from 'src/store-admin/hooks/useMessage';
 
-
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
   color: theme.palette.text.secondary,
@@ -31,13 +28,15 @@ function EditFormAdmin() {
   const id = params?.id;
   const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { mutate, isSuccess } = useEditAdmin({ onSuccess: () => {
-    showSuccessSnackbar('Get Admin successfully')
-  },
-  onError: () => {
-    showErrorSnackbar('Get admin fail')
-  }});
-  
+  const { mutate, isSuccess } = useEditAdmin({
+    onSuccess: () => {
+      showSuccessSnackbar('Get Admin successfully');
+    },
+    onError: () => {
+      showErrorSnackbar('Get admin fail');
+    },
+  });
+
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.admin.list);
   }, [isSuccess]);
@@ -56,11 +55,11 @@ function EditFormAdmin() {
   } = methods;
   const dataRes = dataAdmin?.response;
   useEffect(() => {
-    if(dataRes){
-       dataRes
-       reset(dataRes)
+    if (dataRes) {
+      dataRes;
+      reset(dataRes);
     }
-  }, [dataAdmin])
+  }, [dataAdmin]);
   const onSubmit = async (data: IFormAdmin) => {
     const dataEdit = {
       email: data.email,
@@ -153,4 +152,3 @@ function EditFormAdmin() {
 }
 
 export { EditFormAdmin };
-

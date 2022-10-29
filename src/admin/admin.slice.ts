@@ -11,7 +11,7 @@ type StateProps = {
 const initialState: StateProps = {
   filterName: '',
   filterRole: '',
-  adminDetail: {} ,
+  adminDetail: {},
 };
 
 export const adminSlice = createSlice({

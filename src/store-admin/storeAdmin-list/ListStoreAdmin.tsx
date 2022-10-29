@@ -10,7 +10,7 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
@@ -19,7 +19,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions
+  TableSelectedActions,
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -33,7 +33,11 @@ import { useImportFile } from '../hooks/useImportFile';
 import useMessage from '../hooks/useMessage';
 import { IFormStore, IStoreParams } from '../interfaces';
 import { exportStoreAdmin } from '../services';
-import { firstScanEndSelector, firstScanStartSelector, searchTextSelector } from '../storeAdmin.slice';
+import {
+  firstScanEndSelector,
+  firstScanStartSelector,
+  searchTextSelector,
+} from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 import { StoreTableToolbar } from './components/StoreTableToolbar';
 
@@ -66,19 +70,19 @@ function StoreAdminListDashboard() {
 
   const mutationDetele = useDeleteStoreAdmin({
     onSuccess: () => {
-      showSuccessSnackbar('Delete store successfully')
+      showSuccessSnackbar('Delete store successfully');
     },
     onError: () => {
-      showErrorSnackbar('Delete store fail')
+      showErrorSnackbar('Delete store fail');
     },
   });
 
   const { mutate } = useImportFile({
     onSuccess: () => {
-      showSuccessSnackbar('Import file successfully')
+      showSuccessSnackbar('Import file successfully');
     },
     onError: () => {
-      showErrorSnackbar('Import file fail')
+      showErrorSnackbar('Import file fail');
     },
   });
 
@@ -94,9 +98,8 @@ function StoreAdminListDashboard() {
 
   const { data, refetch } = useGetStoreAdmin(searchParams);
 
-
   const listStoreAdmin = data?.data?.response?.response || [];
-  
+
   const {
     isCheckedAll,
     reset: resetSelect,
@@ -282,4 +285,3 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
-

@@ -11,7 +11,7 @@ export interface IResEventPrizeById {
 export interface IEventProvince {
   id?: number;
   provinceId: number;
-  quantity: number;
+  quantity?: number;
   startDate: Date | string;
   endDate: Date | string;
   extraquantity?: number;
@@ -95,6 +95,15 @@ export interface IGiftDetail {
   type: string;
   money: number;
   name: string;
+}
+export interface IGiftById {
+  data: {
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: IGiftDetail;
+  };
 }
 
 interface IGiftPagiantion {

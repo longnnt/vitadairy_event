@@ -34,11 +34,17 @@ import { defaultValues } from '../constant';
 import { IEventFormData } from '../interface';
 import { useProductCode } from '../hooks/useProductCode';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { setUserType, userTypeState } from '../eventPromotionIV.slice';
+import {
+  buttonTypeState,
+  setButtonType,
+  setUserType,
+  userTypeState,
+} from '../eventPromotionIV.slice';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const buttonTypeValue = useSelector(buttonTypeState);
   const methods = useForm({
     resolver: yupResolver(schemaAddEvent),
     defaultValues,
@@ -52,7 +58,7 @@ export const AddEvent = () => {
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const { mutate, isSuccess } = useAddNewEvent({
+  const { mutate, isSuccess, data } = useAddNewEvent({
     onSuccess: () => {
       showSuccessSnackbar('Tạo mới thành công');
     },
@@ -60,6 +66,7 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
+
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
       name: data.name,
@@ -71,13 +78,20 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      id: 100,
+      id: 1,
     };
     mutate(formDataAddNewEvent);
   };
 
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
+    const idEvent = data?.data?.response?.id;
+    if (isSuccess) {
+      if (buttonTypeValue !== 'saveSubmit') {
+        navigate(PATH_DASHBOARD.eventPromotionIV.edit(+idEvent));
+      } else {
+        navigate(PATH_DASHBOARD.eventPromotionIV.list);
+      }
+    }
   }, [isSuccess]);
 
   const skusCodeDataEvent = useProductCode({ size: 20 });
@@ -242,7 +256,7 @@ export const AddEvent = () => {
                     <DatePicker
                       {...field}
                       label="Ngày tính người dùng mới"
-                      inputFormat="dd/MM/yyyy a"
+                      inputFormat="dd/MM/yyyy"
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -267,10 +281,20 @@ export const AddEvent = () => {
           </Card>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button variant="contained" color="secondary" type="submit">
+          <Button
+            variant="contained"
+            color="secondary"
+            type="submit"
+            onClick={() => dispatch(setButtonType('saveSubmit'))}
+          >
             Lưu
           </Button>
-          <Button variant="contained" sx={{ mx: '7px' }}>
+          <Button
+            variant="contained"
+            sx={{ mx: '7px' }}
+            type="submit"
+            onClick={() => dispatch(setButtonType('saveEditSubmit'))}
+          >
             Lưu & chỉnh sửa
           </Button>
         </Box>

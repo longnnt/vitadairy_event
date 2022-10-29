@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
@@ -37,6 +37,14 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GiftModal } from './GìiftModal';
+import {
+  convertExcelFileToObj,
+  convertNameProvinceToId,
+  validateFileImportFormat,
+} from '../common/ultils';
+import Iconify from 'src/common/components/Iconify';
+import { useGetAllGift } from '../hooks/useGetAllGift';
+import { useGetGiftById } from '../hooks/useGetGiftById';
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
@@ -50,15 +58,15 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
+  const { data: dtaProvince } = useGetAllProvinceVN();
+  const provincesData = dtaProvince?.data?.response?.provinces;
+  const provinceOptions = provincesData?.map((item: IProvince) => ({
+    value: item?.id,
+    label: item?.name,
+  }));
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
-  const { data: dtaProvince } = useGetAllProvinceVN();
-  const provinceOptions = dtaProvince?.data?.response?.provinces?.map(
-    (item: IProvince) => ({
-      value: item?.id,
-      label: item?.name,
-    })
-  );
+
   const { data: transactionType } = useGetAllTransactionType();
   const dtaTransactionType = transactionType?.data;
   const transactionTypeOptions = dtaTransactionType?.response?.map(
@@ -87,6 +95,14 @@ export const EditEventPrizeForm = () => {
       reset(dtaEventPrizeById?.response);
     }
   }, [dtaEventPrizeById]);
+
+  const { data: giftDetail } = useGetGiftById(
+    dtaEventPrizeById ? dtaEventPrizeById?.response?.giftId : 0
+  );
+  useDeepCompareEffect(() => {
+    if (giftDetail) setChoosenGift(giftDetail?.data?.response);
+  }, [giftDetail]);
+
   const { mutate } = useEditEventPrize();
   const onSubmit = (data: IFormEdit) => {
     const tempDta = { ...data };
@@ -96,7 +112,6 @@ export const EditEventPrizeForm = () => {
       if (item.endDate || item.startDate) {
         const startDate = new Date(item.startDate).toISOString();
         const endDate = new Date(item.endDate).toISOString();
-
         item = { ...item, startDate: startDate, endDate: endDate };
       }
       if (typeof item.provinceId === 'string') {
@@ -129,6 +144,7 @@ export const EditEventPrizeForm = () => {
     setProvinceCount(temp + 1);
     setValue(`eventDetailProvinces.${temp}`, DEDAULT_PROVINCE);
   };
+
   const provinceWatch = watch('eventDetailProvinces');
   const handleRemoveProvince = (index: number) => {
     const tempArr = [...provinceWatch];
@@ -144,9 +160,105 @@ export const EditEventPrizeForm = () => {
     }
   }, [choosenGift]);
 
+  // ----------------set modal parameter---------------
+
   const [open, setOpen] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const SIZE = 10;
+  const paramsGift = { page: page, size: SIZE };
+  const { data } = useGetAllGift(paramsGift);
+  const giftDta = data?.data?.response ? data?.data?.response : [];
+
+  // ---------------set import file----------------------
+
+  const ref = useRef<HTMLInputElement>(null);
+  const [fileImport, setFileImport] = useState<IEventProvince[]>();
+  const handleOnInuputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      convertExcelFileToObj(files[0], setFileImport);
+    }
+  };
+
+  useDeepCompareEffect(() => {
+    if (fileImport && provinceOptions) {
+      const tempDta = fileImport.map((item: any) => {
+        const test = validateFileImportFormat(item);
+
+        if (test === false) {
+          showErrorSnackbar('File import  không đúng định dạng');
+          return;
+        }
+
+        const ID = convertNameProvinceToId(item.name, provinceOptions);
+        item = { ...item, quantity: 0, provinceId: ID };
+        delete item.name;
+
+        if (item.endDate || item.startDate) {
+          const startDate = new Date(item.startDate);
+          const endDate = new Date(item.endDate);
+          item = { ...item, startDate: startDate, endDate: endDate };
+        }
+        return item;
+      });
+
+      const temp = provinceCount;
+      setProvinceCount(temp + fileImport.length);
+      setValue('eventDetailProvinces', provinceWatch.concat(tempDta));
+      showSuccessSnackbar('import file thành công');
+    }
+  }, [fileImport]);
+
+  // const importFile = async (event: any) => {
+  //   try {
+  //     const allowedExtensions = ['csv'];
+  //     if (event.target.files.length) {
+  //       const inputFile = event.target.files[0];
+
+  //       const fileExtension = inputFile?.type.split('/')[1];
+  //       if (!allowedExtensions.includes(fileExtension)) {
+  //         showErrorSnackbar('không phải file csv');
+  //         return;
+  //       }
+  //     }
+
+  //     if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
+
+  //     parse(event.target.files[0], {
+  //       header: true,
+  //       download: true,
+  //       skipEmptyLines: true,
+  //       delimiter: ',',
+  //       encoding: 'utf-8',
+  //       complete: (results: ParseResult<ProvinceCSV>) => {
+  //         const provinceImportData: ProvinceCSV[] = results.data;
+  //         console.log('results', results);
+
+  //         // setProvinceCount(provinceImportData.length);
+  //         // const customProvinceData = provinceImportData.map(item => ({
+  //         //   endDate: item.end_date,
+  //         //   id: item.id,
+  //         //   provinceName: item.province_name,
+  //         //   quantity: item.amount,
+  //         //   startDate: item.start_date,
+  //         // }))
+
+  //         // const customDateEventPrize = {
+  //         //   ...dtaEventPrizeById,
+  //         //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
+  //         // }
+
+  //         // reset(customDateEventPrize.response);
+  //         showSuccessSnackbar('import file thành công');
+  //       },
+  //     });
+  //   } catch (e) {
+  //     // console.log(e);
+  //     showErrorSnackbar('Không import file thành công!');
+  //   }
+  // };
 
   return (
     <>
@@ -293,6 +405,10 @@ export const EditEventPrizeForm = () => {
                     open={open}
                     handleClose={handleClose}
                     setChoosenGift={setChoosenGift}
+                    setPage={setPage}
+                    giftDta={giftDta}
+                    page={page}
+                    totalRecords={data ? data?.data?.pagination?.totalRecords : 0}
                   />
                 </Stack>
               </Card>
@@ -331,7 +447,21 @@ export const EditEventPrizeForm = () => {
                   spacing={1.5}
                   sx={{ mt: 3, alignSelf: 'flex-end' }}
                 >
-                  <Button fullWidth color="secondary" variant="contained" size="large">
+                  <input
+                    type="file"
+                    accept="xlsx"
+                    ref={ref}
+                    style={{ display: 'none' }}
+                    onChange={(e) => handleOnInuputFile(e)}
+                  />
+                  <Button
+                    fullWidth
+                    startIcon={<Iconify icon={'mdi:file-import'} />}
+                    color="secondary"
+                    variant="contained"
+                    size="large"
+                    onClick={() => ref?.current?.click()}
+                  >
                     Nhập
                   </Button>
 

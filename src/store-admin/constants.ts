@@ -8,9 +8,8 @@ export const TABLE_HEAD = [
   { id: '' },
 ];
 
-export const SuccessUploadCode = 1000
+export const SuccessUploadCode = 1000;
 
-export const formatCreateDate = 'MMMM D, YYYY h:mm A'
+export const formatCreateDate = 'MMMM D, YYYY h:mm A';
 
-export const formatDateNews = 'dd-MM-yyyy hh:mm a'
-
+export const formatDateNews = 'dd-MM-yyyy hh:mm a';

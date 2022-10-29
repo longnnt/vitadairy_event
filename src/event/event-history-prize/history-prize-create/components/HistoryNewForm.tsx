@@ -214,7 +214,7 @@ export default function HistoryNewForm() {
 
         const fileExtension = inputFile?.type.split('/')[1];"DD/MM/YYYY"
         if (!allowedExtensions.includes(fileExtension)) {
-          enqueueSnackbar('không phải file csv')
+          enqueueSnackbar('không phải file csv');
           return;
         }
         setfilesCsv(inputFile);
@@ -246,6 +246,7 @@ export default function HistoryNewForm() {
       console.log(e);
     }
   };
+
   const methods = useForm<IFormCreateEvent>({
     resolver: yupResolver(eventPrizeSchema),
     defaultValues,

@@ -12,13 +12,13 @@ import {
   initialState,
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText
+  setSearchText,
 } from '../../storeAdmin.slice';
 
 // ----------------------------------------------------------------------
 
-export const StoreTableToolbar = (props: {handleSearch: Function}) => {
-  const {handleSearch} = {...props};
+export const StoreTableToolbar = (props: { handleSearch: Function }) => {
+  const { handleSearch } = { ...props };
   const methods = useForm({
     defaultValues: initialState,
   });

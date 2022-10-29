@@ -3,10 +3,8 @@ import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { IStoreAdminCallback } from '../interfaces';
 // import { deletePrizeHistoryAdmin } from '../services';
 
-
 export function useDeletePrizeHistoryAdmin(callback: IStoreAdminCallback) {
   // const queryClient = useQueryClient();
-
   // return useMutation((id: string) => deletePrizeHistoryAdmin(id), {
   //   onSuccess: (_rs, _variables) => {
   //     queryClient

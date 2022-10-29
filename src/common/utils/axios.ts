@@ -14,15 +14,14 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) =>
-    {
-      const response = error.response;
+  (error) => {
+    const response = error.response;
 
-      if (response?.status === 401) {
-        window.location.href=PATH_AUTH.login
-      }
-      return Promise.reject(error);
+    if (response?.status === 401) {
+      window.location.href = PATH_AUTH.login;
     }
+    return Promise.reject(error);
+  }
 );
 axiosInstance.interceptors.request.use(async (config) => {
   const token = store.getState()?.authLogin.accessToken;

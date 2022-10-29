@@ -40,7 +40,10 @@ export default function RHFEditor({ name, toolbarId, disabled, ...other }: Props
             onChange={field.onChange}
             error={!!error}
             helperText={
-              <FormHelperText error sx={{ px: 2, textTransform: 'capitalize', color: 'red' }}>
+              <FormHelperText
+                error
+                sx={{ px: 2, textTransform: 'capitalize', color: 'red' }}
+              >
                 {error?.message}
               </FormHelperText>
             }

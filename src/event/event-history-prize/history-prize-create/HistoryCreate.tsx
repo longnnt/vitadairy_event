@@ -6,12 +6,14 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import HistoryNewForm from './components/HistoryNewForm';
 
 export default function AddEventDashboard() {
-
   return (
     <>
       <HeaderBreadcrumbs
         heading="Create a new event"
-        links={[{ name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root }, { name: 'Event' }]}
+        links={[
+          { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
+          { name: 'Event' },
+        ]}
       />
       <HistoryNewForm />
     </>
