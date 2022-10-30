@@ -14,13 +14,13 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { parse, ParseResult } from 'papaparse';
 import React, { useEffect, useState } from 'react';
@@ -30,24 +30,25 @@ import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField,
+  RHFTextField
 } from 'src/common/components/hook-form';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
-import { useSelector } from 'src/common/redux/store';
+import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { string } from 'yup';
 import {
+  COLUMNS_HEADERS,
   defaultValues,
+  FormatDate,
   popupTypeOption,
   POPUP_TYPE,
   StyleGift,
-  TABLE_HEAD_GIFT,
+  TABLE_HEAD_GIFT
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
-import { giftSelecttor } from '../../event.slice';
+import { giftSelecttor, setGift } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
@@ -56,7 +57,7 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
-  ISelectPopup,
+  ISelectPopup
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
@@ -76,6 +77,8 @@ export default function HistoryNewForm() {
   const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueChoice((event.target as HTMLInputElement).value);
   };
+
+  const dispatch = useDispatch()
   const {
     dense,
     page,
@@ -87,56 +90,55 @@ export default function HistoryNewForm() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const [valueStartDate, setValueStartDate] = React.useState<Dayjs | null>(null);
-  const [valueEndDate, setValueEndDate] = React.useState<Dayjs | null>(null);
-  const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.HTML_LINK);
+  const [popUpType, setPopUpType] = useState<string>(POPUP_TYPE.NULL);
   const [popUpCode, setPopUpCode] = React.useState<string | null>('');
-  const [idHolder, setidHolder] = React.useState<number | undefined>(0);
   const [redirect, setRedirect] = React.useState<boolean>(true);
-  const [filesCsv, setfilesCsv] = React.useState<Array<unknown>>([]);
-
+  const [_, setfilesCsv] = React.useState<Array<unknown>>([]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const gift = useSelector(giftSelecttor);
 
-  const keyName1 = 'Province name';
-  const keyName2 = 'start-date';
-  const keyName3 = 'end-date';
+  const [dataCities, setDataCities] = React.useState<IEventDetail[]>([]);
 
-  type DataCSV = {
-    id: number;
-    amount: number;
-    [keyName1]: string;
-    [keyName2]: string | Dayjs | null;
-    [keyName3]: string | Dayjs | null;
+  const removeCount = (provinceId: number) => {
+    setDataCities([...dataCities].filter((item) => item.provinceId !== provinceId));
   };
 
-  type DataCites = {
-    id: number;
-    name: string;
-    amount: number;
-    startDate: Dayjs | null;
-    endDate: Dayjs | null;
-  };
+  const handleChangeCity = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, province: IEventDetail) => {
+    const newData : IEventDetail[] = [...dataCities];
+    let itemEdit : IEventDetail = {...province};
 
-  const [dataCities, setDataCities] = React.useState<DataCites[]>([]);
+    // find edit index and item edit in array
+    let provinceIdx = 0;
+    newData.forEach((item, index) => {
+      if(item.provinceId === province.provinceId) {
+        itemEdit = item;
+        provinceIdx = index;
+      }
+    });
 
-  // const [provinceCount, setProvinCount] = useState<
-  //   Array<{
-  //     id: number;
-  //     startDate: Dayjs | null;
-  //     endDate: Dayjs | null;
-  //     transactionType: string;
-  //     countProvince: number;
-  //     morePrize: number;
-  //   }>
-  // >([]);
+    // get key edit
+    const keyEdit = e.target.name.split(".")[2];
 
-  const removeCount = (index: number) => {
-    setidHolder(index);
-    setDataCities([...dataCities].filter((item) => item.id !== idHolder));
-  };
+    // edit detail data
+    const itemChanged : IEventDetail = keyEdit !== "numberOfMorePrize" ? {
+      ...itemEdit, // spread
+      [keyEdit] : e.target.value,
+    } 
+    :
+    {
+      ...itemEdit, // spread
+      quantity: ( !isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) + parseInt(itemEdit?.quantity.toString()) : itemEdit?.quantity),
+    };
+
+    // update element in array
+    newData[provinceIdx] = itemChanged;
+
+    // update data array
+    setDataCities(newData);
+    setValue('eventDetailProvinces', newData);
+  }
 
   const changePopUpType = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -166,6 +168,15 @@ export default function HistoryNewForm() {
 
   const { mutate, isSuccess } = useAddEvent({ onSuccess, onError });
 
+  useEffect(() => {
+    dispatch(setGift({
+      id: 0,
+      name: '',
+      type: '',
+      money: '',
+    }));
+  },[])
+
   const params = useParams();
   const id = params?.id;
   useEffect(() => {
@@ -182,7 +193,7 @@ export default function HistoryNewForm() {
   }));
 
   const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response || [];
+  const dataProvince = addProvince?.data?.response?.provinces || [];
   const addNewOption2 = dataProvince.map((item) => ({
     key: item.id,
     name: item.name,
@@ -204,7 +215,7 @@ export default function HistoryNewForm() {
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
 
-        const fileExtension = inputFile?.type.split('/')[1];
+        const fileExtension = inputFile?.type.split('/')[1];FormatDate
         if (!allowedExtensions.includes(fileExtension)) {
           enqueueSnackbar('không phải file csv');
           return;
@@ -212,23 +223,26 @@ export default function HistoryNewForm() {
         setfilesCsv(inputFile);
       }
       if (!event.target.files[0]) return enqueueSnackbar('file không hợp lệ!!!');
+     
       parse(event.target.files[0], {
         header: true,
         download: true,
         skipEmptyLines: true,
-        delimiter: ',',
-        encoding: 'utf-8',
-        complete: (results: ParseResult<DataCSV>) => {
-          const test: DataCSV[] = results.data;
-          const data: any = test.map((item) => ({
-            name: item[keyName1],
-            id: item.id,
-            amount: item.amount,
-            startDate: item[keyName2],
-            endDate: item[keyName3],
-          }));
+        delimiter: ",",
+        fastMode: true,
+        encoding: "utf-8",
+        transformHeader: (header:string, index: number) => COLUMNS_HEADERS[index],
+        complete: async (results: ParseResult<IEventDetail>) => {
+          const data : IEventDetail[] = results.data.map((item : IEventDetail) =>
+            ({
+              name: item.name,
+              provinceId: item.provinceId,
+              quantity: item.quantity,
+              startDate: dayjs(item.startDate, FormatDate),
+              endDate: dayjs(item.endDate, FormatDate),
+            }));
           setDataCities(data);
-          enqueueSnackbar('import file thành công');
+          setValue('eventDetailProvinces', data);
         },
       });
     } catch (e) {
@@ -251,15 +265,17 @@ export default function HistoryNewForm() {
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
-    const eventDetailProvinces = data.eventDetailProvinces.map((item) => {
+    const eventDetailProvinces : Array<IEventDetail> = data.eventDetailProvinces.map((item) => {
+      let startDate = new Date().toISOString();
+      let endDate = new Date().toISOString();
       if (item.endDate || item.startDate) {
-        const startDate = new Date(item.startDate).toISOString();
-        const endDate = new Date(item.endDate).toISOString();
-        return { ...item, startDate: startDate, endDate: endDate };
-      }
+        startDate = item.startDate ? item.startDate instanceof Date ? item.startDate.toISOString() : startDate : startDate ;
+        endDate = item.endDate ? item.endDate instanceof Date ? item.endDate.toISOString() : endDate : endDate ;
+      };
+      return { ...item, startDate: startDate, endDate: endDate };
     });
     const dataEvent: IFormCreateEvent = {
-      eventDetailProvinces: eventDetailProvinces as Array<IEventDetail>,
+      eventDetailProvinces,
       eventId: idEventPrize,
       giftId: gift.id,
       notificationContent: data.notificationContent,
@@ -274,6 +290,12 @@ export default function HistoryNewForm() {
       quantity: data.quantity,
       transactionTypeId: data.transactionTypeId,
     };
+    dispatch(setGift({
+      id: 0,
+      name: '',
+      type: '',
+      money: '',
+    }));
     mutate(dataEvent);
   };
   return (
@@ -337,6 +359,7 @@ export default function HistoryNewForm() {
                     label="Pop up Type"
                     placeholder="Pop up Type"
                     margin="dense"
+                    value={popUpType}
                     onChange={(e) => {
                       const val = e.target.value;
                       setPopUpType(val);
@@ -382,16 +405,18 @@ export default function HistoryNewForm() {
                     row
                     name={'giftId'}
                     key="giftId"
-                    // value={valueChoice}
+                    value={valueChoice}
                     onChange={handleChangeChoice}
                   >
                     <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
                     <FormControlLabel
+                      name={'giftId'}
                       value="point"
                       control={<Radio />}
                       label="Tặng Điểm"
                     />
                     <FormControlLabel
+                      name={'giftId'}
                       value="all"
                       control={<Radio />}
                       label="Tặng Quà và Điểm"
@@ -440,7 +465,6 @@ export default function HistoryNewForm() {
                                 ))}
                               </TableBody>
                             </TableContainer>
-                          </Scrollbar>
                           {!!ListGift?.data?.pagination?.totalPages && (
                             <TablePagination
                               rowsPerPageOptions={[10, 15]}
@@ -452,6 +476,7 @@ export default function HistoryNewForm() {
                               onRowsPerPageChange={onChangeRowsPerPage}
                             />
                           )}
+                          </Scrollbar>
                         </Box>
                       </Modal>
                     </Grid>
@@ -496,7 +521,7 @@ export default function HistoryNewForm() {
             </Card>
             <LabelStyle>Tỉnh thành</LabelStyle>
             <Card sx={{ p: 3, width: '100%' }}>
-              <Grid sx={{ maxHeight: 450 }}>
+              <Grid sx={{maxHeight: 370}}>
                 <Grid direction="row" justifyContent="flex-end" container>
                   <Box sx={{ paddingRight: 2 }}>
                     <Button
@@ -512,15 +537,15 @@ export default function HistoryNewForm() {
                     <Button
                       color="inherit"
                       onClick={() => {
-                        setidHolder((idHolder || 0) + 1);
+                        // setidHolder((idHolder || 0) + 1);
                         setDataCities([
                           ...dataCities,
                           {
-                            id: (idHolder || 0) + 1,
-                            startDate: valueStartDate,
-                            endDate: valueEndDate,
-                            name: '',
-                            amount: 0,
+                            provinceId: dataCities.length,
+                            startDate: dayjs(),
+                            endDate: dayjs(),
+                            name: "",
+                            quantity: 0,
                           },
                         ]);
                       }}
@@ -531,98 +556,101 @@ export default function HistoryNewForm() {
                     </Button>
                   </Box>
                 </Grid>
-                <Grid sx={{ maxHeight: 450, overflow: 'auto' }}>
-                  {dataCities &&
-                    dataCities.map((item, index) => {
-                      return (
-                        <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
-                          <Grid item xs>
-                            <RHFSelect
-                              name={`eventDetailProvinces.${index}.provinceId`}
-                              key={`eventDetailProvinces.${index}.provinceId`}
-                              label="Tỉnh thành"
-                              placeholder="Tỉnh thành"
-                              value={item.name}
-                            >
-                              <option value="" />
-                              {addNewOption2.map((option) => (
-                                <option key={option.key} value={option.name}>
-                                  {option.name}
-                                </option>
-                              ))}
-                            </RHFSelect>
-                          </Grid>
-                          <Grid item xs>
-                            <RHFTextField
-                              name={`eventDetailProvinces.${index}.quantity`}
-                              key={`eventDetailProvinces.${index}.quantity`}
-                              InputProps={{
-                                readOnly: true,
-                              }}
-                              label="Tổng Số lượng giải theo tỉnh"
-                              value={item.amount}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <RHFTextField
-                              name={`eventDetailProvinces.${index}.quantity`}
-                              key={`eventDetailProvinces.${index}.quantity`}
-                              label="Số giải nhập thêm"
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Controller
-                              name={`eventDetailProvinces.${index}.startDate`}
-                              key={`eventDetailProvinces.${index}}.startDate`}
-                              control={control}
-                              render={({ field }: { field: any }) => (
-                                <DatePicker
-                                  {...field}
-                                  key="startDate"
-                                  label="Ngày bắt đầu"
-                                  inputFormat="dd/MM/yyyy"
-                                  value={dayjs(item.startDate || null, 'DD/MM/YYYY')}
-                                  renderInput={(params: any) => (
-                                    <TextField {...params} fullWidth />
-                                  )}
-                                />
-                              )}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Controller
-                              name={`eventDetailProvinces.${index}.endDate`}
-                              key={`eventDetailProvinces.${index}.endDate`}
-                              control={control}
-                              render={({ field }: { field: any }) => (
-                                <DatePicker
-                                  {...field}
-                                  key="endDate"
-                                  label="Ngày kết thúc"
-                                  inputFormat="dd/MM/yyyy"
-                                  value={dayjs(item.endDate || null, 'DD/MM/YYYY')}
-                                  renderInput={(params: any) => (
-                                    <TextField {...params} fullWidth />
-                                  )}
-                                />
-                              )}
-                            />
-                          </Grid>
-                          <Grid item xs={1}>
-                            <Button
-                              color="inherit"
-                              onClick={() => {
-                                removeCount(item?.id);
-                              }}
-                              variant="contained"
-                              size="large"
-                            >
-                              -
-                            </Button>
-                          </Grid>
+                <Grid sx={{maxHeight: 450, overflow:'auto'}}>
+                  {dataCities && dataCities.map((item, index) => {
+                    return (
+                      <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
+                        <Grid item xs>
+                          <RHFSelect
+                            name={`eventDetailProvinces.${index}.provinceId`}
+                            key={`eventDetailProvinces.${index}.provinceId`}
+                            label="Tỉnh thành"
+                            placeholder="Tỉnh thành"
+                            value={item.provinceId}
+                            onChange={(e) => handleChangeCity(e, item)}
+                          >
+                            <option value="" />
+                            {addNewOption2.map((option) => (
+                              <option key={option.key} value={option.key} >
+                                {option.name}
+                              </option>
+                            ))}
+                          </RHFSelect>
                         </Grid>
-                      );
-                    })}
+                        <Grid item xs>
+                          <RHFTextField
+                            name={`eventDetailProvinces.${index}.quantity`}
+                            key={`eventDetailProvinces.${index}.quantity`}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            label="Tổng Số lượng giải theo tỉnh"
+                            value={item.quantity}
+                          />
+                        </Grid>
+                        <Grid item xs>
+                          <RHFTextField
+                            name={`eventDetailProvinces.${index}.numberOfMorePrize`}
+                            key={`eventDetailProvinces.${index}.numberOfMorePrize`}
+                            // name={`amount_test`}
+                            // key={`amount_test`}
+                            label="Số giải nhập thêm"
+                            onChange={(e) => handleChangeCity(e, item)}
+                          />
+                        </Grid>
+                        <Grid item xs>
+                          <Controller
+                            name={`eventDetailProvinces.${index}.startDate`}
+                            key={`eventDetailProvinces.${index}}.startDate`}
+                            control={control}
+                            render={({ field }: { field: any }) => (
+                              <DatePicker
+                                {...field}
+                                key="startDate"
+                                label="Ngày bắt đầu"
+                                inputFormat="dd/MM/yyyy"
+                                // value={dayjs(item.startDate  || null, formatDate)}
+                                
+                                renderInput={(params: any) => (
+                                  <TextField {...params} fullWidth defaultValue={dayjs(item.startDate  || null, FormatDate)} onChange={(e) => handleChangeCity(e, item)}  />
+                                )}
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs>
+                          <Controller
+                            name={`eventDetailProvinces.${index}.endDate`}
+                            key={`eventDetailProvinces.${index}.endDate`}
+                            control={control}
+                            render={({ field }: { field: any }) => (
+                              <DatePicker
+                                {...field}
+                                key="endDate"
+                                label="Ngày kết thúc"
+                                inputFormat="dd/MM/yyyy"
+                                // value={dayjs(item.endDate  || null, formatDate)}
+                                // onChange={(e) => handleChangeCity(e, item)}
+                                renderInput={(params: any) => (
+                                  <TextField {...params} fullWidth defaultValue={dayjs(item.endDate  || null, FormatDate)} onChange={(e) => handleChangeCity(e, item)} />
+                                )}
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button
+                            color="inherit"
+                            onClick={() => removeCount(item?.provinceId)}
+                            variant="contained"
+                            size="large"
+                          >
+                            -
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    );
+                  })}
                 </Grid>
               </Grid>
             </Card>

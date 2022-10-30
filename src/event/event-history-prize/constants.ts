@@ -126,6 +126,15 @@ export const popupTypeOption = [
   },
 ];
 
+export const COLUMNS_HEADERS: Array<string> = [
+  'name',
+  'provinceId',
+  'quantity',
+  'startDate',
+  'endDate',
+];
+export const FormatDate = 'DD/MM/YYYY';
+
 export const StyleGift = {
   position: 'absolute',
   top: '50%',
