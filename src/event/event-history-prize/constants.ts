@@ -126,7 +126,7 @@ export const popupTypeOption = [
   },
 ];
 
-export const Columns: Array<string> = [
+export const COLUMNS_HEADERS: Array<string> = [
   'name',
   'provinceId',
   'quantity',

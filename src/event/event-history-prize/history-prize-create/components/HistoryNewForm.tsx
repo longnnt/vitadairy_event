@@ -39,7 +39,7 @@ import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import {
-  Columns,
+  COLUMNS_HEADERS,
   defaultValues,
   FormatDate,
   popupTypeOption,
@@ -231,7 +231,7 @@ export default function HistoryNewForm() {
         delimiter: ",",
         fastMode: true,
         encoding: "utf-8",
-        transformHeader: (header:string, index: number) => Columns[index],
+        transformHeader: (header:string, index: number) => COLUMNS_HEADERS[index],
         complete: async (results: ParseResult<IEventDetail>) => {
           const data : IEventDetail[] = results.data.map((item : IEventDetail) =>
             ({
