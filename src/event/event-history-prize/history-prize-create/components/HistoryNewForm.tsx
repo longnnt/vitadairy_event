@@ -14,31 +14,30 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { parse, ParseResult } from 'papaparse';
-import React, { ReactHTMLElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField,
+  RHFTextField
 } from 'src/common/components/hook-form';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
-import { dispatch, useSelector } from 'src/common/redux/store';
+import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { number, string } from 'yup';
 import {
   Columns,
   defaultValues,
@@ -46,7 +45,7 @@ import {
   popupTypeOption,
   POPUP_TYPE,
   StyleGift,
-  TABLE_HEAD_GIFT,
+  TABLE_HEAD_GIFT
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
 import { giftSelecttor, setGift } from '../../event.slice';
@@ -58,12 +57,11 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
-  ISelectPopup,
+  ISelectPopup
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { Data } from 'react-csv/components/CommonPropTypes';
 
 dayjs.extend(customParseFormat);
 
@@ -79,6 +77,8 @@ export default function HistoryNewForm() {
   const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueChoice((event.target as HTMLInputElement).value);
   };
+
+  const dispatch = useDispatch()
   const {
     dense,
     page,
@@ -215,7 +215,7 @@ export default function HistoryNewForm() {
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
 
-        const fileExtension = inputFile?.type.split('/')[1];"DD/MM/YYYY"
+        const fileExtension = inputFile?.type.split('/')[1];FormatDate
         if (!allowedExtensions.includes(fileExtension)) {
           enqueueSnackbar('không phải file csv');
           return;
