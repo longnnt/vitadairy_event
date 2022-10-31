@@ -21,9 +21,6 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
 
       <TableCell align="left">{qr}</TableCell>
       <TableCell align="left">{spoonCode}</TableCell>
-      <TableCell align="left"></TableCell>
-
-      <TableCell align="right"></TableCell>
     </TableRow>
   );
 }
