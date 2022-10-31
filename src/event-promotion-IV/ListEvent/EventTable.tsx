@@ -9,6 +9,7 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
@@ -19,17 +20,25 @@ import {
 } from 'src/common/components/table';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
-import { useSelector } from 'src/common/redux/store';
+import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { TABLE_HEAD } from '../constant';
-import { endDateState, searchTextState, startDateState } from '../eventPromotionIV.slice';
+import {
+  endDateState,
+  isResetSelectState,
+  searchTextState,
+  setIsResetSelect,
+  setSelectedIds,
+  startDateState,
+} from '../eventPromotionIV.slice';
 import { useDeleteEvents } from '../hooks/useDeleteEvent';
 import { useGetListEvent } from '../hooks/useGetListEvent';
 import { EventSearchParams, PaginationProps, RowProps } from '../interface';
 import { EventTableRow } from './EventTableRow';
 export const EventTable = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { onChangeRowsPerPage, dense, onChangeDense, page, rowsPerPage, onChangePage } =
     useTable();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
@@ -37,6 +46,7 @@ export const EventTable = () => {
   const startDateValue = useSelector(startDateState);
   const endDateValue = useSelector(endDateState);
   const searchTextValue = useSelector(searchTextState);
+  const isResetSelect = useSelector(isResetSelectState);
 
   const searchParams: EventSearchParams = {
     page: page,
@@ -71,21 +81,31 @@ export const EventTable = () => {
   };
 
   const isNotFound = !dataListEvent.length;
+
+  useEffect(() => {
+    dispatch(setSelectedIds(selectedIds));
+  }, [selectedIds]);
+
+  useEffect(() => {
+    resetSelect();
+    dispatch(setIsResetSelect(false));
+  }, [isResetSelect]);
+
+  const handleViewRow = (id: number) => {
+    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
+  };
+
   const mutationDelete = useDeleteEvents({
     onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
     onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
     onSuccessSend: () => showErrorSnackbar('Sự kiện đã có người trúng không thể xóa'),
   });
 
-  const handleDeleteRows = (idsRowSeleted: number[]) => {
-    if (idsRowSeleted.length) {
-      mutationDelete.mutate(idsRowSeleted);
+  const handleDeleteRows = (selectedIds: number[]) => {
+    if (selectedIds.length) {
+      mutationDelete.mutate(selectedIds);
       resetSelect();
     }
-  };
-
-  const handleViewRow = (id: number) => {
-    navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
   };
 
   return (
@@ -99,17 +119,6 @@ export const EventTable = () => {
               numSelected={selectedIds.length}
               onSelectAllRows={handleCheckAll}
               isSelectAll={isCheckedAll}
-              actions={
-                <Tooltip title="Delete">
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleDeleteRows(selectedIds)}
-                  >
-                    {' '}
-                    <Iconify icon={'eva:trash-2-outline'} />
-                  </IconButton>
-                </Tooltip>
-              }
             />
           )}
           <Table size={dense ? 'small' : 'medium'}>
