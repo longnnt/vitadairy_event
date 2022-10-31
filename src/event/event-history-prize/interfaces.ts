@@ -117,7 +117,8 @@ export interface IEventDetail {
   quantity: number;
   endDate: Dayjs | null | string;
   startDate: Dayjs | null | string;
-  name: string;
+  name?: string;
+  extraquantity?: number;
 }
 
 export interface IResTransaction {
