@@ -99,8 +99,8 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
 
 export const TABLE_HEAD_GIFT = [
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'type', label: 'Type', align: 'left' },
-  { id: 'money', label: 'Money', align: 'left' },
+  { id: 'type', label: 'Type', align: 'center' },
+  { id: 'money', label: 'Money', align: 'right' },
 ];
 
 export const formatDateNews = 'dd-MM-yyyy ';
@@ -140,8 +140,7 @@ export const StyleGift = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
-  height: 500,
+  width: 900,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
