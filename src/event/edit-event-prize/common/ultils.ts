@@ -38,15 +38,15 @@ export const convertToJson = (csv: any) => {
   return result;
 };
 
-export const convertNameProvinceToId = (name: string, provinceOp: ISelect[]) => {
-  const idProvince = provinceOp?.find((item: ISelect) => {
-    return item.label === name;
-  });
-  return idProvince?.value;
-};
+// export const convertNameProvinceToId = (name: string, provinceOp: ISelect[]) => {
+//   const idProvince = provinceOp?.find((item: ISelect) => {
+//     return item.label === name;
+//   });
+//   return idProvince?.value;
+// };
 
 export const validateFileImportFormat = (file: any) => {
-  const testArr = ['name', 'extraquantity', 'startDate', 'endDate'];
+  const testArr = ['provinceId', 'extraquantity', 'startDate', 'endDate'];
   const testProperties = Object.keys(file);
   let result = true;
   const found = testProperties?.every((t: string) => testArr.includes(t));

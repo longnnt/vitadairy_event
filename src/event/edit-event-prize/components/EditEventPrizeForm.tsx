@@ -37,11 +37,7 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GiftModal } from './GìiftModal';
-import {
-  convertExcelFileToObj,
-  convertNameProvinceToId,
-  validateFileImportFormat,
-} from '../common/ultils';
+import { convertExcelFileToObj, validateFileImportFormat } from '../common/ultils';
 import Iconify from 'src/common/components/Iconify';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
@@ -191,11 +187,9 @@ export const EditEventPrizeForm = () => {
           showErrorSnackbar('File import  không đúng định dạng');
           return;
         }
-
-        const ID = convertNameProvinceToId(item.name, provinceOptions);
-        item = { ...item, quantity: 0, provinceId: ID };
+        // const ID = convertNameProvinceToId(item.name, provinceOptions);
+        item = { ...item, quantity: 0, provinceId: item.provinceId };
         delete item.name;
-
         if (item.endDate || item.startDate) {
           const startDate = new Date(item.startDate);
           const endDate = new Date(item.endDate);
