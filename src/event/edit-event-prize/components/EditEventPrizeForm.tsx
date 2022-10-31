@@ -37,11 +37,7 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GiftModal } from './GìiftModal';
-import {
-  convertExcelFileToObj,
-  convertNameProvinceToId,
-  validateFileImportFormat,
-} from '../common/ultils';
+import { convertExcelFileToObj, validateFileImportFormat } from '../common/ultils';
 import Iconify from 'src/common/components/Iconify';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
@@ -102,8 +98,10 @@ export const EditEventPrizeForm = () => {
   useDeepCompareEffect(() => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
   }, [giftDetail]);
-
+  // ------------mutate---------------
+  const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
+  const [mutateSuccess, setMutateSuccess] = useState<boolean>(false);
   const onSubmit = (data: IFormEdit) => {
     const tempDta = { ...data };
     delete tempDta.typeUser;
@@ -132,12 +130,23 @@ export const EditEventPrizeForm = () => {
     mutate(tempDta, {
       onSuccess: () => {
         showSuccessSnackbar('edit successfully');
+        setFileImport([]);
+        setMutateSuccess(!mutateSuccess);
+        setProvinceCount(provinceWatch.length);
       },
       onError: () => {
         showErrorSnackbar('edit fail');
       },
     });
   };
+
+  useDeepCompareEffect(() => {
+    if (mutateSuccess) {
+      for (let i = 0; i < provinceWatch.length; i++) {
+        setValue(`eventDetailProvinces.${i}.extraquantity`, 0);
+      }
+    }
+  }, [mutateSuccess]);
 
   const handleCountProvince = () => {
     const temp = provinceCount;
@@ -146,6 +155,7 @@ export const EditEventPrizeForm = () => {
   };
 
   const provinceWatch = watch('eventDetailProvinces');
+
   const handleRemoveProvince = (index: number) => {
     const tempArr = [...provinceWatch];
     tempArr.splice(index, 1);
@@ -173,8 +183,7 @@ export const EditEventPrizeForm = () => {
 
   // ---------------set import file----------------------
 
-  const ref = useRef<HTMLInputElement>(null);
-  const [fileImport, setFileImport] = useState<IEventProvince[]>();
+  const [fileImport, setFileImport] = useState<IEventProvince[]>([]);
   const handleOnInuputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
@@ -183,31 +192,30 @@ export const EditEventPrizeForm = () => {
   };
 
   useDeepCompareEffect(() => {
-    if (fileImport && provinceOptions) {
-      const tempDta = fileImport.map((item: any) => {
-        const test = validateFileImportFormat(item);
+    if (fileImport?.length > 0 && provinceOptions) {
+      setMutateSuccess(false);
+      const test = validateFileImportFormat(fileImport);
 
-        if (test === false) {
-          showErrorSnackbar('File import  không đúng định dạng');
-          return;
-        }
+      if (!test) {
+        showErrorSnackbar('File import  không đúng định dạng');
+        return;
+      } else {
+        showSuccessSnackbar('import file thành công');
+        const tempDta = fileImport.map((item: any) => {
+          item = { ...item, quantity: 0, provinceId: item.provinceId };
+          delete item.name;
+          if (item.endDate || item.startDate) {
+            const startDate = new Date(item.startDate);
+            const endDate = new Date(item.endDate);
+            item = { ...item, startDate: startDate, endDate: endDate };
+          }
+          return item;
+        });
 
-        const ID = convertNameProvinceToId(item.name, provinceOptions);
-        item = { ...item, quantity: 0, provinceId: ID };
-        delete item.name;
-
-        if (item.endDate || item.startDate) {
-          const startDate = new Date(item.startDate);
-          const endDate = new Date(item.endDate);
-          item = { ...item, startDate: startDate, endDate: endDate };
-        }
-        return item;
-      });
-
-      const temp = provinceCount;
-      setProvinceCount(temp + fileImport.length);
-      setValue('eventDetailProvinces', provinceWatch.concat(tempDta));
-      showSuccessSnackbar('import file thành công');
+        const temp = provinceCount;
+        setProvinceCount(temp + fileImport.length);
+        setValue('eventDetailProvinces', provinceWatch.concat(tempDta));
+      }
     }
   }, [fileImport]);
 
