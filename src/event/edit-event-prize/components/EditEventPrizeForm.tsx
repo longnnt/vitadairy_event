@@ -457,7 +457,7 @@ export const EditEventPrizeForm = () => {
                 >
                   <input
                     type="file"
-                    accept="xlsx"
+                    accept="xlsx,CSV"
                     ref={ref}
                     style={{ display: 'none' }}
                     onChange={(e) => handleOnInuputFile(e)}
