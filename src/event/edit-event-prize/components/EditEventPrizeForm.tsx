@@ -519,7 +519,7 @@ export const EditEventPrizeForm = () => {
                               <MobileDateTimePicker
                                 {...field}
                                 key="startDate"
-                                label="End date"
+                                label="Start date"
                                 inputFormat="dd/MM/yyyy hh:mm a"
                                 renderInput={(params: any) => (
                                   <TextField {...params} fullWidth />
