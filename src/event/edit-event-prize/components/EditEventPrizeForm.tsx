@@ -131,7 +131,7 @@ export const EditEventPrizeForm = () => {
       onSuccess: () => {
         showSuccessSnackbar('edit successfully');
         setFileImport([]);
-        setMutateSuccess(true);
+        setMutateSuccess(!mutateSuccess);
         setProvinceCount(provinceWatch.length);
       },
       onError: () => {
@@ -142,7 +142,7 @@ export const EditEventPrizeForm = () => {
 
   useDeepCompareEffect(() => {
     if (mutateSuccess) {
-      for (let i = 0; i < provinceCount; i++) {
+      for (let i = 0; i < provinceWatch.length; i++) {
         setValue(`eventDetailProvinces.${i}.extraquantity`, 0);
       }
     }
