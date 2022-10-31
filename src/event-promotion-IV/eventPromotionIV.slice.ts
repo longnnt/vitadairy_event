@@ -10,6 +10,8 @@ const initialValue: initialValueProps = {
   eventDetail: {} as IEventFormData,
   userType: 'allUser',
   buttonType: '',
+  selectedIds: [],
+  isResetSelect: false,
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -42,6 +44,12 @@ const eventPromotionIVSlice = createSlice({
     setButtonType: (state, action) => {
       state.buttonType = action.payload;
     },
+    setSelectedIds: (state, action) => {
+      state.selectedIds = action.payload;
+    },
+    setIsResetSelect: (state, action) => {
+      state.isResetSelect = action.payload;
+    },
   },
 });
 
@@ -55,6 +63,8 @@ export const {
   setEventDetail,
   setUserType,
   setButtonType,
+  setSelectedIds,
+  setIsResetSelect,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -64,3 +74,6 @@ export const openMenuState = (state: RootState) => state.eventPromotionIV.isOpen
 export const eventDetailState = (state: RootState) => state.eventPromotionIV.eventDetail;
 export const userTypeState = (state: RootState) => state.eventPromotionIV.userType;
 export const buttonTypeState = (state: RootState) => state.eventPromotionIV.buttonType;
+export const selectedIdsState = (state: RootState) => state.eventPromotionIV.selectedIds;
+export const isResetSelectState = (state: RootState) =>
+  state.eventPromotionIV.isResetSelect;

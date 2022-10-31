@@ -13,6 +13,7 @@ export const convertExcelFileToObj = (file: any, setFileImport: any) => {
     const ws = wb.Sheets[wsname];
     const data = XLSX.utils.sheet_to_csv(ws);
     convertDta = convertToJson(data);
+
     setFileImport(convertDta);
   };
 
@@ -38,30 +39,26 @@ export const convertToJson = (csv: any) => {
   return result;
 };
 
-export const convertNameProvinceToId = (name: string, provinceOp: ISelect[]) => {
-  const idProvince = provinceOp?.find((item: ISelect) => {
-    return item.label === name;
-  });
-  return idProvince?.value;
-};
-
-export const validateFileImportFormat = (file: any) => {
-  const testArr = ['name', 'extraquantity', 'startDate', 'endDate'];
-  const testProperties = Object.keys(file);
+export const validateFileImportFormat = (files: any) => {
+  const testArr = ['provinceId', 'extraquantity', 'startDate', 'endDate', 'provinceName'];
   let result = true;
-  const found = testProperties?.every((t: string) => testArr.includes(t));
+  files?.map((item: any) => {
+    const testProperties = Object.keys(item);
+    const found = testProperties?.every((t: string) => testArr.includes(t));
 
-  if (found === false) {
-    result = false;
-    return result;
-  }
-  const startTime = new Date(file.startDate);
-  const endTime = new Date(file.endDate);
+    if (found === false) {
+      result = false;
+      // return result;
+      return;
+    }
+    const startTime = new Date(item.startDate);
+    const endTime = new Date(item.endDate);
 
-  if (!(startTime instanceof Date) || !(endTime instanceof Date)) {
-    result = false;
-    return result;
-  }
+    if (!(startTime instanceof Date) || !(endTime instanceof Date)) {
+      result = false;
+      return;
+    }
+  });
 
   return result;
 };
