@@ -3,7 +3,7 @@ import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/mate
 import { Container } from '@mui/system';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
   FormProvider,
@@ -41,6 +41,8 @@ import { convertExcelFileToObj, validateFileImportFormat } from '../common/ultil
 import Iconify from 'src/common/components/Iconify';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
+import _ from 'lodash';
+
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
@@ -81,9 +83,12 @@ export const EditEventPrizeForm = () => {
     handleSubmit,
     reset,
     control,
+    resetField,
+    trigger,
     watch,
     formState: { isSubmitting, errors },
   } = methods;
+  const provinceWatch = watch('eventDetailProvinces');
 
   useDeepCompareEffect(() => {
     if (dtaEventPrizeById?.response) {
@@ -102,6 +107,7 @@ export const EditEventPrizeForm = () => {
   const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
   const [mutateSuccess, setMutateSuccess] = useState<boolean>(false);
+
   const onSubmit = (data: IFormEdit) => {
     const tempDta = { ...data };
     delete tempDta.typeUser;
@@ -131,8 +137,12 @@ export const EditEventPrizeForm = () => {
       onSuccess: () => {
         showSuccessSnackbar('edit successfully');
         setFileImport([]);
-        setMutateSuccess(!mutateSuccess);
+        setMutateSuccess(true);
         setProvinceCount(provinceWatch.length);
+
+        for (let i = 0; i < provinceWatch.length; i++) {
+          resetField(`eventDetailProvinces.${i}.extraquantity`);
+        }
       },
       onError: () => {
         showErrorSnackbar('edit fail');
@@ -140,21 +150,11 @@ export const EditEventPrizeForm = () => {
     });
   };
 
-  useDeepCompareEffect(() => {
-    if (mutateSuccess) {
-      for (let i = 0; i < provinceWatch.length; i++) {
-        setValue(`eventDetailProvinces.${i}.extraquantity`, 0);
-      }
-    }
-  }, [mutateSuccess]);
-
   const handleCountProvince = () => {
     const temp = provinceCount;
     setProvinceCount(temp + 1);
     setValue(`eventDetailProvinces.${temp}`, DEDAULT_PROVINCE);
   };
-
-  const provinceWatch = watch('eventDetailProvinces');
 
   const handleRemoveProvince = (index: number) => {
     const tempArr = [...provinceWatch];
@@ -193,7 +193,6 @@ export const EditEventPrizeForm = () => {
 
   useDeepCompareEffect(() => {
     if (fileImport?.length > 0 && provinceOptions) {
-      setMutateSuccess(false);
       const test = validateFileImportFormat(fileImport);
 
       if (!test) {
@@ -214,59 +213,19 @@ export const EditEventPrizeForm = () => {
 
         const temp = provinceCount;
         setProvinceCount(temp + fileImport.length);
-        setValue('eventDetailProvinces', provinceWatch.concat(tempDta));
+        setValue(
+          'eventDetailProvinces',
+          _.sortBy(provinceWatch.concat(tempDta), (o) => o.provinceId)
+        );
       }
     }
   }, [fileImport]);
+  useDeepCompareEffect(() => {
+    const provinceSort = _.sortBy(provinceWatch, (o) => o.provinceId);
 
-  // const importFile = async (event: any) => {
-  //   try {
-  //     const allowedExtensions = ['csv'];
-  //     if (event.target.files.length) {
-  //       const inputFile = event.target.files[0];
-
-  //       const fileExtension = inputFile?.type.split('/')[1];
-  //       if (!allowedExtensions.includes(fileExtension)) {
-  //         showErrorSnackbar('không phải file csv');
-  //         return;
-  //       }
-  //     }
-
-  //     if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
-
-  //     parse(event.target.files[0], {
-  //       header: true,
-  //       download: true,
-  //       skipEmptyLines: true,
-  //       delimiter: ',',
-  //       encoding: 'utf-8',
-  //       complete: (results: ParseResult<ProvinceCSV>) => {
-  //         const provinceImportData: ProvinceCSV[] = results.data;
-  //         console.log('results', results);
-
-  //         // setProvinceCount(provinceImportData.length);
-  //         // const customProvinceData = provinceImportData.map(item => ({
-  //         //   endDate: item.end_date,
-  //         //   id: item.id,
-  //         //   provinceName: item.province_name,
-  //         //   quantity: item.amount,
-  //         //   startDate: item.start_date,
-  //         // }))
-
-  //         // const customDateEventPrize = {
-  //         //   ...dtaEventPrizeById,
-  //         //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
-  //         // }
-
-  //         // reset(customDateEventPrize.response);
-  //         showSuccessSnackbar('import file thành công');
-  //       },
-  //     });
-  //   } catch (e) {
-  //     // console.log(e);
-  //     showErrorSnackbar('Không import file thành công!');
-  //   }
-  // };
+    setValue('eventDetailProvinces', provinceSort);
+    trigger('eventDetailProvinces');
+  }, [provinceWatch, mutateSuccess]);
 
   return (
     <>
@@ -354,7 +313,7 @@ export const EditEventPrizeForm = () => {
 
                   <RHFTextField name="popupCode" key={'popupCode'} label="popupCode" />
                   <RHFRadioGroup
-                    sx={{ justifyContent: 'space-around' }}
+                    sx={{ justifyContent: 'flex-start' }}
                     name="typeUser"
                     defaultValue={'gift'}
                     onChange={(e) => {
@@ -362,8 +321,8 @@ export const EditEventPrizeForm = () => {
                     }}
                     options={[
                       { label: 'Tặng quà', value: 'gift' },
-                      { label: 'Tặng điểm', value: 'point' },
-                      { label: 'Tặng quà và điểm', value: 'giftandpoint' },
+                      // { label: 'Tặng điểm', value: 'point' },
+                      // { label: 'Tặng quà và điểm', value: 'giftandpoint' },
                     ]}
                   />
                   {giftPoint === 'gift' && (
@@ -388,7 +347,7 @@ export const EditEventPrizeForm = () => {
                       )}
                     </Stack>
                   )}
-                  {giftPoint === 'point' && (
+                  {/* {giftPoint === 'point' && (
                     <RHFTextField name="point" key={'point'} label="Nhập điểm" />
                   )}
                   {giftPoint === 'giftandpoint' && (
@@ -408,7 +367,7 @@ export const EditEventPrizeForm = () => {
                         label="Nhập điểm"
                       />
                     </Stack>
-                  )}
+                  )} */}
                   <GiftModal
                     open={open}
                     handleClose={handleClose}
