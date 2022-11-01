@@ -73,5 +73,7 @@ export const PATH_DASHBOARD = {
     listPrize: (eventID: string) =>
       path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
     editEventPrize: path(ROOTS_DASHBOARD, '/event/event-prize-edit/:id'),
+    editFileEvent: (idEvent: number) =>
+      path(ROOTS_DASHBOARD, `/event/event-prize-edit/${idEvent}`),
   },
 };

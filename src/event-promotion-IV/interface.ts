@@ -18,11 +18,12 @@ export interface initialValueProps {
   startDate: Date | null;
   endDate: Date | null;
   searchText: string;
-  isFilter: boolean;
-  isDeleteSelected: boolean;
+  buttonType: string;
   isOpenMenu: HTMLElement | null;
   eventDetail: IEventFormData;
   userType: 'allUser' | 'newUser';
+  selectedIds: number[];
+  isResetSelect: boolean;
 }
 
 export type TimeProps = Date | null;

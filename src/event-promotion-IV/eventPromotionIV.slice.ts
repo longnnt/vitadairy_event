@@ -6,11 +6,12 @@ const initialValue: initialValueProps = {
   startDate: null,
   endDate: null,
   searchText: '',
-  isFilter: false,
-  isDeleteSelected: false,
   isOpenMenu: null,
   eventDetail: {} as IEventFormData,
   userType: 'allUser',
+  buttonType: '',
+  selectedIds: [],
+  isResetSelect: false,
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -40,6 +41,15 @@ const eventPromotionIVSlice = createSlice({
     setUserType: (state, action) => {
       state.userType = action.payload;
     },
+    setButtonType: (state, action) => {
+      state.buttonType = action.payload;
+    },
+    setSelectedIds: (state, action) => {
+      state.selectedIds = action.payload;
+    },
+    setIsResetSelect: (state, action) => {
+      state.isResetSelect = action.payload;
+    },
   },
 });
 
@@ -52,6 +62,9 @@ export const {
   udpateStatusMenu,
   setEventDetail,
   setUserType,
+  setButtonType,
+  setSelectedIds,
+  setIsResetSelect,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -60,3 +73,7 @@ export const searchTextState = (state: RootState) => state.eventPromotionIV.sear
 export const openMenuState = (state: RootState) => state.eventPromotionIV.isOpenMenu;
 export const eventDetailState = (state: RootState) => state.eventPromotionIV.eventDetail;
 export const userTypeState = (state: RootState) => state.eventPromotionIV.userType;
+export const buttonTypeState = (state: RootState) => state.eventPromotionIV.buttonType;
+export const selectedIdsState = (state: RootState) => state.eventPromotionIV.selectedIds;
+export const isResetSelectState = (state: RootState) =>
+  state.eventPromotionIV.isResetSelect;
