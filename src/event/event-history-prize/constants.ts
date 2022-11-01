@@ -133,6 +133,9 @@ export const COLUMNS_HEADERS: Array<string> = [
   'startDate',
   'endDate',
 ];
+
+export const SuccessUploadCode = 1000;
+
 export const FormatDate = 'DD/MM/YYYY';
 
 export const StyleGift = {
