@@ -17,7 +17,6 @@ export const useAddEvent = (callback: IStoreAdminCallback) => {
 
   return useMutation(addEvent, {
     onSuccess: (rs, variables) => {
-      console.log(variables);
       if (rs.data?.meta?.status === SuccessUploadCode) {
         queryClient.invalidateQueries([QUERY_KEYS.EVENT_CREATE_PRIZE]);
         const idEvent = rs?.data?.response?.id;
