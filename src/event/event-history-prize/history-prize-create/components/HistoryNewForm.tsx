@@ -7,15 +7,13 @@ import {
   Card,
   FormControlLabel,
   Grid,
-  Modal,
-  Radio,
+  Modal, Paper, Radio,
   RadioGroup,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
-  Paper,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -31,14 +29,13 @@ import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField,
+  RHFTextField
 } from 'src/common/components/hook-form';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import {
   COLUMNS_HEADERS,
   defaultValues,
@@ -46,14 +43,14 @@ import {
   popupTypeOption,
   POPUP_TYPE,
   StyleGift,
-  TABLE_HEAD_GIFT,
+  TABLE_HEAD_GIFT
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
 import {
   buttonTypeState,
   giftSelecttor,
   setButtonType,
-  setGift,
+  setGift
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
@@ -63,13 +60,12 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
-  ISelectPopup,
+  ISelectPopup
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { isTemplateExpression } from 'typescript';
 
 dayjs.extend(customParseFormat);
 
@@ -163,6 +159,7 @@ export default function HistoryNewForm() {
     });
   };
 
+
   const onError = () => {
     enqueueSnackbar('Lưu thất bại', {
       variant: 'error',
@@ -184,17 +181,6 @@ export default function HistoryNewForm() {
 
   const params = useParams();
   const id = params?.id;
-  useEffect(() => {
-    const idEvent = data?.data?.response?.id;
-    if (isSuccess && redirect) {
-      if (buttonTypeValue === 'saveEditSubmit') {
-        navigate(`/dashboard/event/event-prize-edit/${idEvent}`);
-      } else {
-        console.log(data);
-        navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
-      }
-    }
-  }, [isSuccess]);
   const idEventPrize = parseInt(id as string);
 
   const { data: addTransaction } = useGetAllTranSacTion();
@@ -331,11 +317,7 @@ export default function HistoryNewForm() {
         money: '',
       })
     );
-    mutate(dataEvent, {
-      onSuccess: () => {
-        showSuccessSnackbar('Lưu file thành công');
-      },
-    });
+    mutate(dataEvent);
   };
   return (
     <>
@@ -725,6 +707,7 @@ export default function HistoryNewForm() {
                 variant="outlined"
                 size="large"
                 type="submit"
+                onClick={() => dispatch(setButtonType('saveSubmit'))}
               >
                 Lưu
               </LoadingButton>
@@ -738,7 +721,7 @@ export default function HistoryNewForm() {
                 // onClick={(e) => {
                 //   setRedirect(false);
                 // }}
-                onClick={() => dispatch(setButtonType('saveEditSubmit'))}
+                onClick={() => dispatch(setButtonType('saveCreateSubmit'))}
               >
                 Lưu & Chỉnh sửa
               </LoadingButton>
