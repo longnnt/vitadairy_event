@@ -7,13 +7,15 @@ import {
   Card,
   FormControlLabel,
   Grid,
-  Modal, Paper, Radio,
+  Modal,
+  Paper,
+  Radio,
   RadioGroup,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
-  Typography
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -29,7 +31,7 @@ import {
   FormProvider,
   RHFEditor,
   RHFSelect,
-  RHFTextField
+  RHFTextField,
 } from 'src/common/components/hook-form';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
@@ -43,14 +45,14 @@ import {
   popupTypeOption,
   POPUP_TYPE,
   StyleGift,
-  TABLE_HEAD_GIFT
+  TABLE_HEAD_GIFT,
 } from '../../constants';
 import { eventPrizeSchema } from '../../event.schema';
 import {
   buttonTypeState,
   giftSelecttor,
   setButtonType,
-  setGift
+  setGift,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
@@ -60,7 +62,7 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
-  ISelectPopup
+  ISelectPopup,
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
@@ -158,7 +160,6 @@ export default function HistoryNewForm() {
       variant: 'success',
     });
   };
-
 
   const onError = () => {
     enqueueSnackbar('Lưu thất bại', {
@@ -567,7 +568,6 @@ export default function HistoryNewForm() {
                     <Button
                       color="inherit"
                       onClick={() => {
-                        // setidHolder((idHolder || 0) + 1);
                         setDataCities([
                           ...dataCities,
                           {
@@ -637,8 +637,6 @@ export default function HistoryNewForm() {
                                   key="startDate"
                                   label="Ngày bắt đầu"
                                   inputFormat="dd/MM/yyyy"
-                                  // value={dayjs(item.startDate  || null, formatDate)}
-
                                   renderInput={(params: any) => (
                                     <TextField
                                       {...params}
@@ -665,8 +663,6 @@ export default function HistoryNewForm() {
                                   key="endDate"
                                   label="Ngày kết thúc"
                                   inputFormat="dd/MM/yyyy"
-                                  // value={dayjs(item.endDate  || null, formatDate)}
-                                  // onChange={(e) => handleChangeCity(e, item)}
                                   renderInput={(params: any) => (
                                     <TextField
                                       {...params}
