@@ -15,9 +15,9 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
     >
       <TableCell align="left">{name}</TableCell>
 
-      <TableCell align="left">{type}</TableCell>
+      <TableCell align="center">{type}</TableCell>
 
-      <TableCell align="left">{money}</TableCell>
+      <TableCell align="right">{money}</TableCell>
     </TableRow>
   );
 }

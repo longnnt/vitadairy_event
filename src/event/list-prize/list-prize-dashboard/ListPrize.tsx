@@ -70,6 +70,8 @@ function ListPrizeDashboard() {
   const id = params?.id;
   const searchParams: IListPrizeParams = {
     eventId: id,
+    page: page,
+    size: rowsPerPage,
   };
   const filterName = useSelector(filterNameSelector);
   if (filterName) searchParams.searchText = filterName;

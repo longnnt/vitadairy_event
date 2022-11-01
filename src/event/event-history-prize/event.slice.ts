@@ -7,6 +7,7 @@ type StateProps = {
   startDate: Date | null;
   endDate: Date | null;
   gift: IGift;
+  buttonType: string;
 };
 
 export const initialState: StateProps = {
@@ -14,6 +15,7 @@ export const initialState: StateProps = {
   startDate: null,
   endDate: null,
   gift: {} as IGift,
+  buttonType: '',
 };
 
 export const eventAdminSlice = createSlice({
@@ -32,15 +34,24 @@ export const eventAdminSlice = createSlice({
     setGift: (state, action: PayloadAction<IGift>) => {
       state.gift = action.payload;
     },
+    setButtonType: (state, action) => {
+      state.buttonType = action.payload;
+    },
   },
 });
 
-export const { setFirstScanEndDate, setFirstScanStartDate, setSearchText, setGift } =
-  eventAdminSlice.actions;
+export const {
+  setFirstScanEndDate,
+  setFirstScanStartDate,
+  setSearchText,
+  setGift,
+  setButtonType,
+} = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
 export const firstScanStartSelector = (state: RootState) => state.historyList.startDate;
 export const firstScanEndSelector = (state: RootState) => state.historyList.endDate;
 export const giftSelecttor = (state: RootState) => state.historyList.gift;
+export const buttonTypeState = (state: RootState) => state.historyList.buttonType;
 
 export default eventAdminSlice.reducer;
