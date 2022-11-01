@@ -1,4 +1,4 @@
-import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
+import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';

@@ -104,6 +104,7 @@ function ListPrizeDashboard() {
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;
+
   return (
     <>
       <HeaderBreadcrumbs
@@ -124,6 +125,13 @@ function ListPrizeDashboard() {
               component={RouterLink}
             >
               Tạo mới
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDeleteRows(selectedIds)}
+            >
+              Xóa
             </Button>
           </Stack>
         }
