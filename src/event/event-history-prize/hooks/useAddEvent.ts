@@ -22,7 +22,7 @@ export const useAddEvent = (callback: IStoreAdminCallback) => {
         const idEvent = rs?.data?.response?.id;
         callback.onSuccess && callback.onSuccess();
         if (buttonType === 'saveCreateSubmit') {
-          navigate(`/dashboard/event/event-prize-edit/${idEvent}`);
+          navigate(PATH_DASHBOARD.eventAdmin.editFileEvent(+idEvent));
         } else if (buttonType === 'saveSubmit') {
           navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
         }

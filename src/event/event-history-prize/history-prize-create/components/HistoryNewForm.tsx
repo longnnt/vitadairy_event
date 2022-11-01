@@ -167,7 +167,7 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate, isSuccess, data } = useAddEvent({ onSuccess, onError });
+  const { mutate } = useAddEvent({ onSuccess, onError });
 
   useEffect(() => {
     dispatch(
