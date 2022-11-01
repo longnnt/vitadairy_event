@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Grid,
   Modal,
+  Paper,
   Radio,
   RadioGroup,
   Table,
@@ -15,7 +16,6 @@ import {
   TableContainer,
   TablePagination,
   Typography,
-  Paper,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -38,7 +38,6 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import {
   COLUMNS_HEADERS,
   defaultValues,
@@ -69,7 +68,6 @@ import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { isTemplateExpression } from 'typescript';
 
 dayjs.extend(customParseFormat);
 
@@ -169,7 +167,7 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate, isSuccess, data } = useAddEvent({ onSuccess, onError });
+  const { mutate } = useAddEvent({ onSuccess, onError });
 
   useEffect(() => {
     dispatch(
@@ -184,17 +182,6 @@ export default function HistoryNewForm() {
 
   const params = useParams();
   const id = params?.id;
-  useEffect(() => {
-    const idEvent = data?.data?.response?.id;
-    if (isSuccess && redirect) {
-      if (buttonTypeValue === 'saveEditSubmit') {
-        navigate(`/dashboard/event/event-prize-edit/${idEvent}`);
-      } else {
-        console.log(data);
-        navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
-      }
-    }
-  }, [isSuccess]);
   const idEventPrize = parseInt(id as string);
 
   const { data: addTransaction } = useGetAllTranSacTion();
@@ -331,11 +318,7 @@ export default function HistoryNewForm() {
         money: '',
       })
     );
-    mutate(dataEvent, {
-      onSuccess: () => {
-        showSuccessSnackbar('Lưu file thành công');
-      },
-    });
+    mutate(dataEvent);
   };
   return (
     <>
@@ -585,7 +568,6 @@ export default function HistoryNewForm() {
                     <Button
                       color="inherit"
                       onClick={() => {
-                        // setidHolder((idHolder || 0) + 1);
                         setDataCities([
                           ...dataCities,
                           {
@@ -655,8 +637,6 @@ export default function HistoryNewForm() {
                                   key="startDate"
                                   label="Ngày bắt đầu"
                                   inputFormat="dd/MM/yyyy"
-                                  // value={dayjs(item.startDate  || null, formatDate)}
-
                                   renderInput={(params: any) => (
                                     <TextField
                                       {...params}
@@ -683,8 +663,6 @@ export default function HistoryNewForm() {
                                   key="endDate"
                                   label="Ngày kết thúc"
                                   inputFormat="dd/MM/yyyy"
-                                  // value={dayjs(item.endDate  || null, formatDate)}
-                                  // onChange={(e) => handleChangeCity(e, item)}
                                   renderInput={(params: any) => (
                                     <TextField
                                       {...params}
@@ -725,6 +703,7 @@ export default function HistoryNewForm() {
                 variant="outlined"
                 size="large"
                 type="submit"
+                onClick={() => dispatch(setButtonType('saveSubmit'))}
               >
                 Lưu
               </LoadingButton>
@@ -738,7 +717,7 @@ export default function HistoryNewForm() {
                 // onClick={(e) => {
                 //   setRedirect(false);
                 // }}
-                onClick={() => dispatch(setButtonType('saveEditSubmit'))}
+                onClick={() => dispatch(setButtonType('saveCreateSubmit'))}
               >
                 Lưu & Chỉnh sửa
               </LoadingButton>
