@@ -11,7 +11,6 @@ export const eventPrizeSchema = Yup.object().shape({
   giftId: Yup.number().required('This field is required'),
   popupCode: Yup.string().required('This field is required'),
   popupImageLink: Yup.string().required('This field is required'),
-  // popupLink: Yup.string().required('This field is required'),
   popupType: Yup.string()
     .required('This field is required')
     .test('testPopUpTye', 'This field is required', (value) => value !== ''),
