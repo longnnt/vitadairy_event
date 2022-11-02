@@ -383,7 +383,6 @@ export const EditEventPrizeForm = () => {
                   sx={{ mt: 3, alignSelf: 'flex-end' }}
                 >
                   <input
-                    multiple
                     type="file"
                     accept="xlsx,CSV"
                     ref={ref}
