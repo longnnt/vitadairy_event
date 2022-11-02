@@ -182,6 +182,7 @@ export const EditEventPrizeForm = () => {
 
   const handleOnInuputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+
     if (files && files[0]) {
       convertExcelFileToObj(files[0], setFileImport, fileImport);
     }
@@ -285,7 +286,22 @@ export const EditEventPrizeForm = () => {
                     />
                   )}
 
-                  <RHFTextField name="popupCode" key={'popupCode'} label="popupCode" />
+                  <RHFSelect
+                    name="popupCode"
+                    key={'popupCode'}
+                    label="Pop up Code"
+                    placeholder="Pop up Code"
+                    margin="dense"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setValue('popupCode', val);
+                    }}
+                  >
+                    <option value=""></option>
+                    <option value="pp">PUZZLE PIECE</option>
+                    <option value="o">OGGI</option>
+                    <option value="fs">FULL_SCREEN</option>
+                  </RHFSelect>
                   <RHFRadioGroup
                     sx={{ justifyContent: 'flex-start' }}
                     name="typeUser"
