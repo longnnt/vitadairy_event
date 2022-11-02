@@ -140,7 +140,7 @@ export const EditEventPrizeForm = () => {
     setFileImport([
       ...fileImport,
       {
-        provinceId: fileImport.length + 100,
+        provinceId: fileImport.length + Math.floor(Math.random() * 100) + 1,
         startDate: new Date(),
         endDate: new Date(),
         quantity: 0,

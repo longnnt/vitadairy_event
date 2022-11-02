@@ -51,9 +51,11 @@ export const validateFileImportFormat = (files: any) => {
   ];
   let result = true;
   files?.map((item: any) => {
-    const testProperties = Object.keys(item);
-    const found = testProperties?.every((t: string) => testPropsName.includes(t));
-    if (found === false) {
+    const propsfileImportName = Object.keys(item);
+    const rightFormatName = propsfileImportName?.every((t: string) =>
+      testPropsName.includes(t)
+    );
+    if (rightFormatName === false) {
       result = false;
       return;
     }
