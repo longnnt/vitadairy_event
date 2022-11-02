@@ -12,9 +12,9 @@ import listPrizeReducer from 'src/event/list-prize/event.slice';
 
 // ----------------------------------------------------------------------
 const rootPersistConfig = {
-  key: 'vitadairy',
+  key: 'root',
   storage,
-  keyPrefix: 'auth-',
+  keyPrefix: 'redux-',
   whitelist: ['authLogin', 'login'],
 };
 
