@@ -12,7 +12,13 @@ import {
   RHFSelect,
   RHFTextField,
 } from 'src/common/components/hook-form';
-import { DEFAULT_FORM_VALUE, popupTypeOption, POPUP_TYPE } from '../common/constants';
+import {
+  DATE_FORMAT,
+  DEFAULT_FORM_VALUE,
+  NO_ID,
+  popupTypeOption,
+  POPUP_TYPE,
+} from '../common/constants';
 import {
   IEventProvince,
   IFormEdit,
@@ -82,7 +88,7 @@ export const EditEventPrizeForm = () => {
   } = methods;
 
   const { data: giftDetail } = useGetGiftById(
-    dtaEventPrizeById ? dtaEventPrizeById?.response?.giftId : 0
+    dtaEventPrizeById ? dtaEventPrizeById?.response?.giftId : NO_ID
   );
   useDeepCompareEffect(() => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
@@ -179,8 +185,8 @@ export const EditEventPrizeForm = () => {
     if (files && files[0]) {
       convertExcelFileToObj(files[0], setFileImport, fileImport);
     }
-    const test = validateFileImportFormat(fileImport);
-    if (!test) {
+    const testValidateImport = validateFileImportFormat(fileImport);
+    if (!testValidateImport) {
       showErrorSnackbar('File import  không đúng định dạng');
     } else {
       showSuccessSnackbar('import file thành công');
@@ -446,7 +452,7 @@ export const EditEventPrizeForm = () => {
                               {...field}
                               key="startDate"
                               label="Start date"
-                              inputFormat="dd/MM/yyyy hh:mm a"
+                              inputFormat={DATE_FORMAT}
                               renderInput={(params: any) => (
                                 <TextField {...params} fullWidth />
                               )}
@@ -462,7 +468,7 @@ export const EditEventPrizeForm = () => {
                               {...field}
                               key="startDate"
                               label="End date"
-                              inputFormat="dd/MM/yyyy hh:mm a"
+                              inputFormat={DATE_FORMAT}
                               renderInput={(params: any) => (
                                 <TextField {...params} fullWidth />
                               )}

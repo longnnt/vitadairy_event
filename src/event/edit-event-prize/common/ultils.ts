@@ -1,5 +1,4 @@
 import * as XLSX from 'xlsx';
-import { ISelect } from './interface';
 
 export const convertExcelFileToObj = (file: any, setFileImport: any, fileImport: any) => {
   const reader = new FileReader();
@@ -13,9 +12,9 @@ export const convertExcelFileToObj = (file: any, setFileImport: any, fileImport:
     const ws = wb.Sheets[wsname];
     const data = XLSX.utils.sheet_to_csv(ws);
     convertDta = convertToJson(data);
-    const temp = fileImport.concat(convertDta);
+    const tempCustomDta = fileImport.concat(convertDta);
 
-    setFileImport(temp);
+    setFileImport(tempCustomDta);
   };
 
   if (rABS) {
@@ -41,7 +40,7 @@ export const convertToJson = (csv: any) => {
 };
 
 export const validateFileImportFormat = (files: any) => {
-  const testArr = [
+  const testPropsName = [
     'provinceId',
     'extraquantity',
     'startDate',
@@ -53,7 +52,7 @@ export const validateFileImportFormat = (files: any) => {
   let result = true;
   files?.map((item: any) => {
     const testProperties = Object.keys(item);
-    const found = testProperties?.every((t: string) => testArr.includes(t));
+    const found = testProperties?.every((t: string) => testPropsName.includes(t));
     if (found === false) {
       result = false;
       return;

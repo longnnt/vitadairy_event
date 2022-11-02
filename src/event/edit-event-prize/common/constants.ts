@@ -44,3 +44,6 @@ export const DEFAULT_FORM_VALUE = {
   transactionTypeId: 0,
   winnerAmount: 0,
 };
+
+export const NO_ID = 0;
+export const DATE_FORMAT = 'dd/MM/yyyy hh:mm a';
