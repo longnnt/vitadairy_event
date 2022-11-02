@@ -7,9 +7,11 @@ import { SuccessUploadCode } from '../constants';
 import { buttonTypeState } from '../event.slice';
 import { IStoreAdminCallback } from '../interfaces';
 import { addEvent } from '../services';
+import useMessage from 'src/store-admin/hooks/useMessage';
 
 export const useAddEvent = (callback: IStoreAdminCallback) => {
   const buttonType = useSelector(buttonTypeState);
+  const { showErrorSnackbar } = useMessage();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const params = useParams();
@@ -27,7 +29,7 @@ export const useAddEvent = (callback: IStoreAdminCallback) => {
           navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
         }
       } else {
-        callback.onError && callback.onError();
+        showErrorSnackbar(rs.data?.meta?.msg);
       }
     },
     onError: (error, _variables) => {

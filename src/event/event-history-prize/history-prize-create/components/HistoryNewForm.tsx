@@ -310,14 +310,14 @@ export default function HistoryNewForm() {
       quantity: data.quantity,
       transactionTypeId: data.transactionTypeId,
     };
-    dispatch(
-      setGift({
-        id: 0,
-        name: '',
-        type: '',
-        money: '',
-      })
-    );
+    // dispatch(
+    //   setGift({
+    //     id: 0,
+    //     name: '',
+    //     type: '',
+    //     money: '',
+    //   })
+    // );
     mutate(dataEvent);
   };
   return (

@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
@@ -13,8 +13,9 @@ import {
   RHFTextField,
 } from 'src/common/components/hook-form';
 import {
-  DEDAULT_PROVINCE,
+  DATE_FORMAT,
   DEFAULT_FORM_VALUE,
+  NO_ID,
   popupTypeOption,
   POPUP_TYPE,
 } from '../common/constants';
@@ -41,12 +42,13 @@ import { convertExcelFileToObj, validateFileImportFormat } from '../common/ultil
 import Iconify from 'src/common/components/Iconify';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
+import _ from 'lodash';
+
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-  const [provinceCount, setProvinceCount] = useState<number>(1);
   const [giftPoint, setGiftPoint] = useState<string>('gift');
   const [popupTypeOp, setPopupTypeOp] = useState<string>(POPUP_TYPE.HTML_LINK);
   const [choosenGift, setChoosenGift] = useState<IGiftDetail>();
@@ -68,7 +70,7 @@ export const EditEventPrizeForm = () => {
   const transactionTypeOptions = dtaTransactionType?.response?.map(
     (item: ITransactionType) => ({
       value: item.id,
-      label: item.code,
+      label: item.description,
     })
   );
 
@@ -81,19 +83,12 @@ export const EditEventPrizeForm = () => {
     handleSubmit,
     reset,
     control,
-    watch,
+    resetField,
     formState: { isSubmitting, errors },
   } = methods;
 
-  useDeepCompareEffect(() => {
-    if (dtaEventPrizeById?.response) {
-      setProvinceCount(dtaEventPrizeById?.response?.eventDetailProvinces?.length);
-      reset(dtaEventPrizeById?.response);
-    }
-  }, [dtaEventPrizeById]);
-
   const { data: giftDetail } = useGetGiftById(
-    dtaEventPrizeById ? dtaEventPrizeById?.response?.giftId : 0
+    dtaEventPrizeById ? dtaEventPrizeById?.response?.giftId : NO_ID
   );
   useDeepCompareEffect(() => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
@@ -101,7 +96,7 @@ export const EditEventPrizeForm = () => {
   // ------------mutate---------------
   const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
-  const [mutateSuccess, setMutateSuccess] = useState<boolean>(false);
+
   const onSubmit = (data: IFormEdit) => {
     const tempDta = { ...data };
     delete tempDta.typeUser;
@@ -131,8 +126,9 @@ export const EditEventPrizeForm = () => {
       onSuccess: () => {
         showSuccessSnackbar('edit successfully');
         setFileImport([]);
-        setMutateSuccess(!mutateSuccess);
-        setProvinceCount(provinceWatch.length);
+        for (let i = 0; i < fileImport.length; i++) {
+          resetField(`eventDetailProvinces.${i}.extraquantity`);
+        }
       },
       onError: () => {
         showErrorSnackbar('edit fail');
@@ -140,28 +136,19 @@ export const EditEventPrizeForm = () => {
     });
   };
 
-  useDeepCompareEffect(() => {
-    if (mutateSuccess) {
-      for (let i = 0; i < provinceWatch.length; i++) {
-        setValue(`eventDetailProvinces.${i}.extraquantity`, 0);
-      }
-    }
-  }, [mutateSuccess]);
-
   const handleCountProvince = () => {
-    const temp = provinceCount;
-    setProvinceCount(temp + 1);
-    setValue(`eventDetailProvinces.${temp}`, DEDAULT_PROVINCE);
+    setFileImport([
+      ...fileImport,
+      {
+        provinceId: Math.floor(Math.random() * 100) + 100,
+        startDate: new Date(),
+        endDate: new Date(),
+        quantity: 0,
+      },
+    ]);
   };
-
-  const provinceWatch = watch('eventDetailProvinces');
-
-  const handleRemoveProvince = (index: number) => {
-    const tempArr = [...provinceWatch];
-    tempArr.splice(index, 1);
-    setValue('eventDetailProvinces', tempArr);
-    const temp = provinceCount;
-    setProvinceCount(temp - 1);
+  const handleRemoveProvince = (provinceId: number) => {
+    setFileImport([...fileImport].filter((item) => item.provinceId !== provinceId));
   };
 
   useDeepCompareEffect(() => {
@@ -184,89 +171,35 @@ export const EditEventPrizeForm = () => {
   // ---------------set import file----------------------
 
   const [fileImport, setFileImport] = useState<IEventProvince[]>([]);
+  useDeepCompareEffect(() => {
+    if (dtaEventPrizeById?.response) {
+      setFileImport(
+        _.sortBy(dtaEventPrizeById?.response?.eventDetailProvinces, (o) => o.provinceId)
+      );
+      reset(dtaEventPrizeById?.response);
+    }
+  }, [dtaEventPrizeById]);
+
   const handleOnInuputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
-      convertExcelFileToObj(files[0], setFileImport);
+      convertExcelFileToObj(files[0], setFileImport, fileImport);
+    }
+    const testValidateImport = validateFileImportFormat(fileImport);
+    if (!testValidateImport) {
+      showErrorSnackbar('File import  không đúng định dạng');
+    } else {
+      showSuccessSnackbar('import file thành công');
     }
   };
 
-  useDeepCompareEffect(() => {
-    if (fileImport?.length > 0 && provinceOptions) {
-      setMutateSuccess(false);
-      const test = validateFileImportFormat(fileImport);
-
-      if (!test) {
-        showErrorSnackbar('File import  không đúng định dạng');
-        return;
-      } else {
-        showSuccessSnackbar('import file thành công');
-        const tempDta = fileImport.map((item: any) => {
-          item = { ...item, quantity: 0, provinceId: item.provinceId };
-          delete item.name;
-          if (item.endDate || item.startDate) {
-            const startDate = new Date(item.startDate);
-            const endDate = new Date(item.endDate);
-            item = { ...item, startDate: startDate, endDate: endDate };
-          }
-          return item;
-        });
-
-        const temp = provinceCount;
-        setProvinceCount(temp + fileImport.length);
-        setValue('eventDetailProvinces', provinceWatch.concat(tempDta));
-      }
-    }
-  }, [fileImport]);
-
-  // const importFile = async (event: any) => {
-  //   try {
-  //     const allowedExtensions = ['csv'];
-  //     if (event.target.files.length) {
-  //       const inputFile = event.target.files[0];
-
-  //       const fileExtension = inputFile?.type.split('/')[1];
-  //       if (!allowedExtensions.includes(fileExtension)) {
-  //         showErrorSnackbar('không phải file csv');
-  //         return;
-  //       }
-  //     }
-
-  //     if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
-
-  //     parse(event.target.files[0], {
-  //       header: true,
-  //       download: true,
-  //       skipEmptyLines: true,
-  //       delimiter: ',',
-  //       encoding: 'utf-8',
-  //       complete: (results: ParseResult<ProvinceCSV>) => {
-  //         const provinceImportData: ProvinceCSV[] = results.data;
-  //         console.log('results', results);
-
-  //         // setProvinceCount(provinceImportData.length);
-  //         // const customProvinceData = provinceImportData.map(item => ({
-  //         //   endDate: item.end_date,
-  //         //   id: item.id,
-  //         //   provinceName: item.province_name,
-  //         //   quantity: item.amount,
-  //         //   startDate: item.start_date,
-  //         // }))
-
-  //         // const customDateEventPrize = {
-  //         //   ...dtaEventPrizeById,
-  //         //    response: {...dtaEventPrizeById?.response, eventDetailProvinces: customProvinceData}
-  //         // }
-
-  //         // reset(customDateEventPrize.response);
-  //         showSuccessSnackbar('import file thành công');
-  //       },
-  //     });
-  //   } catch (e) {
-  //     // console.log(e);
-  //     showErrorSnackbar('Không import file thành công!');
-  //   }
-  // };
+  useEffect(() => {
+    if (fileImport)
+      setValue(
+        'eventDetailProvinces',
+        _.sortBy(fileImport, (o) => o.provinceId)
+      );
+  });
 
   return (
     <>
@@ -354,7 +287,7 @@ export const EditEventPrizeForm = () => {
 
                   <RHFTextField name="popupCode" key={'popupCode'} label="popupCode" />
                   <RHFRadioGroup
-                    sx={{ justifyContent: 'space-around' }}
+                    sx={{ justifyContent: 'flex-start' }}
                     name="typeUser"
                     defaultValue={'gift'}
                     onChange={(e) => {
@@ -362,8 +295,8 @@ export const EditEventPrizeForm = () => {
                     }}
                     options={[
                       { label: 'Tặng quà', value: 'gift' },
-                      { label: 'Tặng điểm', value: 'point' },
-                      { label: 'Tặng quà và điểm', value: 'giftandpoint' },
+                      // { label: 'Tặng điểm', value: 'point' },
+                      // { label: 'Tặng quà và điểm', value: 'giftandpoint' },
                     ]}
                   />
                   {giftPoint === 'gift' && (
@@ -388,7 +321,7 @@ export const EditEventPrizeForm = () => {
                       )}
                     </Stack>
                   )}
-                  {giftPoint === 'point' && (
+                  {/* {giftPoint === 'point' && (
                     <RHFTextField name="point" key={'point'} label="Nhập điểm" />
                   )}
                   {giftPoint === 'giftandpoint' && (
@@ -408,7 +341,7 @@ export const EditEventPrizeForm = () => {
                         label="Nhập điểm"
                       />
                     </Stack>
-                  )}
+                  )} */}
                   <GiftModal
                     open={open}
                     handleClose={handleClose}
@@ -484,79 +417,77 @@ export const EditEventPrizeForm = () => {
                   </Button>
                 </Stack>
                 <Box>
-                  {Array.from(Array(provinceCount)).map((c, index) => {
-                    return (
-                      <Box key={`eventDetailProvinces.${index}`} py="10px">
-                        <Stack direction={'row'} spacing="3px">
-                          <RHFSelect
-                            name={`eventDetailProvinces.${index}.provinceId`}
-                            key={`eventDetailProvinces.${index}.provinceId`}
-                            label={'Tỉnh thành'}
-                          >
-                            <option value="" />
-                            {provinceOptions?.map((item: ISelect) => (
-                              <option key={item.value} value={item.value}>
-                                {item.label}
-                              </option>
-                            ))}
-                          </RHFSelect>
-                          <RHFTextField
-                            disabled
-                            name={`eventDetailProvinces.${index}.quantity`}
-                            key={`eventDetailProvinces.${index}.quantity`}
-                            label="Tổng số lượng giải theo tỉnh"
-                          />
-                          <RHFTextField
-                            name={`eventDetailProvinces.${index}.extraquantity`}
-                            key={`eventDetailProvinces.${index}.extraquantity`}
-                            label="Số giải nhập thêm"
-                          />
-                          <Controller
-                            name={`eventDetailProvinces.${index}.startDate`}
-                            key={`eventDetailProvinces.${index}}.startDate`}
-                            control={control}
-                            render={({ field }: { field: any }) => (
-                              <MobileDateTimePicker
-                                {...field}
-                                key="startDate"
-                                label="Start date"
-                                inputFormat="dd/MM/yyyy hh:mm a"
-                                renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth />
-                                )}
-                              />
-                            )}
-                          />
-                          <Controller
-                            name={`eventDetailProvinces.${index}.endDate`}
-                            key={`eventDetailProvinces.${index}.endDate`}
-                            control={control}
-                            render={({ field }: { field: any }) => (
-                              <MobileDateTimePicker
-                                {...field}
-                                key="startDate"
-                                label="End date"
-                                inputFormat="dd/MM/yyyy hh:mm a"
-                                renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth />
-                                )}
-                              />
-                            )}
-                          />
-                          <Button
-                            // fullWidth
-                            color="error"
-                            variant="contained"
-                            size="small"
-                            sx={{ width: '50px', height: '50px' }}
-                            onClick={() => handleRemoveProvince(index)}
-                          >
-                            <RemoveRoundedIcon />
-                          </Button>
-                        </Stack>
-                      </Box>
-                    );
-                  })}
+                  {fileImport?.map((item: IEventProvince, index: number) => (
+                    <Box key={`eventDetailProvinces.${index}`} py="10px">
+                      <Stack direction={'row'} spacing="3px">
+                        <RHFSelect
+                          name={`eventDetailProvinces.${index}.provinceId`}
+                          key={`eventDetailProvinces.${index}.provinceId`}
+                          label={'Tỉnh thành'}
+                        >
+                          <option value="" />
+                          {provinceOptions?.map((item: ISelect) => (
+                            <option key={item.value} value={item.value}>
+                              {item.label}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                        <RHFTextField
+                          disabled
+                          name={`eventDetailProvinces.${index}.quantity`}
+                          key={`eventDetailProvinces.${index}.quantity`}
+                          label="Tổng số lượng giải theo tỉnh"
+                        />
+                        <RHFTextField
+                          name={`eventDetailProvinces.${index}.extraquantity`}
+                          key={`eventDetailProvinces.${index}.extraquantity`}
+                          label="Số giải nhập thêm"
+                        />
+                        <Controller
+                          name={`eventDetailProvinces.${index}.startDate`}
+                          key={`eventDetailProvinces.${index}}.startDate`}
+                          control={control}
+                          render={({ field }: { field: any }) => (
+                            <MobileDateTimePicker
+                              {...field}
+                              key="startDate"
+                              label="Start date"
+                              inputFormat={DATE_FORMAT}
+                              renderInput={(params: any) => (
+                                <TextField {...params} fullWidth />
+                              )}
+                            />
+                          )}
+                        />
+                        <Controller
+                          name={`eventDetailProvinces.${index}.endDate`}
+                          key={`eventDetailProvinces.${index}.endDate`}
+                          control={control}
+                          render={({ field }: { field: any }) => (
+                            <MobileDateTimePicker
+                              {...field}
+                              key="startDate"
+                              label="End date"
+                              inputFormat={DATE_FORMAT}
+                              renderInput={(params: any) => (
+                                <TextField {...params} fullWidth />
+                              )}
+                            />
+                          )}
+                        />
+                        <Button
+                          // fullWidth
+                          color="error"
+                          variant="contained"
+                          size="small"
+                          sx={{ width: '50px', height: '50px' }}
+                          onClick={() => handleRemoveProvince(item.provinceId)}
+                        >
+                          <RemoveRoundedIcon />
+                        </Button>
+                      </Stack>
+                    </Box>
+                  ))}
                 </Box>
                 <Button
                   type="submit"
