@@ -40,7 +40,6 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = () => {
@@ -70,7 +69,7 @@ export default function AccountPopover() {
   const handleLogout = async () => {
     try {
       await mutate();
-      navigate(PATH_AUTH.login, { replace: true });
+     
 
       if (isMountedRef.current) {
         handleClose();
