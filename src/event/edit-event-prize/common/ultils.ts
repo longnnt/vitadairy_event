@@ -1,7 +1,6 @@
 import * as XLSX from 'xlsx';
-import { ISelect } from './interface';
 
-export const convertExcelFileToObj = (file: any, setFileImport: any) => {
+export const convertExcelFileToObj = (file: any, setFileImport: any, fileImport: any) => {
   const reader = new FileReader();
   const rABS = !!reader.readAsBinaryString;
   let convertDta;
@@ -13,8 +12,9 @@ export const convertExcelFileToObj = (file: any, setFileImport: any) => {
     const ws = wb.Sheets[wsname];
     const data = XLSX.utils.sheet_to_csv(ws);
     convertDta = convertToJson(data);
+    const tempCustomDta = fileImport.concat(convertDta);
 
-    setFileImport(convertDta);
+    setFileImport(tempCustomDta);
   };
 
   if (rABS) {
@@ -40,15 +40,23 @@ export const convertToJson = (csv: any) => {
 };
 
 export const validateFileImportFormat = (files: any) => {
-  const testArr = ['provinceId', 'extraquantity', 'startDate', 'endDate', 'provinceName'];
+  const testPropsName = [
+    'provinceId',
+    'extraquantity',
+    'startDate',
+    'endDate',
+    'provinceName',
+    'id',
+    'quantity',
+  ];
   let result = true;
   files?.map((item: any) => {
-    const testProperties = Object.keys(item);
-    const found = testProperties?.every((t: string) => testArr.includes(t));
-
-    if (found === false) {
+    const propsfileImportName = Object.keys(item);
+    const rightFormatName = propsfileImportName?.every((t: string) =>
+      testPropsName.includes(t)
+    );
+    if (rightFormatName === false) {
       result = false;
-      // return result;
       return;
     }
     const startTime = new Date(item.startDate);
