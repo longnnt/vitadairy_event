@@ -13,9 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   build-and-deploy-to-prod:
-    # if: github.ref == 'refs/heads/prod'
+    if: github.ref == 'refs/heads/prod'
     name: Deploy production
     runs-on: ubuntu-latest
     env:
@@ -29,51 +28,47 @@ jobs:
       GAR_NAME: vtd-prod
       GAR_HOST: asia-southeast1-docker.pkg.dev
       GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-      # SECRET_KEY_DEPLOY_PROD: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
-      # SECRET_KEY: ${{ github.event.inputs.secret_key_deploy_prod }}
+      SECRET_KEY_DEPLOY_PROD: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
 
     steps:
-      # - if: ${{ github.event.inputs.secret_key_deploy_prod }} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
       - name: Checking secrets
-        uses: actions/github-script@v3
-        run: |
-          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
-        # with:
-        #   script: |
-        #       core.setFailed('Deploy to fail')
+        if: "${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}"
+        run: |-
+          echo "Log level: ${{ github.event.inputs.secret_key_deploy_prod }}"
 
-      - run: |
-          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
-          echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
-      # - name: Checkout
-      #   uses: actions/checkout@v3
-
-      # - name: Authen GCP
-      #   uses: 'google-github-actions/auth@v0'
-      #   with:
-      #     credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-
-      # - name: Setup GCP
-      #   uses: google-github-actions/setup-gcloud@v0.6.0
-
-      # - name: Get GKE credentials
+      # - name: Loging data
       #   run: |-
-      #     gcloud container clusters get-credentials $GKE_CLUSTER --zone=$GKE_ZONE
+      #     echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
+      #     echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      # - name: Configure Docker Client
-      #   run: |-
-      #     gcloud auth configure-docker --quiet
-      #     gcloud auth configure-docker $GAR_HOST --quiet
+      - name: Authen GCP
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 
-      # - name: Build Docker
-      #   run: docker build -t $IMAGE_NAME:latest .
+      - name: Setup GCP
+        uses: google-github-actions/setup-gcloud@v0.6.0
 
-      # - name: Push Docker Image to Artifact Registry
-      #   run: |-
-      #     docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
-      #     docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
+      - name: Get GKE credentials
+        run: |-
+          gcloud container clusters get-credentials $GKE_CLUSTER --zone=$GKE_ZONE
 
-      # - name: Deploy
-      #   run: |-
-      #     gcloud run deploy $DEPLOYMENT_NAME --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=$REGION --allow-unauthenticated
+      - name: Configure Docker Client
+        run: |-
+          gcloud auth configure-docker --quiet
+          gcloud auth configure-docker $GAR_HOST --quiet
+
+      - name: Build Docker
+        run: docker build -t $IMAGE_NAME:latest .
+
+      - name: Push Docker Image to Artifact Registry
+        run: |-
+          docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
+          docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
+
+      - name: Deploy
+        run: |-
+          gcloud run deploy $DEPLOYMENT_NAME --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=$REGION --allow-unauthenticated
 
