@@ -320,7 +320,12 @@ export default function HistoryNewForm() {
               <Grid item xs={6}>
                 <LabelStyle>Thông báo tổng quan</LabelStyle>
                 <Card sx={{ p: 3, width: '100%' }}>
-                  <RHFTextField name={'ordinal'} key={'ordinal'} label="Thứ tự ưu tiên" margin="dense" />
+                  <RHFTextField
+                    name={'ordinal'}
+                    key={'ordinal'}
+                    label="Thứ tự ưu tiên"
+                    margin="dense"
+                  />
                   <RHFTextField
                     name="probability"
                     key={'probability'}
@@ -525,8 +530,8 @@ export default function HistoryNewForm() {
                   margin="dense"
                 />
                 <RHFTextField
-                  name={'notificationDescription'}
-                  key={'notificationDescription'}
+                  name="notificationContent"
+                  key={'notificationContent'}
                   label="Nội dung thông báo"
                   margin="dense"
                 />
@@ -535,8 +540,8 @@ export default function HistoryNewForm() {
                   <RHFEditor
                     className="category__text-editor"
                     simple
-                    name="notificationContent"
-                    key={'notificationContent'}
+                    name={'notificationDescription'}
+                    key={'notificationDescription'}
                   />
                 </div>
               </Grid>
