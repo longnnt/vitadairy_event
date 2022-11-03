@@ -22,6 +22,7 @@ concurrency:
 
 jobs:
   build-and-deploy-to-prod:
+    if: github.ref == 'refs/heads/prod'
     name: Deploy production
     runs-on: ubuntu-latest
     env:
