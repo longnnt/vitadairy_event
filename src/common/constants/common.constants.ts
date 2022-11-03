@@ -30,7 +30,9 @@ export const FIELD = {
 
 export const BREADCUMBS = {
   DASHBOARD: 'Dashboard',
-  LIST_EVENT: 'List event',
+  LIST_EVENT: 'Sự kiện Promotion quý 4',
+  CREATE_EVENT: 'Tạo mới sự kiện',
+  VIEW_EVENT: 'Xem sự kiện',
   LIST_REGISTER_EVENT: 'List register event',
   LIST_POLICY_CATEGORY: 'List category policy',
   ADD_POLICY_CATEGORY: 'Add category',
@@ -38,6 +40,14 @@ export const BREADCUMBS = {
   CATEGORY_ENTERPRISE_LIST: 'List category enterprise ',
   CATEGORY_ENTERPRISE_EDIT: 'Category enterprise edit',
   CATEGORY_ENTERPRISE_NEW: 'category enterprise add new',
-  ADMIN_LIST:'List admin',
+  SHOP_INVITATION: 'shop invitation',
+  SHOP_INVITATION_lIST: 'shop invitation list',
+  ADMIN_LIST: 'List admin',
   STORE_ADMIN: 'Cửa hàng',
+
+  EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4',
+
+  NEW_ADMIN: 'create admin',
+  EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
+  LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
 };

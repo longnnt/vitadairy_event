@@ -41,6 +41,10 @@ export default function Router() {
             </GuestGuard>
           ),
         },
+        {
+          path: 'forgot-password',
+          element: <ForgotPassword />,
+        },
       ],
     },
 
@@ -53,19 +57,50 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
+        {
+          path: 'shop-invitation',
+          element: <ShopInvitation />,
+        },
         // STORE
         {
           path: '',
-          children:[
-            { element: <Navigate to="/dashboard/store" replace />, index: true},
-            { path: 'stories', element: <ListStore />},
+          children: [
+            { element: <Navigate to="/dashboard/store" replace />, index: true },
+            { path: 'stories', element: <ListStore /> },
           ],
         },
         {
           path: '',
           children: [
             { element: <Navigate to="/stories" replace />, index: true },
-            { path: 'admins', element: <AdminList/> },
+            { path: 'admins', element: <AdminList /> },
+            { path: 'admins/create', element: <AddNewAdmin /> },
+            { path: 'admins/:id', element: <EditAdmin /> },
+          ],
+        },
+        {
+          path: '',
+          children: [
+            {
+              element: <Navigate to="/dashboard/event-promotion-IV" replace />,
+              index: true,
+            },
+            { path: 'event-promotion-IV', element: <ListEventPromotion /> },
+            { path: 'event-promotion-IV/:id', element: <ViewEventPromotion /> },
+            { path: 'event-promotion-IV/edit/:id', element: <EditEventPromotion /> },
+            { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
+          ],
+        },
+        {
+          path: '',
+          children: [
+            { element: <Navigate to="/dashboard/event" replace />, index: true },
+            { path: 'event-history', element: <History /> },
+            { path: 'event-list-prize', element: <ListPrize /> },
+            { path: 'event-create-prize/:id', element: <CreatePrize /> },
+            // { path: 'event-list-prize', element: <ListPrize /> },
+            { path: 'event/event-prize-edit/:id', element: <EditEventPrize /> },
+            { path: 'event-list-prize/event-:id', element: <ListPrize /> },
           ],
         },
       ],
@@ -93,16 +128,51 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
-
+// login
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
+const ForgotPassword = Loadable(
+  lazy(() => import('../../auth/forgot-password/ResetPassword'))
+);
 
 // STORE ADMIN
-const ListStore = Loadable(lazy(() => import('../pages/store-admin/listStoreAdmin')));
+const ListStore = Loadable(
+  lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin'))
+);
+
+// EVENT ADMIN
+const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));
+const ListPrize = Loadable(lazy(() => import('../../event/list-prize/index')));
+const CreatePrize = Loadable(
+  lazy(() => import('../../event/event-history-prize/history-prize-create/create'))
+);
+const EditEventPrize = Loadable(lazy(() => import('../../event/edit-event-prize/index')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
-// ADMIN
-const AdminList = Loadable(lazy(()=>import('../pages/admin/adminList')))
+// shop invitation
+const ShopInvitation = Loadable(
+  lazy(() => import('src/shop-invitation/components/ShopInvitation'))
+);
 
+// EVENT_PROMOTION_IV
+
+const ListEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
+);
+
+const ViewEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/viewEventPromotion'))
+);
+const EditEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/editEventPromotion'))
+);
+const AddEventPromotion = Loadable(
+  lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))
+);
+
+// ADMIN
+const AdminList = Loadable(lazy(() => import('../../admin/admin-pages/AdminList')));
+const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
+const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));

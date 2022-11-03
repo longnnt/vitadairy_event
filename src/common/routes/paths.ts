@@ -5,7 +5,7 @@ function path(root: string, sublink: string) {
 }
 
 const ROOTS_AUTH = '/auth';
-const ROOTS_DASHBOARD = '/dashboard';
+export const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +18,7 @@ export const PATH_AUTH = {
   verify: path(ROOTS_AUTH, '/verify'),
   resetPassword: path(ROOTS_AUTH, '/reset-password'),
   newPassword: path(ROOTS_AUTH, '/new-password'),
+  forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
 };
 
 export const PATH_PAGE = {
@@ -42,14 +43,37 @@ export const PATH_DASHBOARD = {
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
+    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
   admin: {
     root: path(ROOTS_DASHBOARD, '/admins'),
     list: path(ROOTS_DASHBOARD, '/admins'),
+    create: path(ROOTS_DASHBOARD, '/admins/create'),
+    edit: (adminId: number) => path(ROOTS_DASHBOARD, `/admins/${adminId}`),
   },
   storeAdmin: {
     root: path(ROOTS_DASHBOARD, '/stories'),
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
-  }
+  },
+  eventPromotionIV: {
+    root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
+    list: path(ROOTS_DASHBOARD, '/event-promotion-IV'),
+    new: path(ROOTS_DASHBOARD, '/event-promotion-IV/new'),
+    view: (id: number) => path(ROOTS_DASHBOARD, `/event-promotion-IV/${id}`),
+    edit: (eventId: number) =>
+      path(ROOTS_DASHBOARD, `/event-promotion-IV/edit/${eventId}`),
+  },
+
+  eventAdmin: {
+    root: path(ROOTS_DASHBOARD, '/event-history'),
+    historyPrize: path(ROOTS_DASHBOARD, '/event-history'),
+    createPrize: (eventID: string) =>
+      path(ROOTS_DASHBOARD, `/event-create-prize/${eventID}`),
+    listPrize: (eventID: string) =>
+      path(ROOTS_DASHBOARD, `/event-list-prize/event-${eventID}`),
+    editEventPrize: path(ROOTS_DASHBOARD, '/event/event-prize-edit/:id'),
+    editFileEvent: (idEvent: number) =>
+      path(ROOTS_DASHBOARD, `/event/event-prize-edit/${idEvent}`),
+  },
 };

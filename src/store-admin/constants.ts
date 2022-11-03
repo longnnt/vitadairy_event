@@ -7,3 +7,9 @@ export const TABLE_HEAD = [
   { id: 'isActive', label: 'Active', align: 'left' },
   { id: '' },
 ];
+
+export const SuccessUploadCode = 1000;
+
+export const formatCreateDate = 'MMMM D, YYYY h:mm A';
+
+export const formatDateNews = 'dd-MM-yyyy hh:mm a';

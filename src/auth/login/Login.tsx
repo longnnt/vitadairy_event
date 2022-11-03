@@ -75,9 +75,6 @@ export default function Login() {
                 <Typography variant="h4" gutterBottom>
                   Sign in to Minimal
                 </Typography>
-                <Typography sx={{ color: 'text.secondary' }}>
-                  Enter your details below.
-                </Typography>
               </Box>
 
               <Tooltip title={capitalCase(method)} placement="right">
@@ -90,11 +87,6 @@ export default function Login() {
                 </>
               </Tooltip>
             </Stack>
-
-            <Alert severity="info" sx={{ mb: 3 }}>
-              Use email : <strong>admin@tesosoft.com</strong> / password :
-              <strong> Aabb1234</strong>
-            </Alert>
 
             <LoginForm />
 

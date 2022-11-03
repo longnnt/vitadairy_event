@@ -8,8 +8,17 @@ export interface IFormStore {
   createdDate: string;
 }
 
+export interface IPayloadSearch {
+  payload: string;
+  type: string;
+}
+export interface IPayloadDate {
+  payload: Date | string;
+  type: string;
+}
+
 export interface IStoreActive {
-  code: string;
+  code?: string;
   isActive: boolean;
 }
 
@@ -26,6 +35,16 @@ export interface IStoreParams {
   searchText?: string;
   size?: number;
   startDate?: Date | string;
+}
+
+export enum MessageType {
+  ERROR = 'error',
+  SUCCESS = 'success',
+}
+
+export interface IShowMessage {
+  type: MessageType;
+  message: string;
 }
 
 export interface IDataStore {
@@ -48,7 +67,7 @@ export interface IDataStore {
       };
       response: IStories;
     };
-  }
+  };
 }
 
 export type IPropsStoreTableRow = {

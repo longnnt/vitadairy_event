@@ -34,19 +34,14 @@ const ICONS = {
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
-
   {
     subheader: 'app',
     items: [
       {
-        title: 'mail',
-        path: PATH_DASHBOARD.general.app,
-        icon: ICONS.mail,
-        info: <Label color="error">+32</Label>,
+        title: 'shop-invitation',
+        path: PATH_DASHBOARD.general.shop_invitation,
+        icon: ICONS.analytics,
       },
-      { title: 'chat', path: PATH_DASHBOARD.general.app, icon: ICONS.chat },
-      { title: 'calendar', path: PATH_DASHBOARD.general.app, icon: ICONS.calendar },
-      { title: 'kanban', path: PATH_DASHBOARD.general.app, icon: ICONS.kanban },
     ],
   },
   // MANAGEMENT
@@ -63,19 +58,45 @@ const navConfig = [
           {
             title: 'Danh sách',
             path: PATH_DASHBOARD.storeAdmin.list,
-          }
+          },
+        ],
+      },
+
+      // EVENT
+      {
+        title: 'Sự kiện Promotion Quý 4',
+        path: PATH_DASHBOARD.eventAdmin.root,
+        icon: ICONS.calendar,
+        children: [
+          {
+            title: 'Danh sách Event',
+            path: PATH_DASHBOARD.eventPromotionIV.list,
+          },
+          {
+            title: 'Lịch sử trúng giải',
+            path: PATH_DASHBOARD.eventAdmin.historyPrize,
+          },
         ],
       },
       {
         title: 'Quản lý quản trị viên',
         path: PATH_DASHBOARD.admin.root,
         icon: ICONS.policy,
-        children: [
-          { title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list },
-        ],
+        children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
       },
+      // {
+      //   title: 'Event Promotion Quý 4',
+      //   path: PATH_DASHBOARD.eventPromotionIV.root,
+      //   icon: ICONS.policy,
+      //   children: [
+      //     {
+      //       title: 'Danh sách Event',
+      //       path: PATH_DASHBOARD.eventPromotionIV.list,
+      //     },
+      //   ],
+      // },
     ],
-  }
+  },
 ];
 
 export default navConfig;

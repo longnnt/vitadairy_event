@@ -1,7 +1,5 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
-import { getRelatedCacheKeys } from 'src/common/utils/getRelatedCacheKeys';
-import { IStoreActive } from '../interfaces';
 import { getActiveStore } from '../services';
 
 export function useGetStoreActive() {
