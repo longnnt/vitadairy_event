@@ -13,7 +13,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   build-and-deploy-to-prod:
     # if: github.ref == 'refs/heads/prod' && ${{github.event.inputs.secret_key_deploy_prod}} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
     name: Deploy production
@@ -29,16 +28,17 @@ jobs:
       GAR_NAME: vtd-prod
       GAR_HOST: asia-southeast1-docker.pkg.dev
       GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      SECRET_KEY_DEPLOY_PROD: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
 
     steps:
       - name: Checking secrets
-        uses: actions/github-script@v3
+        if: "${{ env.SECRET_KEY_DEPLOY_PROD != '' }}"
         run: |
           echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
-          
-      - run: |
-          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
-          echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
+
+      # - run: |
+      #     echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
+      #     echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
       # - name: Checkout
       #   uses: actions/checkout@v3
 
