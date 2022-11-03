@@ -7,6 +7,14 @@ on:
           type: string
           required: true
           description: secret_key_deploy_prod
+        BRANCH:
+          description: 'Branch to use'
+          required: true
+          default: 'prod'
+          type: choice
+          options:
+          - prod
+          - develop
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,7 +22,6 @@ concurrency:
 
 jobs:
   build-and-deploy-to-prod:
-    # if: github.ref == 'refs/heads/prod' && ${{github.event.inputs.secret_key_deploy_prod}} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
     name: Deploy production
     runs-on: ubuntu-latest
     env:
