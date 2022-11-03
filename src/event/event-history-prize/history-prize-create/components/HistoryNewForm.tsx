@@ -534,11 +534,17 @@ export default function HistoryNewForm() {
                 />
                 <div>
                   <LabelStyle>Mô tả thông báo</LabelStyle>
-                  <RHFEditor
+                  {/* <RHFEditor
                     className="category__text-editor"
                     simple
                     name="notificationContent"
                     key={'notificationContent'}
+                  /> */}
+                  <RHFTextField
+                    name="notificationContent"
+                    key={'notificationContent'}
+                    label="Nội dung thông báo"
+                    margin="dense"
                   />
                 </div>
               </Grid>
