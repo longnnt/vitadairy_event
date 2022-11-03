@@ -33,12 +33,15 @@ jobs:
       SECRET_KEY: ${{ github.event.inputs.secret_key_deploy_prod }}
 
     steps:
-      # - if: ${{github.event.inputs.secret_key_deploy_prod}} == ${{secrets.SECRET_KEY_DEPLOY_PROD}}
-      #   name: Checking secrets
-      #   uses: actions/github-script@v3
-      #   with:
-      #     script: |
-      #         core.setFailed('Deploy to fail')
+      - if: ${{ github.event.inputs.secret_key_deploy_prod }} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
+        name: Checking secrets
+        uses: actions/github-script@v3
+        run: |
+          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
+        # with:
+        #   script: |
+        #       core.setFailed('Deploy to fail')
+
       - run: |
           echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
           echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
