@@ -32,13 +32,14 @@ jobs:
 
     steps:
       - name: Checking secrets
-        if: $SECRET_KEY_DEPLOY_PROD != ''
-        run: |
+        if: "${{ env.SECRET_KEY_DEPLOY_PROD != github.event.inputs.secret_key_deploy_prod }}"
+        run: |-
           echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
 
-      # - run: |
-      #     echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
-      #     echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
+      - name: Loging data
+        run: |-
+          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
+          echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
       # - name: Checkout
       #   uses: actions/checkout@v3
 
