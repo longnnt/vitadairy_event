@@ -32,9 +32,9 @@ jobs:
 
     steps:
       - name: Checking secrets
-        if: "${{ env.SECRET_KEY_DEPLOY_PROD != github.event.inputs.secret_key_deploy_prod }}"
+        if: "${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}"
         run: |-
-          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
+          echo "Log level: ${{ github.event.inputs.secret_key_deploy_prod }}"
 
       - name: Loging data
         run: |-
