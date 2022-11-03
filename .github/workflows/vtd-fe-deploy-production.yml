@@ -1,0 +1,64 @@
+name: Deploy production
+
+workflow_dispatch:
+    inputs:
+      secret_key_deploy_prod:
+        type: string
+        required: true
+        description: secret_key_deploy_prod
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  build-and-deploy-to-prod:
+    if: github.ref == 'refs/heads/prod' && ${{github.event.inputs.secret_key_deploy_prod}} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
+    name: Deploy production
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: vtd-fe-admin-v2
+      GCP_PROJECT_ID: spartan-impact-319504
+      GCP_REGISTRY_HOST: asia.gcr.io
+      REGION: asia-southeast1
+      GKE_CLUSTER: vitadairy-k8s-dev
+      GKE_ZONE: asia-southeast1-b
+      DEPLOYMENT_NAME: vtd-fe-admin-v2-prod
+      GAR_NAME: vtd-prod
+      GAR_HOST: asia-southeast1-docker.pkg.dev
+      GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Authen GCP
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+
+      - name: Setup GCP
+        uses: google-github-actions/setup-gcloud@v0.6.0
+
+      - name: Get GKE credentials
+        run: |-
+          gcloud container clusters get-credentials $GKE_CLUSTER --zone=$GKE_ZONE
+
+      - name: Configure Docker Client
+        run: |-
+          gcloud auth configure-docker --quiet
+          gcloud auth configure-docker $GAR_HOST --quiet
+
+      - name: Build Docker
+        run: docker build -t $IMAGE_NAME:latest .
+
+      - name: Push Docker Image to Artifact Registry
+        run: |-
+          docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
+          docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
+
+      - name: Deploy
+        run: |-
+          gcloud run deploy $DEPLOYMENT_NAME --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=$REGION --allow-unauthenticated
+
