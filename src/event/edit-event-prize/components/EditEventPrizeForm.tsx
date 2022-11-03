@@ -28,7 +28,7 @@ import {
   ISelectPopup,
   ITransactionType,
 } from '../common/interface';
-import { eidtEventPrizeSchema } from '../editEvent.Schema';
+import { eidtEventPrizevalidate } from '../editEvent.Schema';
 import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
 import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
@@ -62,6 +62,10 @@ export const EditEventPrizeForm = () => {
     value: item?.id,
     label: item?.name,
   }));
+  const provinceId = provinceOptions
+    ? provinceOptions.map((item: ISelect) => item.value)
+    : [];
+
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
 
@@ -75,7 +79,7 @@ export const EditEventPrizeForm = () => {
   );
 
   const methods = useForm<IFormEdit>({
-    resolver: yupResolver(eidtEventPrizeSchema),
+    resolver: yupResolver(eidtEventPrizevalidate(provinceId)),
     defaultValues: DEFAULT_FORM_VALUE,
   });
   const {
@@ -187,6 +191,7 @@ export const EditEventPrizeForm = () => {
       convertExcelFileToObj(files[0], setFileImport, fileImport);
     }
     const testValidateImport = validateFileImportFormat(fileImport);
+
     if (!testValidateImport) {
       showErrorSnackbar('File import  không đúng định dạng');
     } else {
@@ -406,7 +411,7 @@ export const EditEventPrizeForm = () => {
                 >
                   <input
                     type="file"
-                    accept="xlsx,CSV"
+                    accept=".csv"
                     ref={ref}
                     style={{ display: 'none' }}
                     onChange={(e) => handleOnInuputFile(e)}
