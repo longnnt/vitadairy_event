@@ -31,6 +31,11 @@ jobs:
       GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
     steps:
+      - name: Checking secrets
+        uses: actions/github-script@v3
+        run: |
+          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
+          
       - run: |
           echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
           echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
