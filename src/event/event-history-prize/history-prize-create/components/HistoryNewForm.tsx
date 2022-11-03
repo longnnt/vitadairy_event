@@ -101,7 +101,6 @@ export default function HistoryNewForm() {
   const [redirect, setRedirect] = React.useState<boolean>(true);
   const [_, setfilesCsv] = React.useState<Array<unknown>>([]);
   const [dataCities, setDataCities] = React.useState<IEventDetail[]>([]);
-  const [provinceCount, setProvinceCount] = useState<number>(1);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -310,14 +309,6 @@ export default function HistoryNewForm() {
       quantity: data.quantity,
       transactionTypeId: data.transactionTypeId,
     };
-    // dispatch(
-    //   setGift({
-    //     id: 0,
-    //     name: '',
-    //     type: '',
-    //     money: '',
-    //   })
-    // );
     mutate(dataEvent);
   };
   return (
@@ -329,7 +320,12 @@ export default function HistoryNewForm() {
               <Grid item xs={6}>
                 <LabelStyle>Thông báo tổng quan</LabelStyle>
                 <Card sx={{ p: 3, width: '100%' }}>
-                  <RHFTextField name={'ordinal'} label="Thứ tự ưu tiên" margin="dense" />
+                  <RHFTextField
+                    name={'ordinal'}
+                    key={'ordinal'}
+                    label="Thứ tự ưu tiên"
+                    margin="dense"
+                  />
                   <RHFTextField
                     name="probability"
                     key={'probability'}
@@ -419,9 +415,9 @@ export default function HistoryNewForm() {
                     value={popUpCode}
                   >
                     <option value=""></option>
-                    <option value="pp">PUZZLE PIECE</option>
-                    <option value="o">OGGI</option>
-                    <option value="fs">FULL_SCREEN</option>
+                    <option value="PUZZLE PIECE">PUZZLE PIECE</option>
+                    <option value="OGGI">OGGI</option>
+                    <option value="FULL_SCREEN">FULL_SCREEN</option>
                   </RHFSelect>
                   <RadioGroup
                     row
@@ -534,8 +530,8 @@ export default function HistoryNewForm() {
                   margin="dense"
                 />
                 <RHFTextField
-                  name={'notificationDescription'}
-                  key={'notificationDescription'}
+                  name="notificationContent"
+                  key={'notificationContent'}
                   label="Nội dung thông báo"
                   margin="dense"
                 />
@@ -544,8 +540,8 @@ export default function HistoryNewForm() {
                   <RHFEditor
                     className="category__text-editor"
                     simple
-                    name="notificationContent"
-                    key={'notificationContent'}
+                    name={'notificationDescription'}
+                    key={'notificationDescription'}
                   />
                 </div>
               </Grid>
@@ -590,7 +586,7 @@ export default function HistoryNewForm() {
                     dataCities.map((item, index) => {
                       return (
                         <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
-                          <Grid item xs>
+                          <Grid item xs={2.75}>
                             <RHFSelect
                               name={`eventDetailProvinces.${index}.provinceId`}
                               key={`eventDetailProvinces.${index}.provinceId`}
