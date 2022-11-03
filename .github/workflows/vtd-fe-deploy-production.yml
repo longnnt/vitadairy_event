@@ -30,11 +30,11 @@ jobs:
       GAR_HOST: asia-southeast1-docker.pkg.dev
       GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
       # SECRET_KEY_DEPLOY_PROD: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
-      SECRET_KEY: ${{ github.event.inputs.secret_key_deploy_prod }}
+      # SECRET_KEY: ${{ github.event.inputs.secret_key_deploy_prod }}
 
     steps:
-      - if: ${{ github.event.inputs.secret_key_deploy_prod }} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
-        name: Checking secrets
+      # - if: ${{ github.event.inputs.secret_key_deploy_prod }} == ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
+      - name: Checking secrets
         uses: actions/github-script@v3
         run: |
           echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
