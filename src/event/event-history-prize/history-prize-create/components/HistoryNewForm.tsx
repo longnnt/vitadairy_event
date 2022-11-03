@@ -1,7 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-// import { } from 'fs';
-// import { readFileSync } from 'fs';
 import {
   Button,
   Card,
@@ -98,7 +96,6 @@ export default function HistoryNewForm() {
 
   const [popUpType, setPopUpType] = useState<string>('');
   const [popUpCode, setPopUpCode] = React.useState<string | null>('');
-  const [redirect, setRedirect] = React.useState<boolean>(true);
   const [_, setfilesCsv] = React.useState<Array<unknown>>([]);
   const [dataCities, setDataCities] = React.useState<IEventDetail[]>([]);
   const [open, setOpen] = React.useState(false);
@@ -530,8 +527,8 @@ export default function HistoryNewForm() {
                   margin="dense"
                 />
                 <RHFTextField
-                  name="notificationContent"
-                  key={'notificationContent'}
+                  name={'notificationDescription'}
+                  key={'notificationDescription'}
                   label="Nội dung thông báo"
                   margin="dense"
                 />
@@ -540,8 +537,8 @@ export default function HistoryNewForm() {
                   <RHFEditor
                     className="category__text-editor"
                     simple
-                    name={'notificationDescription'}
-                    key={'notificationDescription'}
+                    name="notificationContent"
+                    key={'notificationContent'}
                   />
                 </div>
               </Grid>

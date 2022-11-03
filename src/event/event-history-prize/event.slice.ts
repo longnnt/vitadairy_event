@@ -8,6 +8,8 @@ type StateProps = {
   endDate: Date | null;
   gift: IGift;
   buttonType: string;
+  popUpType: string;
+  popUpCode: string | null;
 };
 
 export const initialState: StateProps = {
@@ -16,6 +18,8 @@ export const initialState: StateProps = {
   endDate: null,
   gift: {} as IGift,
   buttonType: '',
+  popUpType: '',
+  popUpCode: '',
 };
 
 export const eventAdminSlice = createSlice({
@@ -37,6 +41,12 @@ export const eventAdminSlice = createSlice({
     setButtonType: (state, action) => {
       state.buttonType = action.payload;
     },
+    setPopUpType: (state, action) => {
+      state.popUpType = action.payload;
+    },
+    setPopUpCode: (state, action) => {
+      state.popUpCode = action.payload;
+    },
   },
 });
 
@@ -46,6 +56,8 @@ export const {
   setSearchText,
   setGift,
   setButtonType,
+  setPopUpType,
+  setPopUpCode,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -53,5 +65,7 @@ export const firstScanStartSelector = (state: RootState) => state.historyList.st
 export const firstScanEndSelector = (state: RootState) => state.historyList.endDate;
 export const giftSelecttor = (state: RootState) => state.historyList.gift;
 export const buttonTypeState = (state: RootState) => state.historyList.buttonType;
+export const popUpTypeState = (state: RootState) => state.historyList.popUpType;
+export const popUpCodeState = (state: RootState) => state.historyList.popUpCode;
 
 export default eventAdminSlice.reducer;
