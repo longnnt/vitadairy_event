@@ -1,20 +1,16 @@
 import * as Yup from 'yup';
-
-// Yup.addMethod(Yup.array, "sorted", function(message, parser =(a:any) => a) {
-//   return this.test("sorted", message, function(list:any) {
-//     return Boolean(
-//       list.map(parser).reduce((memo:any, item:any) => memo && item >= memo && item)
-//     );
-//   });
-// });
+import { PROVINCE_ID } from './common/constants';
 
 export const eventDetailProvincesSchema = Yup.object().shape({
   endDate: Yup.string().required('This field is required'),
-  provinceId: Yup.number().required('This field is required'),
+  provinceId: Yup.number()
+    .required('This field is required')
+    .test('test province id', 'this field is required', (val) =>
+      PROVINCE_ID.includes(val as number)
+    ),
   quantity: Yup.number(),
   // .required('This field is requiered'),
   startDate: Yup.string().required('This field is required'),
-  // extraquantity: Yup.number(),
 });
 
 export const eidtEventPrizeSchema = Yup.object().shape({

@@ -62,6 +62,7 @@ export const EditEventPrizeForm = () => {
     value: item?.id,
     label: item?.name,
   }));
+
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
 
@@ -187,6 +188,8 @@ export const EditEventPrizeForm = () => {
       convertExcelFileToObj(files[0], setFileImport, fileImport);
     }
     const testValidateImport = validateFileImportFormat(fileImport);
+    console.log('tét', testValidateImport);
+
     if (!testValidateImport) {
       showErrorSnackbar('File import  không đúng định dạng');
     } else {
@@ -406,7 +409,7 @@ export const EditEventPrizeForm = () => {
                 >
                   <input
                     type="file"
-                    accept="xlsx,CSV"
+                    accept=".csv"
                     ref={ref}
                     style={{ display: 'none' }}
                     onChange={(e) => handleOnInuputFile(e)}
