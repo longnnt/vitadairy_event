@@ -188,7 +188,6 @@ export const EditEventPrizeForm = () => {
       convertExcelFileToObj(files[0], setFileImport, fileImport);
     }
     const testValidateImport = validateFileImportFormat(fileImport);
-    console.log('tét', testValidateImport);
 
     if (!testValidateImport) {
       showErrorSnackbar('File import  không đúng định dạng');

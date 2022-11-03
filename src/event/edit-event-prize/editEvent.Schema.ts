@@ -9,7 +9,6 @@ export const eventDetailProvincesSchema = Yup.object().shape({
       PROVINCE_ID.includes(val as number)
     ),
   quantity: Yup.number(),
-  // .required('This field is requiered'),
   startDate: Yup.string().required('This field is required'),
 });
 
