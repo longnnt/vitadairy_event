@@ -1,11 +1,12 @@
 name: Deploy production
 
-workflow_dispatch:
-    inputs:
-      secret_key_deploy_prod:
-        type: string
-        required: true
-        description: secret_key_deploy_prod
+on:
+  workflow_dispatch:
+      inputs:
+        secret_key_deploy_prod:
+          type: string
+          required: true
+          description: secret_key_deploy_prod
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
