@@ -7,14 +7,6 @@ on:
           type: string
           required: true
           description: secret_key_deploy_prod
-        BRANCH:
-          description: 'Branch to use'
-          required: true
-          default: 'prod'
-          type: choice
-          options:
-          - prod
-          - develop
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
