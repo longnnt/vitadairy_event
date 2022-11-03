@@ -33,7 +33,7 @@ jobs:
       SECRET_KEY: ${{ github.event.inputs.secret_key_deploy_prod }}
 
     steps:
-      - if: $SECRET_KEY == $SECRET_KEY_DEPLOY_PROD
+      - if: ${{github.event.inputs.secret_key_deploy_prod}} == ${{secrets.SECRET_KEY_DEPLOY_PROD}}
         name: Checking secrets
         uses: actions/github-script@v3
         with:
