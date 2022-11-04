@@ -40,18 +40,12 @@ export default function LoginForm() {
     formState: { isSubmitting },
   } = methods;
   const { enqueueSnackbar } = useSnackbar();
-  const onSuccess = () => {
-    enqueueSnackbar('Đăng nhập thành công', {
-      variant: 'success',
-      autoHideDuration: 1000,
-    });
-  };
   const onError = () => {
     enqueueSnackbar('Đăng nhập thất bại ! xin kiểm tra lại thông tin', {
       variant: 'error',
     });
   };
-  const { mutate, isSuccess } = useAuthlogin({ onSuccess, onError });
+  const { mutate, isSuccess } = useAuthlogin({ onError });
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.root);
   }, [isSuccess]);
