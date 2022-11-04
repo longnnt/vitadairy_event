@@ -18,18 +18,26 @@ export const schemaAddEvent = yup
       .number()
       .required('Vui lòng nhập thông tin vào ô trống')
       .min(1, 'Kí tự từ 1 tới 100')
+      .transform((value) => (isNaN(value) ? undefined : value))
       .max(100, 'Kí tự từ 1 tới 100'),
     upRate: yup
       .number()
       .required('Vui lòng nhập thông tin vào ô trống')
       .min(1, 'Kí tự từ 1 tới 100')
+      .transform((value) => (isNaN(value) ? undefined : value))
       .max(100, 'Kí tự từ 1 tới 100'),
     downRate: yup
       .number()
       .required('Vui lòng nhập thông tin vào ô trống')
       .min(1, 'Kí tự từ 1 tới 100')
+      .transform((value) => (isNaN(value) ? undefined : value))
       .max(100, 'Kí tự từ 1 tới 100'),
     userRegisterDate: yup.mixed().nullable(true),
-    userLimit: yup.number().required('Vui lòng nhập thông tin vào ô trống').moreThan(0),
+    userLimit: yup
+      .number()
+      .required('Vui lòng nhập thông tin vào ô trống')
+      .moreThan(0, 'Kí tự từ 1 tới 100')
+      .transform((value) => (isNaN(value) ? undefined : value))
+      .max(100, 'Kí tự từ 1 tới 100'),
   })
   .required();
