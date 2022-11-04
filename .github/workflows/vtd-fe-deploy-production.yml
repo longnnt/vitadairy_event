@@ -31,13 +31,6 @@ jobs:
       SECRET_KEY_DEPLOY_PROD: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}
 
     steps:
-<<<<<<< HEAD
-      - run: |
-          echo "Log level: ${{ secrets.SECRET_KEY_DEPLOY_PROD }}"
-          echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
-      # - name: Checkout
-      #   uses: actions/checkout@v3
-=======
       - name: Checking secrets
         if: "${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}"
         run: |-
@@ -49,7 +42,6 @@ jobs:
       #     echo "Tags: ${{ github.event.inputs.secret_key_deploy_prod }}"
       - name: Checkout
         uses: actions/checkout@v3
->>>>>>> 0ac0ad1fb0f061144a579bb85b28499780c4bd8c
 
       # - name: Authen GCP
       #   uses: 'google-github-actions/auth@v0'
