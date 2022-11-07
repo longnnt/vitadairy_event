@@ -64,7 +64,7 @@ function EventPrizeHistoryDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-  console.log(rowsPerPage);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const searchText = useSelector(searchTextSelector);
