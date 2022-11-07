@@ -60,20 +60,17 @@ jobs:
       #     gcloud auth configure-docker --quiet
       #     gcloud auth configure-docker $GAR_HOST --quiet
 
-      # - name: Build Docker
-      #   run: docker build -t $IMAGE_NAME:latest .
+      - name: Setup env
+        run: |
+          echo REACT_APP_BASE_URL=${{ secrets.BASE_URL_PROD }} >> .env
 
-<<<<<<< HEAD
-      # - name: Push Docker Image to Artifact Registry
-      #   run: |-
-      #     docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
-      #     docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
-=======
+      - name: Build Docker
+        run: docker build -t $IMAGE_NAME:latest .
+
       - name: Push Docker Image to Artifact Registry
         run: |-
           docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
           docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
->>>>>>> 0ac0ad1fb0f061144a579bb85b28499780c4bd8c
 
       # - name: Deploy
       #   run: |-
