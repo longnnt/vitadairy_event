@@ -103,7 +103,7 @@ export const TABLE_HEAD_GIFT = [
   { id: 'money', label: 'Money', align: 'right' },
 ];
 
-export const formatDateNews = 'dd-MM-yyyy ';
+export const formatDateNews = 'dd-MM-yyyy hh:mm a';
 
 export const POPUP_TYPE = {
   DEEP_LINK: 'DEEP_LINK',
