@@ -23,6 +23,8 @@ import { IFormLoginValuesProps } from '../interface/interface';
 import { setShowPassword, showPasswordSelector, setEmail } from '../login.slice';
 import { LoginSchema } from '../schema/login.schema';
 import { Link } from 'react-router-dom';
+import useMessage from 'src/store-admin/hooks/useMessage';
+
 
 // ----------------------------------------------------------------------
 
@@ -39,11 +41,9 @@ export default function LoginForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  const { enqueueSnackbar } = useSnackbar();
+  const { showErrorSnackbar } = useMessage();
   const onError = () => {
-    enqueueSnackbar('Đăng nhập thất bại ! xin kiểm tra lại thông tin', {
-      variant: 'error',
-    });
+    showErrorSnackbar('Đăng nhập thất bại ! xin kiểm tra lại thông tin');
   };
   const { mutate, isSuccess } = useAuthlogin({ onError });
   useEffect(() => {
