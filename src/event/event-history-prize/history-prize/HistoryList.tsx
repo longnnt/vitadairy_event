@@ -43,6 +43,7 @@ import { IPrizeHistory, IPrizeHistoryParams } from '../interfaces';
 import { exportPrizeHistory } from '../services';
 import { FilterBar } from './components/FilterBar';
 import { PrizeHistoryTableRow } from './components/HistoryTable';
+import TableSkeleton from './components/TableSkeleton';
 
 function EventPrizeHistoryDashboard() {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ function EventPrizeHistoryDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+  console.log(rowsPerPage);
   const { enqueueSnackbar } = useSnackbar();
 
   const searchText = useSelector(searchTextSelector);
@@ -79,7 +81,7 @@ function EventPrizeHistoryDashboard() {
   if (!firstScanEnd) delete searchParams.endDate;
   if (!firstScanStart) delete searchParams.startDate;
 
-  const { data, refetch } = useGetPrizeHistory(searchParams);
+  const { data, refetch, isLoading } = useGetPrizeHistory(searchParams);
   const listStoreAdmin = data?.data?.response || [];
 
   const {
@@ -123,7 +125,7 @@ function EventPrizeHistoryDashboard() {
       })
       .catch((err) => console.log(err));
   };
-  const isNotFound = !listStoreAdmin.length;
+  const isNotFound = !listStoreAdmin.length && !isLoading;
   return (
     <>
       <HeaderBreadcrumbs
@@ -202,7 +204,9 @@ function EventPrizeHistoryDashboard() {
                     onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
-
+                {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <TableSkeleton key={index} isNotFound={isLoading} />;
+                })}
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
             </Table>
