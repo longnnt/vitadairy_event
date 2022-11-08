@@ -69,6 +69,12 @@ export const EditEventPrizeForm = () => {
   const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
   const dtaEventPrizeById = dataEventPrizeById?.data;
 
+  useDeepCompareEffect(() => {
+    if (dtaEventPrizeById) {
+      setPopupTypeOp(dtaEventPrizeById?.response?.popupType);
+    }
+  }, [dtaEventPrizeById]);
+
   const { data: transactionType } = useGetAllTransactionType();
   const dtaTransactionType = transactionType?.data;
   const transactionTypeOptions = dtaTransactionType?.response?.map(
@@ -87,6 +93,8 @@ export const EditEventPrizeForm = () => {
     handleSubmit,
     reset,
     control,
+
+    trigger,
     resetField,
     formState: { isSubmitting, errors },
   } = methods;
@@ -141,15 +149,18 @@ export const EditEventPrizeForm = () => {
   };
 
   const handleCountProvince = () => {
-    setFileImport([
-      ...fileImport,
+    let tempFileImport = [...fileImport];
+    tempFileImport = tempFileImport.concat([
       {
-        provinceId: Math.floor(Math.random() * 100) + 100,
+        // provinceId: Math.floor(Math.random() * 100) + 100,
+        provinceId: fileImport.length + 200,
         startDate: new Date(),
         endDate: new Date(),
         quantity: 0,
       },
     ]);
+
+    setFileImport(tempFileImport);
   };
   const handleRemoveProvince = (provinceId: number) => {
     setFileImport([...fileImport].filter((item) => item.provinceId !== provinceId));
@@ -175,6 +186,7 @@ export const EditEventPrizeForm = () => {
   // ---------------set import file----------------------
 
   const [fileImport, setFileImport] = useState<IEventProvince[]>([]);
+
   useDeepCompareEffect(() => {
     if (dtaEventPrizeById?.response) {
       setFileImport(
@@ -198,14 +210,16 @@ export const EditEventPrizeForm = () => {
       showSuccessSnackbar('import file thành công');
     }
   };
-
-  useEffect(() => {
-    if (fileImport)
-      setValue(
-        'eventDetailProvinces',
-        _.sortBy(fileImport, (o) => o.provinceId)
-      );
-  });
+  const handleSelectProvince = (e: any, index: any) => {
+    setValue(`eventDetailProvinces.${index}.provinceId`, e.target.value);
+    trigger();
+    const tempFileImport = [...fileImport];
+    tempFileImport[index].provinceId = e.target.value;
+    setFileImport(tempFileImport);
+  };
+  useDeepCompareEffect(() => {
+    if (fileImport.length) setValue('eventDetailProvinces', fileImport);
+  }, [fileImport]);
 
   return (
     <>
@@ -232,6 +246,7 @@ export const EditEventPrizeForm = () => {
                     label="Tổng số lượng quà..."
                   />
                   <RHFTextField
+                    disabled
                     name="winnerAmount"
                     key={'winnerAmount'}
                     label="Số lượng user đã trúng"
@@ -438,77 +453,82 @@ export const EditEventPrizeForm = () => {
                   </Button>
                 </Stack>
                 <Box>
-                  {fileImport?.map((item: IEventProvince, index: number) => (
-                    <Box key={`eventDetailProvinces.${index}`} py="10px">
-                      <Stack direction={'row'} spacing="3px">
-                        <RHFSelect
-                          name={`eventDetailProvinces.${index}.provinceId`}
-                          key={`eventDetailProvinces.${index}.provinceId`}
-                          label={'Tỉnh thành'}
-                        >
-                          <option value="" />
-                          {provinceOptions?.map((item: ISelect) => (
-                            <option key={item.value} value={item.value}>
-                              {item.label}
-                            </option>
-                          ))}
-                        </RHFSelect>
-                        <RHFTextField
-                          disabled
-                          name={`eventDetailProvinces.${index}.quantity`}
-                          key={`eventDetailProvinces.${index}.quantity`}
-                          label="Tổng số lượng giải theo tỉnh"
-                        />
-                        <RHFTextField
-                          name={`eventDetailProvinces.${index}.extraquantity`}
-                          key={`eventDetailProvinces.${index}.extraquantity`}
-                          label="Số giải nhập thêm"
-                        />
-                        <Controller
-                          name={`eventDetailProvinces.${index}.startDate`}
-                          key={`eventDetailProvinces.${index}}.startDate`}
-                          control={control}
-                          render={({ field }: { field: any }) => (
-                            <MobileDateTimePicker
-                              {...field}
-                              key="startDate"
-                              label="Start date"
-                              inputFormat={DATE_FORMAT}
-                              renderInput={(params: any) => (
-                                <TextField {...params} fullWidth />
-                              )}
-                            />
-                          )}
-                        />
-                        <Controller
-                          name={`eventDetailProvinces.${index}.endDate`}
-                          key={`eventDetailProvinces.${index}.endDate`}
-                          control={control}
-                          render={({ field }: { field: any }) => (
-                            <MobileDateTimePicker
-                              {...field}
-                              key="startDate"
-                              label="End date"
-                              inputFormat={DATE_FORMAT}
-                              renderInput={(params: any) => (
-                                <TextField {...params} fullWidth />
-                              )}
-                            />
-                          )}
-                        />
-                        <Button
-                          // fullWidth
-                          color="error"
-                          variant="contained"
-                          size="small"
-                          sx={{ width: '50px', height: '50px' }}
-                          onClick={() => handleRemoveProvince(item.provinceId)}
-                        >
-                          <RemoveRoundedIcon />
-                        </Button>
-                      </Stack>
-                    </Box>
-                  ))}
+                  {fileImport?.map((item: IEventProvince, index: number) => {
+                    return (
+                      <Box key={`eventDetailProvinces.${index}`} py="10px">
+                        <Stack direction={'row'} spacing="3px">
+                          <RHFSelect
+                            name={`eventDetailProvinces.${index}.provinceId`}
+                            key={`eventDetailProvinces.${index}.provinceId`}
+                            label={'Tỉnh thành'}
+                            onChange={(e) => handleSelectProvince(e, index)}
+                            // value={item.provinceId}
+                          >
+                            <option value="" />
+                            {provinceOptions?.map((item: ISelect) => (
+                              <option key={item.value} value={item.value}>
+                                {item.label}
+                              </option>
+                            ))}
+                          </RHFSelect>
+                          <RHFTextField
+                            disabled
+                            name={`eventDetailProvinces.${index}.quantity`}
+                            key={`eventDetailProvinces.${index}.quantity`}
+                            label="Tổng số lượng giải theo tỉnh"
+                            // value={item.quantity}
+                          />
+                          <RHFTextField
+                            name={`eventDetailProvinces.${index}.extraquantity`}
+                            key={`eventDetailProvinces.${index}.extraquantity`}
+                            label="Số giải nhập thêm"
+                          />
+                          <Controller
+                            name={`eventDetailProvinces.${index}.startDate`}
+                            key={`eventDetailProvinces.${index}}.startDate`}
+                            control={control}
+                            render={({ field }: { field: any }) => (
+                              <MobileDateTimePicker
+                                {...field}
+                                key="startDate"
+                                label="Start date"
+                                inputFormat={DATE_FORMAT}
+                                renderInput={(params: any) => (
+                                  <TextField {...params} fullWidth />
+                                )}
+                              />
+                            )}
+                          />
+                          <Controller
+                            name={`eventDetailProvinces.${index}.endDate`}
+                            key={`eventDetailProvinces.${index}.endDate`}
+                            control={control}
+                            render={({ field }: { field: any }) => (
+                              <MobileDateTimePicker
+                                {...field}
+                                key="startDate"
+                                label="End date"
+                                inputFormat={DATE_FORMAT}
+                                renderInput={(params: any) => (
+                                  <TextField {...params} fullWidth />
+                                )}
+                              />
+                            )}
+                          />
+                          <Button
+                            // fullWidth
+                            color="error"
+                            variant="contained"
+                            size="small"
+                            sx={{ width: '50px', height: '50px' }}
+                            onClick={() => handleRemoveProvince(item.provinceId)}
+                          >
+                            <RemoveRoundedIcon />
+                          </Button>
+                        </Stack>
+                      </Box>
+                    );
+                  })}
                 </Box>
                 <Button
                   type="submit"

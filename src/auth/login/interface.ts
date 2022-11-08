@@ -4,7 +4,6 @@ export type IAuth = {
 };
 
 export type ILoginCallback = {
-  onSuccess: VoidFunction;
   onError: VoidFunction;
 };
 

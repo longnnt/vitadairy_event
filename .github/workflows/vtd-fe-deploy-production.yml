@@ -2,11 +2,11 @@ name: Deploy production
 
 on:
   workflow_dispatch:
-      inputs:
-        secret_key_deploy_prod:
-          type: string
-          required: true
-          description: secret_key_deploy_prod
+    inputs:
+      secret_key_deploy_prod:
+        type: string
+        required: true
+        description: secret_key_deploy_prod
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checking secrets
-        if: "${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}"
+        if: '${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}'
         run: |-
           echo "Log level: ${{ github.event.inputs.secret_key_deploy_prod }}"
 
@@ -60,15 +60,18 @@ jobs:
           gcloud auth configure-docker --quiet
           gcloud auth configure-docker $GAR_HOST --quiet
 
+      - name: Setup env
+        run: |
+          echo REACT_APP_BASE_URL=${{ secrets.BASE_URL_PROD }} >> .env
+
       - name: Build Docker
         run: docker build -t $IMAGE_NAME:latest .
 
       - name: Push Docker Image to Artifact Registry
         run: |-
-          docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
-          docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:$GITHUB_SHA
+          docker tag $IMAGE_NAME:latest $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
+          docker push $GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest
 
       - name: Deploy
         run: |-
           gcloud run deploy $DEPLOYMENT_NAME --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=$REGION --allow-unauthenticated
-

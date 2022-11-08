@@ -33,18 +33,24 @@ export const FilterBar = (props: { handleSearch: Function }) => {
   });
 
   const {
+    watch,
     control,
     handleSubmit,
     register,
     reset,
     formState: { isSubmitting, errors },
   } = methods;
-
+  if(!watch().endDate && !watch().searchText && !watch().startDate){
+    dispatch(setSearchText(''));
+    dispatch(setFirstScanStartDate(null));
+    dispatch(setFirstScanEndDate(null));
+  }
   const onSubmit = (data: IFormFilter) => {
     dispatch(setSearchText(data.searchText));
     dispatch(setFirstScanStartDate(data.startDate));
     dispatch(setFirstScanEndDate(data.endDate));
   };
+
 
   const handleCancel = () => {
     reset({

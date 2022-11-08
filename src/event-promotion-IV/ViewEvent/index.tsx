@@ -78,7 +78,7 @@ export const ViewEvent = () => {
       <Scrollbar sx={{ marginTop: '20px' }}>
         <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
           <Stack spacing="26px">
-            <TextField value={name} label="Tên sự kiện" fullWidth disabled />
+            <TextField value={name} label="Tên sự kiện*" fullWidth disabled />
             <Stack
               spacing={'10px'}
               direction="row"
@@ -106,7 +106,7 @@ export const ViewEvent = () => {
             </Stack>
 
             <FormControl>
-              <InputLabel>Mã sản phẩm</InputLabel>
+              <InputLabel>Mã sản phẩm*</InputLabel>
               <Select
                 multiple
                 input={<OutlinedInput label="Mã sản phẩm" value={skus} />}
@@ -123,20 +123,20 @@ export const ViewEvent = () => {
 
             <TextField
               fullWidth
-              label="Tỉ lệ trúng quà mặc định của người dùng %"
+              label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
               value={defaultWinRate}
               disabled
             />
             <TextField
               value={upRate}
               fullWidth
-              label="Tỉ lệ cộng thêm khi người dùng không trúng quà %"
+              label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
               disabled
             />
             <TextField
               value={downRate}
               fullWidth
-              label="Tỉ lệ bị trừ đi khi người dùng trúng quà %"
+              label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
               disabled
             />
             <FormControl>
@@ -180,7 +180,7 @@ export const ViewEvent = () => {
 
             <TextField
               fullWidth
-              label="Số lần người dùng nhận quà ..."
+              label="Số lần người dùng nhận quà tối đa*"
               value={userLimit}
               disabled
             />
