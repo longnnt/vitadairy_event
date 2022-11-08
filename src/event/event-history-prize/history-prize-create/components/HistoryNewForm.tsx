@@ -173,7 +173,7 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate,isLoading } = useAddEvent({ onSuccess, onError });
+  const { mutate, isLoading } = useAddEvent({ onSuccess, onError });
   const params = useParams();
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
@@ -566,7 +566,7 @@ export default function HistoryNewForm() {
                 </div>
               </Grid>
             </Card>
-            <LabelStyle>Tỉnh thành</LabelStyle>
+            {/* <LabelStyle>Tỉnh thành</LabelStyle>
             <Card sx={{ p: 3, width: '100%' }}>
               <Grid sx={{ maxHeight: 370 }}>
                 <Grid direction="row" justifyContent="flex-end" container>
@@ -711,7 +711,7 @@ export default function HistoryNewForm() {
                     })}
                 </Grid>
               </Grid>
-            </Card>
+            </Card> */}
           </Grid>
 
           <Grid direction="row" justifyContent="flex-end" container mt={2}>
