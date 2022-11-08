@@ -37,20 +37,30 @@ import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
+  ButtonType,
   COLUMNS_HEADERS,
   defaultValues,
-  FormatDate,
+  FORMAT_DATE,
   popupTypeOption,
   POPUP_TYPE,
-  StyleGift,
+  STYLE_GIFT,
   TABLE_HEAD_GIFT,
 } from '../../constants';
-import { eventPrizeSchema } from '../../event.schema';
+import { createEventPrizevalidate } from '../../event.schema';
 import {
   buttonTypeState,
   giftSelecttor,
+  popUpCodeSelector,
+  popUpTypeSelector,
   setButtonType,
+  setDataCities,
+  setDataCitiesSelector,
+  setFileCSV,
   setGift,
+  setOpen,
+  setOpenSelector,
+  setPopUpCode,
+  setPopUpType,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
@@ -94,19 +104,19 @@ export default function HistoryNewForm() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const [popUpType, setPopUpType] = useState<string>('');
-  const [popUpCode, setPopUpCode] = React.useState<string | null>('');
-  const [_, setfilesCsv] = React.useState<Array<unknown>>([]);
-  const [dataCities, setDataCities] = React.useState<IEventDetail[]>([]);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const buttonTypeValue = useSelector(buttonTypeState);
   const gift = useSelector(giftSelecttor);
+  const popUpType = useSelector(popUpTypeSelector);
+  const popUpCode = useSelector(popUpCodeSelector);
+  const open = useSelector(setOpenSelector);
+  const dataCities = useSelector(setDataCitiesSelector);
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
+  const handleOpen = () => dispatch(setOpen(true));
+  const handleClose = () => dispatch(setOpen(false));
 
   const removeCount = (provinceId: number) => {
-    setDataCities([...dataCities].filter((item) => item.provinceId !== provinceId));
+    dispatch(
+      setDataCities([...dataCities].filter((item) => item.provinceId !== provinceId))
+    );
   };
 
   const handleChangeCity = (
@@ -133,20 +143,20 @@ export default function HistoryNewForm() {
     newData[provinceIdx] = { ...itemEdit, [keyEdit]: e.target.value };
 
     // update data array
-    setDataCities(newData);
+    dispatch(setDataCities(newData));
     setValue('eventDetailProvinces', newData);
   };
 
   const changePopUpType = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setPopUpType(event.target.value);
+    dispatch(setPopUpType(event.target.value));
     setValue('popupType', event.target.value);
   };
   const changePopUpCode = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setPopUpCode(event.target.value);
+    dispatch(setPopUpCode(event.target.value));
     setValue('popupCode', event.target.value);
   };
 
@@ -163,19 +173,7 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate } = useAddEvent({ onSuccess, onError });
-
-  useEffect(() => {
-    dispatch(
-      setGift({
-        id: 0,
-        name: '',
-        type: '',
-        money: '',
-      })
-    );
-  }, []);
-
+  const { mutate,isLoading } = useAddEvent({ onSuccess, onError });
   const params = useParams();
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
@@ -211,12 +209,12 @@ export default function HistoryNewForm() {
         const inputFile = event.target.files[0];
 
         const fileExtension = inputFile?.type.split('/')[1];
-        FormatDate;
+        FORMAT_DATE;
         if (!allowedExtensions.includes(fileExtension)) {
           showErrorSnackbar('Không phải file csv');
           return;
         }
-        setfilesCsv(inputFile);
+        dispatch(setFileCSV(inputFile));
         showSuccessSnackbar('Import file thành công');
       }
       if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
@@ -234,11 +232,11 @@ export default function HistoryNewForm() {
             name: item.name,
             provinceId: item.provinceId,
             quantity: item.quantity,
-            startDate: dayjs(item.startDate, FormatDate),
-            endDate: dayjs(item.endDate, FormatDate),
+            startDate: dayjs(item.startDate, FORMAT_DATE),
+            endDate: dayjs(item.endDate, FORMAT_DATE),
           }));
 
-          setDataCities(data);
+          dispatch(setDataCities(data));
           setValue('eventDetailProvinces', data);
         },
       });
@@ -247,8 +245,26 @@ export default function HistoryNewForm() {
     }
   };
 
+  useEffect(() => {
+    dispatch(
+      setGift({
+        id: 0,
+        name: '',
+        type: '',
+        money: '',
+      })
+    );
+
+    return () => {
+      dispatch(setPopUpType(''));
+      dispatch(setPopUpCode(''));
+      dispatch(setFileCSV([]));
+      dispatch(setDataCities([]));
+    };
+  }, []);
+
   const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(eventPrizeSchema),
+    resolver: yupResolver(createEventPrizevalidate()),
     defaultValues,
   });
 
@@ -369,16 +385,14 @@ export default function HistoryNewForm() {
                     margin="dense"
                   />
                   <RHFSelect
-                    name={'popupType'}
+                    name="popupType"
                     key="popupType"
                     label="Pop up Type"
                     placeholder="Pop up Type"
                     margin="dense"
                     value={popUpType}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      setPopUpType(val);
-                      setValue('popupType', val);
+                      changePopUpType(e);
                     }}
                   >
                     <option value="" />
@@ -440,8 +454,11 @@ export default function HistoryNewForm() {
                   <Grid container spacing={3}>
                     <Grid item xs>
                       <Button
-                        fullWidth
-                        sx={{ display: valueChoice !== 'point' ? 'block' : 'none' }}
+                        sx={{
+                          display: valueChoice !== 'point' ? 'block' : 'none',
+                          width: '40%',
+                          alignSelf: 'flex-start',
+                        }}
                         variant="contained"
                         color="info"
                         size="large"
@@ -464,7 +481,7 @@ export default function HistoryNewForm() {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                       >
-                        <Box sx={StyleGift}>
+                        <Box sx={STYLE_GIFT}>
                           <Scrollbar>
                             <TableContainer
                               sx={{
@@ -567,15 +584,17 @@ export default function HistoryNewForm() {
                     <Button
                       color="inherit"
                       onClick={() => {
-                        setDataCities([
-                          ...dataCities,
-                          {
-                            provinceId: dataCities.length,
-                            startDate: dayjs(),
-                            endDate: dayjs(),
-                            quantity: 0,
-                          },
-                        ]);
+                        dispatch(
+                          setDataCities([
+                            ...dataCities,
+                            {
+                              provinceId: dataCities.length,
+                              startDate: dayjs(),
+                              endDate: dayjs(),
+                              quantity: 0,
+                            },
+                          ])
+                        );
                       }}
                       variant="outlined"
                       size="large"
@@ -642,7 +661,7 @@ export default function HistoryNewForm() {
                                       fullWidth
                                       defaultValue={dayjs(
                                         item.startDate || null,
-                                        FormatDate
+                                        FORMAT_DATE
                                       )}
                                       onChange={(e) => handleChangeCity(e, item)}
                                     />
@@ -668,7 +687,7 @@ export default function HistoryNewForm() {
                                       fullWidth
                                       defaultValue={dayjs(
                                         item.endDate || null,
-                                        FormatDate
+                                        FORMAT_DATE
                                       )}
                                       onChange={(e) => handleChangeCity(e, item)}
                                     />
@@ -702,7 +721,8 @@ export default function HistoryNewForm() {
                 variant="outlined"
                 size="large"
                 type="submit"
-                onClick={() => dispatch(setButtonType('saveSubmit'))}
+                loading={isLoading}
+                onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
               >
                 Lưu
               </LoadingButton>
@@ -713,10 +733,8 @@ export default function HistoryNewForm() {
                 variant="outlined"
                 size="large"
                 type="submit"
-                // onClick={(e) => {
-                //   setRedirect(false);
-                // }}
-                onClick={() => dispatch(setButtonType('saveCreateSubmit'))}
+                loading={isLoading}
+                onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
               >
                 Lưu & Chỉnh sửa
               </LoadingButton>

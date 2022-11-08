@@ -11,7 +11,6 @@ export const useAuthlogin = (callback: ILoginCallback) => {
         const { accessToken } = data.data.response.auth;
         dispatch(setAccessToken('Bearer ' + accessToken));
         dispatch(setLogin(true));
-        callback.onSuccess && callback.onSuccess();
       },
       onError: () => {
         callback.onError && callback.onError();

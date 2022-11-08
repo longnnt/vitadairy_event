@@ -124,7 +124,7 @@ export const EditEventForm = () => {
         <Scrollbar sx={{ marginTop: '20px' }}>
           <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
             <Stack spacing="26px">
-              <RHFTextField name="name" label="Tên sự kiện" fullWidth />
+              <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
               <Stack
                 spacing={'10px'}
                 direction="row"
@@ -178,7 +178,7 @@ export const EditEventForm = () => {
               </Stack>
 
               <FormControl>
-                <InputLabel error={!!errors.skus}>Mã sản phẩm</InputLabel>
+                <InputLabel error={!!errors.skus}>Mã sản phẩm*</InputLabel>
                 <Controller
                   name="skus"
                   control={control}
@@ -212,19 +212,19 @@ export const EditEventForm = () => {
 
               <RHFTextField
                 fullWidth
-                label="Tỉ lệ trúng quà mặc định của người dùng %"
+                label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
                 name="defaultWinRate"
                 type="number"
               />
               <RHFTextField
                 fullWidth
-                label="Tỉ lệ cộng thêm khi người dùng không trúng quà %"
+                label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
                 name="upRate"
                 type="number"
               />
               <RHFTextField
                 fullWidth
-                label="Tỉ lệ bị trừ đi khi người dùng trúng quà %"
+                label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
                 name="downRate"
                 type="number"
               />
@@ -267,7 +267,7 @@ export const EditEventForm = () => {
               <RHFTextField
                 name="userLimit"
                 fullWidth
-                label="Số lần người dùng nhận quà ..."
+                label="Số lần người dùng nhận quà tối đa*"
                 type="number"
               />
             </Stack>

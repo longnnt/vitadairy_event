@@ -42,18 +42,7 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const onSuccess = () => {
-    enqueueSnackbar('Đăng xuất thành công', {
-      variant: 'success',
-      autoHideDuration: 1000,
-    });
-  };
-  const onError = () => {
-    enqueueSnackbar('Đăng xuất thất bại', {
-      variant: 'error',
-    });
-  };
-  const { mutate } = useAuthlogout({ onSuccess, onError });
+  const { mutate } = useAuthlogout();
   const isMountedRef = useIsMountedRef();
 
   const [open, setOpen] = useState<HTMLElement | null>(null);

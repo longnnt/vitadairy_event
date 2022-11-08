@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checking secrets
-        if: "${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}"
+        if: '${{ env.SECRET_KEY_DEPLOY_PROD == github.event.inputs.secret_key_deploy_prod }}'
         run: |-
           echo "Log level: ${{ github.event.inputs.secret_key_deploy_prod }}"
 
@@ -75,4 +75,3 @@ jobs:
       - name: Deploy
         run: |-
           gcloud run deploy $DEPLOYMENT_NAME --quiet --image=$GAR_HOST/$GCP_PROJECT_ID/$GAR_NAME/$IMAGE_NAME:latest --region=$REGION --allow-unauthenticated
-
