@@ -185,7 +185,7 @@ export default function HistoryNewForm() {
   const idEventPrize = parseInt(id as string);
 
   const { data: addTransaction } = useGetAllTranSacTion();
-  const dataTransaction = addTransaction?.data?.response?.response || [];
+  const dataTransaction = addTransaction?.data?.response || [];
   const addNewOption1 = dataTransaction.map((item) => ({
     key: item.id,
     name: item.description,
