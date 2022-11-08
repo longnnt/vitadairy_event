@@ -1,5 +1,6 @@
 import {
   API_CREATE_EVENT,
+  API_CREATE_TRANSACTION_TYPE,
   API_GIFT,
   API_PRIZE_EDIT,
   API_PRIZE_HISTORY,
@@ -44,7 +45,7 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
 };
 
 export const getTransactionTypeId = async () => {
-  return axiosInstance.get<unknown, IResTransaction>(`${API_TRANSACTION_TYPE}`);
+  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`);
 };
 
 export const getProvince = async () => {

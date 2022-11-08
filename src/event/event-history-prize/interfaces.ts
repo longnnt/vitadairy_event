@@ -127,7 +127,13 @@ export interface IResTransaction {
       status: number;
       msg: string;
     };
-    response: ITranSacTion[];
+    response: {
+      meta: {
+        status: number;
+        msg: string;
+      };
+      response: ITranSacTion[];
+    };
   };
 }
 
