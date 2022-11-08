@@ -14,6 +14,7 @@ type StateProps = {
   open: boolean;
   dataCities: IEventDetail[];
   fileCSV: Array<unknown>;
+  showData:boolean
 };
 
 export const initialState: StateProps = {
@@ -27,6 +28,7 @@ export const initialState: StateProps = {
   open: false,
   dataCities: [],
   fileCSV: [],
+  showData:false
 };
 
 export const eventAdminSlice = createSlice({
@@ -63,6 +65,9 @@ export const eventAdminSlice = createSlice({
     setFileCSV: (state, action: PayloadAction<Array<unknown>>) => {
       state.fileCSV = action.payload;
     },
+    setShowData: (state, action: PayloadAction<boolean>) => {
+      state.showData = action.payload;
+    },
   },
 });
 
@@ -77,6 +82,7 @@ export const {
   setOpen,
   setDataCities,
   setFileCSV,
+  setShowData
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -89,5 +95,7 @@ export const popUpCodeSelector = (state: RootState) => state.historyList.popUpCo
 export const setOpenSelector = (state: RootState) => state.historyList.open;
 export const setDataCitiesSelector = (state: RootState) => state.historyList.dataCities;
 export const setFileCSVSelector = (state: RootState) => state.historyList.fileCSV;
+export const showDataSelector = (state: RootState) => state.historyList.showData;
+
 
 export default eventAdminSlice.reducer;

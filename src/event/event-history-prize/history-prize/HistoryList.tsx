@@ -15,6 +15,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { reset } from 'numeral';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -35,6 +36,8 @@ import {
   firstScanEndSelector,
   firstScanStartSelector,
   searchTextSelector,
+  setShowData,
+  showDataSelector,
 } from '../event.slice';
 import { useDeletePrizeHistoryAdmin } from '../hooks/useDeletePrizeHistory';
 
@@ -66,10 +69,11 @@ function EventPrizeHistoryDashboard() {
   } = useTable();
 
   const { enqueueSnackbar } = useSnackbar();
-
+  const dispatch =useDispatch() 
   const searchText = useSelector(searchTextSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
+  const showData =useSelector(showDataSelector)
   const searchParams: IPrizeHistoryParams = {
     page: page,
     size: rowsPerPage,
@@ -80,7 +84,7 @@ function EventPrizeHistoryDashboard() {
   if (!searchText) delete searchParams.searchText;
   if (!firstScanEnd) delete searchParams.endDate;
   if (!firstScanStart) delete searchParams.startDate;
-
+  
   const { data, refetch, isLoading } = useGetPrizeHistory(searchParams);
   const listStoreAdmin = data?.data?.response || [];
 
@@ -96,12 +100,17 @@ function EventPrizeHistoryDashboard() {
   );
 
   const handleSearch = () => {
+    dispatch(setShowData(true))
     refetch();
     setPage(0);
   };
 
   const handleDeleteRows = (ids: string[]) => {};
-
+  useEffect(()=>{
+    return ()=>{
+      dispatch(setShowData(false))
+    }
+  },[])
   const handleEditRow = (id: string) => {};
 
   const { totalRecords } = data?.data?.pagination || {
@@ -189,7 +198,7 @@ function EventPrizeHistoryDashboard() {
               />
 
               <TableBody>
-                {listStoreAdmin.map((row: IPrizeHistory) => (
+                {showData && listStoreAdmin.map((row: IPrizeHistory) => (
                   <PrizeHistoryTableRow
                     key={row.id}
                     row={{
