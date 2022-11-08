@@ -24,6 +24,8 @@ export interface initialValueProps {
   userType: 'allUser' | 'newUser';
   selectedIds: number[];
   isResetSelect: boolean;
+  isOpenModal: boolean;
+  productCode: string[];
 }
 
 export type TimeProps = Date | null;
@@ -95,4 +97,9 @@ export interface PaginationProps {
   currentPage?: number;
   recordsPerPage?: number;
   last?: boolean;
+}
+
+export interface IProductCode {
+  code: string;
+  id: number;
 }
