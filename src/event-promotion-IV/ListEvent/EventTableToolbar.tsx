@@ -67,7 +67,7 @@ export const EventTableToolbar = () => {
               {...field}
               label="Ngày bắt đầu"
               key={'firstScanStartDate'}
-              inputFormat={'dd/mm/yyyy hh:mm a'}
+              inputFormat={'dd/MM/yyyy hh:mm a'}
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
@@ -81,7 +81,7 @@ export const EventTableToolbar = () => {
               {...field}
               key="firstScanEndDate"
               label="Ngày kết thúc"
-              inputFormat={'dd/mm/yyyy hh:mm a'}
+              inputFormat={'dd/MM/yyyy hh:mm a'}
               renderInput={(params: any) => <TextField {...params} fullWidth />}
             />
           )}
