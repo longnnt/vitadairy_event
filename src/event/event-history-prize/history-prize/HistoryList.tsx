@@ -15,6 +15,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { reset } from 'numeral';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -68,7 +69,7 @@ function EventPrizeHistoryDashboard() {
   } = useTable();
 
   const { enqueueSnackbar } = useSnackbar();
-
+  const dispatch =useDispatch() 
   const searchText = useSelector(searchTextSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
