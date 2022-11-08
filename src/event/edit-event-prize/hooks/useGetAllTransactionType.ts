@@ -4,6 +4,8 @@ import { getAllTransactionType } from '../service';
 
 export const useGetAllTransactionType = () => {
   return {
-    ...useQuery([QUERY_KEYS.ALL_TRANSACTION_TYPE], getAllTransactionType),
+    ...useQuery([QUERY_KEYS.ALL_TRANSACTION_TYPE], getAllTransactionType, {
+      select: (data) => data.data.response,
+    }),
   };
 };

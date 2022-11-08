@@ -5,9 +5,9 @@ import {
   API_PRIZE_EDIT,
   API_PROVINCE_VN,
   API_TRANSACTION_TYPE,
+  API_TRANSACTION_TYPE_UNUSE,
 } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
-import { Z_UNKNOWN } from 'zlib';
 import {
   IFormEdit,
   IGiftById,

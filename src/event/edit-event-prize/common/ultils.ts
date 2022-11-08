@@ -1,72 +1,64 @@
-import * as XLSX from 'xlsx';
+import { IEventProvince, IFormEdit } from './interface';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
-export const convertExcelFileToObj = (file: any, setFileImport: any, fileImport: any) => {
-  const reader = new FileReader();
-  const rABS = !!reader.readAsBinaryString;
-  let convertDta;
+export const fomatFormData = (data: IFormEdit) => {
+  const tempEditData = { ...data };
+  delete tempEditData.typeUser;
 
-  reader.onload = (e: ProgressEvent<FileReader>) => {
-    const bstr = e?.target?.result;
-    const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array', bookVBA: true });
-    const wsname = wb.SheetNames[0];
-    const ws = wb.Sheets[wsname];
-    const data = XLSX.utils.sheet_to_csv(ws);
-    convertDta = convertToJson(data);
-    const tempCustomDta = fileImport.concat(convertDta);
-
-    setFileImport(tempCustomDta);
-  };
-
-  if (rABS) {
-    reader.readAsBinaryString(file);
-  } else {
-    reader.readAsArrayBuffer(file);
-  }
-};
-
-export const convertToJson = (csv: any) => {
-  const lines = csv.split('\n');
-  const result = [];
-  const headers = lines[0].split(',');
-  for (let i = 1; i < lines.length; i++) {
-    const obj: any = {};
-    const currentline = lines[i].split(',');
-    for (let j = 0; j < headers.length; j++) {
-      obj[headers[j]] = currentline[j];
+  const tempProvince = data?.eventDetailProvinces?.map((item: IEventProvince) => {
+    if (item.endDate || item.startDate) {
+      const startDate = item.startDate
+        ? new Date(item.startDate as string).toISOString()
+        : new Date().toISOString;
+      const endDate = item.endDate
+        ? new Date(item.endDate as string).toISOString()
+        : new Date().toISOString;
+      item = { ...item, startDate: startDate as string, endDate: endDate as string };
     }
-    result.push(obj);
-  }
-  return result;
-};
 
-export const validateFileImportFormat = (files: any) => {
-  const testPropsName = [
-    'provinceId',
-    'extraquantity',
-    'startDate',
-    'endDate',
-    'provinceName',
-    'id',
-    'quantity',
-  ];
-  let result = true;
-  files?.map((item: any) => {
-    const propsfileImportName = Object.keys(item);
-    const rightFormatName = propsfileImportName?.every((t: string) =>
-      testPropsName.includes(t)
-    );
-    if (rightFormatName === false) {
-      result = false;
-      return;
+    if (typeof item.provinceId === 'string') {
+      const provId = parseInt(item.provinceId);
+      item = { ...item, provinceId: provId };
     }
-    const startTime = new Date(item.startDate);
-    const endTime = new Date(item.endDate);
-
-    if (!(startTime instanceof Date) || !(endTime instanceof Date)) {
-      result = false;
-      return;
+    // if (!(typeof item.extraquantity === 'string')) {
+    //   delete item.extraquantity;
+    //   item = { ...item, quantity: 0 };
+    // } else {
+    //   const totalQuantities = +item.extraquantity;
+    //   item = { ...item, quantity: totalQuantities };
+    // }
+    if (!item.extraquantity) {
+      delete item.extraquantity;
+      item = { ...item, quantity: 0 };
+    } else {
+      const totalQuantities = +item.extraquantity;
+      item = { ...item, quantity: totalQuantities };
     }
+    return item;
   });
-
-  return result;
+  tempEditData.eventDetailProvinces = tempProvince;
+  return tempEditData;
 };
+
+export const StyledBox = styled(Box)(({ theme }) => ({
+  height: 500,
+  width: '100%',
+  '& .MuiDataGrid-cell--editing': {
+    backgroundColor: 'rgb(255,215,115, 0.19)',
+    color: '#1a3e72',
+    '& .MuiInputBase-root': {
+      height: '100%',
+    },
+  },
+  '& .Mui-error': {
+    backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
+    color: theme.palette.error.main,
+  },
+  '& .actions': {
+    color: 'text.secondary',
+  },
+  '& .textPrimary': {
+    color: 'text.primary',
+  },
+}));

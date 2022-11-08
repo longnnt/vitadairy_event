@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export interface IResEventPrizeById {
   data: {
     meta: {
@@ -9,12 +11,13 @@ export interface IResEventPrizeById {
 }
 
 export interface IEventProvince {
-  id?: number;
+  id?: number | string;
   provinceId: number;
   quantity?: number;
-  startDate: Date | string;
-  endDate: Date | string;
+  startDate: Date | string | Dayjs;
+  endDate: Date | string | Dayjs;
   extraquantity?: number;
+  isNew?: boolean;
 }
 
 export interface IFormEdit {
