@@ -136,9 +136,9 @@ export const COLUMNS_HEADERS: Array<string> = [
 
 export const SuccessUploadCode = 1000;
 
-export const FormatDate = 'DD/MM/YYYY';
+export const FORMAT_DATE = 'DD/MM/YYYY';
 
-export const StyleGift = {
+export const STYLE_GIFT = {
   position: 'absolute',
   top: '50%',
   left: '50%',

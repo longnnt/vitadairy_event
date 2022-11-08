@@ -1,11 +1,11 @@
 import {
   API_CREATE_EVENT,
+  API_CREATE_TRANSACTION_TYPE,
   API_GIFT,
   API_PRIZE_EDIT,
   API_PRIZE_HISTORY,
   API_PROVINCE_VN,
   API_STORE_ADMIN,
-  API_TRANSACTION_TYPE,
 } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import {
@@ -44,7 +44,7 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
 };
 
 export const getTransactionTypeId = async () => {
-  return axiosInstance.get<unknown, IResTransaction>(`${API_TRANSACTION_TYPE}`);
+  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`);
 };
 
 export const getProvince = async () => {
