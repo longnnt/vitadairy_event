@@ -21,7 +21,7 @@ export const initialState: StateProps = {
   startDate: null,
   endDate: null,
   gift: {} as IGift,
-  buttonType: ButtonType.SAVESUBMIT,
+  buttonType: ButtonType.SAVE_SUBMIT,
   popUpType: '',
   popUpCode: '',
   open: false,

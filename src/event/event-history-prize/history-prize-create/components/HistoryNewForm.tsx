@@ -722,7 +722,7 @@ export default function HistoryNewForm() {
                 size="large"
                 type="submit"
                 loading={isLoading}
-                onClick={() => dispatch(setButtonType(ButtonType.SAVESUBMIT))}
+                onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
               >
                 Lưu
               </LoadingButton>
@@ -734,7 +734,7 @@ export default function HistoryNewForm() {
                 size="large"
                 type="submit"
                 loading={isLoading}
-                onClick={() => dispatch(setButtonType(ButtonType.SAVECREATESUBMIT))}
+                onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
               >
                 Lưu & Chỉnh sửa
               </LoadingButton>

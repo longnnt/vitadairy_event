@@ -23,9 +23,9 @@ export const useAddEvent = (callback: IStoreAdminCallback) => {
         queryClient.invalidateQueries([QUERY_KEYS.EVENT_CREATE_PRIZE]);
         const idEvent = rs?.data?.response?.id;
         callback.onSuccess && callback.onSuccess();
-        if (buttonType === ButtonType.SAVECREATESUBMIT) {
+        if (buttonType === ButtonType.SAVE_CREATE_SUBMIT) {
           navigate(PATH_DASHBOARD.eventAdmin.editFileEvent(+idEvent));
-        } else if (buttonType === ButtonType.SAVESUBMIT) {
+        } else if (buttonType === ButtonType.SAVE_SUBMIT) {
           navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
         }
       } else {

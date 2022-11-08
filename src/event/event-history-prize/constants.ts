@@ -135,8 +135,8 @@ export const COLUMNS_HEADERS: Array<string> = [
 ];
 
 export enum ButtonType {
-  SAVESUBMIT = 'saveSubmit',
-  SAVECREATESUBMIT = 'saveCreateSubmit',
+  SAVE_SUBMIT = 'saveSubmit',
+  SAVE_CREATE_SUBMIT = 'saveCreateSubmit',
 }
 
 export const SuccessUploadCode = 1000;
