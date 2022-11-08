@@ -134,6 +134,11 @@ export const COLUMNS_HEADERS: Array<string> = [
   'endDate',
 ];
 
+export enum ButtonType {
+  SAVESUBMIT = 'saveSubmit',
+  SAVECREATESUBMIT = 'saveCreateSubmit',
+}
+
 export const SuccessUploadCode = 1000;
 
 export const FORMAT_DATE = 'DD/MM/YYYY';

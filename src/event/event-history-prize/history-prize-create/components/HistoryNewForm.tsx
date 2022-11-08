@@ -37,6 +37,7 @@ import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
+  ButtonType,
   COLUMNS_HEADERS,
   defaultValues,
   FORMAT_DATE,
@@ -56,8 +57,6 @@ import {
   setDataCitiesSelector,
   setFileCSV,
   setGift,
-  setLoading,
-  setLoadingSelector,
   setOpen,
   setOpenSelector,
   setPopUpCode,
@@ -77,7 +76,6 @@ import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { cleanup } from '@testing-library/react';
 
 dayjs.extend(customParseFormat);
 
@@ -111,7 +109,6 @@ export default function HistoryNewForm() {
   const popUpCode = useSelector(popUpCodeSelector);
   const open = useSelector(setOpenSelector);
   const dataCities = useSelector(setDataCitiesSelector);
-  const loading = useSelector(setLoadingSelector);
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const handleOpen = () => dispatch(setOpen(true));
   const handleClose = () => dispatch(setOpen(false));
@@ -176,7 +173,7 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate, isLoading } = useAddEvent({ onSuccess, onError });
+  const { mutate,isLoading } = useAddEvent({ onSuccess, onError });
   const params = useParams();
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
@@ -204,10 +201,6 @@ export default function HistoryNewForm() {
   const { totalRecords } = ListGift?.data?.pagination || {
     totalRecords: 0,
   };
-  
-  const handleClick = () => {
-    dispatch(setLoading(true));
-  }
 
   const importFile = async (event: any) => {
     try {
@@ -729,7 +722,7 @@ export default function HistoryNewForm() {
                 size="large"
                 type="submit"
                 loading={isLoading}
-                onClick={() => {dispatch(setButtonType('saveSubmit')), handleClick()}}
+                onClick={() => dispatch(setButtonType(ButtonType.SAVESUBMIT))}
               >
                 Lưu
               </LoadingButton>
@@ -741,7 +734,7 @@ export default function HistoryNewForm() {
                 size="large"
                 type="submit"
                 loading={isLoading}
-                onClick={() => {dispatch(setButtonType('saveCreateSubmit')), handleClick()}}
+                onClick={() => dispatch(setButtonType(ButtonType.SAVECREATESUBMIT))}
               >
                 Lưu & Chỉnh sửa
               </LoadingButton>

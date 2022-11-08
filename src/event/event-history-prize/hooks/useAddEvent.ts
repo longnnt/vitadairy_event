@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { SuccessUploadCode } from '../constants';
+import { ButtonType, SuccessUploadCode } from '../constants';
 import { buttonTypeState } from '../event.slice';
 import { IStoreAdminCallback } from '../interfaces';
 import { addEvent } from '../services';
@@ -23,9 +23,9 @@ export const useAddEvent = (callback: IStoreAdminCallback) => {
         queryClient.invalidateQueries([QUERY_KEYS.EVENT_CREATE_PRIZE]);
         const idEvent = rs?.data?.response?.id;
         callback.onSuccess && callback.onSuccess();
-        if (buttonType === 'saveCreateSubmit') {
+        if (buttonType === ButtonType.SAVECREATESUBMIT) {
           navigate(PATH_DASHBOARD.eventAdmin.editFileEvent(+idEvent));
-        } else if (buttonType === 'saveSubmit') {
+        } else if (buttonType === ButtonType.SAVESUBMIT) {
           navigate(PATH_DASHBOARD.eventAdmin.listPrize(id as string));
         }
       } else {

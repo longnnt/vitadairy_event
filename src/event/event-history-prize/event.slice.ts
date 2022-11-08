@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
+import { ButtonType } from './constants';
 import { IEventDetail, IGift, IPayloadDate, IPayloadSearch } from './interfaces';
 
 type StateProps = {
@@ -7,13 +8,12 @@ type StateProps = {
   startDate: Date | null;
   endDate: Date | null;
   gift: IGift;
-  buttonType: string;
+  buttonType: ButtonType;
   popUpType: string;
   popUpCode: string | null;
   open: boolean;
   dataCities: IEventDetail[];
   fileCSV: Array<unknown>;
-  loading: boolean;
 };
 
 export const initialState: StateProps = {
@@ -21,13 +21,12 @@ export const initialState: StateProps = {
   startDate: null,
   endDate: null,
   gift: {} as IGift,
-  buttonType: '',
+  buttonType: ButtonType.SAVESUBMIT,
   popUpType: '',
   popUpCode: '',
   open: false,
   dataCities: [],
   fileCSV: [],
-  loading: true,
 };
 
 export const eventAdminSlice = createSlice({
@@ -46,7 +45,7 @@ export const eventAdminSlice = createSlice({
     setGift: (state, action: PayloadAction<IGift>) => {
       state.gift = action.payload;
     },
-    setButtonType: (state, action) => {
+    setButtonType: (state, action: PayloadAction<ButtonType>) => {
       state.buttonType = action.payload;
     },
     setPopUpType: (state, action: PayloadAction<string>) => {
@@ -64,9 +63,6 @@ export const eventAdminSlice = createSlice({
     setFileCSV: (state, action: PayloadAction<Array<unknown>>) => {
       state.fileCSV = action.payload;
     },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
-    },
   },
 });
 
@@ -81,7 +77,6 @@ export const {
   setOpen,
   setDataCities,
   setFileCSV,
-  setLoading,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -94,6 +89,5 @@ export const popUpCodeSelector = (state: RootState) => state.historyList.popUpCo
 export const setOpenSelector = (state: RootState) => state.historyList.open;
 export const setDataCitiesSelector = (state: RootState) => state.historyList.dataCities;
 export const setFileCSVSelector = (state: RootState) => state.historyList.fileCSV;
-export const setLoadingSelector = (state: RootState) => state.historyList.loading;
 
 export default eventAdminSlice.reducer;
