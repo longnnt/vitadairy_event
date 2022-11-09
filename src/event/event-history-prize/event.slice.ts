@@ -14,7 +14,6 @@ type StateProps = {
   open: boolean;
   dataCities: IEventDetail[];
   fileCSV: Array<unknown>;
-  rows: IEventDetail[];
   provinceNewForm: IEventDetail[];
   provinceInFo: IEventDetail[];
   showData: boolean;
@@ -31,7 +30,6 @@ export const initialState: StateProps = {
   open: false,
   dataCities: [],
   fileCSV: [],
-  rows: [],
   provinceNewForm: [],
   provinceInFo: [DEDAULT_PROVINCE],
   showData: false,
@@ -71,9 +69,6 @@ export const eventAdminSlice = createSlice({
     setFileCSV: (state, action: PayloadAction<Array<unknown>>) => {
       state.fileCSV = action.payload;
     },
-    setRows: (state, action: PayloadAction<IEventDetail[]>) => {
-      state.rows = action.payload;
-    },
     setProvinceNewForm: (state, action: PayloadAction<Array<IEventDetail>>) => {
       state.provinceNewForm = action.payload;
     },
@@ -97,7 +92,6 @@ export const {
   setOpen,
   setDataCities,
   setFileCSV,
-  setRows,
   setProvinceNewForm,
   setProvinceInFo,
   setShowData,
@@ -113,7 +107,6 @@ export const popUpCodeSelector = (state: RootState) => state.historyList.popUpCo
 export const setOpenSelector = (state: RootState) => state.historyList.open;
 export const setDataCitiesSelector = (state: RootState) => state.historyList.dataCities;
 export const setFileCSVSelector = (state: RootState) => state.historyList.fileCSV;
-export const setRowsSelector = (state: RootState) => state.historyList.rows;
 export const setProvinceNewFormSelector = (state: RootState) =>
   state.historyList.provinceNewForm;
 export const setProvinceInFoSelector = (state: RootState) =>
