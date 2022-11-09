@@ -71,8 +71,7 @@ export default function FullFeaturedCrudGrid() {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
 
-  const province = useSelector(setProvinceInFoSelector);
-
+  const province = useSelector(setProvinceInFoSelector); // ??? => bug 
   const { data: addProvince } = useGetAllProvince();
   const dataProvince = addProvince?.data?.response?.provinces || [];
   const addProvinceVN = dataProvince.map((item) => ({
@@ -80,9 +79,13 @@ export default function FullFeaturedCrudGrid() {
     label: item.name,
   }));
 
-  useDeepCompareEffect(() => {
-    setRows(province);
-  }, [province]);
+  // const provinceId = addProvinceVN
+  //   ? addProvinceVN.map((item: ISelect) => item.value)
+  //   : [];
+
+  // useDeepCompareEffect(() => {
+  //   setRows(dataProvince);
+  // }, [dataProvince]);
   useDeepCompareEffect(() => {
     if (rows) {
       const tempData = rows?.map((item) => ({
@@ -93,6 +96,7 @@ export default function FullFeaturedCrudGrid() {
         extraquantity: item.extraquantity,
       }));
       dispatch(setProvinceNewForm(tempData));
+      // console.log(tempData);
     }
   }, [rows]);
 
@@ -188,7 +192,7 @@ export default function FullFeaturedCrudGrid() {
   const columns: GridColumns = [
     {
       field: 'provinceId',
-      headerName: 'Province Id',
+      headerName: 'Tỉnh thành',
       width: 180,
       editable: true,
       type: 'singleSelect',
@@ -203,30 +207,30 @@ export default function FullFeaturedCrudGrid() {
     },
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Tổng số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
-      width: 150,
+      width: 170,
     },
     {
       field: 'extraquantity',
-      headerName: 'Extra Quantity',
+      headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
-      width: 150,
+      width: 130,
     },
     {
       field: 'startDate',
-      headerName: 'Start Date',
+      headerName: 'Ngày bắt đầu',
       type: 'date',
-      width: 200,
+      width: 140,
       editable: true,
     },
     {
       field: 'endDate',
-      headerName: 'End Date',
+      headerName: 'Ngày kết thúc',
       type: 'dateTime',
-      width: 220,
+      width: 140,
       editable: true,
     },
     {
@@ -277,6 +281,7 @@ export default function FullFeaturedCrudGrid() {
       },
     },
   ];
+  // console.log(rows);
 
   return (
     <StyledBox>

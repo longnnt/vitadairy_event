@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { IEventDetail, IFormCreateEvent } from '../interfaces';
 
 export const StyledBox = styled(Box)(({ theme }) => ({
   height: 500,
@@ -22,3 +23,35 @@ export const StyledBox = styled(Box)(({ theme }) => ({
     color: 'text.primary',
   },
 }));
+
+// export const fomatFormData = (data: IFormCreateEvent) => {
+//   const tempCreateData = { ...data };
+//   const tempProvince = data?.eventDetailProvinces?.map((item: IEventDetail) => {
+//     if (item.endDate || item.startDate) {
+//       const startDate = item.startDate
+//         ? new Date(item.startDate as string).toISOString()
+//         : new Date().toISOString;
+//       const endDate = item.endDate
+//         ? new Date(item.endDate as string).toISOString()
+//         : new Date().toISOString;
+//       item = { ...item, startDate: startDate as string, endDate: endDate as string };
+//     }
+//     if (typeof item.provinceId === 'string') {
+//       const provId = parseInt(item.provinceId);
+//       item = { ...item, provinceId: provId };
+//     }
+//     if (!item.extraquantity) {
+//       delete item.extraquantity;
+//       item = { ...item, quantity: 0 };
+//     } else {
+//       const totalQuantities = +item.extraquantity;
+//       item = { ...item, quantity: totalQuantities };
+//     }
+//     return item;
+//   });
+//   if (data.popupType === 'NULL') {
+//     data.popupLink = 'NULL';
+//   }
+//   tempCreateData.eventDetailProvinces = tempProvince;
+//   return tempCreateData;
+// };

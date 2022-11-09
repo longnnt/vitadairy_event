@@ -1,21 +1,21 @@
 import * as Yup from 'yup';
 
-export const createEventPrizevalidate = (provinceId: number[]) => {
-  const eventDetailProvincesSchema = Yup.object().shape({
-    endDate: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
-    provinceId: Yup.number()
-      .required('This field is required')
-      .typeError('Must be a number')
-      .test('test province id', 'this field is required', (val) =>
-        provinceId.includes(val as number)
-      ),
-    quantity: Yup.number().typeError('Must be a number'),
-    startDate: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
-  });
+export const createEventPrizevalidate = () => {
+  // const eventDetailProvincesSchema = Yup.object().shape({
+  //   endDate: Yup.string()
+  //     .required('This field is required')
+  //     .typeError('Must be a string'),
+  //   provinceId: Yup.number()
+  //     .required('This field is required')
+  //     .typeError('Must be a number')
+  //     .test('test province id', 'this field is required', (val) =>
+  //       provinceId.includes(val as number)
+  //     ),
+  //   quantity: Yup.number().typeError('Must be a number'),
+  //   startDate: Yup.string()
+  //     .required('This field is required')
+  //     .typeError('Must be a string'),
+  // });
 
   const createEventPrizeSchema = Yup.object().shape({
     giftId: Yup.number().required('This field is required').typeError('Must be a number'),
@@ -24,9 +24,6 @@ export const createEventPrizevalidate = (provinceId: number[]) => {
       .required('This field is required')
       .test('test empty', 'Content is required', (val) => val !== ''),
     popupImageLink: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
-    popupLink: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),
     popupType: Yup.string()
@@ -54,9 +51,9 @@ export const createEventPrizevalidate = (provinceId: number[]) => {
     transactionTypeId: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
-    eventDetailProvinces: Yup.array()
-      .of(eventDetailProvincesSchema)
-      .required('This field is required'),
+    // eventDetailProvinces: Yup.array()
+    //   .of(eventDetailProvincesSchema)
+    //   .required('This field is required'),
   });
   return createEventPrizeSchema;
 };

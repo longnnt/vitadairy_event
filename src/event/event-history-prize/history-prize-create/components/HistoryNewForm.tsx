@@ -186,16 +186,13 @@ export default function HistoryNewForm() {
     name: item.description,
   }));
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
-  const addProvinceVN = dataProvince.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
+  // const { data: addProvince } = useGetAllProvince();
+  // const dataProvince = addProvince?.data?.response?.provinces || [];
+  // const addProvinceVN = dataProvince.map((item) => ({
+  //   value: item.id,
+  //   label: item.name,
+  // }));
 
-  const provinceId = addProvinceVN
-    ? addProvinceVN.map((item: ISelect) => item.value)
-    : [];
 
   const searchParams: IGiftParams = {
     page: page,
@@ -207,48 +204,48 @@ export default function HistoryNewForm() {
     totalRecords: 0,
   };
 
-  const importFile = async (event: any) => {
-    try {
-      const allowedExtensions = ['csv'];
-      if (event.target.files.length) {
-        const inputFile = event.target.files[0];
+  // const importFile = async (event: any) => {
+  //   try {
+  //     const allowedExtensions = ['csv'];
+  //     if (event.target.files.length) {
+  //       const inputFile = event.target.files[0];
 
-        const fileExtension = inputFile?.type.split('/')[1];
-        FORMAT_DATE;
-        if (!allowedExtensions.includes(fileExtension)) {
-          showErrorSnackbar('Không phải file csv');
-          return;
-        }
-        dispatch(setFileCSV(inputFile));
-        showSuccessSnackbar('Import file thành công');
-      }
-      if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
+  //       const fileExtension = inputFile?.type.split('/')[1];
+  //       FORMAT_DATE;
+  //       if (!allowedExtensions.includes(fileExtension)) {
+  //         showErrorSnackbar('Không phải file csv');
+  //         return;
+  //       }
+  //       dispatch(setFileCSV(inputFile));
+  //       showSuccessSnackbar('Import file thành công');
+  //     }
+  //     if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
 
-      parse(event.target.files[0], {
-        header: true,
-        download: true,
-        skipEmptyLines: true,
-        delimiter: ',',
-        fastMode: true,
-        encoding: 'utf-8',
-        transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
-        complete: async (results: ParseResult<IEventDetail>) => {
-          const data: IEventDetail[] = results.data.map((item: IEventDetail) => ({
-            name: item.name,
-            provinceId: item.provinceId,
-            quantity: item.quantity,
-            startDate: dayjs(item.startDate, FORMAT_DATE),
-            endDate: dayjs(item.endDate, FORMAT_DATE),
-          }));
+  //     parse(event.target.files[0], {
+  //       header: true,
+  //       download: true,
+  //       skipEmptyLines: true,
+  //       delimiter: ',',
+  //       fastMode: true,
+  //       encoding: 'utf-8',
+  //       transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
+  //       complete: async (results: ParseResult<IEventDetail>) => {
+  //         const data: IEventDetail[] = results.data.map((item: IEventDetail) => ({
+  //           name: item.name,
+  //           provinceId: item.provinceId,
+  //           quantity: item.quantity,
+  //           startDate: dayjs(item.startDate, FORMAT_DATE),
+  //           endDate: dayjs(item.endDate, FORMAT_DATE),
+  //         }));
 
-          dispatch(setDataCities(data));
-          setValue('eventDetailProvinces', data);
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //         dispatch(setDataCities(data));
+  //         setValue('eventDetailProvinces', data);
+  //       },
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   useEffect(() => {
     dispatch(
@@ -269,7 +266,7 @@ export default function HistoryNewForm() {
   }, []);
 
   const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(createEventPrizevalidate(provinceId)),
+    resolver: yupResolver(createEventPrizevalidate()),
     defaultValues,
   });
 
@@ -328,6 +325,7 @@ export default function HistoryNewForm() {
       transactionTypeId: data.transactionTypeId,
     };
     mutate(dataEvent);
+    console.log(dataEvent);
   };
   return (
     <>
