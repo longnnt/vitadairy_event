@@ -1921,7 +1921,11 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
+<<<<<<< HEAD
 "@mui/x-data-grid-generator@5.17.10":
+=======
+"@mui/x-data-grid-generator@^5.17.10":
+>>>>>>> 78ec19a28170a8a70b9df64058d5dd5cef641d1e
   version "5.17.10"
   resolved "https://registry.yarnpkg.com/@mui/x-data-grid-generator/-/x-data-grid-generator-5.17.10.tgz#fa641a5f18c7d43055b934342429d71e50dc76fb"
   integrity sha512-in9Rrusr9Wd4eQQCK9cpffmNVnaI9c7Dd8q9F63SRTEd/o0EViykJ0WF8mYudTmB6V+trXIhvUdDdmaM0aBCHA==

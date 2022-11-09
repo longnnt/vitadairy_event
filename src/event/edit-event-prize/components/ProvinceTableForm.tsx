@@ -1,39 +1,53 @@
+import * as React from 'react';
+import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
-import { Stack } from '@mui/material';
-import Button from '@mui/material/Button';
 import {
-  DataGrid,
-  GridActionsCellItem,
-  GridColumns, GridRowId,
-  GridRowModel,
+  GridRowsProp,
+  GridRowModesModel,
   GridRowModes,
-  GridRowModesModel, GridToolbarContainer
+  DataGrid,
+  GridColumns,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowId,
+  GridRowModel,
 } from '@mui/x-data-grid';
 import { randomId } from '@mui/x-data-grid-generator';
+import { useSelector } from 'react-redux';
+import { provinceInforSelector, setProvinceForm } from '../editEventPrize.Slice';
+import { IEventProvince, IProvince, ISelect } from '../common/interface';
+import { dispatch } from 'src/common/redux/store';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import Iconify from 'src/common/components/Iconify';
+import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS, DATE_FORMAT } from '../common/constants';
+import useShowSnackbar from 'src/common/hooks/useMessage';
 import dayjs from 'dayjs';
 import { parse, ParseResult } from 'papaparse';
-import * as React from 'react';
-import Iconify from 'src/common/components/Iconify';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { useDispatch } from 'src/common/redux/store';
-import useShowSnackbar from 'src/store-admin/hooks/useMessage';
-import { COLUMNS_HEADERS, CSV, FORMAT_DATE } from '../../constants';
-import { setFileCSV, setProvinceNewForm } from '../../event.slice';
-import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { EditToolbarProps, IEventDetail, ISelect } from '../../interfaces';
-import { StyledBox } from '../ultils';
+import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
+import { StyledBox } from '../common/ultils';
+import { useFormContext } from 'react-hook-form';
+// @mui
+import { TextFieldProps, Stack } from '@mui/material';
+
+// --------------------------------------------------------------------------
+
+interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  importFile: any;
+  setRowModesModel: (
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void;
+}
 
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, importFile } = props;
-
   const handleClick = () => {
     const id = randomId();
     setRows((oldRows) => [
       ...oldRows,
-      { id, provinceId: 0, quantity: 0, extraquantity: 0, isNew: true },
+      { id, provinceId: '', quantity: '', extraquantity: '', isNew: true },
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -66,20 +80,30 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
-export default function FullFeaturedCrudGrid() {
-  const dispatch = useDispatch();
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
-  const [rows, setRows] = React.useState<IEventDetail[]>([]);
+type IProps = {
+  name: string;
+  setValue: any;
+};
+
+type Props = IProps & TextFieldProps;
+
+export default function PovinceTableForm({ name, setValue, ...other }: Props) {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
-  const addProvinceVN = dataProvince.map((item) => ({
-    value: item.id,
-    label: item.name,
+  const provinceSelector = useSelector(provinceInforSelector);
+  const [rows, setRows] = React.useState<IEventProvince[]>([]);
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+
+  const { data: provincesData } = useGetAllProvinceVN();
+  const provinceOptions = provincesData?.map((item: IProvince) => ({
+    value: item?.id,
+    label: item?.name,
   }));
 
+  useDeepCompareEffect(() => {
+    setRows(provinceSelector);
+  }, [provinceSelector]);
   useDeepCompareEffect(() => {
     if (rows) {
       const tempData = rows?.map((item) => ({
@@ -89,53 +113,42 @@ export default function FullFeaturedCrudGrid() {
         endDate: item.endDate,
         extraquantity: item.extraquantity,
       }));
-      dispatch(setProvinceNewForm(tempData));
+      dispatch(setProvinceForm(tempData));
     }
   }, [rows]);
-
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
 
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
-  };
-
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(
-      rows.map((row: IEventDetail) =>
+      rows.map((row: IEventProvince) =>
         row.id === newRow.id ? updatedRow : row
-      ) as IEventDetail[]
+      ) as IEventProvince[]
     );
     return updatedRow;
+  };
+  const handleSaveClick = (id: GridRowId) => () => {
+    const newRow = rows.find((row: IEventProvince) => row.id === id);
+    const passedRow = !!newRow?.provinceId;
+    if (passedRow) {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    }
   };
 
   const importFile = async (event: any) => {
     try {
-      const allowedExtensions = [CSV];
+      const allowedExtensions = ACCEPT_FILE_IMPORT;
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
-
         const fileExtension = inputFile?.type.split('/')[1];
-        FORMAT_DATE;
+        DATE_FORMAT;
         if (!allowedExtensions.includes(fileExtension)) {
           showErrorSnackbar('Không phải file csv');
           return;
         }
-        dispatch(setFileCSV(inputFile));
         showSuccessSnackbar('Import file thành công');
       }
       if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
@@ -148,17 +161,15 @@ export default function FullFeaturedCrudGrid() {
         fastMode: true,
         encoding: 'utf-8',
         transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
-        complete: async (results: ParseResult<IEventDetail>) => {
-          const data: IEventDetail[] = results.data.map((item: IEventDetail) => ({
+        complete: async (results: ParseResult<IEventProvince>) => {
+          const data: IEventProvince[] = results.data.map((item: IEventProvince) => ({
             id: randomId(),
-            name: item.name,
             provinceId: item.provinceId,
-            quantity: item.quantity,
-            startDate: dayjs(item.startDate, FORMAT_DATE),
-            endDate: dayjs(item.endDate, FORMAT_DATE),
+            extraquantity: item.extraquantity,
+            startDate: dayjs(item.startDate, DATE_FORMAT),
+            endDate: dayjs(item.endDate, DATE_FORMAT),
             isNew: false,
           }));
-
           setRows([...rows, ...data]);
         },
       });
@@ -170,13 +181,13 @@ export default function FullFeaturedCrudGrid() {
   const columns: GridColumns = [
     {
       field: 'provinceId',
-      headerName: 'Tỉnh thành',
+      headerName: 'Tên tỉnh ',
       width: 180,
       editable: true,
       type: 'singleSelect',
-      valueOptions: addProvinceVN ? addProvinceVN : ([] as ISelect[]),
+      valueOptions: provinceOptions ? provinceOptions : ([] as ISelect[]),
       valueFormatter: ({ id: rowId, value, field, api }) => {
-        const option = addProvinceVN?.find((item: ISelect) => {
+        const option = provinceOptions?.find((item: ISelect) => {
           return item.value == parseInt(value);
         });
         return option ? option.label : '';
@@ -188,23 +199,23 @@ export default function FullFeaturedCrudGrid() {
     },
     {
       field: 'quantity',
-      headerName: 'Tổng số lượng giải theo tỉnh',
+      headerName: 'Số lượng quà',
       type: 'number',
       editable: false,
-      width: 170,
+      width: 150,
     },
     {
       field: 'extraquantity',
-      headerName: 'Số giải phân bổ',
+      headerName: 'Số lượng quà thêm',
       type: 'number',
       editable: true,
-      width: 130,
+      width: 150,
     },
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
       type: 'date',
-      width: 140,
+      width: 200,
       editable: true,
       preProcessEditCellProps: (params) => {
         const isDate = !!params.props.value;
@@ -215,7 +226,7 @@ export default function FullFeaturedCrudGrid() {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
       type: 'dateTime',
-      width: 140,
+      width: 220,
       editable: true,
       preProcessEditCellProps: (params) => {
         const isDate = !!params.props.value;
@@ -241,24 +252,15 @@ export default function FullFeaturedCrudGrid() {
             />,
             <GridActionsCellItem
               key={id}
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={handleDeleteClick(id)}
               color="inherit"
             />,
           ];
         }
 
         return [
-          // <GridActionsCellItem
-          //   key={id}
-          //   icon={<EditIcon />}
-          //   label="Edit"
-          //   className="textPrimary"
-          //   onClick={handleEditClick(id)}
-          //   color="inherit"
-          // />,
           <GridActionsCellItem
             key={id}
             icon={<DeleteIcon />}
@@ -270,9 +272,17 @@ export default function FullFeaturedCrudGrid() {
       },
     },
   ];
-  // console.log(rows);
+
+  const { control } = useFormContext();
 
   return (
+    // <Controller
+    //   name={name}
+    //   control={control}
+    //   render={({ field, fieldState: { error } }) => {
+    //     // console.log('e rocs', error);
+
+    //     return (
     <StyledBox>
       <DataGrid
         rows={rows}
@@ -290,5 +300,8 @@ export default function FullFeaturedCrudGrid() {
         experimentalFeatures={{ newEditingApi: true }}
       />
     </StyledBox>
+    //     );
+    //   }}
+    // />
   );
 }

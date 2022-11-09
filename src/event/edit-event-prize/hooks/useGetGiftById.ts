@@ -4,6 +4,6 @@ import { getGiftById } from '../service';
 
 export const useGetGiftById = (id: number) => {
   return {
-    ...useQuery([QUERY_KEYS.GIFT_DETAIL, id], () => getGiftById(id)),
+    ...useQuery([QUERY_KEYS.GIFT_DETAIL, id], () => getGiftById(id), {}),
   };
 };

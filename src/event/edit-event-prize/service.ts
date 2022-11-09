@@ -4,10 +4,9 @@ import {
   API_GIFT,
   API_PRIZE_EDIT,
   API_PROVINCE_VN,
-  API_TRANSACTION_TYPE,
+  API_TRANSACTION_TYPE_UNUSE,
 } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
-import { Z_UNKNOWN } from 'zlib';
 import {
   IFormEdit,
   IGiftById,
@@ -22,8 +21,10 @@ export const getEventPrizeById = (id: number) => {
   return axiosInstance.get<unknown, IResEventPrizeById>(API_PRIZE_EDIT + `/${id}`);
 };
 
-export const getAllTransactionType = () => {
-  return axiosInstance.get<unknown, IResTransactionType>(API_TRANSACTION_TYPE);
+export const getAllTransactionType = (id: number) => {
+  return axiosInstance.get<unknown, IResTransactionType>(
+    API_TRANSACTION_TYPE_UNUSE + `&except=${id}`
+  );
 };
 
 export const getAllProvinceVN = async () => {
