@@ -251,14 +251,6 @@ export default function FullFeaturedCrudGrid() {
         }
 
         return [
-          // <GridActionsCellItem
-          //   key={id}
-          //   icon={<EditIcon />}
-          //   label="Edit"
-          //   className="textPrimary"
-          //   onClick={handleEditClick(id)}
-          //   color="inherit"
-          // />,
           <GridActionsCellItem
             key={id}
             icon={<DeleteIcon />}
@@ -270,7 +262,6 @@ export default function FullFeaturedCrudGrid() {
       },
     },
   ];
-  // console.log(rows);
 
   return (
     <StyledBox>
