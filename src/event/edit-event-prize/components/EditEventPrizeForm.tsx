@@ -12,7 +12,6 @@ import {
   RHFTextField,
 } from 'src/common/components/hook-form';
 import {
-  DATE_FORMAT,
   DEFAULT_FORM_VALUE,
   GIFT_POINT,
   NO_ID,
@@ -20,7 +19,6 @@ import {
   POPUP_TYPE,
 } from '../common/constants';
 import {
-  IEventProvince,
   IFormEdit,
   IGiftDetail,
   IProvince,
@@ -66,6 +64,8 @@ export const EditEventPrizeForm = () => {
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
   const { data: provincesData } = useGetAllProvinceVN();
+  const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
+
   const provinceOptions = provincesData?.map((item: IProvince) => ({
     value: item?.id,
     label: item?.name,
@@ -74,11 +74,8 @@ export const EditEventPrizeForm = () => {
     ? provinceOptions.map((item: ISelect) => item.value)
     : [];
 
-  const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
-
   const dataEventPrizeById = useSelector(giftByIdSelector);
   const dataProvinceform = useSelector(provinceFormSelector);
-
   const choosenGiftPoint = useSelector(choosenGiftPointSelector);
   const popUpTypedata = useSelector(popUpTypeSelector);
 
@@ -102,7 +99,9 @@ export const EditEventPrizeForm = () => {
     }
   }, [dataEventPrizeById]);
 
-  const { data: transactionType } = useGetAllTransactionType();
+  const { data: transactionType } = useGetAllTransactionType(
+    dataEventPrizeById?.transactionTypeId
+  );
   const transactionTypeOptions = transactionType?.map((item: ITransactionType) => ({
     value: item.id,
     label: item.description,
@@ -338,54 +337,21 @@ export const EditEventPrizeForm = () => {
             <Typography fontWeight={'bold'}>Tỉnh thành</Typography>
             <Card sx={{ p: 3 }}>
               <Stack direction={'column'} spacing="15px">
-                {/* <Stack
-                  direction={'row'}
-                  spacing={1.5}
-                  sx={{ mt: 3, alignSelf: 'flex-end' }}
-                >
-                  <input
-                    type="file"
-                    accept=".csv"
-                    ref={ref}
-                    style={{ display: 'none' }}
-                    onChange={(e) => handleOnInuputFile(e)}
-                  />
-                  <Button
-                    fullWidth
-                    startIcon={<Iconify icon={'mdi:file-import'} />}
-                    color="secondary"
-                    variant="contained"
-                    size="large"
-                    onClick={() => ref?.current?.click()}
-                  >
-                    Nhập
-                  </Button>
-
-                  <Button
-                    fullWidth
-                    color="success"
-                    variant="contained"
-                    size="medium"
-                    onClick={handleCountProvince}
-                  >
-                    <AddIcon />
-                  </Button>
-                </Stack> */}
                 <Box>
-                  <PovinceTableForm />
+                  <PovinceTableForm name="eventDetailProvinces" setValue={setValue} />
                 </Box>
-                <LoadingButton
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  sx={{ width: '20%', alignSelf: 'flex-end' }}
-                  loading={isSubmitting}
-                >
-                  Lưu
-                </LoadingButton>
               </Stack>
             </Card>
           </Box>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            sx={{ width: '20%', alignSelf: 'flex-end' }}
+            loading={isSubmitting}
+          >
+            Lưu
+          </LoadingButton>
         </FormProvider>
       </Container>
     </>

@@ -10,13 +10,9 @@ export const useEditEventPrize = () => {
   const queryClient = useQueryClient();
   return {
     ...useMutation(eidtEventPrize, {
-      // onSuccess: () => {
-      //   queryClient.invalidateQueries([QUERY_KEYS.EVENT_PRIZE_DETAIL]);
-      // },
       onMutate: async (newData: IFormEdit) => {
         const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_PRIZE_DETAIL);
         cancelMultiQueries(queryClient, keys);
-
         const previousEventPrize = keys.map(
           (key) => queryClient.getQueryData<IFormEdit>(key) || ({} as IFormEdit)
         );

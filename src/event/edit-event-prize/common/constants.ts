@@ -48,6 +48,7 @@ export const DEFAULT_FORM_VALUE = {
 
 export const NO_ID = 0;
 export const DATE_FORMAT = 'dd/MM/yyyy hh:mm a';
+export const ACCEPT_FILE_IMPORT = ['csv'];
 
 export const COLUMNS_HEADERS: Array<string> = [
   'name',

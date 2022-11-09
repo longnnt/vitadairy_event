@@ -1,22 +1,16 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import {
   GridRowsProp,
   GridRowModesModel,
   GridRowModes,
   DataGrid,
   GridColumns,
-  GridRowParams,
-  MuiEvent,
   GridToolbarContainer,
   GridActionsCellItem,
-  GridEventListener,
   GridRowId,
   GridRowModel,
 } from '@mui/x-data-grid';
@@ -27,13 +21,17 @@ import { IEventProvince, IProvince, ISelect } from '../common/interface';
 import { dispatch } from 'src/common/redux/store';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import Iconify from 'src/common/components/Iconify';
-import { COLUMNS_HEADERS, DATE_FORMAT } from '../common/constants';
+import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS, DATE_FORMAT } from '../common/constants';
 import useShowSnackbar from 'src/common/hooks/useMessage';
 import dayjs from 'dayjs';
 import { parse, ParseResult } from 'papaparse';
 import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
-import { Stack } from '@mui/material';
 import { StyledBox } from '../common/ultils';
+import { useFormContext } from 'react-hook-form';
+// @mui
+import { TextFieldProps, Stack } from '@mui/material';
+
+// --------------------------------------------------------------------------
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -49,7 +47,7 @@ function EditToolbar(props: EditToolbarProps) {
     const id = randomId();
     setRows((oldRows) => [
       ...oldRows,
-      { id, provinceId: 0, quantity: 0, extraquantity: 0, isNew: true },
+      { id, provinceId: '', quantity: '', extraquantity: '', isNew: true },
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -82,7 +80,14 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
-export default function PovinceTableForm() {
+type IProps = {
+  name: string;
+  setValue: any;
+};
+
+type Props = IProps & TextFieldProps;
+
+export default function PovinceTableForm({ name, setValue, ...other }: Props) {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
 
@@ -112,35 +117,8 @@ export default function PovinceTableForm() {
     }
   }, [rows]);
 
-  const handleRowEditStart = (
-    params: GridRowParams,
-    event: MuiEvent<React.SyntheticEvent>
-  ) => {
-    event.defaultMuiPrevented = true;
-  };
-
-  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
-    event.defaultMuiPrevented = true;
-  };
-
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -153,22 +131,24 @@ export default function PovinceTableForm() {
     return updatedRow;
   };
   const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    const newRow = rows.find((row: IEventProvince) => row.id === id);
+    const passedRow = !!newRow?.provinceId;
+    if (passedRow) {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    }
   };
 
   const importFile = async (event: any) => {
     try {
-      const allowedExtensions = ['csv'];
+      const allowedExtensions = ACCEPT_FILE_IMPORT;
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
-
         const fileExtension = inputFile?.type.split('/')[1];
         DATE_FORMAT;
         if (!allowedExtensions.includes(fileExtension)) {
           showErrorSnackbar('Không phải file csv');
           return;
         }
-        // setfilesCsv(inputFile);
         showSuccessSnackbar('Import file thành công');
       }
       if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
@@ -201,54 +181,57 @@ export default function PovinceTableForm() {
   const columns: GridColumns = [
     {
       field: 'provinceId',
-      headerName: 'Province Id',
+      headerName: 'Tên tỉnh ',
       width: 180,
       editable: true,
       type: 'singleSelect',
       valueOptions: provinceOptions ? provinceOptions : ([] as ISelect[]),
       valueFormatter: ({ id: rowId, value, field, api }) => {
-        const colDef = api.getColumn(field);
-        const option: ISelect = colDef?.valueOptions.find(
-          ({ value: optionValue }: { value: number }) => value === optionValue
-        );
-        return option ? option.label : 'choose a province';
+        const option = provinceOptions?.find((item: ISelect) => {
+          return item.value == parseInt(value);
+        });
+        return option ? option.label : '';
+      },
+      preProcessEditCellProps: (params) => {
+        const hasProvinceId = !!params.props.value;
+        return { ...params.props, error: !hasProvinceId };
       },
     },
     {
       field: 'quantity',
-      headerName: 'Quantity',
+      headerName: 'Số lượng quà',
       type: 'number',
       editable: false,
       width: 150,
     },
     {
       field: 'extraquantity',
-      headerName: 'Extra Quantity',
+      headerName: 'Số lượng quà thêm',
       type: 'number',
       editable: true,
       width: 150,
     },
     {
       field: 'startDate',
-      headerName: 'Start Date',
+      headerName: 'Ngày bắt đầu',
       type: 'date',
       width: 200,
       editable: true,
-      // preProcessEditCellProps: (params) => {
-      //   const isDate = !!params.props.value;
-      //   return { ...params.props, error: !isDate };
-      // },
+      preProcessEditCellProps: (params) => {
+        const isDate = !!params.props.value;
+        return { ...params.props, error: !isDate };
+      },
     },
     {
       field: 'endDate',
-      headerName: 'End Date',
+      headerName: 'Ngày kết thúc',
       type: 'dateTime',
       width: 220,
       editable: true,
-      // preProcessEditCellProps: (params) => {
-      //   const isDate = !!params.props.value;
-      //   return { ...params.props, error: !isDate };
-      // },
+      preProcessEditCellProps: (params) => {
+        const isDate = !!params.props.value;
+        return { ...params.props, error: !isDate };
+      },
     },
     {
       field: 'actions',
@@ -269,24 +252,15 @@ export default function PovinceTableForm() {
             />,
             <GridActionsCellItem
               key={id}
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={handleDeleteClick(id)}
               color="inherit"
             />,
           ];
         }
 
         return [
-          <GridActionsCellItem
-            key={id}
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
           <GridActionsCellItem
             key={id}
             icon={<DeleteIcon />}
@@ -299,19 +273,23 @@ export default function PovinceTableForm() {
     },
   ];
 
+  const { control } = useFormContext();
+
   return (
+    // <Controller
+    //   name={name}
+    //   control={control}
+    //   render={({ field, fieldState: { error } }) => {
+    //     // console.log('e rocs', error);
+
+    //     return (
     <StyledBox>
       <DataGrid
         rows={rows}
-        // rowsPerPageOptions={[15, 25]}
-        // pageSize={15}
-
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
-        onRowEditStart={handleRowEditStart}
-        onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         components={{
           Toolbar: EditToolbar,
@@ -322,5 +300,8 @@ export default function PovinceTableForm() {
         experimentalFeatures={{ newEditingApi: true }}
       />
     </StyledBox>
+    //     );
+    //   }}
+    // />
   );
 }
