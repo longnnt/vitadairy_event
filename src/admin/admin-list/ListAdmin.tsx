@@ -34,6 +34,7 @@ import { useGetAdmin } from '../hooks/useGetAdmin';
 import { IAdminParams, IFormAdmin } from '../interfaces';
 import { AdminTableRow } from './components/AdminTableRow';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import TableSkeleton from './components/TableSkeleton';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ function AdminListDashboard() {
 
   if (filterName) searchParams.searchText = filterName;
 
-  const { data } = useGetAdmin(searchParams);
+  const { data,isLoading } = useGetAdmin(searchParams);
   const listAdmin = data?.data?.response?.response || [];
 
   const {
@@ -106,7 +107,7 @@ function AdminListDashboard() {
   const { totalRecords } = data?.data?.response?.pagination || {
     totalRecords: 0,
   };
-  const isNotFound = !listAdmin.length;
+  const isNotFound = !listAdmin.length && !isLoading;
   return (
     <>
       <HeaderBreadcrumbs
@@ -142,7 +143,7 @@ function AdminListDashboard() {
                   <Tooltip title="Delete">
                     <IconButton
                       color="primary"
-                      onClick={() => handleDeleteRows(selectedIds)}
+                      onClick={() => console.log(selectedIds)}
                     >
                       <Iconify icon={'eva:trash-2-outline'} />
                     </IconButton>
@@ -178,7 +179,9 @@ function AdminListDashboard() {
                     }}
                   />
                 ))}
-
+                {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <TableSkeleton key={index} isNotFound={isLoading} />;
+                })}
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
             </Table>
@@ -186,7 +189,6 @@ function AdminListDashboard() {
         </Scrollbar>
 
         <Box sx={{ position: 'relative' }}>
-          {!!data?.data?.response?.pagination?.totalPages && (
             <TablePagination
               rowsPerPageOptions={[5, 10, 15]}
               component="div"
@@ -196,8 +198,6 @@ function AdminListDashboard() {
               onPageChange={onChangePage}
               onRowsPerPageChange={onChangeRowsPerPage}
             />
-          )}
-
           <FormControlLabel
             control={<Switch checked={dense} onChange={onChangeDense} />}
             label="Dense"

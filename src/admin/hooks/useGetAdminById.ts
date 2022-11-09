@@ -12,7 +12,6 @@ export const useGetAdminById = ({
 }) =>
   useQuery([QUERY_KEYS.EDIT_ADMIN, id], () => getAdminById(id), {
     onSuccess() {
-      callback.onSuccess && callback.onSuccess();
     },
     onError() {
       callback.onError && callback.onError();

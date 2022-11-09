@@ -11,6 +11,7 @@ import { dispatch } from 'src/common/redux/store';
 import { EditFormAdmin } from './components/EditAdminForm';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 
 export default function EditAdminDashboard() {
   const params = useParams();
@@ -18,10 +19,10 @@ export default function EditAdminDashboard() {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const { data } = useGetAdminById({
+  const { data,isLoading } = useGetAdminById({
     id: parseInt(id as string),
     callback: {
-      onSuccess: () => showSuccessSnackbar('Get Admin successfully'),
+      onSuccess:()=>{},
       onError: () => showErrorSnackbar('Get admin fail'),
     },
   });
@@ -45,6 +46,7 @@ export default function EditAdminDashboard() {
           { name: 'Cập nhật admin' },
         ]}
       />
+      {isLoading && (<LoadingScreen/>)}
       <EditFormAdmin />
     </>
   );
