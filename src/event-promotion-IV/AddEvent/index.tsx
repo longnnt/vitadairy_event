@@ -1,45 +1,45 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Box,
   Button,
   Card,
   FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
+  FormControlLabel,
+  InputAdornment,
+  Radio,
+  RadioGroup,
   Stack,
   TextField,
   Typography,
-  FormHelperText,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from '@mui/material';
+
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
-import { schemaAddEvent } from '../schema';
-import { useForm, Controller } from 'react-hook-form';
-import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
-import useMessage from 'src/store-admin/hooks/useMessage';
-import { useAddNewEvent } from '../hooks/useAddNewEvent';
 import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { defaultValues } from '../constant';
-import { IEventFormData } from '../interface';
-import { useProductCode } from '../hooks/useProductCode';
+import { FormProvider, RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
+import useMessage from 'src/store-admin/hooks/useMessage';
+import { ProductCodeModal } from '../components/ProductCodeModal';
+import { defaultValues } from '../constant';
 import {
   buttonTypeState,
+  productCodeState,
   setButtonType,
+  setIsOpenModal,
+  setProductCode,
   setUserType,
   userTypeState,
 } from '../eventPromotionIV.slice';
+import { useAddNewEvent } from '../hooks/useAddNewEvent';
+import { IEventFormData } from '../interface';
+import { schemaAddEvent } from '../schema';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -53,6 +53,7 @@ export const AddEvent = () => {
   const {
     control,
     handleSubmit,
+    reset: resetSelect,
     formState: { errors },
   } = methods;
 
@@ -81,6 +82,7 @@ export const AddEvent = () => {
       id: 1,
     };
     mutate(formDataAddNewEvent);
+    dispatch(setProductCode([]));
   };
 
   useEffect(() => {
@@ -94,11 +96,16 @@ export const AddEvent = () => {
     }
   }, [isSuccess]);
 
-  const skusCodeDataEvent = useProductCode({ size: 20 });
   const handleStatusUserType = (userType: string) => {
     dispatch(setUserType(userType));
   };
   const userTypeValue = useSelector(userTypeState);
+
+  const productCode = useSelector(productCodeState);
+
+  useEffect(() => {
+    resetSelect({ skus: productCode });
+  }, [productCode]);
 
   return (
     <>
@@ -113,6 +120,7 @@ export const AddEvent = () => {
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
+      <ProductCodeModal />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Scrollbar sx={{ marginTop: '20px' }}>
           <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
@@ -146,7 +154,6 @@ export const AddEvent = () => {
                   )}
                 />
                 <Box sx={{ mx: 2 }}>-</Box>
-
                 <Controller
                   name="endDate"
                   control={control}
@@ -170,38 +177,21 @@ export const AddEvent = () => {
                 />
               </Stack>
 
-              <FormControl>
-                <InputLabel error={errors.skus ? true : false}>Mã sản phẩm*</InputLabel>
-                <Controller
-                  name="skus"
-                  control={control}
-                  render={({ field }) => (
-                    <Stack position={'relative'} width="100%">
-                      <Select
-                        multiple
-                        input={
-                          <OutlinedInput
-                            label="Mã sản phẩm"
-                            error={errors.skus ? true : false}
-                          />
-                        }
-                        fullWidth
-                        {...field}
-                        error={!!errors.skus}
-                      >
-                        {skusCodeDataEvent.map((item: string) => (
-                          <MenuItem key={item} value={item}>
-                            {item}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Stack>
-                  )}
-                />
-                <FormHelperText error={!!errors.skus}>
-                  {errors.skus?.message}
-                </FormHelperText>
-              </FormControl>
+              <RHFTextField
+                name="skus"
+                label="Mã sản phẩm"
+                onClick={() => dispatch(setIsOpenModal(true))}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{ position: 'absolute', right: 0, marginRight: '10px' }}
+                    >
+                      <KeyboardArrowDownIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
               <RHFTextField
                 fullWidth

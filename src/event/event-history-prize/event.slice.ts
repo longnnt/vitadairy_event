@@ -17,6 +17,7 @@ type StateProps = {
   rows: IEventDetail[];
   provinceNewForm: IEventDetail[];
   provinceInFo: IEventDetail[];
+  showData: boolean;
 };
 
 export const initialState: StateProps = {
@@ -33,6 +34,7 @@ export const initialState: StateProps = {
   rows: [],
   provinceNewForm: [],
   provinceInFo: [DEDAULT_PROVINCE],
+  showData: false,
 };
 
 export const eventAdminSlice = createSlice({
@@ -78,6 +80,9 @@ export const eventAdminSlice = createSlice({
     setProvinceInFo: (state, action: PayloadAction<Array<IEventDetail>>) => {
       state.provinceInFo = action.payload;
     },
+    setShowData: (state, action: PayloadAction<boolean>) => {
+      state.showData = action.payload;
+    },
   },
 });
 
@@ -95,6 +100,7 @@ export const {
   setRows,
   setProvinceNewForm,
   setProvinceInFo,
+  setShowData,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -112,5 +118,6 @@ export const setProvinceNewFormSelector = (state: RootState) =>
   state.historyList.provinceNewForm;
 export const setProvinceInFoSelector = (state: RootState) =>
   state.historyList.provinceInFo;
+export const showDataSelector = (state: RootState) => state.historyList.showData;
 
 export default eventAdminSlice.reducer;

@@ -23,6 +23,14 @@ export const TABLE_HEAD = [
   },
 ];
 
+export const TABLE_HEAD_PRODUCT_CODE = [
+  {
+    id: 'productCode',
+    label: 'Mã sản phẩm',
+    align: 'left',
+  },
+];
+
 export const defaultValues = {
   name: '',
   startDate: null,

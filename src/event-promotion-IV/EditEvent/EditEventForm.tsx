@@ -3,16 +3,13 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
@@ -26,12 +23,14 @@ import {
   RHFTextField,
 } from 'src/common/components/hook-form';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { useDispatch } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { defaultValues } from '../constant';
+import { setIsOpenModal } from '../eventPromotionIV.slice';
 import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
-import { useProductCode } from '../hooks/useProductCode';
 import { schemaAddEvent } from '../schema';
+import { ProductCodeModal } from '../components/ProductCodeModal';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
@@ -50,8 +49,6 @@ export const EditEventForm = () => {
       onError: () => showErrorSnackbar('Tải sự kiện thất bại'),
     },
   });
-
-  const skusCodeDataEvent = useProductCode({ size: 20 });
 
   const dataEventDetail = data?.data?.response;
 
@@ -76,6 +73,7 @@ export const EditEventForm = () => {
     },
   });
 
+  const dispatch = useDispatch();
   const { useDeepCompareEffect } = useDeepEffect();
   const onSubmit = (data: any) => {
     if (data.typeUser === 'allUser') data.userRegisterDate = null;
@@ -120,6 +118,7 @@ export const EditEventForm = () => {
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
+      <ProductCodeModal />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Scrollbar sx={{ marginTop: '20px' }}>
           <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
@@ -177,38 +176,21 @@ export const EditEventForm = () => {
                 />
               </Stack>
 
-              <FormControl>
-                <InputLabel error={!!errors.skus}>Mã sản phẩm*</InputLabel>
-                <Controller
-                  name="skus"
-                  control={control}
-                  render={({ field }) => (
-                    <Stack position={'relative'} width="100%">
-                      <Select
-                        multiple
-                        input={
-                          <OutlinedInput
-                            label="Mã sản phẩm"
-                            error={errors.skus ? true : false}
-                          />
-                        }
-                        fullWidth
-                        {...field}
-                        error={!!errors.skus}
-                      >
-                        {skusCodeDataEvent.map((code: string) => (
-                          <MenuItem key={code} value={code}>
-                            {code}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Stack>
-                  )}
-                />
-                <FormHelperText error={!!errors.skus}>
-                  {errors.skus?.message}
-                </FormHelperText>
-              </FormControl>
+              <RHFTextField
+                name="skus"
+                label="Mã sản phẩm"
+                onClick={() => dispatch(setIsOpenModal(true))}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{ position: 'absolute', right: 0, marginRight: '10px' }}
+                    >
+                      <KeyboardArrowDownIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
               <RHFTextField
                 fullWidth

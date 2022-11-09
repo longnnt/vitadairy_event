@@ -12,6 +12,8 @@ const initialValue: initialValueProps = {
   buttonType: '',
   selectedIds: [],
   isResetSelect: false,
+  isOpenModal: false,
+  productCode: [] as string[],
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -50,6 +52,12 @@ const eventPromotionIVSlice = createSlice({
     setIsResetSelect: (state, action) => {
       state.isResetSelect = action.payload;
     },
+    setIsOpenModal: (state, action) => {
+      state.isOpenModal = action.payload;
+    },
+    setProductCode: (state, action) => {
+      state.productCode = action.payload;
+    },
   },
 });
 
@@ -65,6 +73,8 @@ export const {
   setButtonType,
   setSelectedIds,
   setIsResetSelect,
+  setIsOpenModal,
+  setProductCode,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -77,3 +87,5 @@ export const buttonTypeState = (state: RootState) => state.eventPromotionIV.butt
 export const selectedIdsState = (state: RootState) => state.eventPromotionIV.selectedIds;
 export const isResetSelectState = (state: RootState) =>
   state.eventPromotionIV.isResetSelect;
+export const openModalState = (state: RootState) => state.eventPromotionIV.isOpenModal;
+export const productCodeState = (state: RootState) => state.eventPromotionIV.productCode;

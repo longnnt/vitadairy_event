@@ -21,7 +21,7 @@ import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
 import { COLUMNS_HEADERS, CSV, FORMAT_DATE } from '../../constants';
-import { setFileCSV, setProvinceNewForm, setProvinceNewFormSelector, setRows, setRowsSelector } from '../../event.slice';
+import { setFileCSV, setProvinceInFoSelector, setProvinceNewForm, setProvinceNewFormSelector, setRows, setRowsSelector } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { EditToolbarProps, IEventDetail, ISelect } from '../../interfaces';
 import { StyledBox } from '../ultils';
@@ -71,7 +71,7 @@ export default function FullFeaturedCrudGrid() {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
 
-  const province = useSelector(setProvinceNewFormSelector);
+  const province = useSelector(setProvinceInFoSelector);
 
   const { data: addProvince } = useGetAllProvince();
   const dataProvince = addProvince?.data?.response?.provinces || [];
