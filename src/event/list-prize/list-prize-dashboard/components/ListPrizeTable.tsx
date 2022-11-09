@@ -22,15 +22,15 @@ function ListPrizeTableRow({
   };
 
   return (
-    <TableRow hover selected={selected}>
+    <TableRow hover selected={selected} sx={{overflow: 'hidden'}}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="left">{giftName}</TableCell>
-      <TableCell align="left">{ordinal}</TableCell>
-      <TableCell align="left">{quantity}</TableCell>
-      <TableCell align="left">{probability} %</TableCell>
-      <TableCell align="left">
+      <TableCell align="center">{giftName}</TableCell>
+      <TableCell align="center">{ordinal}</TableCell>
+      <TableCell align="center">{quantity}</TableCell>
+      <TableCell align="center">{probability} %</TableCell>
+      <TableCell align="center">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
