@@ -37,6 +37,8 @@ import { useGetListPrize } from '../hooks/useGetListPrize';
 import { IListPrize, IListPrizeParams } from '../interfaces';
 import ListPrizeFilterBar from './components/ListPrizeFilterBar';
 import { ListPrizeTableRow } from './components/ListPrizeTable';
+import ListPrizeTableNoData from './components/ListPrizeTableNoData';
+import ListPrizeTableSkeleton from './components/ListPrizeTableSkeleton';
 
 function ListPrizeDashboard() {
   const {
@@ -76,7 +78,7 @@ function ListPrizeDashboard() {
   const filterName = useSelector(filterNameSelector);
   if (filterName) searchParams.searchText = filterName;
 
-  const { data } = useGetListPrize(searchParams);
+  const { data, isLoading } = useGetListPrize(searchParams);
   const listPrize = data?.data?.response || [];
 
   const {
@@ -110,14 +112,14 @@ function ListPrizeDashboard() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="Quà tặng sự kiện"
+        heading="Giải thưởng sự kiện"
         links={[
           {
             name: BREADCUMBS.EVENT_PROMOTION_Q4,
             href: PATH_DASHBOARD.eventPromotionIV.root,
           },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Quà tặng sự kiện' },
+          { name: 'Giải thưởng sự kiện' },
         ]}
         action={
           <Stack direction="row" spacing={'10px'}>
@@ -138,11 +140,11 @@ function ListPrizeDashboard() {
           </Stack>
         }
       />
-      <Card>
+      <Card sx={{overflow: 'hidden'}}>
         <Divider />
         <ListPrizeFilterBar filterName={filterName} onFilterName={handleFilterName} />
         <Scrollbar>
-          <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+          <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: 400 }}>
             {!!selectedIds.length && (
               <TableSelectedActions
                 dense={dense}
@@ -151,22 +153,21 @@ function ListPrizeDashboard() {
                 rowCount={listPrize.length}
                 onSelectAllRows={handleCheckAll}
                 actions={
-                  <Tooltip title="Delete">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleDeleteRows(selectedIds)}
-                    >
-                      <Iconify icon={'eva:trash-2-outline'} />
-                    </IconButton>
-                  </Tooltip>
+                  <></>
+                  // <Tooltip title="Delete">
+                  //   {/* <IconButton
+                  //     color="primary"
+                  //     onClick={() => handleDeleteRows(selectedIds)}
+                  //   >
+                  //     <Iconify icon={'eva:trash-2-outline'} />
+                  //   </IconButton> */}
+                  // </Tooltip>
                 }
               />
             )}
 
             <Table size={dense ? 'small' : 'medium'}>
               <TableHeadCustom
-                order={order}
-                orderBy={orderBy}
                 isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={listPrize.length}
@@ -188,8 +189,10 @@ function ListPrizeDashboard() {
                     onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
-
-                <TableNoData isNotFound={isNotFound} />
+                {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <ListPrizeTableSkeleton key={index} isNotFound={isLoading} />;
+                })}
+                <ListPrizeTableNoData isNotFound={isNotFound && !isLoading} />
               </TableBody>
             </Table>
           </TableContainer>
@@ -208,7 +211,7 @@ function ListPrizeDashboard() {
 
           <FormControlLabel
             control={<Switch checked={dense} onChange={onChangeDense} />}
-            label="Dense"
+            label="Thu gọn"
             sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
           />
         </Box>
