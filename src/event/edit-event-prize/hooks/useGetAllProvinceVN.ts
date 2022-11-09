@@ -4,6 +4,8 @@ import { getAllProvinceVN } from '../service';
 
 export const useGetAllProvinceVN = () => {
   return {
-    ...useQuery([QUERY_KEYS.ALL_PROVINCE_VN], getAllProvinceVN),
+    ...useQuery([QUERY_KEYS.ALL_PROVINCE_VN], getAllProvinceVN, {
+      select: (data) => data.data.response.provinces,
+    }),
   };
 };

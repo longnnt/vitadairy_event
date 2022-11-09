@@ -25,6 +25,7 @@ export const DEDAULT_PROVINCE = {
   startDate: new Date(),
   endDate: new Date(),
   extraquantity: 0,
+  isNew: false,
 };
 export const DEFAULT_FORM_VALUE = {
   eventDetailProvinces: [DEDAULT_PROVINCE],
@@ -47,3 +48,18 @@ export const DEFAULT_FORM_VALUE = {
 
 export const NO_ID = 0;
 export const DATE_FORMAT = 'dd/MM/yyyy hh:mm a';
+export const ACCEPT_FILE_IMPORT = ['csv'];
+
+export const COLUMNS_HEADERS: Array<string> = [
+  'name',
+  'provinceId',
+  'extraquantity',
+  'startDate',
+  'endDate',
+];
+
+export const GIFT_POINT = {
+  GIFT: 'gift',
+  POINT: 'point',
+  GIFT_POINT: 'gift_point',
+};

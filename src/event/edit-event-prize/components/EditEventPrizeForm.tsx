@@ -1,9 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
-import { useEffect, useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
   FormProvider,
@@ -13,14 +12,13 @@ import {
   RHFTextField,
 } from 'src/common/components/hook-form';
 import {
-  DATE_FORMAT,
   DEFAULT_FORM_VALUE,
+  GIFT_POINT,
   NO_ID,
   popupTypeOption,
   POPUP_TYPE,
 } from '../common/constants';
 import {
-  IEventProvince,
   IFormEdit,
   IGiftDetail,
   IProvince,
@@ -35,29 +33,39 @@ import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useEditEventPrize } from '../hooks/useEditEventPrize';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GiftModal } from './GìiftModal';
-import { convertExcelFileToObj, validateFileImportFormat } from '../common/ultils';
-import Iconify from 'src/common/components/Iconify';
+import { fomatFormData } from '../common/ultils';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
 import _ from 'lodash';
+import {
+  choosenGiftPointSelector,
+  giftByIdSelector,
+  popUpTypeSelector,
+  provinceFormSelector,
+  setChoosenGiftPoint,
+  setGiftById,
+  setPopUpType,
+  setProvinceInfor,
+} from '../editEventPrize.Slice';
+import { useSelector } from 'react-redux';
+import LoadingScreen from 'src/common/components/LoadingScreen';
+import { dispatch } from 'src/common/redux/store';
+import PovinceTableForm from './ProvinceTableForm';
+import { LoadingButton } from '@mui/lab';
 
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-  const [giftPoint, setGiftPoint] = useState<string>('gift');
-  const [popupTypeOp, setPopupTypeOp] = useState<string>(POPUP_TYPE.HTML_LINK);
-  const [choosenGift, setChoosenGift] = useState<IGiftDetail>();
 
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data: dtaProvince } = useGetAllProvinceVN();
-  const provincesData = dtaProvince?.data?.response?.provinces;
+  const { data: provincesData } = useGetAllProvinceVN();
+  const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
+
   const provinceOptions = provincesData?.map((item: IProvince) => ({
     value: item?.id,
     label: item?.name,
@@ -66,23 +74,36 @@ export const EditEventPrizeForm = () => {
     ? provinceOptions.map((item: ISelect) => item.value)
     : [];
 
-  const { data: dataEventPrizeById } = useGetEventPrizeById(idEventPrize);
-  const dtaEventPrizeById = dataEventPrizeById?.data;
+  const dataEventPrizeById = useSelector(giftByIdSelector);
+  const dataProvinceform = useSelector(provinceFormSelector);
+  const choosenGiftPoint = useSelector(choosenGiftPointSelector);
+  const popUpTypedata = useSelector(popUpTypeSelector);
 
   useDeepCompareEffect(() => {
-    if (dtaEventPrizeById) {
-      setPopupTypeOp(dtaEventPrizeById?.response?.popupType);
+    if (eventPrizeById) {
+      dispatch(setGiftById(eventPrizeById));
+      dispatch(setProvinceInfor(eventPrizeById.eventDetailProvinces));
+      dispatch(setPopUpType(eventPrizeById.popupType));
     }
-  }, [dtaEventPrizeById]);
+  }, [eventPrizeById]);
+  useDeepCompareEffect(() => {
+    if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
+  }, [dataProvinceform]);
+  useDeepCompareEffect(() => {
+    if (popUpTypedata) setValue('popupType', popUpTypedata);
+  }, [popUpTypedata]);
 
-  const { data: transactionType } = useGetAllTransactionType();
-  const dtaTransactionType = transactionType?.data;
-  const transactionTypeOptions = dtaTransactionType?.response?.map(
-    (item: ITransactionType) => ({
-      value: item.id,
-      label: item.description,
-    })
-  );
+  useDeepCompareEffect(() => {
+    if (dataEventPrizeById) {
+      reset(dataEventPrizeById);
+    }
+  }, [dataEventPrizeById]);
+
+  const { data: transactionType } = useGetAllTransactionType(idEventPrize);
+  const transactionTypeOptions = transactionType?.map((item: ITransactionType) => ({
+    value: item.id,
+    label: item.description,
+  }));
 
   const methods = useForm<IFormEdit>({
     resolver: yupResolver(eidtEventPrizevalidate(provinceId)),
@@ -92,15 +113,11 @@ export const EditEventPrizeForm = () => {
     setValue,
     handleSubmit,
     reset,
-    control,
-
-    trigger,
-    resetField,
     formState: { isSubmitting, errors },
   } = methods;
 
   const { data: giftDetail } = useGetGiftById(
-    dtaEventPrizeById ? dtaEventPrizeById?.response?.giftId : NO_ID
+    dataEventPrizeById ? dataEventPrizeById?.giftId : NO_ID
   );
   useDeepCompareEffect(() => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
@@ -109,38 +126,11 @@ export const EditEventPrizeForm = () => {
   const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
 
-  const onSubmit = (data: IFormEdit) => {
-    const tempDta = { ...data };
-    delete tempDta.typeUser;
-
-    const temp = data?.eventDetailProvinces?.map((item: IEventProvince) => {
-      if (item.endDate || item.startDate) {
-        const startDate = new Date(item.startDate).toISOString();
-        const endDate = new Date(item.endDate).toISOString();
-        item = { ...item, startDate: startDate, endDate: endDate };
-      }
-      if (typeof item.provinceId === 'string') {
-        const provId = parseInt(item.provinceId);
-        item = { ...item, provinceId: provId };
-      }
-      if (!(typeof item.extraquantity === 'string')) {
-        delete item.extraquantity;
-        item = { ...item, quantity: 0 };
-      } else {
-        const totalQuantities = +item.extraquantity;
-        item = { ...item, quantity: totalQuantities };
-      }
-      return item;
-    });
-    tempDta.eventDetailProvinces = temp;
-
-    mutate(tempDta, {
+  const onSubmit = async (data: IFormEdit) => {
+    const tempEditData = fomatFormData(data);
+    await mutate(tempEditData, {
       onSuccess: () => {
         showSuccessSnackbar('edit successfully');
-        setFileImport([]);
-        for (let i = 0; i < fileImport.length; i++) {
-          resetField(`eventDetailProvinces.${i}.extraquantity`);
-        }
       },
       onError: () => {
         showErrorSnackbar('edit fail');
@@ -148,82 +138,29 @@ export const EditEventPrizeForm = () => {
     });
   };
 
-  const handleCountProvince = () => {
-    let tempFileImport = [...fileImport];
-    tempFileImport = tempFileImport.concat([
-      {
-        // provinceId: Math.floor(Math.random() * 100) + 100,
-        provinceId: fileImport.length + 200,
-        startDate: new Date(),
-        endDate: new Date(),
-        quantity: 0,
-      },
-    ]);
-
-    setFileImport(tempFileImport);
-  };
-  const handleRemoveProvince = (provinceId: number) => {
-    setFileImport([...fileImport].filter((item) => item.provinceId !== provinceId));
-  };
-
-  useDeepCompareEffect(() => {
-    if (choosenGift) {
-      setValue('giftId', choosenGift.id);
-    }
-  }, [choosenGift]);
-
   // ----------------set modal parameter---------------
 
   const [open, setOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
+  const [choosenGift, setChoosenGift] = useState<IGiftDetail>();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const SIZE = 10;
   const paramsGift = { page: page, size: SIZE };
   const { data } = useGetAllGift(paramsGift);
   const giftDta = data?.data?.response ? data?.data?.response : [];
-
-  // ---------------set import file----------------------
-
-  const [fileImport, setFileImport] = useState<IEventProvince[]>([]);
-
   useDeepCompareEffect(() => {
-    if (dtaEventPrizeById?.response) {
-      setFileImport(
-        _.sortBy(dtaEventPrizeById?.response?.eventDetailProvinces, (o) => o.provinceId)
-      );
-      reset(dtaEventPrizeById?.response);
+    if (choosenGift) {
+      setValue('giftId', choosenGift.id);
     }
-  }, [dtaEventPrizeById]);
+  }, [choosenGift]);
 
-  const handleOnInuputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-
-    if (files && files[0]) {
-      convertExcelFileToObj(files[0], setFileImport, fileImport);
-    }
-    const testValidateImport = validateFileImportFormat(fileImport);
-
-    if (!testValidateImport) {
-      showErrorSnackbar('File import  không đúng định dạng');
-    } else {
-      showSuccessSnackbar('import file thành công');
-    }
-  };
-  const handleSelectProvince = (e: any, index: any) => {
-    setValue(`eventDetailProvinces.${index}.provinceId`, e.target.value);
-    trigger();
-    const tempFileImport = [...fileImport];
-    tempFileImport[index].provinceId = e.target.value;
-    setFileImport(tempFileImport);
-  };
-  useDeepCompareEffect(() => {
-    if (fileImport.length) setValue('eventDetailProvinces', fileImport);
-  }, [fileImport]);
+  const loadingScreen: boolean = isLoading || isSubmitting;
 
   return (
     <>
       <Container>
+        {loadingScreen && <LoadingScreen />}
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Typography fontWeight={'bold'}>Thông tin tổng quan </Typography>
           <Grid container spacing={3}>
@@ -280,8 +217,7 @@ export const EditEventPrizeForm = () => {
                     label={'Popup type'}
                     onChange={(e) => {
                       const val = e.target.value;
-                      setPopupTypeOp(val);
-                      setValue('popupType', val);
+                      dispatch(setPopUpType(val));
                     }}
                   >
                     <option value="" />
@@ -291,14 +227,14 @@ export const EditEventPrizeForm = () => {
                       </option>
                     ))}
                   </RHFSelect>
-                  {popupTypeOp === POPUP_TYPE.HTML_LINK && (
+                  {popUpTypedata === POPUP_TYPE.HTML_LINK && (
                     <RHFTextField
                       name="popupLink"
                       key={'PopupHtmllink'}
                       label="Popup html link"
                     />
                   )}
-                  {popupTypeOp === POPUP_TYPE.DEEP_LINK && (
+                  {popUpTypedata === POPUP_TYPE.DEEP_LINK && (
                     <RHFTextField
                       name="popupLink"
                       key={'popupDeepLink'}
@@ -327,7 +263,7 @@ export const EditEventPrizeForm = () => {
                     name="typeUser"
                     defaultValue={'gift'}
                     onChange={(e) => {
-                      setGiftPoint(e.target.value);
+                      dispatch(setChoosenGiftPoint(e.target.value));
                     }}
                     options={[
                       { label: 'Tặng quà', value: 'gift' },
@@ -335,7 +271,7 @@ export const EditEventPrizeForm = () => {
                       // { label: 'Tặng quà và điểm', value: 'giftandpoint' },
                     ]}
                   />
-                  {giftPoint === 'gift' && (
+                  {choosenGiftPoint === GIFT_POINT.GIFT && (
                     <Stack direction={'column'} spacing="10px">
                       <Button
                         variant="contained"
@@ -357,27 +293,7 @@ export const EditEventPrizeForm = () => {
                       )}
                     </Stack>
                   )}
-                  {/* {giftPoint === 'point' && (
-                    <RHFTextField name="point" key={'point'} label="Nhập điểm" />
-                  )}
-                  {giftPoint === 'giftandpoint' && (
-                    <Stack direction={'row'} justifyContent="space-between">
-                      <Button
-                        variant="contained"
-                        size="large"
-                        sx={{ width: '30%', alignSelf: 'flex-start' }}
-                      >
-                        Chọn quà
-                      </Button>
-                      <RHFTextField
-                        sx={{ width: '30%' }}
-                        size="medium"
-                        name="giftandpoint"
-                        key={'giftandpoint'}
-                        label="Nhập điểm"
-                      />
-                    </Stack>
-                  )} */}
+
                   <GiftModal
                     open={open}
                     handleClose={handleClose}
@@ -419,128 +335,21 @@ export const EditEventPrizeForm = () => {
             <Typography fontWeight={'bold'}>Tỉnh thành</Typography>
             <Card sx={{ p: 3 }}>
               <Stack direction={'column'} spacing="15px">
-                <Stack
-                  direction={'row'}
-                  spacing={1.5}
-                  sx={{ mt: 3, alignSelf: 'flex-end' }}
-                >
-                  <input
-                    type="file"
-                    accept=".csv"
-                    ref={ref}
-                    style={{ display: 'none' }}
-                    onChange={(e) => handleOnInuputFile(e)}
-                  />
-                  <Button
-                    fullWidth
-                    startIcon={<Iconify icon={'mdi:file-import'} />}
-                    color="secondary"
-                    variant="contained"
-                    size="large"
-                    onClick={() => ref?.current?.click()}
-                  >
-                    Nhập
-                  </Button>
-
-                  <Button
-                    fullWidth
-                    color="success"
-                    variant="contained"
-                    size="medium"
-                    onClick={handleCountProvince}
-                  >
-                    <AddIcon />
-                  </Button>
-                </Stack>
                 <Box>
-                  {fileImport?.map((item: IEventProvince, index: number) => {
-                    return (
-                      <Box key={`eventDetailProvinces.${index}`} py="10px">
-                        <Stack direction={'row'} spacing="3px">
-                          <RHFSelect
-                            name={`eventDetailProvinces.${index}.provinceId`}
-                            key={`eventDetailProvinces.${index}.provinceId`}
-                            label={'Tỉnh thành'}
-                            onChange={(e) => handleSelectProvince(e, index)}
-                            // value={item.provinceId}
-                          >
-                            <option value="" />
-                            {provinceOptions?.map((item: ISelect) => (
-                              <option key={item.value} value={item.value}>
-                                {item.label}
-                              </option>
-                            ))}
-                          </RHFSelect>
-                          <RHFTextField
-                            disabled
-                            name={`eventDetailProvinces.${index}.quantity`}
-                            key={`eventDetailProvinces.${index}.quantity`}
-                            label="Tổng số lượng giải theo tỉnh"
-                            // value={item.quantity}
-                          />
-                          <RHFTextField
-                            name={`eventDetailProvinces.${index}.extraquantity`}
-                            key={`eventDetailProvinces.${index}.extraquantity`}
-                            label="Số giải nhập thêm"
-                          />
-                          <Controller
-                            name={`eventDetailProvinces.${index}.startDate`}
-                            key={`eventDetailProvinces.${index}}.startDate`}
-                            control={control}
-                            render={({ field }: { field: any }) => (
-                              <MobileDateTimePicker
-                                {...field}
-                                key="startDate"
-                                label="Start date"
-                                inputFormat={DATE_FORMAT}
-                                renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth />
-                                )}
-                              />
-                            )}
-                          />
-                          <Controller
-                            name={`eventDetailProvinces.${index}.endDate`}
-                            key={`eventDetailProvinces.${index}.endDate`}
-                            control={control}
-                            render={({ field }: { field: any }) => (
-                              <MobileDateTimePicker
-                                {...field}
-                                key="startDate"
-                                label="End date"
-                                inputFormat={DATE_FORMAT}
-                                renderInput={(params: any) => (
-                                  <TextField {...params} fullWidth />
-                                )}
-                              />
-                            )}
-                          />
-                          <Button
-                            // fullWidth
-                            color="error"
-                            variant="contained"
-                            size="small"
-                            sx={{ width: '50px', height: '50px' }}
-                            onClick={() => handleRemoveProvince(item.provinceId)}
-                          >
-                            <RemoveRoundedIcon />
-                          </Button>
-                        </Stack>
-                      </Box>
-                    );
-                  })}
+                  <PovinceTableForm name="eventDetailProvinces" setValue={setValue} />
                 </Box>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  sx={{ width: '20%', alignSelf: 'flex-end' }}
-                >
-                  Lưu
-                </Button>
               </Stack>
             </Card>
           </Box>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            sx={{ width: '20%', alignSelf: 'flex-end' }}
+            loading={isSubmitting}
+          >
+            Lưu
+          </LoadingButton>
         </FormProvider>
       </Container>
     </>
