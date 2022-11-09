@@ -1,4 +1,5 @@
 import { Dayjs } from 'dayjs';
+import { GridRowsProp, GridRowModesModel } from '@mui/x-data-grid-pro';
 
 export interface IHistoryListEventParams {
   endDate?: Date | null;
@@ -113,12 +114,14 @@ export interface IProvinceType {
 }
 
 export interface IEventDetail {
+  id?: number | string;
   provinceId: number;
   quantity: number;
-  endDate: Dayjs | null | string;
-  startDate: Dayjs | null | string;
+  endDate: Dayjs | Date | string;
+  startDate: Dayjs | Date | string;
   name?: string;
   extraquantity?: number;
+  isNew?: boolean;
 }
 
 export interface IResTransaction {
@@ -210,3 +213,16 @@ export type IGiftParams = {
   page?: number;
   size?: number;
 };
+
+export interface ISelect {
+  value: number;
+  label: string;
+}
+
+export interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  importFile: any;
+  setRowModesModel: (
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void;
+}

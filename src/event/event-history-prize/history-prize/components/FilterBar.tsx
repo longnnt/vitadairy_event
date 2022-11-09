@@ -6,7 +6,7 @@ import { FormProvider } from 'src/common/components/hook-form';
 // components
 import { Controller, useForm } from 'react-hook-form';
 import { dispatch } from 'src/common/redux/store';
-import { formatDateNews } from '../../constants';
+import { FORMAT_DATE_NEWS } from '../../constants';
 import {
   setFirstScanEndDate,
   setFirstScanStartDate,
@@ -115,7 +115,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={formatDateNews}
+                      inputFormat={FORMAT_DATE_NEWS}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -133,7 +133,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={formatDateNews}
+                    inputFormat={FORMAT_DATE_NEWS}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}

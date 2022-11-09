@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { ButtonType } from './constants';
+import { ButtonType, DEDAULT_PROVINCE } from './constants';
 import { IEventDetail, IGift, IPayloadDate, IPayloadSearch } from './interfaces';
 
 type StateProps = {
@@ -14,7 +14,9 @@ type StateProps = {
   open: boolean;
   dataCities: IEventDetail[];
   fileCSV: Array<unknown>;
-  showData:boolean
+  provinceNewForm: IEventDetail[];
+  provinceInFo: IEventDetail[];
+  showData: boolean;
 };
 
 export const initialState: StateProps = {
@@ -28,7 +30,9 @@ export const initialState: StateProps = {
   open: false,
   dataCities: [],
   fileCSV: [],
-  showData:false
+  provinceNewForm: [],
+  provinceInFo: [DEDAULT_PROVINCE],
+  showData: false,
 };
 
 export const eventAdminSlice = createSlice({
@@ -65,6 +69,12 @@ export const eventAdminSlice = createSlice({
     setFileCSV: (state, action: PayloadAction<Array<unknown>>) => {
       state.fileCSV = action.payload;
     },
+    setProvinceNewForm: (state, action: PayloadAction<Array<IEventDetail>>) => {
+      state.provinceNewForm = action.payload;
+    },
+    setProvinceInFo: (state, action: PayloadAction<Array<IEventDetail>>) => {
+      state.provinceInFo = action.payload;
+    },
     setShowData: (state, action: PayloadAction<boolean>) => {
       state.showData = action.payload;
     },
@@ -82,7 +92,9 @@ export const {
   setOpen,
   setDataCities,
   setFileCSV,
-  setShowData
+  setProvinceNewForm,
+  setProvinceInFo,
+  setShowData,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -95,7 +107,10 @@ export const popUpCodeSelector = (state: RootState) => state.historyList.popUpCo
 export const setOpenSelector = (state: RootState) => state.historyList.open;
 export const setDataCitiesSelector = (state: RootState) => state.historyList.dataCities;
 export const setFileCSVSelector = (state: RootState) => state.historyList.fileCSV;
+export const setProvinceNewFormSelector = (state: RootState) =>
+  state.historyList.provinceNewForm;
+export const setProvinceInFoSelector = (state: RootState) =>
+  state.historyList.provinceInFo;
 export const showDataSelector = (state: RootState) => state.historyList.showData;
-
 
 export default eventAdminSlice.reducer;

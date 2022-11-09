@@ -9,6 +9,7 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Stack,
   Table,
   TableBody,
   TableContainer,
@@ -16,14 +17,12 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
-import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { parse, ParseResult } from 'papaparse';
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   FormProvider,
@@ -31,7 +30,6 @@ import {
   RHFSelect,
   RHFTextField,
 } from 'src/common/components/hook-form';
-import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
@@ -48,7 +46,6 @@ import {
 } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
-  buttonTypeState,
   giftSelecttor,
   popUpCodeSelector,
   popUpTypeSelector,
@@ -61,6 +58,7 @@ import {
   setOpenSelector,
   setPopUpCode,
   setPopUpType,
+  setProvinceNewFormSelector,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
@@ -70,12 +68,15 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
+  ISelect,
   ISelectPopup,
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useShowSnackbar from 'src/common/hooks/useMessage';
+import FullFeaturedCrudGrid from './ProvinceTableRow';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 dayjs.extend(customParseFormat);
 
@@ -86,7 +87,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function HistoryNewForm() {
-  const navigate = useNavigate();
+  const { useDeepCompareEffect } = useDeepEffect();
   const [valueChoice, setValueChoice] = React.useState('all');
   const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueChoice((event.target as HTMLInputElement).value);
@@ -109,6 +110,7 @@ export default function HistoryNewForm() {
   const popUpCode = useSelector(popUpCodeSelector);
   const open = useSelector(setOpenSelector);
   const dataCities = useSelector(setDataCitiesSelector);
+  const dataProvinceform = useSelector(setProvinceNewFormSelector);
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const handleOpen = () => dispatch(setOpen(true));
   const handleClose = () => dispatch(setOpen(false));
@@ -147,6 +149,10 @@ export default function HistoryNewForm() {
     setValue('eventDetailProvinces', newData);
   };
 
+  useDeepCompareEffect(() => {
+    if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
+  }, [dataProvinceform]);
+
   const changePopUpType = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -173,7 +179,7 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate,isLoading } = useAddEvent({ onSuccess, onError });
+  const { mutate, isLoading } = useAddEvent({ onSuccess, onError });
   const params = useParams();
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
@@ -185,13 +191,6 @@ export default function HistoryNewForm() {
     name: item.description,
   }));
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
-  const addNewOption2 = dataProvince.map((item) => ({
-    key: item.id,
-    name: item.name,
-  }));
-
   const searchParams: IGiftParams = {
     page: page,
     size: 10,
@@ -200,49 +199,6 @@ export default function HistoryNewForm() {
   const dataGift = ListGift?.data?.response || [];
   const { totalRecords } = ListGift?.data?.pagination || {
     totalRecords: 0,
-  };
-
-  const importFile = async (event: any) => {
-    try {
-      const allowedExtensions = ['csv'];
-      if (event.target.files.length) {
-        const inputFile = event.target.files[0];
-
-        const fileExtension = inputFile?.type.split('/')[1];
-        FORMAT_DATE;
-        if (!allowedExtensions.includes(fileExtension)) {
-          showErrorSnackbar('Không phải file csv');
-          return;
-        }
-        dispatch(setFileCSV(inputFile));
-        showSuccessSnackbar('Import file thành công');
-      }
-      if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
-
-      parse(event.target.files[0], {
-        header: true,
-        download: true,
-        skipEmptyLines: true,
-        delimiter: ',',
-        fastMode: true,
-        encoding: 'utf-8',
-        transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
-        complete: async (results: ParseResult<IEventDetail>) => {
-          const data: IEventDetail[] = results.data.map((item: IEventDetail) => ({
-            name: item.name,
-            provinceId: item.provinceId,
-            quantity: item.quantity,
-            startDate: dayjs(item.startDate, FORMAT_DATE),
-            endDate: dayjs(item.endDate, FORMAT_DATE),
-          }));
-
-          dispatch(setDataCities(data));
-          setValue('eventDetailProvinces', data);
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   useEffect(() => {
@@ -438,18 +394,6 @@ export default function HistoryNewForm() {
                     onChange={handleChangeChoice}
                   >
                     <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
-                    {/* <FormControlLabel
-                      name={'giftId'}
-                      value="point"
-                      control={<Radio />}
-                      label="Tặng Điểm"
-                    />
-                    <FormControlLabel
-                      name={'giftId'}
-                      value="all"
-                      control={<Radio />}
-                      label="Tặng Quà và Điểm"
-                    /> */}
                   </RadioGroup>
                   <Grid container spacing={3}>
                     <Grid item xs>
@@ -521,15 +465,6 @@ export default function HistoryNewForm() {
                         </Box>
                       </Modal>
                     </Grid>
-                    {/* <Grid item xs>
-                      <RHFTextField
-                        type="number"
-                        name={'point'}
-                        label="Nhập điểm."
-                        margin="dense"
-                        sx={{ display: valueChoice !== 'gift' ? 'block' : 'none' }}
-                      />
-                    </Grid> */}
                   </Grid>
                 </Card>
               </Grid>
@@ -551,166 +486,22 @@ export default function HistoryNewForm() {
                 />
                 <div>
                   <LabelStyle>Mô tả thông báo</LabelStyle>
-                  {/* <RHFEditor
+                  <RHFEditor
                     className="category__text-editor"
                     simple
                     name="notificationContent"
                     key={'notificationContent'}
-                  /> */}
-                  <RHFTextField
-                    name="notificationContent"
-                    key={'notificationContent'}
-                    label="Nội dung thông báo"
-                    margin="dense"
                   />
                 </div>
               </Grid>
             </Card>
             <LabelStyle>Tỉnh thành</LabelStyle>
-            <Card sx={{ p: 3, width: '100%' }}>
-              <Grid sx={{ maxHeight: 370 }}>
-                <Grid direction="row" justifyContent="flex-end" container>
-                  <Box sx={{ paddingRight: 2 }}>
-                    <Button
-                      variant="contained"
-                      startIcon={<Iconify icon={'mdi:file-import'} />}
-                      component="label"
-                    >
-                      Nhập
-                      <input hidden multiple type="file" onChange={importFile} />
-                    </Button>
-                  </Box>
-                  <Box>
-                    <Button
-                      color="inherit"
-                      onClick={() => {
-                        dispatch(
-                          setDataCities([
-                            ...dataCities,
-                            {
-                              provinceId: dataCities.length,
-                              startDate: dayjs(),
-                              endDate: dayjs(),
-                              quantity: 0,
-                            },
-                          ])
-                        );
-                      }}
-                      variant="outlined"
-                      size="large"
-                    >
-                      +
-                    </Button>
-                  </Box>
-                </Grid>
-                <Grid sx={{ maxHeight: 450, overflow: 'auto' }}>
-                  {dataCities &&
-                    dataCities.map((item, index) => {
-                      return (
-                        <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
-                          <Grid item xs={2.75}>
-                            <RHFSelect
-                              name={`eventDetailProvinces.${index}.provinceId`}
-                              key={`eventDetailProvinces.${index}.provinceId`}
-                              label="Tỉnh thành"
-                              placeholder="Tỉnh thành"
-                              value={item.provinceId}
-                              onChange={(e) => handleChangeCity(e, item)}
-                            >
-                              <option value="" />
-                              {addNewOption2.map((option) => (
-                                <option key={option.key} value={option.key}>
-                                  {option.name}
-                                </option>
-                              ))}
-                            </RHFSelect>
-                          </Grid>
-                          <Grid item xs>
-                            <RHFTextField
-                              name={`eventDetailProvinces.${index}.quantity`}
-                              key={`eventDetailProvinces.${index}.quantity`}
-                              InputProps={{
-                                readOnly: true,
-                              }}
-                              label="Tổng số lượng giải theo tỉnh"
-                              value={item.quantity}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <RHFTextField
-                              name={`eventDetailProvinces.${index}.extraquantity`}
-                              key={`eventDetailProvinces.${index}.extraquantity`}
-                              label="Số giải nhập thêm"
-                              onChange={(e) => handleChangeCity(e, item)}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Controller
-                              name={`eventDetailProvinces.${index}.startDate`}
-                              key={`eventDetailProvinces.${index}}.startDate`}
-                              control={control}
-                              render={({ field }: { field: any }) => (
-                                <DatePicker
-                                  {...field}
-                                  key="startDate"
-                                  label="Ngày bắt đầu"
-                                  inputFormat="dd/MM/yyyy"
-                                  renderInput={(params: any) => (
-                                    <TextField
-                                      {...params}
-                                      fullWidth
-                                      defaultValue={dayjs(
-                                        item.startDate || null,
-                                        FORMAT_DATE
-                                      )}
-                                      onChange={(e) => handleChangeCity(e, item)}
-                                    />
-                                  )}
-                                />
-                              )}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Controller
-                              name={`eventDetailProvinces.${index}.endDate`}
-                              key={`eventDetailProvinces.${index}.endDate`}
-                              control={control}
-                              render={({ field }: { field: any }) => (
-                                <DatePicker
-                                  {...field}
-                                  key="endDate"
-                                  label="Ngày kết thúc"
-                                  inputFormat="dd/MM/yyyy"
-                                  renderInput={(params: any) => (
-                                    <TextField
-                                      {...params}
-                                      fullWidth
-                                      defaultValue={dayjs(
-                                        item.endDate || null,
-                                        FORMAT_DATE
-                                      )}
-                                      onChange={(e) => handleChangeCity(e, item)}
-                                    />
-                                  )}
-                                />
-                              )}
-                            />
-                          </Grid>
-                          <Grid item xs={1}>
-                            <Button
-                              color="inherit"
-                              onClick={() => removeCount(item?.provinceId)}
-                              variant="contained"
-                              size="large"
-                            >
-                              -
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      );
-                    })}
-                </Grid>
-              </Grid>
+            <Card sx={{ p: 1.5 }}>
+              <Stack direction={'column'} spacing="15px">
+                <Box>
+                  <FullFeaturedCrudGrid />
+                </Box>
+              </Stack>
             </Card>
           </Grid>
 
