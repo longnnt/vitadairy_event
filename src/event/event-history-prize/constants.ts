@@ -63,15 +63,19 @@ export enum LANG {
   VI = 'vi',
   EN = 'en',
 }
+
+export const DEDAULT_PROVINCE = {
+  id: 0,
+  provinceId: 0,
+  quantity: 0,
+  startDate: new Date(),
+  endDate: new Date(),
+  extraquantity: 0,
+  isNew: false,
+};
+
 export const defaultValues = {
-  eventDetailProvinces: [
-    {
-      endDate: new Date(),
-      provinceId: 0,
-      quantity: 0,
-      startDate: new Date(),
-    },
-  ],
+  eventDetailProvinces: [DEDAULT_PROVINCE],
   eventId: 0,
   giftId: 0,
   notificationContent: '',
@@ -103,7 +107,7 @@ export const TABLE_HEAD_GIFT = [
   { id: 'money', label: 'Money', align: 'right' },
 ];
 
-export const formatDateNews = 'dd/MM/yyyy hh:mm a';
+export const FORMAT_DATE_NEWS = 'dd/MM/yyyy hh:mm a';
 
 export const POPUP_TYPE = {
   DEEP_LINK: 'DEEP_LINK',
@@ -154,3 +158,5 @@ export const STYLE_GIFT = {
   boxShadow: 24,
   p: 4,
 };
+
+export const CSV = 'csv';

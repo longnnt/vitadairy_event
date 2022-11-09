@@ -9,6 +9,7 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Stack,
   Table,
   TableBody,
   TableContainer,
@@ -16,22 +17,14 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
-import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { parse, ParseResult } from 'papaparse';
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  FormProvider,
-  RHFEditor,
-  RHFSelect,
-  RHFTextField,
-} from 'src/common/components/hook-form';
-import Iconify from 'src/common/components/Iconify';
+import { FormProvider, RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
@@ -48,7 +41,6 @@ import {
 } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
-  buttonTypeState,
   giftSelecttor,
   popUpCodeSelector,
   popUpTypeSelector,
@@ -61,6 +53,7 @@ import {
   setOpenSelector,
   setPopUpCode,
   setPopUpType,
+  setProvinceNewFormSelector,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
@@ -70,12 +63,15 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
+  ISelect,
   ISelectPopup,
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useShowSnackbar from 'src/common/hooks/useMessage';
+import FullFeaturedCrudGrid from './ProvinceTableRow';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 dayjs.extend(customParseFormat);
 
@@ -86,7 +82,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function HistoryNewForm() {
-  const navigate = useNavigate();
+  const { useDeepCompareEffect } = useDeepEffect();
   const [valueChoice, setValueChoice] = React.useState('all');
   const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueChoice((event.target as HTMLInputElement).value);
@@ -109,6 +105,7 @@ export default function HistoryNewForm() {
   const popUpCode = useSelector(popUpCodeSelector);
   const open = useSelector(setOpenSelector);
   const dataCities = useSelector(setDataCitiesSelector);
+  const dataProvinceform = useSelector(setProvinceNewFormSelector);
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const handleOpen = () => dispatch(setOpen(true));
   const handleClose = () => dispatch(setOpen(false));
@@ -146,6 +143,10 @@ export default function HistoryNewForm() {
     dispatch(setDataCities(newData));
     setValue('eventDetailProvinces', newData);
   };
+
+  useDeepCompareEffect(() => {
+    if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
+  }, [dataProvinceform]);
 
   const changePopUpType = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -187,10 +188,14 @@ export default function HistoryNewForm() {
 
   const { data: addProvince } = useGetAllProvince();
   const dataProvince = addProvince?.data?.response?.provinces || [];
-  const addNewOption2 = dataProvince.map((item) => ({
-    key: item.id,
-    name: item.name,
+  const addProvinceVN = dataProvince.map((item) => ({
+    value: item.id,
+    label: item.name,
   }));
+
+  const provinceId = addProvinceVN
+    ? addProvinceVN.map((item: ISelect) => item.value)
+    : [];
 
   const searchParams: IGiftParams = {
     page: page,
@@ -264,7 +269,7 @@ export default function HistoryNewForm() {
   }, []);
 
   const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(createEventPrizevalidate()),
+    resolver: yupResolver(createEventPrizevalidate(provinceId)),
     defaultValues,
   });
 
@@ -566,8 +571,16 @@ export default function HistoryNewForm() {
                 </div>
               </Grid>
             </Card>
-            {/* <LabelStyle>Tỉnh thành</LabelStyle>
-            <Card sx={{ p: 3, width: '100%' }}>
+            <LabelStyle>Tỉnh thành</LabelStyle>
+            <Card sx={{ p: 1.5 }}>
+              <Stack direction={'column'} spacing="15px">
+                <Box>
+                  <FullFeaturedCrudGrid />
+                </Box>
+              </Stack>
+            </Card>
+
+            {/* <Card sx={{ p: 3, width: '100%' }}>
               <Grid sx={{ maxHeight: 370 }}>
                 <Grid direction="row" justifyContent="flex-end" container>
                   <Box sx={{ paddingRight: 2 }}>
