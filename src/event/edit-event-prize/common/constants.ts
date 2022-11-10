@@ -4,6 +4,12 @@ export const POPUP_TYPE = {
   NULL: 'NULL',
 };
 
+export const POPUP_CODE = {
+  PUZZLE_PIECE: 'PUZZLE_PIECE',
+  OGGI: 'OGGI',
+  FULL_SCREEN: 'FULL_SCREEN',
+};
+
 export const popupTypeOption = [
   {
     value: POPUP_TYPE.NULL,

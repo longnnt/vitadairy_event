@@ -2,19 +2,14 @@ import * as Yup from 'yup';
 
 export const eidtEventPrizevalidate = (provinceId: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
-    endDate: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
+    endDate: Yup.string().typeError('Must be a string'),
     provinceId: Yup.number()
-      .required('This field is required')
       .typeError('Must be a number')
       .test('test province id', 'this field is required', (val) =>
         provinceId.includes(val as number)
       ),
-    quantity: Yup.number().typeError('Must be a number'),
-    startDate: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
+    quantity: Yup.mixed(),
+    startDate: Yup.string().typeError('Must be a string'),
   });
 
   const eidtEventPrizeSchema = Yup.object().shape({

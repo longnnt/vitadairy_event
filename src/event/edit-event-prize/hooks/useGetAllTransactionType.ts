@@ -1,11 +1,16 @@
 import { useQuery } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
+import { IQuery } from '../common/interface';
 import { getAllTransactionType } from '../service';
 
-export const useGetAllTransactionType = (id: number) => {
+export const useGetAllTransactionType = (params: IQuery) => {
   return {
-    ...useQuery([QUERY_KEYS.ALL_TRANSACTION_TYPE], () => getAllTransactionType(id), {
-      select: (data) => data.data.response,
-    }),
+    ...useQuery(
+      [QUERY_KEYS.ALL_TRANSACTION_TYPE, params],
+      () => getAllTransactionType(params),
+      {
+        select: (data) => data.data.response,
+      }
+    ),
   };
 };

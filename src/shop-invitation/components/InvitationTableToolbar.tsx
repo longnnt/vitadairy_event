@@ -1,8 +1,8 @@
 import { LoadingButton } from '@mui/lab';
-import { Stack, InputAdornment, TextField, Box, Grid, Card } from '@mui/material';
+import { Stack, InputAdornment, TextField, Box, Grid, Card, Button } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
-import { FormProvider, RHFSwitch } from 'src/common/components/hook-form';
+import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
 import {
@@ -34,17 +34,18 @@ export const InvitationTableToolbar = (handleSearch: any) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = methods;
 
   const onSubmit = (data: IParamsQuery) => {
-    console.log(data);
     if (data.searchText) dispatch(setSearchText(data.searchText));
-    if (typeof data.status === 'boolean') dispatch(setStatus(data.status));
-
-    dispatch(setFirstScanStartDate(data.firstScanStartDate as string));
-
-    dispatch(setFirstScanEndDate(data.firstScanEndDate as string));
+    if (data.status) dispatch(setStatus(data.status));
+    dispatch(setFirstScanStartDate(data.firstScanStartDate));
+    dispatch(setFirstScanEndDate(data.firstScanEndDate));
+  };
+  const handleResetSearch = () => {
+    reset();
   };
   return (
     <>
@@ -56,12 +57,12 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                 <Controller
                   name="searchText"
                   control={control}
-                  render={({ field: { onChange } }) => (
+                  render={({ field: { onChange, value } }) => (
                     <TextField
                       fullWidth
                       onChange={onChange}
-                      name="searchText"
-                      placeholder="Search..."
+                      value={value}
+                      placeholder="Search text..."
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -76,24 +77,33 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                   )}
                 />
 
-                <div>
-                  <RHFSwitch
-                    name="status"
-                    label="Success Status"
-                    labelPlacement="start"
-                    sx={{ mx: 0, width: 0.5, justifyContent: 'space-between' }}
-                  />
-                </div>
+                <RHFSelect name={'status'} key="status" label={'Status'}>
+                  <option value="" />
+                  <option value={'true'}>Success</option>
+                  <option value={'false'}>Not Success</option>
+                </RHFSelect>
+
                 <Box>
-                  <LoadingButton
-                    sx={{ size: '30px' }}
-                    type="submit"
-                    variant="contained"
-                    size="medium"
-                    onClick={() => handleSearch()}
-                  >
-                    Tìm kiếm
-                  </LoadingButton>
+                  <Stack direction={'row'} spacing="10px">
+                    <LoadingButton
+                      sx={{ size: '30px' }}
+                      type="submit"
+                      variant="contained"
+                      size="medium"
+                      onClick={() => handleSearch()}
+                    >
+                      Tìm kiếm
+                    </LoadingButton>
+                    <Button
+                      sx={{ size: '30px' }}
+                      type="submit"
+                      variant="contained"
+                      size="medium"
+                      onClick={handleResetSearch}
+                    >
+                      Reset
+                    </Button>
+                  </Stack>
                 </Box>
               </Stack>
             </Grid>

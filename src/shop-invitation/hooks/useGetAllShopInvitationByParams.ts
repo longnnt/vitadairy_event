@@ -5,8 +5,12 @@ import { getAllShopInvitationByparams } from '../services';
 
 export const useGetAllShopInvitationByParams = (params: IParamsQuery) => {
   return {
-    ...useQuery([QUERY_KEYS.SHOP_INVITATION_LIST, params], () =>
-      getAllShopInvitationByparams(params)
+    ...useQuery(
+      [QUERY_KEYS.SHOP_INVITATION_LIST, params],
+      () => getAllShopInvitationByparams(params),
+      {
+        select: (data) => data?.data?.response?.response,
+      }
     ),
   };
 };
