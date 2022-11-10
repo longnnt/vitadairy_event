@@ -30,7 +30,7 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { replacePathParams } from 'src/common/utils/replaceParams';
 import { TABLE_HEAD } from '../contants';
-import { alertStatusSelector, filterNameSelector, setFilterName, setAlertStatus } from '../event.slice';
+import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector } from '../event.slice';
 import useShowSnackbar from '../hooks/useCustomSnackBar';
 import { useDeleteListPrizeAdmin } from '../hooks/useDeleteListPrize';
 import { useGetListPrize } from '../hooks/useGetListPrize';
@@ -94,11 +94,12 @@ function ListPrizeDashboard() {
   );
 
   const alertStatus = useSelector(alertStatusSelector)
+  // const itemRow= useSelector(itemRowsSelector)
   const handleOpenAlert = () =>{
-    dispatch(setAlertStatus(true));
+    dispatch(setAlert({alertStatus: true}));
   }
   const handleCloseAlert= () =>{
-    dispatch(setAlertStatus(false))
+    dispatch(setAlert({alertStatus: false}));
   }
 
   const handleFilterName = (filterName: string) => {
@@ -203,8 +204,6 @@ function ListPrizeDashboard() {
                     }}
                     onDeleteRow={() => handleDeleteRows([row.id])}
                     onEditRow={() => handleEditRow(row.id)}
-                    onOpenAlert={() => handleOpenAlert()}
-                    onCloseAlert={() => handleCloseAlert()}
                     
                   />
                 ))}

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { dispatch, useSelector } from 'src/common/redux/store';
-import { alertStatusSelector } from '../../event.slice';
+import { alertStatusSelector, itemRowsSelector, setAlert} from '../../event.slice';
 
 import { useDeleteListPrizeAdmin } from '../../hooks/useDeleteListPrize';
 import { IPropsListPrizeTableRow } from '../../interfaces';
@@ -17,11 +17,12 @@ function ListPrizeTableRow({
   onEditRow,
   onSelectRow,
   onDeleteRow,
-  onOpenAlert,
-  onCloseAlert,
+
 }: IPropsListPrizeTableRow) {
   const { id, giftName, ordinal, probability, quantity } = row;
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
+  
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(event.currentTarget);
   };
@@ -29,14 +30,25 @@ function ListPrizeTableRow({
     setOpenMenuActions(null);
   };
 
-  
-  const alertStatus = useSelector(alertStatusSelector)
+  const itemRow= useSelector(itemRowsSelector)
+  const alert = useSelector(alertStatusSelector)
+  const handleOpenAlert = () =>{
+    // setOpenAlert(true)
+    dispatch(setAlert({itemId: row.id, alertStatus: true}))
+  }
+  const handleCloseAlert= () =>{
+    // setOpenAlert(false)
+    dispatch(setAlert({itemId: '', alertStatus:false}))
+  }
+
+
+
   return (
     <TableRow hover selected={selected} sx={{overflow: 'hidden'}}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="center">{giftName}</TableCell>
+      <TableCell align="left">{giftName}</TableCell>
       <TableCell align="center">{ordinal}</TableCell>
       <TableCell align="center">{quantity}</TableCell>
       <TableCell align="center">{probability} %</TableCell>
@@ -46,6 +58,7 @@ function ListPrizeTableRow({
           onOpen={handleOpenMenu}
           onClose={handleCloseMenu}
           actions={
+            <>
             <Stack>
               <MenuItem
                 onClick={() => {
@@ -59,26 +72,29 @@ function ListPrizeTableRow({
               <MenuItem
                 onClick={() => {
                   handleCloseMenu();
-                  onOpenAlert()
+                  handleOpenAlert()
+                  
                 }}
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon={'eva:trash-2-outline'} />
                 Delete
-              </MenuItem>
                 
+              </MenuItem>
+             
             </Stack>
+           
+            </> 
           }
-          
         />
-        <AlertDialog 
-                open={alertStatus} 
-                handleClose={onCloseAlert} 
-                selectedId = {[row.id]}
-              />
-        
+            <AlertDialog 
+              open={alert} 
+              handleClose={handleCloseAlert} 
+              selectedId = {[itemRow.itemRowId]}
+            />  
+  
       </TableCell>
-
+      
     </TableRow>
   );
 }
