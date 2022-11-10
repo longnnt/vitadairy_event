@@ -36,6 +36,7 @@ import { useDeleteEvents } from '../hooks/useDeleteEvent';
 import { useGetListEvent } from '../hooks/useGetListEvent';
 import { EventSearchParams, PaginationProps, RowProps } from '../interface';
 import { EventTableRow } from './EventTableRow';
+import TableSkeleton from './TableSkeleton';
 export const EventTable = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,10 +57,10 @@ export const EventTable = () => {
     searchText: searchTextValue,
   };
 
-  const { data } = useGetListEvent({
+  const { data,isLoading } = useGetListEvent({
     params: searchParams,
     callback: {
-      onSuccess: () => showSuccessSnackbar('Tải sự kiện thành công'),
+      onSuccess:()=>{},
       onError: () => showErrorSnackbar('Tải sự kiện thất bại'),
     },
   });
@@ -80,7 +81,7 @@ export const EventTable = () => {
     totalRecords: 0,
   };
 
-  const isNotFound = !dataListEvent.length;
+  const isNotFound = !dataListEvent.length && !isLoading;
 
   useEffect(() => {
     dispatch(setSelectedIds(selectedIds));
@@ -142,7 +143,9 @@ export const EventTable = () => {
                   }}
                 />
               ))}
-
+               {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <TableSkeleton key={index} isNotFound={isLoading} />;
+                })}
               <TableNoData isNotFound={isNotFound} />
             </TableBody>
           </Table>
@@ -150,7 +153,6 @@ export const EventTable = () => {
       </Scrollbar>
 
       <Box sx={{ position: 'relative' }}>
-        {!!totalPages && (
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
@@ -160,7 +162,6 @@ export const EventTable = () => {
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
           />
-        )}
 
         <FormControlLabel
           control={<Switch checked={dense} onChange={onChangeDense} />}

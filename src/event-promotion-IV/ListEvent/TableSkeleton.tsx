@@ -18,8 +18,8 @@ export default function TableSkeleton({ isNotFound  }: Props) {
       <Skeleton/>
       </TableCell>
 
-      <TableCell align="left"><Skeleton/></TableCell>
-      <TableCell align="left"><Skeleton/></TableCell></>):(
+    
+</>):(
         
         <TableCell colSpan={12} sx={{ p: 0 }} />
       )}

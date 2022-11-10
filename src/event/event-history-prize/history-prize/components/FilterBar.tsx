@@ -51,8 +51,11 @@ export const FilterBar = (props: { handleSearch: Function }) => {
     dispatch(setFirstScanEndDate(data.endDate));
   };
 
-
-  const handleCancel = () => {
+  function timeout(ms:any) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+  const handleCancel = async() => {
+    await timeout(3000);
     reset({
       searchText: '',
       startDate: null,

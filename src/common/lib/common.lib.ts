@@ -9,3 +9,7 @@ export function toQueryString(objParams: any) {
 
   return '?' + str.join('&');
 }
+
+export function timeout(ms:any) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

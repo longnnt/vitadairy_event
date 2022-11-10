@@ -11,6 +11,7 @@ import {
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
+import { timeout } from 'src/common/lib/common.lib';
 
 import { dispatch } from 'src/common/redux/store';
 import { setEndDate, setSearchText, setStartDate } from '../eventPromotionIV.slice';
@@ -45,7 +46,8 @@ export const EventTableToolbar = () => {
     dispatch(setEndDate(data.endDate));
   };
 
-  const handleResetForm = () => {
+  const handleResetForm = async() => {
+    await timeout(3000);
     reset({
       endDate: null,
       startDate: null,

@@ -55,7 +55,6 @@ function AdminTableRow({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  console.log(id);
                   onEditRow();
                   handleCloseMenu();
                 }}

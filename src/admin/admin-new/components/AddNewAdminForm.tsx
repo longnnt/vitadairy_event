@@ -13,7 +13,7 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 
 function AddFormNewAdmin() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { mutate, isSuccess } = useAddNewAdmin({
+  const { mutate, isSuccess ,isLoading } = useAddNewAdmin({
     onSuccess: () => {
       showSuccessSnackbar('Add admin successfully');
     },
@@ -89,7 +89,7 @@ function AddFormNewAdmin() {
               size="large"
               type="submit"
               variant="contained"
-              loading={isSubmitting}
+              loading={isLoading}
             >
               Add New
             </LoadingButton>

@@ -28,9 +28,8 @@ function EditFormAdmin() {
   const id = params?.id;
   const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { mutate, isSuccess } = useEditAdmin({
+  const { mutate, isSuccess,isLoading } = useEditAdmin({
     onSuccess: () => {
-      showSuccessSnackbar('Get Admin successfully');
     },
     onError: () => {
       showErrorSnackbar('Get admin fail');
@@ -131,7 +130,8 @@ function EditFormAdmin() {
               size="large"
               type="submit"
               variant="contained"
-              loading={isSubmitting}
+              loading={isLoading}
+
             >
               Edit
             </LoadingButton>
