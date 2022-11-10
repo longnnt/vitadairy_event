@@ -10,6 +10,10 @@ export interface IResEventPrizeById {
   };
 }
 
+export interface IQuery {
+  except: number;
+}
+
 export interface IEventProvince {
   id?: number | string;
   provinceId: number;

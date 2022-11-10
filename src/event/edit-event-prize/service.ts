@@ -11,6 +11,7 @@ import {
   IFormEdit,
   IGiftById,
   IParamsGetGift,
+  IQuery,
   IResEventPrizeById,
   IResGetGifts,
   IResProvince,
@@ -21,10 +22,10 @@ export const getEventPrizeById = (id: number) => {
   return axiosInstance.get<unknown, IResEventPrizeById>(API_PRIZE_EDIT + `/${id}`);
 };
 
-export const getAllTransactionType = (id: number) => {
-  return axiosInstance.get<unknown, IResTransactionType>(
-    API_TRANSACTION_TYPE_UNUSE + `?except=${id}`
-  );
+export const getAllTransactionType = (params: IQuery) => {
+  return axiosInstance.get<unknown, IResTransactionType>(API_TRANSACTION_TYPE_UNUSE, {
+    params,
+  });
 };
 
 export const getAllProvinceVN = async () => {

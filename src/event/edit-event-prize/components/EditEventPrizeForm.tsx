@@ -100,7 +100,7 @@ export const EditEventPrizeForm = () => {
     }
   }, [dataEventPrizeById]);
 
-  const { data: transactionType } = useGetAllTransactionType(idEventPrize);
+  const { data: transactionType } = useGetAllTransactionType({ except: idEventPrize });
   const transactionTypeOptions = transactionType?.map((item: ITransactionType) => ({
     value: item.id,
     label: item.description,
