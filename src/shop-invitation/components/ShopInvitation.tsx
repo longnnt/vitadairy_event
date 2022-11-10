@@ -35,9 +35,9 @@ import InvitationTableRow from './InvitationTableRow';
 import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
-import { getQueryObj } from 'src/shop-invitation/common/ultils/getQueryObj';
 import { CSVLink } from 'react-csv';
 import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 export default function ShopInvitation() {
   const navigate = useNavigate();
   const {
@@ -47,7 +47,6 @@ export default function ShopInvitation() {
     orderBy,
     rowsPerPage,
     setPage,
-    setSelected,
     selected: selectedRows,
     onSort,
     onChangePage,
@@ -59,7 +58,7 @@ export default function ShopInvitation() {
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
 
-  const params: IParamsQuery = {
+  const searchParams: IParamsQuery = {
     page: page + 1,
     size: rowsPerPage,
     firstScanEndDate: firstScanEnd,
@@ -67,10 +66,9 @@ export default function ShopInvitation() {
     searchText: searchText,
     status: statusSuccess,
   };
-  const searchParams = getQueryObj(params);
 
-  const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
-  const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
+  const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);
+  const tableData: IResShopInvitation[] = data ? data : [];
   const { data: csvData } = useGetAllShopInvitationExportCsv();
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
@@ -86,13 +84,14 @@ export default function ShopInvitation() {
 
   return (
     <>
+      {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
         heading="Danh Sách Khách Hàng "
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
           {
             name: BREADCUMBS.SHOP_INVITATION,
-            href: PATH_DASHBOARD.general.shop_invitation,
+            href: PATH_DASHBOARD.storeAdmin.shop_invitation,
           },
           { name: BREADCUMBS.SHOP_INVITATION_lIST },
         ]}
@@ -100,8 +99,8 @@ export default function ShopInvitation() {
           <CSVLink data={csvData ? csvData.data : ''}>
             <Button
               variant="contained"
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
-              onClick={() => navigate(PATH_DASHBOARD.general.shop_invitation)}
+              startIcon={<Iconify icon={'akar-icons:file'} />}
+              onClick={() => navigate(PATH_DASHBOARD.storeAdmin.shop_invitation)}
             >
               Export
             </Button>
@@ -170,7 +169,7 @@ export default function ShopInvitation() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
-            count={data ? data?.data?.response?.response.length : 1}
+            count={tableData ? tableData.length : 1}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onChangePage}

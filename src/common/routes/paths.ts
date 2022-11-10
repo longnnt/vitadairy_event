@@ -43,7 +43,7 @@ export const PATH_DASHBOARD = {
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
-    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
+    // shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
   admin: {
     root: path(ROOTS_DASHBOARD, '/admins'),
@@ -55,6 +55,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/stories'),
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
+    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
   eventPromotionIV: {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),

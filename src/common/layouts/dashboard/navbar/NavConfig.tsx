@@ -34,16 +34,16 @@ const ICONS = {
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
-  {
-    subheader: 'app',
-    items: [
-      {
-        title: 'shop-invitation',
-        path: PATH_DASHBOARD.general.shop_invitation,
-        icon: ICONS.analytics,
-      },
-    ],
-  },
+  // {
+  //   subheader: 'app',
+  //   items: [
+  //     {
+  //       title: 'shop-invitation',
+  //       path: PATH_DASHBOARD.general.shop_invitation,
+  //       icon: ICONS.analytics,
+  //     },
+  //   ],
+  // },
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
@@ -58,6 +58,10 @@ const navConfig = [
           {
             title: 'Danh sách',
             path: PATH_DASHBOARD.storeAdmin.list,
+          },
+          {
+            title: 'Danh sách định danh ',
+            path: PATH_DASHBOARD.storeAdmin.shop_invitation,
           },
         ],
       },

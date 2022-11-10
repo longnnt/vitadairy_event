@@ -23,7 +23,7 @@ export const getEventPrizeById = (id: number) => {
 
 export const getAllTransactionType = (id: number) => {
   return axiosInstance.get<unknown, IResTransactionType>(
-    API_TRANSACTION_TYPE_UNUSE + `&except=${id}`
+    API_TRANSACTION_TYPE_UNUSE + `?except=${id}`
   );
 };
 

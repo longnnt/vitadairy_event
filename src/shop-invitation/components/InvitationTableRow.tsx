@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // @mui
-import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableRow } from '@mui/material';
 // @types
 import { IResShopInvitation } from '../common/interfaces';
 // components
@@ -46,9 +46,9 @@ export default function InvitationTableRow({
 
   return (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell>
+      </TableCell> */}
 
       <TableCell align="left">{storeCode}</TableCell>
 
@@ -70,17 +70,8 @@ export default function InvitationTableRow({
         {qrCode}
       </TableCell>
 
-      <TableCell align="left" title={isSuccess ? 'featured' : 'unFeatured'}>
-        <Iconify
-          icon={isSuccess ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-          sx={{
-            width: 20,
-            height: 20,
-            color: 'success.main',
-
-            ...(!isSuccess && { color: 'warning.main' }),
-          }}
-        />
+      <TableCell padding="checkbox">
+        <Checkbox checked={isSuccess} disabled />
       </TableCell>
     </TableRow>
   );

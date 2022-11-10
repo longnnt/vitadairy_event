@@ -16,6 +16,7 @@ import {
   GIFT_POINT,
   NO_ID,
   popupTypeOption,
+  POPUP_CODE,
   POPUP_TYPE,
 } from '../common/constants';
 import {
@@ -33,7 +34,7 @@ import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useEditEventPrize } from '../hooks/useEditEventPrize';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { GiftModal } from './GìiftModal';
+import { GiftModal } from './GiftModal';
 import { fomatFormData } from '../common/ultils';
 import { useGetAllGift } from '../hooks/useGetAllGift';
 import { useGetGiftById } from '../hooks/useGetGiftById';
@@ -254,9 +255,9 @@ export const EditEventPrizeForm = () => {
                     }}
                   >
                     <option value=""></option>
-                    <option value="pp">PUZZLE PIECE</option>
-                    <option value="o">OGGI</option>
-                    <option value="fs">FULL_SCREEN</option>
+                    <option value={POPUP_CODE.PUZZLE_PIECE}>PUZZLE PIECE</option>
+                    <option value={POPUP_CODE.OGGI}>OGGI</option>
+                    <option value={POPUP_CODE.FULL_SCREEN}>FULL_SCREEN</option>
                   </RHFSelect>
                   <RHFRadioGroup
                     sx={{ justifyContent: 'flex-start' }}
@@ -323,10 +324,13 @@ export const EditEventPrizeForm = () => {
                   label="Nội dung thông báo"
                 />
 
-                <RHFEditor
-                  simple
+                <RHFTextField
+                  // simple
                   name="notificationContent"
                   key={'notificationContent'}
+                  label="Nội dung"
+                  multiline
+                  rows={7}
                 />
               </Stack>
             </Card>

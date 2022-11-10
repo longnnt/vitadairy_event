@@ -1,8 +1,8 @@
 export interface IParamsQuery {
-  searchText?: string;
-  firstScanStartDate?: Date | string;
-  firstScanEndDate?: Date | string;
-  status?: boolean | string;
+  searchText: string | null;
+  firstScanStartDate: Date | null;
+  firstScanEndDate: Date | null;
+  status: boolean | string;
   page?: number;
   size?: number;
 }
@@ -23,7 +23,7 @@ export interface IPayloadSearch {
   type: string;
 }
 export interface IPayloadDate {
-  payload: Date | string;
+  payload: Date | null;
   type: string;
 }
 export interface IPayloadStatus {
