@@ -14,6 +14,8 @@ export interface EventTableRowProps {
   onViewRow: (r: RowProps) => void;
 }
 
+export type UserType = 'allUser' | 'newUser';
+
 export interface initialValueProps {
   startDate: Date | null;
   endDate: Date | null;
@@ -21,11 +23,12 @@ export interface initialValueProps {
   buttonType: string;
   isOpenMenu: HTMLElement | null;
   eventDetail: IEventFormData;
-  userType: 'allUser' | 'newUser';
+  userType: UserType;
   selectedIds: number[];
   isResetSelect: boolean;
   isOpenModal: boolean;
-  productCode: string[];
+  product: string[];
+  confirmPopup: boolean;
 }
 
 export type TimeProps = Date | null;

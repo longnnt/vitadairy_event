@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { EventTableToolbar } from './EventTableToolbar';
 import {
   selectedIdsState,
+  setConfirmPopup,
   setIsResetSelect,
   setSelectedIds,
 } from '../eventPromotionIV.slice';
@@ -25,20 +26,9 @@ export default function ListEventPromotionDashboard() {
     navigate(PATH_DASHBOARD.eventPromotionIV.new);
   };
 
-  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-
-  const mutationDelete = useDeleteEvents({
-    onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
-    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
-    onSuccessSend: () => showErrorSnackbar('Sự kiện đã có người trúng không thể xóa'),
-  });
-
   const handleDeleteRows = () => {
-    if (selectedIdsValue.length) {
-      mutationDelete.mutate(selectedIdsValue);
-      dispatch(setSelectedIds([]));
-      dispatch(setIsResetSelect(true));
-    }
+    dispatch(setConfirmPopup(true));
+    dispatch(setSelectedIds(selectedIdsValue));
   };
 
   return (

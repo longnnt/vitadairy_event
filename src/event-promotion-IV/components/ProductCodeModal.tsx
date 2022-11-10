@@ -8,6 +8,7 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+import { useEffect } from 'react';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom, TableSelectedActions } from 'src/common/components/table';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -16,8 +17,9 @@ import { useDispatch, useSelector } from 'src/common/redux/store';
 import { TABLE_HEAD_PRODUCT_CODE } from '../constant';
 import {
   openModalState,
+  productState,
   setIsOpenModal,
-  setProductCode,
+  setProduct,
 } from '../eventPromotionIV.slice';
 import { useProductCode } from '../hooks/useProductCode';
 import { IProductCode } from '../interface';
@@ -26,10 +28,10 @@ import { ProductCodeTableRow } from './ProductCodeTableRow';
 export const ProductCodeModal = () => {
   const { dense, onChangeDense, page, rowsPerPage, onChangePage, onChangeRowsPerPage } =
     useTable({
-      defaultRowsPerPage: 10,
+      defaultRowsPerPage: 5,
     });
   const { skusListData: skusCodeDataEvent, pagination } = useProductCode({
-    page,
+    page: page + 1,
     size: rowsPerPage,
   });
 
@@ -37,10 +39,11 @@ export const ProductCodeModal = () => {
     selectedIds,
     handleSelectItem,
     handleCheckAll,
+    setSelectedIds,
     reset: resetSelect,
     isCheckedAll,
-  } = useSelectMultiple<number>(
-    skusCodeDataEvent.map((row: IProductCode) => row.id),
+  } = useSelectMultiple<string>(
+    skusCodeDataEvent.map((row: IProductCode) => row.code),
     page + 1
   );
 
@@ -53,13 +56,15 @@ export const ProductCodeModal = () => {
 
   const totalPages = pagination.totalPages;
 
-  const productCodeWithId = skusCodeDataEvent.filter(function (product: IProductCode) {
-    return selectedIds.some(function (id) {
-      return product.id === id;
-    });
-  });
+  const product = useSelector(productState);
 
-  const productCode = productCodeWithId.map((item: IProductCode) => item.code);
+  useEffect(() => {
+    dispatch(setProduct(selectedIds));
+  }, [selectedIds]);
+
+  useEffect(() => {
+    setSelectedIds(product);
+  }, [product]);
 
   return (
     <Modal
@@ -72,7 +77,6 @@ export const ProductCodeModal = () => {
           variant="contained"
           onClick={() => {
             handleClose();
-            if (productCode.length) dispatch(setProductCode(productCode));
           }}
           sx={{ ml: '10px', my: '10px' }}
         >
@@ -100,9 +104,9 @@ export const ProductCodeModal = () => {
                 {skusCodeDataEvent.map((item: any) => (
                   <ProductCodeTableRow
                     key={item.id}
-                    selected={selectedIds.includes(item.id)}
-                    onSelectRow={(e) => handleSelectItem(item.id, e)}
-                    productCode={item.code}
+                    selected={selectedIds.includes(item.code)}
+                    onSelectRow={(e) => handleSelectItem(item.code, e)}
+                    product={item}
                   />
                 ))}
               </TableBody>
