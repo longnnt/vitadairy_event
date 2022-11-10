@@ -143,7 +143,7 @@ function AdminListDashboard() {
                   <Tooltip title="Delete">
                     <IconButton
                       color="primary"
-                      onClick={() => console.log(selectedIds)}
+                      onClick={() => handleDeleteRows(selectedIds)}
                     >
                       <Iconify icon={'eva:trash-2-outline'} />
                     </IconButton>
