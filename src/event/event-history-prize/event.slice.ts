@@ -12,11 +12,11 @@ type StateProps = {
   popUpType: string;
   popUpCode: string | null;
   open: boolean;
-  dataCities: IEventDetail[];
   fileCSV: Array<unknown>;
   provinceNewForm: IEventDetail[];
   provinceInFo: IEventDetail[];
   showData: boolean;
+  valueChoice: string;
 };
 
 export const initialState: StateProps = {
@@ -28,11 +28,11 @@ export const initialState: StateProps = {
   popUpType: '',
   popUpCode: '',
   open: false,
-  dataCities: [],
   fileCSV: [],
   provinceNewForm: [],
   provinceInFo: [DEDAULT_PROVINCE],
   showData: false,
+  valueChoice: '',
 };
 
 export const eventAdminSlice = createSlice({
@@ -63,9 +63,6 @@ export const eventAdminSlice = createSlice({
     setOpen: (state, action: PayloadAction<boolean>) => {
       state.open = action.payload;
     },
-    setDataCities: (state, action: PayloadAction<IEventDetail[]>) => {
-      state.dataCities = action.payload;
-    },
     setFileCSV: (state, action: PayloadAction<Array<unknown>>) => {
       state.fileCSV = action.payload;
     },
@@ -77,6 +74,9 @@ export const eventAdminSlice = createSlice({
     },
     setShowData: (state, action: PayloadAction<boolean>) => {
       state.showData = action.payload;
+    },
+    setValueChoice: (state, action: PayloadAction<string>) => {
+      state.valueChoice = action.payload;
     },
   },
 });
@@ -90,11 +90,11 @@ export const {
   setPopUpType,
   setPopUpCode,
   setOpen,
-  setDataCities,
   setFileCSV,
   setProvinceNewForm,
   setProvinceInFo,
   setShowData,
+  setValueChoice,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -105,12 +105,12 @@ export const buttonTypeState = (state: RootState) => state.historyList.buttonTyp
 export const popUpTypeSelector = (state: RootState) => state.historyList.popUpType;
 export const popUpCodeSelector = (state: RootState) => state.historyList.popUpCode;
 export const setOpenSelector = (state: RootState) => state.historyList.open;
-export const setDataCitiesSelector = (state: RootState) => state.historyList.dataCities;
 export const setFileCSVSelector = (state: RootState) => state.historyList.fileCSV;
 export const setProvinceNewFormSelector = (state: RootState) =>
   state.historyList.provinceNewForm;
 export const setProvinceInFoSelector = (state: RootState) =>
   state.historyList.provinceInFo;
 export const showDataSelector = (state: RootState) => state.historyList.showData;
+export const setValueChoiceSelector = (state: RootState) => state.historyList.valueChoice;
 
 export default eventAdminSlice.reducer;
