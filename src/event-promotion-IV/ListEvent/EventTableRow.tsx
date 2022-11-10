@@ -1,12 +1,10 @@
-import { TableCell, Checkbox, TableRow, MenuItem, Link } from '@mui/material';
+import { Checkbox, Link, MenuItem, TableCell, TableRow } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
-import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { fDate } from 'src/common/utils/formatTime';
-import { openMenuState, udpateStatusMenu } from '../eventPromotionIV.slice';
 import { EventTableRowProps } from '../interface';
 
 export const EventTableRow = ({
@@ -19,8 +17,6 @@ export const EventTableRow = ({
   const navigate = useNavigate();
   const { name, startDate, endDate, id } = row;
 
-  const dispatch = useDispatch();
-  // const openMenu = useSelector(openMenuState);
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (e: MouseEvent<HTMLElement>) => {
@@ -48,13 +44,8 @@ export const EventTableRow = ({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell
-        align="left"
-        onClick={() => handleViewListPrize(id.toString())}
-      >
-        <Link underline="always">
-          {name}
-        </Link>
+      <TableCell align="left" onClick={() => handleViewListPrize(id.toString())}>
+        <Link underline="always">{name}</Link>
       </TableCell>
       <TableCell align="left">{fDate(startDate)}</TableCell>
       <TableCell align="left">{fDate(endDate)}</TableCell>

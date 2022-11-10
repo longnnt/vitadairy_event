@@ -1,12 +1,6 @@
-import { RootState } from 'src/common/redux/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  initialValueProps,
-  TimeProps,
-  IEventFormData,
-  IProductCode,
-  UserType,
-} from './interface';
+import { RootState } from 'src/common/redux/store';
+import { IEventFormData, initialValueProps, TimeProps, UserType } from './interface';
 
 const initialValue: initialValueProps = {
   startDate: null,
