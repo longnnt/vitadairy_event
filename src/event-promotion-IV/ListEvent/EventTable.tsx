@@ -23,11 +23,13 @@ import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { AlertDialogSlide } from '../components/ModalConfirmDelete';
 import { TABLE_HEAD } from '../constant';
 import {
   endDateState,
   isResetSelectState,
   searchTextState,
+  setConfirmPopup,
   setIsResetSelect,
   setSelectedIds,
   startDateState,
@@ -95,21 +97,14 @@ export const EventTable = () => {
     navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
   };
 
-  const mutationDelete = useDeleteEvents({
-    onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
-    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
-    onSuccessSend: () => showErrorSnackbar('Sự kiện đã có người trúng không thể xóa'),
-  });
-
   const handleDeleteRows = (selectedIds: number[]) => {
-    if (selectedIds.length) {
-      mutationDelete.mutate(selectedIds);
-      resetSelect();
-    }
+    dispatch(setConfirmPopup(true));
+    dispatch(setSelectedIds(selectedIds));
   };
 
   return (
     <>
+      <AlertDialogSlide />
       <Scrollbar sx={{ mt: '10px' }}>
         <TableContainer>
           {!!selectedIds.length && (

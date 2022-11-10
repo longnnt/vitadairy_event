@@ -25,7 +25,8 @@ export interface initialValueProps {
   selectedIds: number[];
   isResetSelect: boolean;
   isOpenModal: boolean;
-  productCode: string[];
+  product: string[];
+  confirmPopup: boolean;
 }
 
 export type TimeProps = Date | null;

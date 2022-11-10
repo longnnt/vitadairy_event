@@ -1,6 +1,6 @@
 import { RootState } from 'src/common/redux/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initialValueProps, TimeProps, IEventFormData } from './interface';
+import { initialValueProps, TimeProps, IEventFormData, IProductCode } from './interface';
 
 const initialValue: initialValueProps = {
   startDate: null,
@@ -13,7 +13,8 @@ const initialValue: initialValueProps = {
   selectedIds: [],
   isResetSelect: false,
   isOpenModal: false,
-  productCode: [] as string[],
+  product: [] as string[],
+  confirmPopup: false,
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -55,8 +56,11 @@ const eventPromotionIVSlice = createSlice({
     setIsOpenModal: (state, action) => {
       state.isOpenModal = action.payload;
     },
-    setProductCode: (state, action) => {
-      state.productCode = action.payload;
+    setProduct: (state, action) => {
+      state.product = action.payload;
+    },
+    setConfirmPopup: (state, action) => {
+      state.confirmPopup = action.payload;
     },
   },
 });
@@ -74,7 +78,8 @@ export const {
   setSelectedIds,
   setIsResetSelect,
   setIsOpenModal,
-  setProductCode,
+  setProduct,
+  setConfirmPopup,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -88,4 +93,6 @@ export const selectedIdsState = (state: RootState) => state.eventPromotionIV.sel
 export const isResetSelectState = (state: RootState) =>
   state.eventPromotionIV.isResetSelect;
 export const openModalState = (state: RootState) => state.eventPromotionIV.isOpenModal;
-export const productCodeState = (state: RootState) => state.eventPromotionIV.productCode;
+export const productState = (state: RootState) => state.eventPromotionIV.product;
+export const confirmPopupEventState = (state: RootState) =>
+  state.eventPromotionIV.confirmPopup;

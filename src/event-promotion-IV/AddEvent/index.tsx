@@ -23,17 +23,17 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { FormProvider, RHFSelect, RHFTextField } from 'src/common/components/hook-form';
+import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { ProductCodeModal } from '../components/ProductCodeModal';
 import { defaultValues } from '../constant';
 import {
   buttonTypeState,
-  productCodeState,
+  productState,
   setButtonType,
   setIsOpenModal,
-  setProductCode,
+  setProduct,
   setUserType,
   userTypeState,
 } from '../eventPromotionIV.slice';
@@ -54,6 +54,7 @@ export const AddEvent = () => {
     control,
     handleSubmit,
     reset: resetSelect,
+    setValue,
     formState: { errors },
   } = methods;
 
@@ -82,7 +83,7 @@ export const AddEvent = () => {
       id: 1,
     };
     mutate(formDataAddNewEvent);
-    dispatch(setProductCode([]));
+    dispatch(setProduct([]));
   };
 
   useEffect(() => {
@@ -101,11 +102,11 @@ export const AddEvent = () => {
   };
   const userTypeValue = useSelector(userTypeState);
 
-  const productCode = useSelector(productCodeState);
+  const product = useSelector(productState);
 
   useEffect(() => {
-    resetSelect({ skus: productCode });
-  }, [productCode]);
+    if (product.length > 0) setValue('skus', product);
+  }, [product?.length]);
 
   return (
     <>

@@ -23,10 +23,15 @@ import {
   RHFTextField,
 } from 'src/common/components/hook-form';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { useDispatch } from 'src/common/redux/store';
+import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { defaultValues } from '../constant';
-import { setIsOpenModal } from '../eventPromotionIV.slice';
+import {
+  productState,
+  setIsOpenModal,
+  setProduct,
+  setSelectedIds,
+} from '../eventPromotionIV.slice';
 import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
 import { schemaAddEvent } from '../schema';
@@ -91,9 +96,11 @@ export const EditEventForm = () => {
     };
     mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
   };
+  const product = useSelector(productState);
 
   useDeepCompareEffect(() => {
     if (dataEventDetail) {
+      // const data1 = { ...dataEventDetail, skus: product };
       reset(dataEventDetail);
       let allUserOrNewUser = '';
       if (dataEventDetail?.userRegisterDate === null) {
@@ -102,8 +109,13 @@ export const EditEventForm = () => {
         allUserOrNewUser = 'newUser';
       }
       setValue('typeUser', allUserOrNewUser);
+      dispatch(setProduct(dataEventDetail.skus));
     }
   }, [dataEventDetail]);
+
+  useEffect(() => {
+    setValue('skus', product);
+  }, [product]);
 
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
