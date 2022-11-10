@@ -5,8 +5,6 @@ import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { alertStatusSelector, itemRowsSelector, setAlert} from '../../event.slice';
-
-import { useDeleteListPrizeAdmin } from '../../hooks/useDeleteListPrize';
 import { IPropsListPrizeTableRow } from '../../interfaces';
 import AlertDialog from './AlertConfirmDelete';
 // ----------------------------------------------------------------------
@@ -20,7 +18,6 @@ function ListPrizeTableRow({
 
 }: IPropsListPrizeTableRow) {
   const { id, giftName, ordinal, probability, quantity } = row;
-  const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
   
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,11 +30,9 @@ function ListPrizeTableRow({
   const itemRow= useSelector(itemRowsSelector)
   const alert = useSelector(alertStatusSelector)
   const handleOpenAlert = () =>{
-    // setOpenAlert(true)
     dispatch(setAlert({itemId: row.id, alertStatus: true}))
   }
   const handleCloseAlert= () =>{
-    // setOpenAlert(false)
     dispatch(setAlert({itemId: '', alertStatus:false}))
   }
 
