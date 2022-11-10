@@ -30,7 +30,6 @@ function EditFormAdmin() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { mutate, isSuccess,isLoading } = useEditAdmin({
     onSuccess: () => {
-      showSuccessSnackbar('Get Admin successfully');
     },
     onError: () => {
       showErrorSnackbar('Get admin fail');
