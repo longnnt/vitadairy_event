@@ -18,6 +18,7 @@ export default function ListPrizeTableNoData({ isNotFound }: Props) {
           <EmptyContent
             title="Không có dữ liệu"
             sx={{
+              padding: 0,
               '& span.MuiBox-root': { height: 160 },
             }}
           />

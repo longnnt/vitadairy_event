@@ -1,8 +1,14 @@
 import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import { dispatch, useSelector } from 'src/common/redux/store';
+import { alertStatusSelector } from '../../event.slice';
+
+import { useDeleteListPrizeAdmin } from '../../hooks/useDeleteListPrize';
 import { IPropsListPrizeTableRow } from '../../interfaces';
+import AlertDialog from './AlertConfirmDelete';
 // ----------------------------------------------------------------------
 
 function ListPrizeTableRow({
@@ -11,6 +17,8 @@ function ListPrizeTableRow({
   onEditRow,
   onSelectRow,
   onDeleteRow,
+  onOpenAlert,
+  onCloseAlert,
 }: IPropsListPrizeTableRow) {
   const { id, giftName, ordinal, probability, quantity } = row;
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
@@ -21,6 +29,8 @@ function ListPrizeTableRow({
     setOpenMenuActions(null);
   };
 
+  
+  const alertStatus = useSelector(alertStatusSelector)
   return (
     <TableRow hover selected={selected} sx={{overflow: 'hidden'}}>
       <TableCell padding="checkbox">
@@ -36,7 +46,7 @@ function ListPrizeTableRow({
           onOpen={handleOpenMenu}
           onClose={handleCloseMenu}
           actions={
-            <>
+            <Stack>
               <MenuItem
                 onClick={() => {
                   onEditRow();
@@ -48,18 +58,27 @@ function ListPrizeTableRow({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  onDeleteRow();
                   handleCloseMenu();
+                  onOpenAlert()
                 }}
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon={'eva:trash-2-outline'} />
                 Delete
               </MenuItem>
-            </>
+                
+            </Stack>
           }
+          
         />
+        <AlertDialog 
+                open={alertStatus} 
+                handleClose={onCloseAlert} 
+                selectedId = {[row.id]}
+              />
+        
       </TableCell>
+
     </TableRow>
   );
 }

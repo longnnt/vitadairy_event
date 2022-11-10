@@ -30,11 +30,12 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { replacePathParams } from 'src/common/utils/replaceParams';
 import { TABLE_HEAD } from '../contants';
-import { filterNameSelector, setFilterName } from '../event.slice';
+import { alertStatusSelector, filterNameSelector, setFilterName, setAlertStatus } from '../event.slice';
 import useShowSnackbar from '../hooks/useCustomSnackBar';
 import { useDeleteListPrizeAdmin } from '../hooks/useDeleteListPrize';
 import { useGetListPrize } from '../hooks/useGetListPrize';
 import { IListPrize, IListPrizeParams } from '../interfaces';
+import AlertDialog from './components/AlertConfirmDelete';
 import ListPrizeFilterBar from './components/ListPrizeFilterBar';
 import { ListPrizeTableRow } from './components/ListPrizeTable';
 import ListPrizeTableNoData from './components/ListPrizeTableNoData';
@@ -76,7 +77,7 @@ function ListPrizeDashboard() {
     size: rowsPerPage,
   };
   const filterName = useSelector(filterNameSelector);
-  if (filterName) searchParams.searchText = filterName;
+  if (filterName.length >2) searchParams.searchText = filterName;
 
   const { data, isLoading } = useGetListPrize(searchParams);
   const listPrize = data?.data?.response || [];
@@ -91,6 +92,14 @@ function ListPrizeDashboard() {
     listPrize.map((item) => item.id),
     page + 1
   );
+
+  const alertStatus = useSelector(alertStatusSelector)
+  const handleOpenAlert = () =>{
+    dispatch(setAlertStatus(true));
+  }
+  const handleCloseAlert= () =>{
+    dispatch(setAlertStatus(false))
+  }
 
   const handleFilterName = (filterName: string) => {
     dispatch(setFilterName(filterName));
@@ -131,12 +140,19 @@ function ListPrizeDashboard() {
               Tạo mới
             </Button>
             <Button
+              disabled={selectedIds.length ===0}
               variant="contained"
               color="error"
-              onClick={() => handleDeleteRows(selectedIds)}
+              onClick={() => handleOpenAlert()}
             >
               Xóa
             </Button>
+            <AlertDialog 
+              open={alertStatus} 
+              handleClose={handleCloseAlert}
+              selectedId={selectedIds}
+              // onDelete={() => handleDeleteRows(selectedIds)}
+              />
           </Stack>
         }
       />
@@ -187,6 +203,9 @@ function ListPrizeDashboard() {
                     }}
                     onDeleteRow={() => handleDeleteRows([row.id])}
                     onEditRow={() => handleEditRow(row.id)}
+                    onOpenAlert={() => handleOpenAlert()}
+                    onCloseAlert={() => handleCloseAlert()}
+                    
                   />
                 ))}
                 {Array.from(Array(rowsPerPage)).map((index) => {
