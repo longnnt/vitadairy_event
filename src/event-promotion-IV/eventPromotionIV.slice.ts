@@ -1,6 +1,12 @@
 import { RootState } from 'src/common/redux/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initialValueProps, TimeProps, IEventFormData, IProductCode } from './interface';
+import {
+  initialValueProps,
+  TimeProps,
+  IEventFormData,
+  IProductCode,
+  UserType,
+} from './interface';
 
 const initialValue: initialValueProps = {
   startDate: null,
@@ -35,31 +41,29 @@ const eventPromotionIVSlice = createSlice({
       state.endDate = new Date();
       state.searchText = '';
     },
-    udpateStatusMenu: (state, action) => {
-      state.isOpenMenu = action.payload;
-    },
+
     setEventDetail: (state, action: PayloadAction<IEventFormData>) => {
       state.eventDetail = action.payload;
     },
-    setUserType: (state, action) => {
+    setUserType: (state, action: PayloadAction<UserType>) => {
       state.userType = action.payload;
     },
-    setButtonType: (state, action) => {
+    setButtonType: (state, action: PayloadAction<string>) => {
       state.buttonType = action.payload;
     },
-    setSelectedIds: (state, action) => {
+    setSelectedIds: (state, action: PayloadAction<number[]>) => {
       state.selectedIds = action.payload;
     },
-    setIsResetSelect: (state, action) => {
+    setIsResetSelect: (state, action: PayloadAction<boolean>) => {
       state.isResetSelect = action.payload;
     },
-    setIsOpenModal: (state, action) => {
+    setIsOpenModal: (state, action: PayloadAction<boolean>) => {
       state.isOpenModal = action.payload;
     },
-    setProduct: (state, action) => {
+    setProduct: (state, action: PayloadAction<string[]>) => {
       state.product = action.payload;
     },
-    setConfirmPopup: (state, action) => {
+    setConfirmPopup: (state, action: PayloadAction<boolean>) => {
       state.confirmPopup = action.payload;
     },
   },
@@ -71,7 +75,6 @@ export const {
   setEndDate,
   setSearchText,
   resetFormFilter,
-  udpateStatusMenu,
   setEventDetail,
   setUserType,
   setButtonType,
