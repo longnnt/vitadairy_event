@@ -34,17 +34,25 @@ function StoreTableRow({
 
   return (
     <TableRow hover selected={selected}>
+      {/* <TableCell padding="checkbox">
+        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
+      </TableCell> */}
       <TableCell align="left">{code}</TableCell>
+
       <TableCell align="left">{phoneNumber}</TableCell>
+
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(createdDate).format(formatCreateDate)}
       </TableCell>
+
       <TableCell align="left">{address}</TableCell>
+
       <TableCell align="left">
         <a target="_blank" rel="noopener noreferrer" href={qrLink}>
           Tải QR
         </a>
       </TableCell>
+
       <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
           checked={isActive ? true : false}
@@ -53,6 +61,37 @@ function StoreTableRow({
           }}
         />
       </TableCell>
+
+      {/* <TableCell align="right">
+        <TableMoreMenu
+          open={openMenu}
+          onOpen={handleOpenMenu}
+          onClose={handleCloseMenu}
+          actions={
+            <>
+              <MenuItem
+                onClick={() => {
+                  onDeleteRow();
+                  handleCloseMenu();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon={'eva:trash-2-outline'} />
+                Delete
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  onEditRow();
+                  handleCloseMenu();
+                }}
+              >
+                <Iconify icon={'eva:edit-fill'} />
+                Edit
+              </MenuItem>
+            </>
+          }
+        />
+      </TableCell> */}
     </TableRow>
   );
 }

@@ -5,6 +5,7 @@ export const TABLE_HEAD = [
   { id: 'address', label: 'Địa chỉ', align: 'left' },
   { id: 'qrLink', label: 'Link QR', align: 'left' },
   { id: 'isActive', label: 'Active', align: 'left' },
+  { id: '' },
 ];
 
 export const SuccessUploadCode = 1000;
