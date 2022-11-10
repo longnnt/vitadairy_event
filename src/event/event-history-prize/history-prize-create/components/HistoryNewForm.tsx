@@ -3,6 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import {
   Button,
   Card,
+  Container,
   FormControlLabel,
   Grid,
   Modal,
@@ -14,69 +15,58 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
-import { parse, ParseResult } from 'papaparse';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
-  FormProvider,
-  RHFEditor,
-  RHFSelect,
-  RHFTextField,
+  FormProvider, RHFSelect,
+  RHFTextField
 } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
-  ButtonType,
-  COLUMNS_HEADERS,
-  defaultValues,
-  FORMAT_DATE,
-  popupTypeOption,
+  ButtonType, defaultValues, popupTypeOption,
   POPUP_TYPE,
   STYLE_GIFT,
-  TABLE_HEAD_GIFT,
+  TABLE_HEAD_GIFT
 } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
   giftSelecttor,
   popUpCodeSelector,
   popUpTypeSelector,
-  setButtonType,
-  setDataCities,
-  setDataCitiesSelector,
-  setFileCSV,
+  setButtonType, setFileCSV,
   setGift,
   setOpen,
   setOpenSelector,
   setPopUpCode,
   setPopUpType,
   setProvinceNewFormSelector,
+  setValueChoice,
+  setValueChoiceSelector
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
 import { useGetGilf } from '../../hooks/useGetGilf';
 import {
   IEventDetail,
   IFormCreateEvent,
-  IGiftParams,
-  ISelect,
-  ISelectPopup,
+  IGiftParams, ISelectPopup
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import useShowSnackbar from 'src/common/hooks/useMessage';
-import FullFeaturedCrudGrid from './ProvinceTableRow';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import FullFeaturedCrudGrid from './ProvinceTableRow';
 
 dayjs.extend(customParseFormat);
 
@@ -87,13 +77,19 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function HistoryNewForm() {
-  const { useDeepCompareEffect } = useDeepEffect();
-  const [valueChoice, setValueChoice] = React.useState('all');
-  const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValueChoice((event.target as HTMLInputElement).value);
-  };
-
   const dispatch = useDispatch();
+  const gift = useSelector(giftSelecttor);
+  const popUpType = useSelector(popUpTypeSelector);
+  const popUpCode = useSelector(popUpCodeSelector);
+  const open = useSelector(setOpenSelector);
+  const dataProvinceform = useSelector(setProvinceNewFormSelector);
+  const handleOpen = () => dispatch(setOpen(true));
+  const handleClose = () => dispatch(setOpen(false));
+  const valueChoice = useSelector(setValueChoiceSelector);
+  const { useDeepCompareEffect } = useDeepEffect();
+  const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setValueChoice((event.target as HTMLInputElement).value));
+  };
   const {
     dense,
     page,
@@ -104,51 +100,7 @@ export default function HistoryNewForm() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-
-  const gift = useSelector(giftSelecttor);
-  const popUpType = useSelector(popUpTypeSelector);
-  const popUpCode = useSelector(popUpCodeSelector);
-  const open = useSelector(setOpenSelector);
-  const dataCities = useSelector(setDataCitiesSelector);
-  const dataProvinceform = useSelector(setProvinceNewFormSelector);
-  const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-  const handleOpen = () => dispatch(setOpen(true));
-  const handleClose = () => dispatch(setOpen(false));
-
-  const removeCount = (provinceId: number) => {
-    dispatch(
-      setDataCities([...dataCities].filter((item) => item.provinceId !== provinceId))
-    );
-  };
-
-  const handleChangeCity = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    province: IEventDetail
-  ) => {
-    const newData: IEventDetail[] = [...dataCities];
-    let itemEdit: IEventDetail = { ...province };
-
-    // find edit index and item edit in array
-    let provinceIdx = 0;
-    newData.forEach((item, index) => {
-      if (item.provinceId === province.provinceId) {
-        itemEdit = item;
-        provinceIdx = index;
-      }
-    });
-
-    // get key edit
-    const keyEdit = e.target.name.split('.')[2];
-    //
-
-    // edit detail data & update element in array
-    newData[provinceIdx] = { ...itemEdit, [keyEdit]: e.target.value };
-
-    // update data array
-    dispatch(setDataCities(newData));
-    setValue('eventDetailProvinces', newData);
-  };
-
+  
   useDeepCompareEffect(() => {
     if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
   }, [dataProvinceform]);
@@ -186,7 +138,7 @@ export default function HistoryNewForm() {
 
   const { data: addTransaction } = useGetAllTranSacTion();
   const dataTransaction = addTransaction?.data?.response || [];
-  const addNewOption1 = dataTransaction.map((item) => ({
+  const addNewTransaction = dataTransaction.map((item) => ({
     key: item.id,
     name: item.description,
   }));
@@ -215,7 +167,6 @@ export default function HistoryNewForm() {
       dispatch(setPopUpType(''));
       dispatch(setPopUpCode(''));
       dispatch(setFileCSV([]));
-      dispatch(setDataCities([]));
     };
   }, []);
 
@@ -280,259 +231,265 @@ export default function HistoryNewForm() {
     };
     mutate(dataEvent);
   };
+
+  const loadingScreen: boolean = isLoading || isSubmitting;
+
   return (
     <>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Grid spacing={3} container>
-              <Grid item xs={6}>
-                <LabelStyle>Thông báo tổng quan</LabelStyle>
-                <Card sx={{ p: 3, width: '100%' }}>
-                  <RHFTextField
-                    name={'ordinal'}
-                    key={'ordinal'}
-                    label="Thứ tự ưu tiên"
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name="probability"
-                    key={'probability'}
-                    label="Tỉ lệ trúng quà của sự kiện(%)"
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name="quantity"
-                    key={'quantity'}
-                    label="Tổng số lượng quà..."
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name="id"
-                    key={'id'}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    label="Số lượng quà user đã trúng"
-                    margin="dense"
-                  />
-                  <RHFSelect
-                    name={'transactionTypeId'}
-                    key="transactionTypeId"
-                    label={'Transaction type'}
-                    placeholder="Transaction type"
-                    margin="dense"
-                  >
-                    <option value="" />
-                    {addNewOption1.map((option) => (
-                      <option key={option.key} value={option.key}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </RHFSelect>
-                </Card>
-              </Grid>
-              <Grid item xs={6}>
-                <Card sx={{ p: 3, width: '100%' }}>
-                  <RHFTextField
-                    name="popupImageLink"
-                    key={'popupImageLink'}
-                    label="Link hình ảnh Pop up..."
-                    margin="dense"
-                  />
-                  <RHFSelect
-                    name="popupType"
-                    key="popupType"
-                    label="Pop up Type"
-                    placeholder="Pop up Type"
-                    margin="dense"
-                    value={popUpType}
-                    onChange={(e) => {
-                      changePopUpType(e);
-                    }}
-                  >
-                    <option value="" />
-                    {popupTypeOption.map((item: ISelectPopup) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </RHFSelect>
-                  {popUpType === POPUP_TYPE.HTML_LINK && (
+      <Container>
+        {loadingScreen && <LoadingScreen />}
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Grid spacing={3} container>
+                <Grid item xs={6}>
+                  <LabelStyle>Thông báo tổng quan</LabelStyle>
+                  <Card sx={{ p: 3, width: '100%' }}>
                     <RHFTextField
-                      name="popupLink"
-                      key={'popupHtmlLink'}
-                      label="Popup html link"
+                      name={'ordinal'}
+                      key={'ordinal'}
+                      label="Thứ tự ưu tiên*"
+                      margin="dense"
                     />
-                  )}
-                  {popUpType === POPUP_TYPE.DEEP_LINK && (
                     <RHFTextField
-                      name="popupLink"
-                      key={'popupDeepLink'}
-                      label="Popup deep link"
+                      name="probability"
+                      key={'probability'}
+                      label="Tỉ lệ trúng quà của sự kiện(%)*"
+                      margin="dense"
                     />
-                  )}
-                  <RHFSelect
-                    name="popupCode"
-                    key={'popupCode'}
-                    label="Pop up Code"
-                    placeholder="Pop up Code"
-                    margin="dense"
-                    onChange={(e) => changePopUpCode(e)}
-                    value={popUpCode}
-                  >
-                    <option value=""></option>
-                    <option value="PUZZLE PIECE">PUZZLE PIECE</option>
-                    <option value="OGGI">OGGI</option>
-                    <option value="FULL_SCREEN">FULL_SCREEN</option>
-                  </RHFSelect>
-                  <RadioGroup
-                    row
-                    name={'giftId'}
-                    key="giftId"
-                    value={valueChoice}
-                    onChange={handleChangeChoice}
-                  >
-                    <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
-                  </RadioGroup>
-                  <Grid container spacing={3}>
-                    <Grid item xs>
-                      <Button
-                        sx={{
-                          display: valueChoice !== 'point' ? 'block' : 'none',
-                          width: '40%',
-                          alignSelf: 'flex-start',
-                        }}
-                        variant="contained"
-                        color="info"
-                        size="large"
-                        onClick={handleOpen}
-                      >
-                        Chọn quà
-                      </Button>
-                      <Box
-                        sx={{
-                          color: 'black',
-                          marginTop: '5px',
-                          display: valueChoice !== 'point' ? 'block' : 'none',
-                        }}
-                      >
-                        {gift.name}
-                      </Box>
-                      <Modal
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                      >
-                        <Box sx={STYLE_GIFT}>
-                          <Scrollbar>
-                            <TableContainer
-                              sx={{
-                                minWidth: 800,
-                                maxHeight: 500,
-                                position: 'relative',
-                                overflowY: 'scroll',
-                                overflowX: 'auto',
-                              }}
-                              component={Paper}
-                            >
-                              <Table>
-                                <TableHeadCustom headLabel={TABLE_HEAD_GIFT} />
-                                <TableBody>
-                                  {dataGift.map((row) => (
-                                    <GiftTableRow
-                                      key={row.id}
-                                      row={row}
-                                      handleClose={handleClose}
-                                    />
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                          </Scrollbar>
-                          {!!ListGift?.data?.pagination?.totalPages && (
-                            <TablePagination
-                              rowsPerPageOptions={[10]}
-                              component="div"
-                              count={totalRecords}
-                              rowsPerPage={10}
-                              page={page}
-                              onPageChange={onChangePage}
-                              onRowsPerPageChange={onChangeRowsPerPage}
-                            />
-                          )}
+                    <RHFTextField
+                      name="quantity"
+                      key={'quantity'}
+                      label="Tổng số lượng quà*"
+                      margin="dense"
+                    />
+                    <RHFTextField
+                      name="id"
+                      key={'id'}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      label="Số lượng quà user đã trúng"
+                      margin="dense"
+                    />
+                    <RHFSelect
+                      name={'transactionTypeId'}
+                      key="transactionTypeId"
+                      label={'Transaction type'}
+                      placeholder="Transaction type"
+                      margin="dense"
+                    >
+                      <option value="" />
+                      {addNewTransaction.map((option) => (
+                        <option key={option.key} value={option.key}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </RHFSelect>
+                  </Card>
+                </Grid>
+                <Grid item xs={6}>
+                  <Card sx={{ p: 3, width: '100%' }}>
+                    <RHFTextField
+                      name="popupImageLink"
+                      key={'popupImageLink'}
+                      label="Link hình ảnh Pop up*"
+                      margin="dense"
+                    />
+                    <RHFSelect
+                      name="popupType"
+                      key="popupType"
+                      label="Pop up Type"
+                      placeholder="Pop up Type"
+                      margin="dense"
+                      value={popUpType}
+                      onChange={(e) => {
+                        changePopUpType(e);
+                      }}
+                    >
+                      <option value="" />
+                      {popupTypeOption.map((item: ISelectPopup) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </RHFSelect>
+                    {popUpType === POPUP_TYPE.HTML_LINK && (
+                      <RHFTextField
+                        name="popupLink"
+                        key={'popupHtmlLink'}
+                        label="Popup html link*"
+                      />
+                    )}
+                    {popUpType === POPUP_TYPE.DEEP_LINK && (
+                      <RHFTextField
+                        name="popupLink"
+                        key={'popupDeepLink'}
+                        label="Popup deep link*"
+                      />
+                    )}
+                    <RHFSelect
+                      name="popupCode"
+                      key={'popupCode'}
+                      label="Pop up Code"
+                      placeholder="Pop up Code"
+                      margin="dense"
+                      onChange={(e) => changePopUpCode(e)}
+                      value={popUpCode}
+                    >
+                      <option value=""></option>
+                      <option value="PUZZLE PIECE">PUZZLE PIECE</option>
+                      <option value="OGGI">OGGI</option>
+                      <option value="FULL_SCREEN">FULL_SCREEN</option>
+                    </RHFSelect>
+                    <RadioGroup
+                      row
+                      name={'giftId'}
+                      key="giftId"
+                      value={valueChoice}
+                      onChange={handleChangeChoice}
+                    >
+                      <FormControlLabel
+                        value="gift"
+                        control={<Radio />}
+                        label="Tặng Quà"
+                      />
+                    </RadioGroup>
+                    <Grid container spacing={3}>
+                      <Grid item xs>
+                        <Button
+                          sx={{
+                            display: valueChoice !== 'point' ? 'block' : 'none',
+                            width: '40%',
+                            alignSelf: 'flex-start',
+                          }}
+                          variant="contained"
+                          color="info"
+                          size="large"
+                          onClick={handleOpen}
+                        >
+                          Chọn quà
+                        </Button>
+                        <Box
+                          sx={{
+                            color: 'black',
+                            marginTop: '5px',
+                            display: valueChoice !== 'point' ? 'block' : 'none',
+                          }}
+                        >
+                          {gift.name}
                         </Box>
-                      </Modal>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={STYLE_GIFT}>
+                            <Scrollbar>
+                              <TableContainer
+                                sx={{
+                                  minWidth: 800,
+                                  maxHeight: 500,
+                                  position: 'relative',
+                                  overflowY: 'scroll',
+                                  overflowX: 'auto',
+                                }}
+                                component={Paper}
+                              >
+                                <Table>
+                                  <TableHeadCustom headLabel={TABLE_HEAD_GIFT} />
+                                  <TableBody>
+                                    {dataGift.map((row) => (
+                                      <GiftTableRow
+                                        key={row.id}
+                                        row={row}
+                                        handleClose={handleClose}
+                                      />
+                                    ))}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>
+                            </Scrollbar>
+                            {!!ListGift?.data?.pagination?.totalPages && (
+                              <TablePagination
+                                rowsPerPageOptions={[10]}
+                                component="div"
+                                count={totalRecords}
+                                rowsPerPage={10}
+                                page={page}
+                                onPageChange={onChangePage}
+                                onRowsPerPageChange={onChangeRowsPerPage}
+                              />
+                            )}
+                          </Box>
+                        </Modal>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Card>
+                  </Card>
+                </Grid>
               </Grid>
-            </Grid>
-            <LabelStyle>Thông báo</LabelStyle>
-            <Card sx={{ p: 3, width: '100%', my: 3 }}>
-              <Grid>
-                <RHFTextField
-                  name="notificationTitle"
-                  key={'notificationTitle'}
-                  label="Tiêu đề thông báo"
-                  margin="dense"
-                />
-                <RHFTextField
-                  name={'notificationDescription'}
-                  key={'notificationDescription'}
-                  label="Nội dung thông báo"
-                  margin="dense"
-                />
-                <div>
-                  <LabelStyle>Mô tả thông báo</LabelStyle>
-                  <RHFEditor
-                    className="category__text-editor"
-                    simple
+              <LabelStyle>Thông báo</LabelStyle>
+              <Card sx={{ p: 3, width: '100%', my: 3 }}>
+                <Grid>
+                  <RHFTextField
+                    name="notificationTitle"
+                    key={'notificationTitle'}
+                    label="Tiêu đề thông báo"
+                    margin="dense"
+                  />
+                  <RHFTextField
+                    name={'notificationDescription'}
+                    key={'notificationDescription'}
+                    label="Nội dung thông báo"
+                    margin="dense"
+                  />
+                  {/* <LabelStyle>Mô tả thông báo</LabelStyle> */}
+                  <RHFTextField
                     name="notificationContent"
                     key={'notificationContent'}
+                    label="Mô tả thông báo"
+                    margin="dense"
                   />
-                </div>
-              </Grid>
-            </Card>
-            <LabelStyle>Tỉnh thành</LabelStyle>
-            <Card sx={{ p: 1.5 }}>
-              <Stack direction={'column'} spacing="15px">
-                <Box>
-                  <FullFeaturedCrudGrid />
-                </Box>
-              </Stack>
-            </Card>
-          </Grid>
+                </Grid>
+              </Card>
+              <LabelStyle>Tỉnh thành</LabelStyle>
+              <Card sx={{ p: 1.5 }}>
+                <Stack direction={'column'} spacing="15px">
+                  <Box>
+                    <FullFeaturedCrudGrid />
+                  </Box>
+                </Stack>
+              </Card>
+            </Grid>
 
-          <Grid direction="row" justifyContent="flex-end" container mt={2}>
-            <Box sx={{ paddingRight: 2 }}>
-              <LoadingButton
-                color="inherit"
-                variant="outlined"
-                size="large"
-                type="submit"
-                loading={isLoading}
-                onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
-              >
-                Lưu
-              </LoadingButton>
-            </Box>
-            <Box>
-              <LoadingButton
-                color="inherit"
-                variant="outlined"
-                size="large"
-                type="submit"
-                loading={isLoading}
-                onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
-              >
-                Lưu & Chỉnh sửa
-              </LoadingButton>
-            </Box>
+            <Grid direction="row" justifyContent="flex-end" container mt={2}>
+              <Box sx={{ paddingRight: 2 }}>
+                <LoadingButton
+                  color="inherit"
+                  variant="outlined"
+                  size="large"
+                  type="submit"
+                  onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
+                >
+                  Lưu
+                </LoadingButton>
+              </Box>
+              <Box>
+                <LoadingButton
+                  color="inherit"
+                  variant="outlined"
+                  size="large"
+                  type="submit"
+                  onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
+                >
+                  Lưu & Chỉnh sửa
+                </LoadingButton>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </FormProvider>
+        </FormProvider>
+      </Container>
     </>
   );
 }

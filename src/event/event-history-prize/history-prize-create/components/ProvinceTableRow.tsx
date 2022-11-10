@@ -191,20 +191,20 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Tổng số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
-      width: 170,
+      width: 160,
     },
     {
       field: 'extraquantity',
       headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
-      width: 130,
+      width: 110,
     },
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
       type: 'date',
-      width: 140,
+      width: 130,
       editable: true,
       preProcessEditCellProps: (params) => {
         const isDate = !!params.props.value;
@@ -214,8 +214,8 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
-      type: 'dateTime',
-      width: 140,
+      type: 'date',
+      width: 130,
       editable: true,
       preProcessEditCellProps: (params) => {
         const isDate = !!params.props.value;
