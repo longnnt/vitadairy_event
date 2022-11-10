@@ -41,6 +41,12 @@ export default function AlertDialog({open, handleClose, selectedId, resetSelect}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        BackdropProps={{
+          sx:{
+            backgroundColor:'black!important',
+            opacity:'0.2!important',
+          }
+        }}
       >
         <DialogTitle id="alert-dialog-title">
             Bạn có chắc muốn xóa không?

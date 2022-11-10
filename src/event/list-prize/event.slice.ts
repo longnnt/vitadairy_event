@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
+import { ITablePayload } from './interfaces';
 
 type StateProps = {
   filterName: string;
-  alertStatus: boolean;
+  itemRows:{
+    itemRowId:string;
+    alertStatus: boolean;
+  }
 };
 
 const initialState: StateProps = {
   filterName: '',
-  alertStatus: false,
+  itemRows: {
+    itemRowId: '',
+    alertStatus: false,
+  }
 };
 
 export const listPrizeEventSlice = createSlice({
@@ -18,16 +25,19 @@ export const listPrizeEventSlice = createSlice({
     setFilterName: (state, action: PayloadAction<string>) => {
       state.filterName = action.payload;
     },
-    setAlertStatus: (state, action:PayloadAction<boolean>) =>{
-      state.alertStatus = action.payload;
+    setAlert: (state, action:PayloadAction<ITablePayload>) =>{
+      state.itemRows.alertStatus = action.payload.alertStatus as boolean;
+      state.itemRows.itemRowId= action.payload.itemId as string; 
     },
   },
-});
+})
 
 export const { setFilterName } = listPrizeEventSlice.actions;
-export const { setAlertStatus } = listPrizeEventSlice.actions;
+export const { setAlert } = listPrizeEventSlice.actions;
 
 export const filterNameSelector = (state: RootState) => state.listPrize.filterName;
-export const alertStatusSelector = (state: RootState) => state.listPrize.alertStatus;
+export const alertStatusSelector = (state: RootState) => state.listPrize.itemRows.alertStatus;
+export const itemIdSelector = (state: RootState) => state.listPrize.itemRows.itemRowId;
+export const itemRowsSelector = (state: RootState) => state.listPrize.itemRows;
 
 export default listPrizeEventSlice.reducer;

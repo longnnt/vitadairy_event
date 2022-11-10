@@ -50,8 +50,7 @@ export type IPropsListPrizeTableRow = {
   onEditRow: VoidFunction;
   onSelectRow: (checked: boolean) => void;
   onDeleteRow: VoidFunction;
-  onOpenAlert: VoidFunction;
-  onCloseAlert: VoidFunction;
+
 };
 export enum MessageType {
   ERROR = 'error',
@@ -61,4 +60,9 @@ export enum MessageType {
 export interface IShowMessage {
   type: MessageType;
   message: string;
+}
+
+export interface ITablePayload{
+  alertStatus?: boolean;
+  itemId?: string;
 }
