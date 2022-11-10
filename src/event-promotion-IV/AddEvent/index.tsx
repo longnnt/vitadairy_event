@@ -38,7 +38,7 @@ import {
   userTypeState,
 } from '../eventPromotionIV.slice';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
-import { IEventFormData } from '../interface';
+import { IEventFormData, UserType } from '../interface';
 import { schemaAddEvent } from '../schema';
 
 export const AddEvent = () => {
@@ -98,7 +98,7 @@ export const AddEvent = () => {
   }, [isSuccess]);
 
   const handleStatusUserType = (userType: string) => {
-    dispatch(setUserType(userType));
+    dispatch(setUserType(userType as UserType));
   };
   const userTypeValue = useSelector(userTypeState);
 
