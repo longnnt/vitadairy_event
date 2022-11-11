@@ -22,8 +22,8 @@ type Props = {
   onFilterName: (value: string) => void;
 };
 
-export const FilterBar = (props: { handleSearch: Function }) => {
-  const { handleSearch } = { ...props };
+export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) => {
+  const { handleSearch,isLoading } = { ...props };
   const methods = useForm<IFormFilter>({
     defaultValues: {
       searchText: '',
@@ -54,8 +54,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
   function timeout(ms:any) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-  const handleCancel = async() => {
-    await timeout(3000);
+  const handleCancel =() => {
     reset({
       searchText: '',
       startDate: null,
@@ -90,6 +89,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                     type="submit"
                     variant="contained"
                     size="medium"
+                    loading={isLoading}
                     onClick={() => handleSearch()}
                   >
                     Tìm kiếm
