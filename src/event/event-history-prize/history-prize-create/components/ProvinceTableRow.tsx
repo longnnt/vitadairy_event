@@ -171,7 +171,7 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'provinceId',
       headerName: 'Tỉnh thành',
-      width: 180,
+      flex: 1,
       editable: true,
       type: 'singleSelect',
       valueOptions: addProvinceVN ? addProvinceVN : ([] as ISelect[]),
@@ -191,20 +191,21 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Tổng số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
-      width: 160,
+      flex: 1,
     },
     {
       field: 'extraquantity',
       headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
-      width: 110,
+      // width: 110,
+      flex: 1,
     },
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
       type: 'date',
-      width: 130,
+      flex: 1,
       editable: true,
       preProcessEditCellProps: (params) => {
         const isDate = !!params.props.value;
@@ -215,7 +216,7 @@ export default function FullFeaturedCrudGrid() {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
       type: 'date',
-      width: 130,
+      flex: 1,
       editable: true,
       preProcessEditCellProps: (params) => {
         const isDate = !!params.props.value;
@@ -226,7 +227,7 @@ export default function FullFeaturedCrudGrid() {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 80,
+      flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;

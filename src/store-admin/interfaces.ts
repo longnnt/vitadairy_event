@@ -13,7 +13,7 @@ export interface IPayloadSearch {
   type: string;
 }
 export interface IPayloadDate {
-  payload: Date | string;
+  payload: Date | null;
   type: string;
 }
 
@@ -30,11 +30,11 @@ export type IStoreAdminCallback = {
 export type IStories = Array<IFormStore>;
 
 export interface IStoreParams {
-  endDate?: Date | string;
+  firstScanEndDate: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
+  firstScanStartDate: Date | null;
 }
 
 export enum MessageType {
