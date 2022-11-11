@@ -42,9 +42,6 @@ function StoreTableRow({
 
   return (
     <TableRow hover selected={selected}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell> */}
       <TableCell align="left" onClick={() => handleShopInvitation(code.toString())}>
         <Link underline="always">
           {code}

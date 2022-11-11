@@ -2,12 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import { IPayloadDate, IPayloadSearch, IStoreParams } from './interfaces';
 
-// type StateProps = {
-//   searchText: string;
-//   startDate: Date | null;
-//   endDate: Date | null;
-// };
-
 export const initialState: IStoreParams = {
   searchText: '',
   firstScanStartDate: null,

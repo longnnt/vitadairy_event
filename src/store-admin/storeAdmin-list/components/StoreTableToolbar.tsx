@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
-import { dispatch } from 'src/common/redux/store';
+import { useDispatch } from 'src/common/redux/store';
 import { FORMAT_DATE_NEWS } from 'src/store-admin/constants';
 import { IStoreParams } from '../../interfaces';
 import {
@@ -18,6 +18,7 @@ import {
 // ----------------------------------------------------------------------
 
 export const StoreTableToolbar = (props: { handleSearch: Function }) => {
+  const dispatch = useDispatch();
   const { handleSearch } = { ...props };
   const methods = useForm({
     defaultValues: initialState,
@@ -27,11 +28,12 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
     control,
     handleSubmit,
     reset,
+    register,
     watch,
     formState: { isSubmitting, errors },
   } = methods;
 
-  if(!watch().firstScanEndDate && !watch().searchText && !watch().firstScanStartDate){
+  if (!watch().firstScanEndDate && !watch().searchText && !watch().firstScanStartDate) {
     dispatch(setSearchText(''));
     dispatch(setFirstScanStartDate(null));
     dispatch(setFirstScanEndDate(null));
@@ -62,13 +64,12 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={4} ml="20px">
               <Stack spacing={'20px'}>
                 <Controller
-                  name="searchText"
                   control={control}
+                  {...register('searchText')}
                   render={({ field: { onChange } }) => (
                     <TextField
                       fullWidth
-                      onChange={onChange}
-                      name="searchText"
+                      {...register('searchText')}
                       placeholder="Search..."
                       InputProps={{
                         startAdornment: (
