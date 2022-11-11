@@ -37,7 +37,6 @@ export const createEventPrizevalidate = () => {
     notificationTitle: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),
-
     ordinal: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),

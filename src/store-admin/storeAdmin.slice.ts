@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { IPayloadDate, IPayloadSearch } from './interfaces';
+import { IPayloadDate, IPayloadSearch, IStoreParams } from './interfaces';
 
-type StateProps = {
-  searchText: string;
-  startDate: Date | string;
-  endDate: Date | string;
-};
+// type StateProps = {
+//   searchText: string;
+//   startDate: Date | null;
+//   endDate: Date | null;
+// };
 
-export const initialState: StateProps = {
+export const initialState: IStoreParams = {
   searchText: '',
-  startDate: new Date(1, 1, 2000),
-  endDate: new Date().toISOString(),
+  firstScanStartDate: null,
+  firstScanEndDate: null,
 };
 
 export const storeAdminSlice = createSlice({
@@ -22,10 +22,10 @@ export const storeAdminSlice = createSlice({
       state.searchText = action.payload;
     },
     setFirstScanStartDate: (state, action: IPayloadDate) => {
-      state.startDate = action.payload;
+      state.firstScanStartDate = action.payload;
     },
     setFirstScanEndDate: (state, action: IPayloadDate) => {
-      state.endDate = action.payload;
+      state.firstScanEndDate = action.payload;
     },
   },
 });
@@ -34,7 +34,9 @@ export const { setFirstScanEndDate, setFirstScanStartDate, setSearchText } =
   storeAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.storeAdmin.searchText;
-export const firstScanStartSelector = (state: RootState) => state.storeAdmin.startDate;
-export const firstScanEndSelector = (state: RootState) => state.storeAdmin.endDate;
+export const firstScanStartSelector = (state: RootState) =>
+  state.storeAdmin.firstScanStartDate;
+export const firstScanEndSelector = (state: RootState) =>
+  state.storeAdmin.firstScanEndDate;
 
 export default storeAdminSlice.reducer;

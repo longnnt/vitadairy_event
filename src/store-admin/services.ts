@@ -1,4 +1,4 @@
-import { API_STORE_ADMIN } from 'src/common/constants/apis';
+import { API_STORE_ADMIN, API_STORE_ADMIN_EXPORT } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import { IDataStore, IStoreActive, IStoreParams } from './interfaces';
 
@@ -26,9 +26,6 @@ export const importStoreAdmin = (formData: FormData) => {
   });
 };
 
-export const exportStoreAdmin = (params: IStoreParams) => {
-  return axiosInstance.get(`${API_STORE_ADMIN}/export/csv`, {
-    params,
-    headers: { responseType: 'blob' },
-  });
+export const exportStoreAdmin = () => {
+  return axiosInstance.get(API_STORE_ADMIN_EXPORT);
 };

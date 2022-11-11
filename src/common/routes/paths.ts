@@ -56,6 +56,8 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
     shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
+    shop_invitation_id: (shopID: string) =>
+      path(ROOTS_DASHBOARD, `/shop-invitation/shop-${shopID}`),
   },
   eventPromotionIV: {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),

@@ -12,9 +12,11 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
+import { CSVLink } from 'react-csv';
 import { useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
@@ -28,6 +30,7 @@ import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
+import { useExportFile } from '../hooks/useExportFile';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
 import useMessage from '../hooks/useMessage';
@@ -89,14 +92,15 @@ function StoreAdminListDashboard() {
   const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
-    endDate: firstScanEnd,
-    startDate: firstScanStart,
+    firstScanEndDate: firstScanEnd,
+    firstScanStartDate: firstScanStart,
     searchText: searchText,
   };
 
   if (searchText) searchParams.searchText = searchText;
 
-  const { data, refetch } = useGetStoreAdmin(searchParams);
+  const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
+  const { data: csvData } = useExportFile();
 
   const listStoreAdmin = data?.data?.response?.response || [];
 
@@ -128,30 +132,6 @@ function StoreAdminListDashboard() {
     }
   };
 
-  const exportFile = () => {
-    const expData: IStoreParams = {
-      page: page,
-      size: totalRecords,
-    };
-
-    const response = exportStoreAdmin(expData);
-    response
-      .then((data) => {
-        const fileLink = document.createElement('a');
-
-        const blob = new Blob([data?.data], {
-          type: 'text/csv; charset=utf-8',
-        });
-
-        const fileName = `export_store_admin_${Date.now()}.csv`;
-
-        fileLink.href = window.URL.createObjectURL(blob);
-        fileLink.download = fileName;
-        fileLink.click();
-      })
-      .catch((err) => console.log(err));
-  };
-
   const handleEditRow = (id: string) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
@@ -169,6 +149,7 @@ function StoreAdminListDashboard() {
 
   return (
     <>
+    {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
         heading="DANH SÁCH CỬA HÀNG"
         links={[
@@ -187,16 +168,15 @@ function StoreAdminListDashboard() {
                 <input hidden multiple type="file" onChange={importFile} />
               </Button>
             </Box>
+            <CSVLink data={csvData ? csvData.data : ''}>
             <Button
               variant="contained"
-              startIcon={<Iconify icon={'mdi:file-export'} />}
-              onClick={() => {
-                exportFile();
-                navigate(PATH_DASHBOARD.storeAdmin.list);
-              }}
+              startIcon={<Iconify icon={'akar-icons:file'} />}
+              onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
             >
               Export
             </Button>
+          </CSVLink>
           </>
         }
       />
