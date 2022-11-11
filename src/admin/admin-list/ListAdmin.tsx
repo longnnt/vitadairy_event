@@ -27,7 +27,7 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { filterNameSelector, setFilterName } from '../admin.slice';
+import { filterNameSelector, setConfirmPopup, setFilterName, setSelectedIds } from '../admin.slice';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
 import { useGetAdmin } from '../hooks/useGetAdmin';
@@ -35,6 +35,7 @@ import { IAdminParams, IFormAdmin } from '../interfaces';
 import { AdminTableRow } from './components/AdminTableRow';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import TableSkeleton from './components/TableSkeleton';
+import { AlertDialogSlide } from './components/ModalConfirmDelete';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -95,10 +96,9 @@ function AdminListDashboard() {
   };
 
   const handleDeleteRows = (ids: number[]) => {
-    for (let i = 0; i < ids.length; i++) {
-      mutationDetele.mutate(ids[i]);
-      resetSelect();
-    }
+    dispatch(setConfirmPopup(true));
+    dispatch(setSelectedIds(ids));
+    resetSelect();
   };
 
   const handleEditRow = (id: number) => {
@@ -129,7 +129,7 @@ function AdminListDashboard() {
       />
       <Card>
         <Divider />
-
+        <AlertDialogSlide />
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
             {!!selectedIds.length && (

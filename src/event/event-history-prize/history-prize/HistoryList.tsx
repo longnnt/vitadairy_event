@@ -161,7 +161,7 @@ function EventPrizeHistoryDashboard() {
       />
       <Card>
         <Divider />
-        <FilterBar handleSearch={handleSearch} />
+        <FilterBar handleSearch={handleSearch} isLoading ={isLoading} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>

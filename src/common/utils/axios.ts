@@ -5,6 +5,7 @@ import { toQueryString } from 'src/common/constants/common.utils';
 import { HOST_API } from '../../config';
 import { store } from '../redux/store';
 import { PATH_AUTH } from '../routes/paths';
+import Snackbar from '@mui/material/Snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -16,10 +17,12 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     const response = error.response;
-
-    if (response?.status === 401) {
+    if (response?.status === 401 && response?.data?.meta?.status === 1003) {
       window.location.href = PATH_AUTH.login;
     }
+    // else if ((response?.status === 401 && response?.data?.meta?.status === 1002)){
+        
+    // }
     return Promise.reject(error);
   }
 );
