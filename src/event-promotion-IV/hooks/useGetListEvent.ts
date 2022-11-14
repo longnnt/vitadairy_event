@@ -8,13 +8,13 @@ export const useGetListEvent = ({
   callback,
 }: {
   params: EventSearchParams;
-  callback: IEventCallback;
+  callback?: IEventCallback;
 }) =>
   useQuery([QUERY_KEYS.EVENT_LIST, params], () => getListEvent(params), {
     onSuccess() {
-      callback.onSuccess && callback.onSuccess();
+      callback?.onSuccess && callback?.onSuccess();
     },
     onError() {
-      callback.onError && callback.onError();
+      callback?.onError && callback?.onError();
     },
   });

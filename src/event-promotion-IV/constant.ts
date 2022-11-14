@@ -44,3 +44,4 @@ export const defaultValues = {
   userLimit: 0,
   id: 100,
 };
+export const DEFAULT_LOADING_SIZE = 5;
