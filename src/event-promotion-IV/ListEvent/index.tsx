@@ -19,7 +19,7 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import { EventSearchParams } from '../interface';
 import { useGetListEvent } from '../hooks/useGetListEvent';
 import { DEFAULT_LOADING_SIZE } from '../constant';
-import LoadingSkeletonListEventScreen from './SkeletonScreen';
+import LoadingSkeletonListEventScreen from './LoadingListEventPage';
 
 export default function ListEventPromotionDashboard() {
   const navigate = useNavigate();
@@ -32,10 +32,6 @@ export default function ListEventPromotionDashboard() {
 
   const { isLoading } = useGetListEvent({
     params: searchParams,
-    callback: {
-      onSuccess:()=>{},
-      onError: () => {},
-    },
   });
 
   const handleCreateEvent = () => {

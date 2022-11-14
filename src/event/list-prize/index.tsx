@@ -4,7 +4,7 @@ import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
 import { useGetListPrize } from './hooks/useGetListPrize';
 import { IListPrizeParams } from './interfaces';
-import LoadingSkeletonListPrizeScreen from './list-prize-dashboard/components/SkeletonScreen';
+import LoadingSkeletonListPrizeScreen from './list-prize-dashboard/components/LoadingListPrizePage';
 import { ListPrizeDashboard } from './list-prize-dashboard/ListPrize';
 
 // --------------------------------------------

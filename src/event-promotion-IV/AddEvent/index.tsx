@@ -61,9 +61,6 @@ export const AddEvent = () => {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const { mutate, isSuccess, data } = useAddNewEvent({
-    onSuccess: () => {
-      // showSuccessSnackbar('Tạo mới thành công');
-    },
     onError: () => {
       showErrorSnackbar('Tạo mới thất bại');
     },

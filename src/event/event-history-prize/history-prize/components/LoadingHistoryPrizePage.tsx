@@ -1,19 +1,11 @@
-// @mui
 import {
   Box,
-
   Card,
-
   Stack,
-
   Skeleton,
-
 } from '@mui/material';
 
-// ----------------------------------------------------------------------
-
 export default function LoadingSkeletonHistoryPrizeScreen() {
-
   return (
     <Stack spacing={5}>
       <Stack direction={'row'} spacing={5} height={60} justifyContent='space-between'>
@@ -46,7 +38,6 @@ export default function LoadingSkeletonHistoryPrizeScreen() {
           </Stack>
           <Skeleton variant="rounded" height='80%' width="100%"/>
         </Stack>
-
       </Card>
     </Stack>
   );
