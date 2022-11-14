@@ -4,19 +4,21 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { dispatch } from 'src/common/redux/store';
+import { setConfirmEdit } from '../editEventPrize.Slice';
 
 export const ConfirmEditModal = ({
   open,
   handleClose,
-  setConfirmEdit,
-}: {
+}: //   setConfirmEdit,
+{
   open: boolean;
   handleClose: () => void;
-  setConfirmEdit: (state: boolean) => void;
+  //   setConfirmEdit: (state: boolean) => void;
 }) => {
   const handleOnAgree = () => {
     handleClose();
-    setConfirmEdit(true);
+    dispatch(setConfirmEdit(true));
   };
   return (
     <div>

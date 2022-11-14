@@ -42,11 +42,17 @@ import { useGetGiftById } from '../hooks/useGetGiftById';
 import _ from 'lodash';
 import {
   choosenGiftPointSelector,
+  confirmEditSelector,
+  editDataSelector,
   giftByIdSelector,
+  openEditModalSelector,
   popUpTypeSelector,
   provinceFormSelector,
   setChoosenGiftPoint,
+  setConfirmEdit,
+  setEditData,
   setGiftById,
+  setOpeneditModal,
   setPopUpType,
   setProvinceInfor,
 } from '../editEventPrize.Slice';
@@ -81,6 +87,9 @@ export const EditEventPrizeForm = () => {
   const dataProvinceform = useSelector(provinceFormSelector);
   const choosenGiftPoint = useSelector(choosenGiftPointSelector);
   const popUpTypedata = useSelector(popUpTypeSelector);
+  const openEditModal = useSelector(openEditModalSelector);
+  const confirmEdit = useSelector(confirmEditSelector);
+  const editData = useSelector(editDataSelector);
 
   useDeepCompareEffect(() => {
     if (eventPrizeById) {
@@ -128,31 +137,26 @@ export const EditEventPrizeForm = () => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
   }, [giftDetail]);
 
-  // ----------set modal confirm edit-------------------
-  const [openEditModal, setOPenEditModal] = useState<boolean>(false);
-  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
-  const [editData, setEditData] = useState<any>();
-  const handleOpenEditModal = () => setOPenEditModal(true);
-  const handleCloseEditModal = () => setOPenEditModal(false);
-  // ------------mutate---------------------------------
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+
   const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
-
   const onSubmit = async (data: IFormEdit) => {
     handleOpenEditModal();
     const tempEditData = fomatFormData(data);
-    setEditData(tempEditData);
+    dispatch(setEditData(tempEditData));
   };
   useDeepCompareEffect(() => {
     if (confirmEdit) {
       mutate(editData, {
         onSuccess: () => {
           showSuccessSnackbar('editting is successfull');
-          setConfirmEdit(false);
+          dispatch(setConfirmEdit(false));
         },
         onError: () => {
           showErrorSnackbar('editting is fail');
-          setConfirmEdit(false);
+          dispatch(setConfirmEdit(false));
         },
       });
     }
@@ -410,7 +414,7 @@ export const EditEventPrizeForm = () => {
           <ConfirmEditModal
             open={openEditModal}
             handleClose={handleCloseEditModal}
-            setConfirmEdit={setConfirmEdit}
+            // setConfirmEdit={setConfirmEdit}
           />
         </FormProvider>
       </Container>
