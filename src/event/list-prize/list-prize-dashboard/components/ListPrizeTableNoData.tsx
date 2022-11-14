@@ -1,20 +1,15 @@
 // @mui
 import { TableRow, TableCell } from '@mui/material';
 import EmptyContent from 'src/common/components/EmptyContent';
-//
-
-
 // ----------------------------------------------------------------------
 
 type Props = {
   isNotFound: boolean;
-  rowsPerPage: number;
 };
 
-export default function ListPrizeTableNoData({ isNotFound, rowsPerPage }: Props) {
-  const tableHeight =450*rowsPerPage/5
+export default function ListPrizeTableNoData({ isNotFound }: Props) {
   return (
-    <TableRow sx={{ minWidth: 800, position: 'relative', minHeight: 400 }}>
+    <TableRow sx={{ minWidth: 800, position: 'relative'}}>
       {isNotFound ? (
         <TableCell colSpan={12}>
           <EmptyContent

@@ -212,7 +212,7 @@ function ListPrizeDashboard() {
                 {Array.from(Array(rowsPerPage)).map((index) => {
                   return <ListPrizeTableSkeleton key={index} isNotFound={isLoading} />;
                 })}
-                <ListPrizeTableNoData isNotFound={isNotFound && !isLoading} rowsPerPage={rowsPerPage}/>
+                <ListPrizeTableNoData isNotFound={isNotFound && !isLoading}/>
               </TableBody>
             </Table>
           </TableContainer>
