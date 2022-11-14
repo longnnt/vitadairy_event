@@ -120,7 +120,6 @@ export const EditEventPrizeForm = () => {
     formState: { isSubmitting, errors },
   } = methods;
   const watchPopupCode = watch('popupCode');
-  console.log(watchPopupCode);
 
   const { data: giftDetail } = useGetGiftById(
     dataEventPrizeById ? dataEventPrizeById?.giftId : NO_ID
