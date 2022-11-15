@@ -87,7 +87,7 @@ export interface IFormCreateEvent {
   notificationDescription: string;
   notificationTitle: string;
   ordinal: number;
-  popupCode: string;
+  popupCode: string | null;
   popupImageLink: string;
   popupLink: string;
   popupType: string;

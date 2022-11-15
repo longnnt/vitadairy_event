@@ -1,5 +1,5 @@
 import { Card, Grid, Typography } from '@mui/material';
-import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
+import { RHFSelect, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import { styled } from '@mui/material/styles';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
 
@@ -62,6 +62,8 @@ function NotificationOverviewForm() {
             </option>
           ))}
         </RHFSelect>
+        <Typography marginTop={2}>Trạng thái quà</Typography>
+        <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
       </Card>
     </Grid>
   );

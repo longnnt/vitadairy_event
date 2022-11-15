@@ -154,7 +154,7 @@ function StoreAdminListDashboard() {
         heading="DANH SÁCH CỬA HÀNG"
         links={[
           { name: BREADCUMBS.STORE_ADMIN, href: PATH_DASHBOARD.storeAdmin.root },
-          { name: 'Danh sách' },
+          { name: 'Danh sách cửa hàng' },
         ]}
         action={
           <>

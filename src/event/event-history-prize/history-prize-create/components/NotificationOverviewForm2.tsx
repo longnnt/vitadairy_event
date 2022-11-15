@@ -12,7 +12,7 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TablePagination,
+  TablePagination
 } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,7 +27,7 @@ import {
   POPUP_CODE,
   POPUP_TYPE,
   STYLE_GIFT,
-  TABLE_HEAD_GIFT,
+  TABLE_HEAD_GIFT
 } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
@@ -41,7 +41,7 @@ import {
   setPopUpCode,
   setPopUpType,
   setValueChoice,
-  setValueChoiceSelector,
+  setValueChoiceSelector
 } from '../../event.slice';
 import { useGetGilf } from '../../hooks/useGetGilf';
 import { IFormCreateEvent, IGiftParams, ISelectPopup } from '../../interfaces';
@@ -50,7 +50,6 @@ import { GiftTableRow } from './GiftTableRow';
 function NotificationOverviewForm2() {
   const dispatch = useDispatch();
   const popUpType = useSelector(popUpTypeSelector);
-  console.log(popUpType)
   const popUpCode = useSelector(popUpCodeSelector);
   const open = useSelector(setOpenSelector);
   const gift = useSelector(giftSelecttor);
@@ -77,15 +76,13 @@ function NotificationOverviewForm2() {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setPopUpType(event.target.value));
-    // setValue('popupType', event.target.value);
-    // console.log(popUpType);
+    setValue('popupType', event.target.value);
   };
   const changePopUpCode = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setPopUpCode(event.target.value));
-    // setValue('popupCode', event.target.value);
-    // console.log(popUpCode);
+    setValue('popupCode', event.target.value);
   };
 
   const searchParams: IGiftParams = {
@@ -108,11 +105,11 @@ function NotificationOverviewForm2() {
       })
     );
 
-    // return () => {
-    //   dispatch(setPopUpType(''));
-    //   dispatch(setPopUpCode(''));
-    //   dispatch(setFileCSV([]));
-    // };
+    return () => {
+      dispatch(setPopUpType(''));
+      dispatch(setPopUpCode(''));
+      dispatch(setFileCSV([]));
+    };
   }, []);
 
   const methods = useForm<IFormCreateEvent>({
@@ -129,8 +126,6 @@ function NotificationOverviewForm2() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
-  // console.log(watch());
 
   return (
     <Grid item xs={6} marginTop={3.5}>
@@ -180,53 +175,29 @@ function NotificationOverviewForm2() {
           <option value={POPUP_CODE.OGGI}>OGGI</option>
           <option value={POPUP_CODE.FULL_SCREEN}>FULL_SCREEN</option>
         </RHFSelect>
-        {popUpCode === POPUP_CODE.PUZZLE_PIECE && (
-          <Box>
+        {(popUpCode === POPUP_CODE.PUZZLE_PIECE || popUpCode === POPUP_CODE.OGGI) && (
+          <>
             <RHFTextField
-              name="titlePopUp"
-              key={'titlePopUp'}
+              name="popUpCodeTitle"
+              key={'popUpCodeTitle'}
               label="Tiêu đề Pop up*"
               margin="dense"
             />
             <RHFTextField
-              name="contentPopUp"
-              key={'contentPopUp'}
+              name="popUpCodeContent"
+              key={'popUpCodeContent'}
               label="Nội dung Pop Up*"
               multiline
               rows={7}
               margin="dense"
             />
             <RHFTextField
-              name="cta"
-              key={'cta'}
+              name="popUpCodeCTA"
+              key={'popUpCodeCTA'}
               label="CTA*"
               margin="dense"
             />
-          </Box>
-        )}
-        {popUpCode === POPUP_CODE.OGGI && (
-          <Box>
-            <RHFTextField
-              name="titlePopUp"
-              key={'titlePopUp'}
-              label="Tiêu đề Pop up*"
-              margin="dense"
-            />
-            <RHFTextField
-              name="contentPopUp"
-              key={'contentPopUp'}
-              label="Nội dung Pop Up*"
-              multiline
-              rows={7}
-              margin="dense"
-            />
-            <RHFTextField
-              name="cta"
-              key={'cta'}
-              label="CTA*"
-              margin="dense"
-            />
-          </Box>
+          </>
         )}
         <RadioGroup
           row

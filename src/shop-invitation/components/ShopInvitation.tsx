@@ -86,7 +86,7 @@ export default function ShopInvitation() {
     <>
       {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
-        heading="Danh Sách Định Danh: "
+        heading="Danh Sách Khách Hàng: "
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
           {

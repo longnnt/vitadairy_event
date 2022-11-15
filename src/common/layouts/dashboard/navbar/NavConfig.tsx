@@ -51,16 +51,16 @@ const navConfig = [
     items: [
       // STORE
       {
-        title: 'Cửa hàng',
+        title: 'Cửa hàng định danh',
         path: PATH_DASHBOARD.storeAdmin.root,
         icon: ICONS.booking,
         children: [
           {
-            title: 'Danh sách',
+            title: 'Danh sách cửa hàng',
             path: PATH_DASHBOARD.storeAdmin.list,
           },
           {
-            title: 'Danh sách định danh ',
+            title: 'Danh sách khách hàng ',
             path: PATH_DASHBOARD.storeAdmin.shop_invitation,
           },
         ],

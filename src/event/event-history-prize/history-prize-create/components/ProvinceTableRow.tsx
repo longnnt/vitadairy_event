@@ -203,7 +203,7 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
-      type: 'datetime',
+      type: 'dateTime',
       flex: 1,
       editable: true,
       preProcessEditCellProps: (params) => {
@@ -214,7 +214,7 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
-      type: 'datetime',
+      type: 'dateTime',
       flex: 1,
       editable: true,
       preProcessEditCellProps: (params) => {

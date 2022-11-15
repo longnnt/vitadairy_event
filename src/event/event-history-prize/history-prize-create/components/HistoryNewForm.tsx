@@ -1,75 +1,42 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
-  Button,
   Card,
-  Container,
-  FormControlLabel,
-  Grid,
-  Modal,
-  Paper,
-  Radio,
-  RadioGroup,
-  Stack,
-  Table,
-  TableBody,
-  TableContainer,
-  TablePagination,
-  Typography
+  Container, Grid, Stack, Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
-import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
-  FormProvider, RHFSelect,
-  RHFTextField
+  FormProvider
 } from 'src/common/components/hook-form';
-import Scrollbar from 'src/common/components/Scrollbar';
-import { TableHeadCustom } from 'src/common/components/table';
-import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
-  ButtonType, defaultValues, popupTypeOption,
-  POPUP_TYPE,
-  STYLE_GIFT,
-  TABLE_HEAD_GIFT
+  ButtonType, defaultValues
 } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
   giftSelecttor,
   popUpCodeSelector,
   popUpTypeSelector,
-  setButtonType, setFileCSV,
-  setGift,
-  setOpen,
-  setOpenSelector,
-  setPopUpCode,
-  setPopUpType,
-  setProvinceNewFormSelector,
-  setValueChoice,
-  setValueChoiceSelector
+  setButtonType, setProvinceNewFormSelector
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { useGetGilf } from '../../hooks/useGetGilf';
 import {
   IEventDetail,
-  IFormCreateEvent,
-  IGiftParams, ISelectPopup
+  IFormCreateEvent
 } from '../../interfaces';
-import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import LoadingScreen from 'src/common/components/LoadingScreen';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import FullFeaturedCrudGrid from './ProvinceTableRow';
+import NotificationForm from './NotificationForm';
 import NotificationOverviewForm from './NotificationOverviewForm';
 import NotificationOverviewForm2 from './NotificationOverviewForm2';
-import NotificationForm from './NotificationForm';
+import FullFeaturedCrudGrid from './ProvinceTableRow';
 
 dayjs.extend(customParseFormat);
 
@@ -83,19 +50,10 @@ export default function HistoryNewForm() {
   const dispatch = useDispatch();
   const gift = useSelector(giftSelecttor);
   const dataProvinceform = useSelector(setProvinceNewFormSelector);
+  const popUpType = useSelector(popUpTypeSelector);
+  const popUpCode = useSelector(popUpCodeSelector);
 
   const { useDeepCompareEffect } = useDeepEffect();
-
-  const {
-    dense,
-    page,
-    order,
-    orderBy,
-    rowsPerPage,
-    selected: selectedRows,
-    onChangePage,
-    onChangeRowsPerPage,
-  } = useTable();
   
   useDeepCompareEffect(() => {
     if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
@@ -159,7 +117,7 @@ export default function HistoryNewForm() {
         return { ...item, startDate: startDate, endDate: endDate };
       }
     );
-    if (data.popupType === 'NULL') {
+    if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
     const dataEvent: IFormCreateEvent = {
@@ -170,8 +128,8 @@ export default function HistoryNewForm() {
       notificationDescription: data.notificationDescription,
       notificationTitle: data.notificationTitle,
       ordinal: data.ordinal,
-      popupCode: data.popupCode,
-      popupType: data.popupType,
+      popupCode: popUpCode,
+      popupType: popUpType,
       popupImageLink: data.popupImageLink,
       popupLink: data.popupLink,
       probability: data.probability,
