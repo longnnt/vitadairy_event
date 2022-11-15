@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
@@ -113,7 +113,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <DatePicker
+                    <DateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
@@ -130,7 +130,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <DatePicker
+                  <DateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"

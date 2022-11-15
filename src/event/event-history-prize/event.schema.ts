@@ -16,16 +16,16 @@ export const createEventPrizevalidate = () => {
 
   const createEventPrizeSchema = Yup.object().shape({
     giftId: Yup.number().required('This field is required').typeError('Must be a number'),
-    popupCode: Yup.string()
-      .typeError('Must be a string')
-      .required('This field is required')
-      .test('test empty', 'Content is required', (val) => val !== ''),
+    // popupCode: Yup.string()
+    //   .typeError('Must be a string')
+    //   .required('This field is required')
+    //   .test('test empty', 'Content is required', (val) => val !== ''),
     popupImageLink: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),
-    popupType: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
+    // popupType: Yup.string()
+    //   .required('This field is required')
+    //   .typeError('Must be a string'),
 
     notificationContent: Yup.string()
       .required('This field is required')

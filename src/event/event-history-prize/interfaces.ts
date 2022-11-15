@@ -124,6 +124,12 @@ export interface IEventDetail {
   isNew?: boolean;
 }
 
+export interface INotificationForm {
+  notificationContent: string;
+  notificationDescription: string;
+  notificationTitle: string;
+}
+
 export interface IResTransaction {
   data: {
     meta: {

@@ -67,6 +67,9 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import LoadingScreen from 'src/common/components/LoadingScreen';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import FullFeaturedCrudGrid from './ProvinceTableRow';
+import NotificationOverviewForm from './NotificationOverviewForm';
+import NotificationOverviewForm2 from './NotificationOverviewForm2';
+import NotificationForm from './NotificationForm';
 
 dayjs.extend(customParseFormat);
 
@@ -79,17 +82,10 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 export default function HistoryNewForm() {
   const dispatch = useDispatch();
   const gift = useSelector(giftSelecttor);
-  const popUpType = useSelector(popUpTypeSelector);
-  const popUpCode = useSelector(popUpCodeSelector);
-  const open = useSelector(setOpenSelector);
   const dataProvinceform = useSelector(setProvinceNewFormSelector);
-  const handleOpen = () => dispatch(setOpen(true));
-  const handleClose = () => dispatch(setOpen(false));
-  const valueChoice = useSelector(setValueChoiceSelector);
+
   const { useDeepCompareEffect } = useDeepEffect();
-  const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setValueChoice((event.target as HTMLInputElement).value));
-  };
+
   const {
     dense,
     page,
@@ -104,19 +100,6 @@ export default function HistoryNewForm() {
   useDeepCompareEffect(() => {
     if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
   }, [dataProvinceform]);
-
-  const changePopUpType = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    dispatch(setPopUpType(event.target.value));
-    setValue('popupType', event.target.value);
-  };
-  const changePopUpCode = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    dispatch(setPopUpCode(event.target.value));
-    setValue('popupCode', event.target.value);
-  };
 
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = () => {
@@ -135,40 +118,6 @@ export default function HistoryNewForm() {
   const params = useParams();
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
-
-  const { data: addTransaction } = useGetAllTranSacTion();
-  const dataTransaction = addTransaction?.data?.response || [];
-  const addNewTransaction = dataTransaction.map((item) => ({
-    key: item.id,
-    name: item.description,
-  }));
-
-  const searchParams: IGiftParams = {
-    page: page,
-    size: 10,
-  };
-  const { data: ListGift } = useGetGilf(searchParams);
-  const dataGift = ListGift?.data?.response || [];
-  const { totalRecords } = ListGift?.data?.pagination || {
-    totalRecords: 0,
-  };
-
-  useEffect(() => {
-    dispatch(
-      setGift({
-        id: 0,
-        name: '',
-        type: '',
-        money: '',
-      })
-    );
-
-    return () => {
-      dispatch(setPopUpType(''));
-      dispatch(setPopUpCode(''));
-      dispatch(setFileCSV([]));
-    };
-  }, []);
 
   const methods = useForm<IFormCreateEvent>({
     resolver: yupResolver(createEventPrizevalidate()),
@@ -222,9 +171,9 @@ export default function HistoryNewForm() {
       notificationTitle: data.notificationTitle,
       ordinal: data.ordinal,
       popupCode: data.popupCode,
+      popupType: data.popupType,
       popupImageLink: data.popupImageLink,
       popupLink: data.popupLink,
-      popupType: data.popupType,
       probability: data.probability,
       quantity: data.quantity,
       transactionTypeId: data.transactionTypeId,
@@ -242,219 +191,15 @@ export default function HistoryNewForm() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Grid spacing={3} container>
-                <Grid item xs={6}>
-                  <LabelStyle>Thông báo tổng quan</LabelStyle>
-                  <Card sx={{ p: 3, width: '100%' }}>
-                    <RHFTextField
-                      name={'ordinal'}
-                      key={'ordinal'}
-                      label="Thứ tự ưu tiên*"
-                      margin="dense"
-                    />
-                    <RHFTextField
-                      name="probability"
-                      key={'probability'}
-                      label="Tỉ lệ trúng quà của sự kiện(%)*"
-                      margin="dense"
-                    />
-                    <RHFTextField
-                      name="quantity"
-                      key={'quantity'}
-                      label="Tổng số lượng quà*"
-                      margin="dense"
-                    />
-                    <RHFTextField
-                      name="id"
-                      key={'id'}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      label="Số lượng quà user đã trúng"
-                      margin="dense"
-                    />
-                    <RHFSelect
-                      name={'transactionTypeId'}
-                      key="transactionTypeId"
-                      label={'Transaction type'}
-                      placeholder="Transaction type"
-                      margin="dense"
-                    >
-                      <option value="" />
-                      {addNewTransaction.map((option) => (
-                        <option key={option.key} value={option.key}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </RHFSelect>
-                  </Card>
-                </Grid>
-                <Grid item xs={6}>
-                  <Card sx={{ p: 3, width: '100%' }}>
-                    <RHFTextField
-                      name="popupImageLink"
-                      key={'popupImageLink'}
-                      label="Link hình ảnh Pop up*"
-                      margin="dense"
-                    />
-                    <RHFSelect
-                      name="popupType"
-                      key="popupType"
-                      label="Pop up Type"
-                      placeholder="Pop up Type"
-                      margin="dense"
-                      value={popUpType}
-                      onChange={(e) => {
-                        changePopUpType(e);
-                      }}
-                    >
-                      <option value="" />
-                      {popupTypeOption.map((item: ISelectPopup) => (
-                        <option key={item.value} value={item.value}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </RHFSelect>
-                    {popUpType === POPUP_TYPE.HTML_LINK && (
-                      <RHFTextField
-                        name="popupLink"
-                        key={'popupHtmlLink'}
-                        label="Popup html link*"
-                      />
-                    )}
-                    {popUpType === POPUP_TYPE.DEEP_LINK && (
-                      <RHFTextField
-                        name="popupLink"
-                        key={'popupDeepLink'}
-                        label="Popup deep link*"
-                      />
-                    )}
-                    <RHFSelect
-                      name="popupCode"
-                      key={'popupCode'}
-                      label="Pop up Code"
-                      placeholder="Pop up Code"
-                      margin="dense"
-                      onChange={(e) => changePopUpCode(e)}
-                      value={popUpCode}
-                    >
-                      <option value=""></option>
-                      <option value="PUZZLE PIECE">PUZZLE PIECE</option>
-                      <option value="OGGI">OGGI</option>
-                      <option value="FULL_SCREEN">FULL_SCREEN</option>
-                    </RHFSelect>
-                    <RadioGroup
-                      row
-                      name={'giftId'}
-                      key="giftId"
-                      value={valueChoice}
-                      onChange={handleChangeChoice}
-                    >
-                      <FormControlLabel
-                        value="gift"
-                        control={<Radio />}
-                        label="Tặng Quà"
-                      />
-                    </RadioGroup>
-                    <Grid container spacing={3}>
-                      <Grid item xs>
-                        <Button
-                          sx={{
-                            display: valueChoice !== 'point' ? 'block' : 'none',
-                            width: '40%',
-                            alignSelf: 'flex-start',
-                          }}
-                          variant="contained"
-                          color="info"
-                          size="large"
-                          onClick={handleOpen}
-                        >
-                          Chọn quà
-                        </Button>
-                        <Box
-                          sx={{
-                            color: 'black',
-                            marginTop: '5px',
-                            display: valueChoice !== 'point' ? 'block' : 'none',
-                          }}
-                        >
-                          {gift.name}
-                        </Box>
-                        <Modal
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="modal-modal-title"
-                          aria-describedby="modal-modal-description"
-                        >
-                          <Box sx={STYLE_GIFT}>
-                            <Scrollbar>
-                              <TableContainer
-                                sx={{
-                                  minWidth: 800,
-                                  maxHeight: 500,
-                                  position: 'relative',
-                                  overflowY: 'scroll',
-                                  overflowX: 'auto',
-                                }}
-                                component={Paper}
-                              >
-                                <Table>
-                                  <TableHeadCustom headLabel={TABLE_HEAD_GIFT} />
-                                  <TableBody>
-                                    {dataGift.map((row) => (
-                                      <GiftTableRow
-                                        key={row.id}
-                                        row={row}
-                                        handleClose={handleClose}
-                                      />
-                                    ))}
-                                  </TableBody>
-                                </Table>
-                              </TableContainer>
-                            </Scrollbar>
-                            {!!ListGift?.data?.pagination?.totalPages && (
-                              <TablePagination
-                                rowsPerPageOptions={[10]}
-                                component="div"
-                                count={totalRecords}
-                                rowsPerPage={10}
-                                page={page}
-                                onPageChange={onChangePage}
-                                onRowsPerPageChange={onChangeRowsPerPage}
-                              />
-                            )}
-                          </Box>
-                        </Modal>
-                      </Grid>
-                    </Grid>
-                  </Card>
-                </Grid>
+                <NotificationOverviewForm />
+                <NotificationOverviewForm2 />
               </Grid>
-              <LabelStyle>Thông báo</LabelStyle>
-              <Card sx={{ p: 3, width: '100%', my: 3 }}>
-                <Grid>
-                  <RHFTextField
-                    name="notificationTitle"
-                    key={'notificationTitle'}
-                    label="Tiêu đề thông báo"
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name={'notificationDescription'}
-                    key={'notificationDescription'}
-                    label="Nội dung thông báo"
-                    margin="dense"
-                  />
-                  {/* <LabelStyle>Mô tả thông báo</LabelStyle> */}
-                  <RHFTextField
-                    name="notificationContent"
-                    key={'notificationContent'}
-                    label="Mô tả thông báo"
-                    margin="dense"
-                  />
-                </Grid>
+              <LabelStyle marginTop={2}>Thông báo</LabelStyle>
+              <Card sx={{ p: 2, width: '100%', my: 1 }}>
+                <NotificationForm />
               </Card>
-              <LabelStyle>Tỉnh thành</LabelStyle>
-              <Card sx={{ p: 1.5 }}>
+              <LabelStyle marginTop={2}>Tỉnh thành</LabelStyle>
+              <Card sx={{ p: 2 }}>
                 <Stack direction={'column'} spacing="15px">
                   <Box>
                     <FullFeaturedCrudGrid />
