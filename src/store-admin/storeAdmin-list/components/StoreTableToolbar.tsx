@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
@@ -114,17 +114,10 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <MobileDateTimePicker
+                    <DatePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Calendar />
-                          </InputAdornment>
-                        ),
-                      }}
                       inputFormat={FORMAT_DATE_NEWS}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
@@ -138,17 +131,10 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <MobileDateTimePicker
+                  <DatePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Calendar />
-                        </InputAdornment>
-                      ),
-                    }}
                     inputFormat={FORMAT_DATE_NEWS}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
