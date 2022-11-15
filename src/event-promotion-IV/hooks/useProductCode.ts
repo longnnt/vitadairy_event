@@ -7,8 +7,12 @@ export const useProductCode = (searchParams?: any) => {
   const { data: productData } = useGetProductCode({
     params: searchParams,
     callback: {
-      onSuccess: () => showSuccessSnackbar('Tải mã sản phẩm thành công'),
-      onError: () => showErrorSnackbar('Tải mã sản phẩm thất bại'),
+      onSuccess: () => { 
+        // showSuccessSnackbar('Tải mã sản phẩm thành công')
+      },
+      onError: () => {
+        showErrorSnackbar('Tải mã sản phẩm thất bại')
+      }
     },
   });
 

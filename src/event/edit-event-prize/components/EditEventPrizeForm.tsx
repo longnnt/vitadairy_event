@@ -9,6 +9,7 @@ import {
   RHFEditor,
   RHFRadioGroup,
   RHFSelect,
+  RHFSwitch,
   RHFTextField,
 } from 'src/common/components/hook-form';
 import {
@@ -41,11 +42,17 @@ import { useGetGiftById } from '../hooks/useGetGiftById';
 import _ from 'lodash';
 import {
   choosenGiftPointSelector,
+  confirmEditSelector,
+  editDataSelector,
   giftByIdSelector,
+  openEditModalSelector,
   popUpTypeSelector,
   provinceFormSelector,
   setChoosenGiftPoint,
+  setConfirmEdit,
+  setEditData,
   setGiftById,
+  setOpeneditModal,
   setPopUpType,
   setProvinceInfor,
 } from '../editEventPrize.Slice';
@@ -54,6 +61,7 @@ import LoadingScreen from 'src/common/components/LoadingScreen';
 import { dispatch } from 'src/common/redux/store';
 import PovinceTableForm from './ProvinceTableForm';
 import { LoadingButton } from '@mui/lab';
+import { ConfirmEditModal } from './ConfirmEditModal';
 
 // -----------------------------------------------------------------------------
 
@@ -79,6 +87,9 @@ export const EditEventPrizeForm = () => {
   const dataProvinceform = useSelector(provinceFormSelector);
   const choosenGiftPoint = useSelector(choosenGiftPointSelector);
   const popUpTypedata = useSelector(popUpTypeSelector);
+  const openEditModal = useSelector(openEditModalSelector);
+  const confirmEdit = useSelector(confirmEditSelector);
+  const editData = useSelector(editDataSelector);
 
   useDeepCompareEffect(() => {
     if (eventPrizeById) {
@@ -114,8 +125,10 @@ export const EditEventPrizeForm = () => {
     setValue,
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
+  const watchPopupCode = watch('popupCode');
 
   const { data: giftDetail } = useGetGiftById(
     dataEventPrizeById ? dataEventPrizeById?.giftId : NO_ID
@@ -123,21 +136,31 @@ export const EditEventPrizeForm = () => {
   useDeepCompareEffect(() => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
   }, [giftDetail]);
-  // ------------mutate---------------
+
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+
   const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
-
   const onSubmit = async (data: IFormEdit) => {
+    handleOpenEditModal();
     const tempEditData = fomatFormData(data);
-    await mutate(tempEditData, {
-      onSuccess: () => {
-        showSuccessSnackbar('edit successfully');
-      },
-      onError: () => {
-        showErrorSnackbar('edit fail');
-      },
-    });
+    dispatch(setEditData(tempEditData));
   };
+  useDeepCompareEffect(() => {
+    if (confirmEdit) {
+      mutate(editData, {
+        onSuccess: () => {
+          showSuccessSnackbar('editting is successfull');
+          dispatch(setConfirmEdit(false));
+        },
+        onError: () => {
+          showErrorSnackbar('editting is fail');
+          dispatch(setConfirmEdit(false));
+        },
+      });
+    }
+  }, [confirmEdit, editData]);
 
   // ----------------set modal parameter---------------
 
@@ -169,19 +192,22 @@ export const EditEventPrizeForm = () => {
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
                   <RHFTextField
+                    required
                     name="ordinal"
                     key={'ordinal'}
-                    label="Thứ tự ưu tiên..."
+                    label="Thứ tự ưu tiên"
                   />
                   <RHFTextField
+                    required
                     name="probability"
                     key={'probability'}
                     label="Tỷ lệ trúng quà của sự kiện (%)"
                   />
                   <RHFTextField
+                    required
                     name="quantity"
                     key={'quantity'}
-                    label="Tổng số lượng quà..."
+                    label="Tổng số lượng quà"
                   />
                   <RHFTextField
                     disabled
@@ -201,6 +227,8 @@ export const EditEventPrizeForm = () => {
                       </option>
                     ))}
                   </RHFSelect>
+                  <Typography>Trạng thái quà</Typography>
+                  <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
                 </Stack>
               </Card>
             </Grid>
@@ -208,11 +236,13 @@ export const EditEventPrizeForm = () => {
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
                   <RHFTextField
+                    required
                     name="popupImageLink"
                     key={'popupImageLink'}
                     label="Link hình ảnh popup"
                   />
                   <RHFSelect
+                    required
                     name={'popupType'}
                     key="popupType"
                     label={'Popup type'}
@@ -230,6 +260,7 @@ export const EditEventPrizeForm = () => {
                   </RHFSelect>
                   {popUpTypedata === POPUP_TYPE.HTML_LINK && (
                     <RHFTextField
+                      required
                       name="popupLink"
                       key={'PopupHtmllink'}
                       label="Popup html link"
@@ -237,6 +268,7 @@ export const EditEventPrizeForm = () => {
                   )}
                   {popUpTypedata === POPUP_TYPE.DEEP_LINK && (
                     <RHFTextField
+                      required
                       name="popupLink"
                       key={'popupDeepLink'}
                       label="Popup deep link"
@@ -259,6 +291,31 @@ export const EditEventPrizeForm = () => {
                     <option value={POPUP_CODE.OGGI}>OGGI</option>
                     <option value={POPUP_CODE.FULL_SCREEN}>FULL_SCREEN</option>
                   </RHFSelect>
+                  {(watchPopupCode === POPUP_CODE.OGGI ||
+                    watchPopupCode === POPUP_CODE.PUZZLE_PIECE) && (
+                    <>
+                      <RHFTextField
+                        name="popUpCodeTitle"
+                        key={'popUpCodeTitle'}
+                        label="Tiêu đề Pop up"
+                        required
+                      />
+                      <RHFTextField
+                        multiline
+                        rows={5}
+                        name="popUpCodeContent"
+                        key={'popUpCodeContent'}
+                        label="Nội dung Pop up"
+                        required
+                      />
+                      <RHFTextField
+                        name="popUpCodeCTA"
+                        key={'popUpCodeCTA'}
+                        label="CTA"
+                        required
+                      />
+                    </>
+                  )}
                   <RHFRadioGroup
                     sx={{ justifyContent: 'flex-start' }}
                     name="typeUser"
@@ -354,6 +411,11 @@ export const EditEventPrizeForm = () => {
           >
             Lưu
           </LoadingButton>
+          <ConfirmEditModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            // setConfirmEdit={setConfirmEdit}
+          />
         </FormProvider>
       </Container>
     </>

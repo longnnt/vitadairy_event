@@ -37,7 +37,6 @@ export const ViewEvent = () => {
   const { data } = useGetEventById({
     id: parseInt(id as string),
     callback: {
-      onSuccess: () => showSuccessSnackbar('Lấy thông tin sự kiện thành công'),
       onError: () => showErrorSnackbar('Lấy thông tin sự kiện thất bại'),
     },
   });
