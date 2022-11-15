@@ -151,7 +151,7 @@ function StoreAdminListDashboard() {
     <>
     {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
-        heading="DANH SÁCH CỬA HÀNG"
+        heading="Danh sách cửa hàng"
         links={[
           { name: BREADCUMBS.STORE_ADMIN, href: PATH_DASHBOARD.storeAdmin.root },
           { name: 'Danh sách cửa hàng' },
