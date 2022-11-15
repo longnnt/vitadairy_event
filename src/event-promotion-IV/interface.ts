@@ -39,8 +39,8 @@ export interface IResEvents {
 }
 
 export interface IEventCallback {
-  onSuccess: VoidFunction;
-  onError: VoidFunction;
+  onSuccess?: VoidFunction;
+  onError?: VoidFunction;
   onSuccessSend?: VoidFunction;
 }
 

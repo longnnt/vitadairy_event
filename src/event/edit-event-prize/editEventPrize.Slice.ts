@@ -9,6 +9,9 @@ interface stateType {
   provinceForm: IEventProvince[];
   choosenGiftPoint: string;
   popUpType: string;
+  openEditModal: boolean;
+  confirmEdit: boolean;
+  editData: IFormEdit;
 }
 
 const initialState: stateType = {
@@ -17,6 +20,9 @@ const initialState: stateType = {
   provinceForm: [],
   choosenGiftPoint: GIFT_POINT.GIFT,
   popUpType: '',
+  openEditModal: false,
+  confirmEdit: false,
+  editData: {} as IFormEdit,
 };
 
 export const editEventPrizeSlice = createSlice({
@@ -38,6 +44,15 @@ export const editEventPrizeSlice = createSlice({
     setPopUpType: (state, action: PayloadAction<string>) => {
       state.popUpType = action.payload;
     },
+    setOpeneditModal: (state, action: PayloadAction<boolean>) => {
+      state.openEditModal = action.payload;
+    },
+    setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+      state.confirmEdit = action.payload;
+    },
+    setEditData: (state, action: PayloadAction<IFormEdit>) => {
+      state.editData = action.payload;
+    },
   },
 });
 
@@ -47,6 +62,9 @@ export const {
   setProvinceForm,
   setChoosenGiftPoint,
   setPopUpType,
+  setOpeneditModal,
+  setConfirmEdit,
+  setEditData,
 } = editEventPrizeSlice.actions;
 
 export const giftByIdSelector = (state: RootState) => state.edit_event_prize.dataGiftById;
@@ -57,5 +75,10 @@ export const provinceFormSelector = (state: RootState) =>
 export const choosenGiftPointSelector = (state: RootState) =>
   state.edit_event_prize.choosenGiftPoint;
 export const popUpTypeSelector = (state: RootState) => state.edit_event_prize.popUpType;
+export const openEditModalSelector = (state: RootState) =>
+  state.edit_event_prize.openEditModal;
+export const confirmEditSelector = (state: RootState) =>
+  state.edit_event_prize.confirmEdit;
+export const editDataSelector = (state: RootState) => state.edit_event_prize.editData;
 
 export default editEventPrizeSlice.reducer;

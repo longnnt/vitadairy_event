@@ -199,14 +199,14 @@ export default function PovinceTableForm({ name, setValue, ...other }: Props) {
     },
     {
       field: 'quantity',
-      headerName: 'Số lượng quà',
+      headerName: 'Tổng Số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
       width: 150,
     },
     {
       field: 'extraquantity',
-      headerName: 'Số lượng quà thêm',
+      headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
       width: 150,
