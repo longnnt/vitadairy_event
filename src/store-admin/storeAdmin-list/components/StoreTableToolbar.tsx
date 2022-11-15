@@ -1,7 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
-import { DatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
-import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
+import { DatePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
