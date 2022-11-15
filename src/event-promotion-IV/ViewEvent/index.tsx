@@ -25,6 +25,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import { defaultValues } from '../constant';
+import Can from 'src/common/lib/Can';
 
 export const ViewEvent = () => {
   const navigate = useNavigate();
@@ -191,6 +192,7 @@ export const ViewEvent = () => {
         <Button variant="contained" color="secondary" onClick={handleBackEventList}>
           Trở về
         </Button>
+        <Can do="update" on="all">
         <Button
           variant="contained"
           sx={{ mx: '7px' }}
@@ -198,6 +200,7 @@ export const ViewEvent = () => {
         >
           Chỉnh sửa
         </Button>
+        </Can>
       </Box>
     </>
   );

@@ -16,6 +16,7 @@ import {
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { useDeleteEvents } from '../hooks/useDeleteEvent';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import Can from 'src/common/lib/Can';
 
 export default function ListEventPromotionDashboard() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ export default function ListEventPromotionDashboard() {
           { name: 'Danh sách sự kiện' },
         ]}
         action={
-          <>
+          <><Can do="update" on="all">
             <Button
               variant="contained"
               startIcon={<Iconify icon={'akar-icons:file'} />}
@@ -57,6 +58,7 @@ export default function ListEventPromotionDashboard() {
             >
               Xóa
             </Button>
+            </Can>
           </>
         }
       />

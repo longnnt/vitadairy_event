@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { CSVLink } from 'react-csv';
 import { useNavigate } from 'react-router-dom';
+import { useGetAdmin } from 'src/admin/hooks/useGetAdmin';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -26,7 +27,7 @@ import {
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
-import { useSelector } from 'src/common/redux/store';
+import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
@@ -43,6 +44,7 @@ import {
 } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 import { StoreTableToolbar } from './components/StoreTableToolbar';
+import { emailSelector, setPermission } from 'src/auth/login/login.slice';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -101,7 +103,14 @@ function StoreAdminListDashboard() {
 
   const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
   const { data: csvData } = useExportFile();
-
+  // =========GET PERMISSION==================
+  const { data: admin } = useGetAdmin({});
+  const mail = useSelector(emailSelector);
+  const getPermission = admin?.data?.response?.response.find((item) =>
+   item.email === mail
+  );
+  dispatch(setPermission(getPermission?.permission))
+  
   const listStoreAdmin = data?.data?.response?.response || [];
 
   const {
@@ -149,7 +158,7 @@ function StoreAdminListDashboard() {
 
   return (
     <>
-    {isLoading && <LoadingScreen />}
+      {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
         heading="DANH SÁCH CỬA HÀNG"
         links={[
@@ -169,14 +178,14 @@ function StoreAdminListDashboard() {
               </Button>
             </Box>
             <CSVLink data={csvData ? csvData.data : ''}>
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'akar-icons:file'} />}
-              onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
-            >
-              Export
-            </Button>
-          </CSVLink>
+              <Button
+                variant="contained"
+                startIcon={<Iconify icon={'akar-icons:file'} />}
+                onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
+              >
+                Export
+              </Button>
+            </CSVLink>
           </>
         }
       />

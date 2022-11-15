@@ -36,6 +36,7 @@ import { AdminTableRow } from './components/AdminTableRow';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import TableSkeleton from './components/TableSkeleton';
 import { AlertDialogSlide } from './components/ModalConfirmDelete';
+import Can from 'src/common/lib/Can';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -117,6 +118,7 @@ function AdminListDashboard() {
           { name: 'List admins' },
         ]}
         action={
+          <Can do="update" on="all">
           <Button
             variant="contained"
             startIcon={<Iconify icon={'eva:plus-fill'} />}
@@ -125,6 +127,7 @@ function AdminListDashboard() {
           >
             Thêm mới
           </Button>
+          </Can>
         }
       />
       <Card>
