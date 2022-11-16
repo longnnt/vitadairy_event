@@ -236,7 +236,7 @@ export default function PovinceTableForm() {
           >
             <option value="" />
             {[...(provinceOptions || ([] as ISelect[]))].map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} value={option.value} style={{ color: 'black' }}>
                 {option.label}
               </option>
             ))}
