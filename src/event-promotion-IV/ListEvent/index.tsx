@@ -65,6 +65,7 @@ export default function ListEventPromotionDashboard() {
               Tạo mới
             </Button>
             <Button
+              disabled={selectedIdsValue.length === 0}
               variant="contained"
               startIcon={<Iconify icon={'akar-icons:file'} />}
               color="error"

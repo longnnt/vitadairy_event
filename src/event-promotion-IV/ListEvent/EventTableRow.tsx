@@ -44,8 +44,8 @@ export const EventTableRow = ({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="left" onClick={() => handleViewListPrize(id.toString())}>
-        <Link underline="always">{name}</Link>
+      <TableCell align="left">
+        {name}
       </TableCell>
       <TableCell align="left">{fDate(startDate)}</TableCell>
       <TableCell align="left">{fDate(endDate)}</TableCell>
@@ -56,9 +56,13 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
+              <MenuItem onClick={() => handleViewListPrize(id.toString())}>
+                <Iconify icon={'fa6-solid:gift'} />
+                View Gift
+              </MenuItem>
               <MenuItem onClick={handleClickView}>
                 <Iconify icon={'akar-icons:eye'} />
-                View
+                View Event
               </MenuItem>
               <MenuItem onClick={() => handleEditEventAction(id)}>
                 <Iconify icon={'eva:edit-fill'} />

@@ -29,6 +29,7 @@ export interface initialValueProps {
   isOpenModal: boolean;
   product: string[];
   confirmPopup: boolean;
+  filterProductCode: string;
 }
 
 export type TimeProps = Date | null;

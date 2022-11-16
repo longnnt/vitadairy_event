@@ -16,6 +16,7 @@ import {
 
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
+import Select from 'react-select';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
@@ -38,8 +39,9 @@ import {
   userTypeState,
 } from '../eventPromotionIV.slice';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
-import { IEventFormData, UserType } from '../interface';
+import { EventSearchParams, IEventFormData, IProductCode, UserType } from '../interface';
 import { schemaAddEvent } from '../schema';
+import { useProductCode } from '../hooks/useProductCode';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -65,6 +67,18 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
+
+  const searchParams:EventSearchParams ={
+  }
+
+  const { skusListData: skusCodeDataEvent, pagination } = useProductCode(searchParams);
+  const dataProductCodeSelect =skusCodeDataEvent.map((prodCode:IProductCode) => {
+    return{
+      value: prodCode.code,
+      label: prodCode.code,
+    }
+  })
+
 
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
@@ -118,10 +132,10 @@ export const AddEvent = () => {
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
-      <ProductCodeModal />
+      
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Scrollbar sx={{ marginTop: '20px' }}>
-          <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
+          <Stack sx={{ p: '20px 40px 48px', backgroundColor: 'white'}} >
             <Stack spacing="26px">
               <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
               <Stack
@@ -174,22 +188,33 @@ export const AddEvent = () => {
                   )}
                 />
               </Stack>
-
-              <RHFTextField
-                name="skus"
-                label="Mã sản phẩm"
-                onClick={() => dispatch(setIsOpenModal(true))}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{ position: 'absolute', right: 0, marginRight: '10px' }}
-                    >
-                      <KeyboardArrowDownIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+               
+              <Box sx= {{zIndex:1001}}>
+                <Typography>Mã sản phẩm</Typography>
+                <Controller
+                  name="skus"
+                  control={control}
+                  render={({ field }) => (    
+                      <Select
+                        placeholder='Vui lòng chọn mã sản phẩm'
+                        name='skus'              
+                        isMulti
+                        closeMenuOnSelect={false}
+                        options={dataProductCodeSelect}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        styles={{
+                          control: (styles => 
+                            ({
+                              ...styles,
+                              backgroundColor: 'primary',
+                              borderRadius: '6px',
+                            })),
+                        }}
+                      />      
+                  )}
+                />
+              </Box>
 
               <RHFTextField
                 fullWidth
@@ -266,7 +291,8 @@ export const AddEvent = () => {
                 type="number"
               />
             </Stack>
-          </Card>
+            
+          </Stack>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Button
