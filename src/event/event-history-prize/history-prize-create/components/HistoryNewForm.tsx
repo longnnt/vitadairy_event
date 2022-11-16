@@ -1,34 +1,25 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import {
-  Card,
-  Container, Grid, Stack, Typography
-} from '@mui/material';
+import { Card, Container, Grid, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import {
-  FormProvider
-} from 'src/common/components/hook-form';
+import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import {
-  ButtonType, defaultValues
-} from '../../constants';
+import { ButtonType, defaultValues } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
   giftSelecttor,
   popUpCodeSelector,
   popUpTypeSelector,
-  setButtonType, setProvinceNewFormSelector
+  setButtonType,
+  setProvinceNewFormSelector,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import {
-  IEventDetail,
-  IFormCreateEvent
-} from '../../interfaces';
+import { IEventDetail, IFormCreateEvent } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -54,7 +45,7 @@ export default function HistoryNewForm() {
   const popUpCode = useSelector(popUpCodeSelector);
 
   const { useDeepCompareEffect } = useDeepEffect();
-  
+
   useDeepCompareEffect(() => {
     if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
   }, [dataProvinceform]);
@@ -177,6 +168,10 @@ export default function HistoryNewForm() {
                 >
                   Lưu
                 </LoadingButton>
+                {/* <ConfirmCreateModal
+                  open={openCreateModal}
+                  handleClose={handleCloseCreateModal}
+                /> */}
               </Box>
               <Box>
                 <LoadingButton

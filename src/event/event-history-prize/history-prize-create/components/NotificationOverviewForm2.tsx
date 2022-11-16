@@ -76,13 +76,11 @@ function NotificationOverviewForm2() {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setPopUpType(event.target.value));
-    setValue('popupType', event.target.value);
   };
   const changePopUpCode = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setPopUpCode(event.target.value));
-    setValue('popupCode', event.target.value);
   };
 
   const searchParams: IGiftParams = {
@@ -173,7 +171,7 @@ function NotificationOverviewForm2() {
           <option value=""></option>
           <option value={POPUP_CODE.PUZZLE_PIECE}>PUZZLE PIECE</option>
           <option value={POPUP_CODE.OGGI}>OGGI</option>
-          <option value={POPUP_CODE.FULL_SCREEN}>FULL_SCREEN</option>
+          <option value={POPUP_CODE.FULL_SCREEN}>FULL SCREEN</option>
         </RHFSelect>
         {(popUpCode === POPUP_CODE.PUZZLE_PIECE || popUpCode === POPUP_CODE.OGGI) && (
           <>
