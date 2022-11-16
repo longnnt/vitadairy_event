@@ -10,7 +10,7 @@ export const eidtEventPrizevalidate = (provinceIds: number[]) => {
       .when('startDate', (eventStartDate, schema) => {
         return (
           eventStartDate &&
-          schema.test('test date', (val: string) => val > eventStartDate)
+          schema.test('test date', (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime())
         );
       }),
     provinceId: Yup.number()
