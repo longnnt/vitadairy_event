@@ -5,6 +5,8 @@ import { getAdmin } from '../services';
 
 export function useGetAdmin(params: IAdminParams) {
   return {
-    ...useQuery([QUERY_KEYS.ADMIN, params], () => getAdmin(params)),
+    ...useQuery([QUERY_KEYS.ADMIN, params], () => getAdmin(params), {
+      select: (data) => data?.data?.response,
+    }),
   };
 }
