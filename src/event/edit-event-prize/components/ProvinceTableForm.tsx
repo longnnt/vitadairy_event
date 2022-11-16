@@ -109,6 +109,8 @@ export default function PovinceTableForm() {
     control,
     watch,
     setValue,
+    trigger,
+    clearErrors,
     formState: { errors },
   } = methods;
 
@@ -148,13 +150,15 @@ export default function PovinceTableForm() {
       errors?.eventDetailProvinces &&
       Object.keys(errors?.eventDetailProvinces).length
     ) {
-      let a = {};
+      let rowEdit = {};
       Object.keys(errors?.eventDetailProvinces).forEach((key) => {
-        a = { ...a, [key]: { mode: GridRowModes.Edit } };
+        rowEdit = { ...rowEdit, [key]: { mode: GridRowModes.Edit } };
       });
-      setRowModesModel({ ...rowModesModel, ...a });
+      setRowModesModel((preState) => {
+        return { ...preState, ...rowEdit };
+      });
     }
-  }, [errors]);
+  }, [errors, rowModesModel]);
 
   const importFile = async (event: any) => {
     try {
@@ -213,6 +217,7 @@ export default function PovinceTableForm() {
         });
         return option ? option.label : '';
       },
+
       renderEditCell(params) {
         return (
           <RHFSelect
@@ -221,6 +226,13 @@ export default function PovinceTableForm() {
             InputLabelProps={{ shrink: true }}
             defaultValue={params.value}
             helperText={''}
+            onChange={(e) => {
+              clearErrors(`eventDetailProvinces.${params.row.id}.provinceId`);
+              setValue(
+                `eventDetailProvinces.${params.row.id}.provinceId`,
+                parseInt(e.target.value)
+              );
+            }}
           >
             <option value="" />
             {[...(provinceOptions || ([] as ISelect[]))].map((option) => (
@@ -238,14 +250,15 @@ export default function PovinceTableForm() {
     },
     {
       field: 'quantity',
-      headerName: 'Số lượng quà',
+      headerName: 'Tổng Số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
       width: 150,
     },
     {
       field: 'extraquantity',
-      headerName: 'Số lượng quà thêm',
+      headerName: 'Số giải phân bổ',
+      type: 'number',
       editable: true,
       width: 150,
       renderEditCell(params) {
@@ -284,6 +297,10 @@ export default function PovinceTableForm() {
                 value={
                   watch(`eventDetailProvinces.${param.row.id}.startDate`) || param.value
                 }
+                onChange={(value) => {
+                  clearErrors(`eventDetailProvinces.${param.row.id}.startDate`);
+                  setValue(`eventDetailProvinces.${param.row.id}.startDate`, value);
+                }}
                 inputFormat={'dd/MM/yyyy hh:mm a'}
                 renderInput={(params) => (
                   <TextField
@@ -313,6 +330,7 @@ export default function PovinceTableForm() {
       valueFormatter: ({ value }) => {
         return new Date(value).toLocaleString();
       },
+
       renderEditCell(param) {
         return (
           <Controller
@@ -325,6 +343,10 @@ export default function PovinceTableForm() {
                 value={
                   watch(`eventDetailProvinces.${param.row.id}.endDate`) || param.value
                 }
+                onChange={(value: string) => {
+                  clearErrors(`eventDetailProvinces.${param.row.id}.endDate`);
+                  setValue(`eventDetailProvinces.${param.row.id}.endDate`, value);
+                }}
                 inputFormat={'dd/MM/yyyy hh:mm a'}
                 renderInput={(params: any) => (
                   <TextField
@@ -353,25 +375,25 @@ export default function PovinceTableForm() {
       width: 80,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              key={id}
-              icon={<SaveIcon />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              key={id}
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={handleDeleteClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
+        // if (isInEditMode) {
+        //   return [
+        //     // <GridActionsCellItem
+        //     //   key={id}
+        //     //   icon={<SaveIcon />}
+        //     //   label="Save"
+        //     //   onClick={handleSaveClick(id)}
+        //     // />,
+        //     <GridActionsCellItem
+        //       key={id}
+        //       icon={<DeleteIcon />}
+        //       label="Delete"
+        //       onClick={handleDeleteClick(id)}
+        //       color="inherit"
+        //     />,
+        //   ];
+        // }
 
         return [
           <GridActionsCellItem
@@ -395,6 +417,9 @@ export default function PovinceTableForm() {
         rowModesModel={rowModesModel}
         onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
         processRowUpdate={processRowUpdate}
+        onRowEditStop={() => {
+          trigger('eventDetailProvinces');
+        }}
         components={{
           Toolbar: EditToolbar,
         }}

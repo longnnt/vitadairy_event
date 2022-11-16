@@ -16,11 +16,23 @@ import {
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { useDeleteEvents } from '../hooks/useDeleteEvent';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { EventSearchParams } from '../interface';
+import { useGetListEvent } from '../hooks/useGetListEvent';
+import { DEFAULT_LOADING_SIZE } from '../constant';
+import LoadingSkeletonListEventScreen from './LoadingListEventPage';
 
 export default function ListEventPromotionDashboard() {
   const navigate = useNavigate();
 
   const selectedIdsValue = useSelector(selectedIdsState);
+
+  const searchParams: EventSearchParams = {
+    size: DEFAULT_LOADING_SIZE,
+  };
+
+  const { isLoading } = useGetListEvent({
+    params: searchParams,
+  });
 
   const handleCreateEvent = () => {
     navigate(PATH_DASHBOARD.eventPromotionIV.new);
@@ -33,6 +45,9 @@ export default function ListEventPromotionDashboard() {
 
   return (
     <>
+    {isLoading ? <LoadingSkeletonListEventScreen/> :
+    (
+      <>  
       <HeaderBreadcrumbs
         heading="DANH SÁCH SỰ KIỆN"
         links={[
@@ -65,5 +80,9 @@ export default function ListEventPromotionDashboard() {
         <EventTable />
       </Card>
     </>
+    )
+    }
+    </>
+    
   );
 }

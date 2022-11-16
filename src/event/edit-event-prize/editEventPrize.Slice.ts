@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import {
-  DEFAULT_FORM_VALUE,
-  DEFAULT_FORM_VALUE_SUBMIT,
-  GIFT_POINT,
-} from './common/constants';
-import { IEventDetailProvinces, IFormEdit, IFormSubmitEdit } from './common/interface';
+import { DEFAULT_FORM_VALUE_SUBMIT, GIFT_POINT } from './common/constants';
+import { IEventDetailProvinces, IFormSubmitEdit } from './common/interface';
 
 interface stateType {
   dataGiftById: IFormSubmitEdit;
@@ -13,6 +9,10 @@ interface stateType {
   provinceForm: IEventDetailProvinces;
   choosenGiftPoint: string;
   popUpType: string;
+  openEditModal: boolean;
+  confirmEdit: boolean;
+  editData: IFormSubmitEdit;
+  rows: IEventDetailProvinces;
 }
 
 const initialState: stateType = {
@@ -21,6 +21,10 @@ const initialState: stateType = {
   provinceForm: {},
   choosenGiftPoint: GIFT_POINT.GIFT,
   popUpType: '',
+  openEditModal: false,
+  confirmEdit: false,
+  editData: {} as IFormSubmitEdit,
+  rows: {},
 };
 
 export const editEventPrizeSlice = createSlice({
@@ -42,6 +46,18 @@ export const editEventPrizeSlice = createSlice({
     setPopUpType: (state, action: PayloadAction<string>) => {
       state.popUpType = action.payload;
     },
+    setOpeneditModal: (state, action: PayloadAction<boolean>) => {
+      state.openEditModal = action.payload;
+    },
+    setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+      state.confirmEdit = action.payload;
+    },
+    setEditData: (state, action: PayloadAction<IFormSubmitEdit>) => {
+      state.editData = action.payload;
+    },
+    setRows: (state, action: PayloadAction<IEventDetailProvinces>) => {
+      state.rows = action.payload;
+    },
   },
 });
 
@@ -51,6 +67,10 @@ export const {
   setProvinceForm,
   setChoosenGiftPoint,
   setPopUpType,
+  setOpeneditModal,
+  setConfirmEdit,
+  setEditData,
+  setRows,
 } = editEventPrizeSlice.actions;
 
 export const giftByIdSelector = (state: RootState) => state.edit_event_prize.dataGiftById;
@@ -61,5 +81,12 @@ export const provinceFormSelector = (state: RootState) =>
 export const choosenGiftPointSelector = (state: RootState) =>
   state.edit_event_prize.choosenGiftPoint;
 export const popUpTypeSelector = (state: RootState) => state.edit_event_prize.popUpType;
+export const openEditModalSelector = (state: RootState) =>
+  state.edit_event_prize.openEditModal;
+export const confirmEditSelector = (state: RootState) =>
+  state.edit_event_prize.confirmEdit;
+export const editDataSelector = (state: RootState) => state.edit_event_prize.editData;
+
+export const rowsSelector = (state: RootState) => state.edit_event_prize.rows;
 
 export default editEventPrizeSlice.reducer;

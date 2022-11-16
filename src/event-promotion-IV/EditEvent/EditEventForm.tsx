@@ -49,10 +49,6 @@ export const EditEventForm = () => {
 
   const { data } = useGetEventById({
     id: parseInt(id as string),
-    callback: {
-      onSuccess: () => showSuccessSnackbar('Tải sự kiện thành công'),
-      onError: () => showErrorSnackbar('Tải sự kiện thất bại'),
-    },
   });
 
   const dataEventDetail = data?.data?.response;
@@ -70,9 +66,6 @@ export const EditEventForm = () => {
   const watchUserType = watch('typeUser');
 
   const { mutate, isSuccess } = useEditEvent({
-    onSuccess: () => {
-      showSuccessSnackbar('Tạo mới thành công');
-    },
     onError: () => {
       showErrorSnackbar('Tạo mới thất bại');
     },

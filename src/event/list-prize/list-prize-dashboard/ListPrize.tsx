@@ -17,6 +17,7 @@ import {
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
@@ -118,7 +119,7 @@ function ListPrizeDashboard() {
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;
-
+  const tableHeight =400*rowsPerPage/5
   return (
     <>
       <HeaderBreadcrumbs
@@ -160,8 +161,9 @@ function ListPrizeDashboard() {
       <Card sx={{overflow: 'hidden'}}>
         <Divider />
         <ListPrizeFilterBar filterName={filterName} onFilterName={handleFilterName} />
+
         <Scrollbar>
-          <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: 400 }}>
+          <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
             {!!selectedIds.length && (
               <TableSelectedActions
                 dense={dense}
@@ -210,7 +212,7 @@ function ListPrizeDashboard() {
                 {Array.from(Array(rowsPerPage)).map((index) => {
                   return <ListPrizeTableSkeleton key={index} isNotFound={isLoading} />;
                 })}
-                <ListPrizeTableNoData isNotFound={isNotFound && !isLoading} />
+                <ListPrizeTableNoData isNotFound={isNotFound && !isLoading}/>
               </TableBody>
             </Table>
           </TableContainer>
