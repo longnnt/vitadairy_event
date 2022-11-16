@@ -29,7 +29,7 @@ export default function RHFTextFieldLogin({ name, ...other }: Props) {
             error={!!error}
             {...other}
           />
-          <Typography component='span' sx={{color: error?.message ? 'red' : 'transparent' }}>{error?.message ? error?.message :'hello' }</Typography>
+          <Typography component='span' sx={{color: error?.message ? 'red' : 'transparent' }}>{error?.message ? error?.message :'***' }</Typography>
         </Stack>
       )}
     />
