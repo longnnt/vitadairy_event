@@ -1,15 +1,21 @@
 import * as Yup from 'yup';
+import { IEventDetailProvinces } from './common/interface';
 
-export const eidtEventPrizevalidate = (provinceId: number[]) => {
+export const eidtEventPrizevalidate = (provinceIds: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
-    endDate: Yup.string().typeError('Must be a string'),
+    endDate: Yup.string()
+      .required('This field is required')
+      .typeError('Must be a string'),
     provinceId: Yup.number()
+      .required()
       .typeError('Must be a number')
       .test('test province id', 'this field is required', (val) =>
-        provinceId.includes(val as number)
+        provinceIds.includes(val as number)
       ),
     quantity: Yup.mixed(),
-    startDate: Yup.string().typeError('Must be a string'),
+    startDate: Yup.string()
+      .required('This field is required')
+      .typeError('Must be a string'),
   });
 
   const eidtEventPrizeSchema = Yup.object().shape({
@@ -53,9 +59,16 @@ export const eidtEventPrizevalidate = (provinceId: number[]) => {
       .typeError('Must be a number'),
     winnerAmount: Yup.number().required('This field is required'),
 
-    eventDetailProvinces: Yup.array()
-      .of(eventDetailProvincesSchema)
-      .required('This field is required'),
+    eventDetailProvinces: Yup.lazy((value: IEventDetailProvinces) => {
+      const validationObject: any = {};
+      Object.keys(value).map((item) => {
+        validationObject[item] = eventDetailProvincesSchema;
+      });
+
+      return Yup.object()
+        .shape({ ...validationObject })
+        .required();
+    }),
   });
   return eidtEventPrizeSchema;
 };

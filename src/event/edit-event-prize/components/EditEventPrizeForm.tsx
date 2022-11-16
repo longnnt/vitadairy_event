@@ -1,16 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Button, Card, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   FormProvider,
-  RHFEditor,
   RHFRadioGroup,
   RHFSelect,
   RHFTextField,
 } from 'src/common/components/hook-form';
+import LoadingScreen from 'src/common/components/LoadingScreen';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import useShowSnackbar from 'src/common/hooks/useMessage';
+import { dispatch } from 'src/common/redux/store';
 import {
   DEFAULT_FORM_VALUE,
   GIFT_POINT,
@@ -27,33 +32,25 @@ import {
   ISelectPopup,
   ITransactionType,
 } from '../common/interface';
+import { fomatFormData, formatDataProvinces, tranferData } from '../common/ultils';
 import { eidtEventPrizevalidate } from '../editEvent.Schema';
-import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
-import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
-import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { useEditEventPrize } from '../hooks/useEditEventPrize';
-import useShowSnackbar from 'src/common/hooks/useMessage';
-import { GiftModal } from './GiftModal';
-import { fomatFormData } from '../common/ultils';
-import { useGetAllGift } from '../hooks/useGetAllGift';
-import { useGetGiftById } from '../hooks/useGetGiftById';
-import _ from 'lodash';
 import {
   choosenGiftPointSelector,
   giftByIdSelector,
   popUpTypeSelector,
-  provinceFormSelector,
   setChoosenGiftPoint,
   setGiftById,
   setPopUpType,
   setProvinceInfor,
 } from '../editEventPrize.Slice';
-import { useSelector } from 'react-redux';
-import LoadingScreen from 'src/common/components/LoadingScreen';
-import { dispatch } from 'src/common/redux/store';
+import { useEditEventPrize } from '../hooks/useEditEventPrize';
+import { useGetAllGift } from '../hooks/useGetAllGift';
+import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
+import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
+import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
+import { useGetGiftById } from '../hooks/useGetGiftById';
+import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
-import { LoadingButton } from '@mui/lab';
 
 // -----------------------------------------------------------------------------
 
@@ -76,27 +73,26 @@ export const EditEventPrizeForm = () => {
     : [];
 
   const dataEventPrizeById = useSelector(giftByIdSelector);
-  const dataProvinceform = useSelector(provinceFormSelector);
   const choosenGiftPoint = useSelector(choosenGiftPointSelector);
   const popUpTypedata = useSelector(popUpTypeSelector);
 
   useDeepCompareEffect(() => {
     if (eventPrizeById) {
+      const data = formatDataProvinces(eventPrizeById.eventDetailProvinces);
       dispatch(setGiftById(eventPrizeById));
-      dispatch(setProvinceInfor(eventPrizeById.eventDetailProvinces));
+      dispatch(setProvinceInfor(data));
       dispatch(setPopUpType(eventPrizeById.popupType));
     }
   }, [eventPrizeById]);
-  useDeepCompareEffect(() => {
-    if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
-  }, [dataProvinceform]);
+
   useDeepCompareEffect(() => {
     if (popUpTypedata) setValue('popupType', popUpTypedata);
   }, [popUpTypedata]);
 
   useDeepCompareEffect(() => {
     if (dataEventPrizeById) {
-      reset(dataEventPrizeById);
+      const data = tranferData(dataEventPrizeById);
+      reset(data);
     }
   }, [dataEventPrizeById]);
 
@@ -114,7 +110,7 @@ export const EditEventPrizeForm = () => {
     setValue,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
   const { data: giftDetail } = useGetGiftById(
@@ -124,12 +120,11 @@ export const EditEventPrizeForm = () => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
   }, [giftDetail]);
   // ------------mutate---------------
-  const ref = useRef<HTMLInputElement>(null);
   const { mutate } = useEditEventPrize();
 
-  const onSubmit = async (data: IFormEdit) => {
+  const onSubmit = (data: IFormEdit) => {
     const tempEditData = fomatFormData(data);
-    await mutate(tempEditData, {
+    mutate(tempEditData, {
       onSuccess: () => {
         showSuccessSnackbar('edit successfully');
       },
@@ -340,7 +335,7 @@ export const EditEventPrizeForm = () => {
             <Card sx={{ p: 3 }}>
               <Stack direction={'column'} spacing="15px">
                 <Box>
-                  <PovinceTableForm name="eventDetailProvinces" setValue={setValue} />
+                  <PovinceTableForm />
                 </Box>
               </Stack>
             </Card>

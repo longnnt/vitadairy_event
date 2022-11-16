@@ -1,44 +1,80 @@
-import { IEventProvince, IFormEdit } from './interface';
+import {
+  IEventDetailProvinces,
+  IEventProvince,
+  IFormEdit,
+  IFormSubmitEdit,
+} from './interface';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import _ from 'lodash';
 
 export const fomatFormData = (data: IFormEdit) => {
-  const tempEditData = { ...data };
+  // const tempEditData = { ...data };
+  const { eventDetailProvinces, ...tempEditData } = data;
   delete tempEditData.typeUser;
 
-  const tempProvince = data?.eventDetailProvinces?.map((item: IEventProvince) => {
-    if (item.endDate || item.startDate) {
-      const startDate = item.startDate
-        ? new Date(item.startDate as string).toISOString()
-        : new Date().toISOString;
-      const endDate = item.endDate
-        ? new Date(item.endDate as string).toISOString()
-        : new Date().toISOString;
-      item = { ...item, startDate: startDate as string, endDate: endDate as string };
-    }
+  const tempProvince = Object.values(eventDetailProvinces)?.map(
+    (item: IEventProvince) => {
+      if (item.endDate || item.startDate) {
+        const startDate = item.startDate
+          ? new Date(item.startDate as string).toISOString()
+          : new Date().toISOString;
+        const endDate = item.endDate
+          ? new Date(item.endDate as string).toISOString()
+          : new Date().toISOString;
+        item = { ...item, startDate: startDate as string, endDate: endDate as string };
+      }
 
-    if (typeof item.provinceId === 'string') {
-      const provId = parseInt(item.provinceId);
-      item = { ...item, provinceId: provId };
+      if (typeof item.provinceId === 'string') {
+        const provId = parseInt(item.provinceId);
+        item = { ...item, provinceId: provId };
+      }
+      // if (!(typeof item.extraquantity === 'string')) {
+      //   delete item.extraquantity;
+      //   item = { ...item, quantity: 0 };
+      // } else {
+      //   const totalQuantities = +item.extraquantity;
+      //   item = { ...item, quantity: totalQuantities };
+      // }
+      if (!item.extraquantity) {
+        delete item.extraquantity;
+        item = { ...item, quantity: 0 };
+      } else {
+        const totalQuantities = +item.extraquantity;
+        item = { ...item, quantity: totalQuantities };
+      }
+      if (typeof item.id === 'string') {
+        const { id, ...newItem } = item;
+        return newItem;
+      }
+      return item;
     }
-    // if (!(typeof item.extraquantity === 'string')) {
-    //   delete item.extraquantity;
-    //   item = { ...item, quantity: 0 };
-    // } else {
-    //   const totalQuantities = +item.extraquantity;
-    //   item = { ...item, quantity: totalQuantities };
-    // }
-    if (!item.extraquantity) {
-      delete item.extraquantity;
-      item = { ...item, quantity: 0 };
-    } else {
-      const totalQuantities = +item.extraquantity;
-      item = { ...item, quantity: totalQuantities };
-    }
-    return item;
+  );
+  // tempEditData.eventDetailProvinces = tempProvince;
+
+  return {
+    ...tempEditData,
+    eventDetailProvinces: tempProvince,
+  };
+};
+
+export const formatDataProvinces = (data: IEventProvince[]) => {
+  const newData: IEventDetailProvinces = {};
+  data.forEach((item: IEventProvince) => {
+    newData[item.id as number] = item;
   });
-  tempEditData.eventDetailProvinces = tempProvince;
-  return tempEditData;
+  return newData;
+};
+
+export const tranferData = (data: IFormSubmitEdit) => {
+  const newProvince: IEventDetailProvinces = {};
+  data.eventDetailProvinces.forEach((item: IEventProvince) => {
+    newProvince[item.id as number] = item;
+  });
+  return {
+    ...data,
+    eventDetailProvinces: newProvince,
+  };
 };
 
 export const StyledBox = styled(Box)(({ theme }) => ({
