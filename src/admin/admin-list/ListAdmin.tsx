@@ -78,7 +78,7 @@ function AdminListDashboard() {
   if (filterName) searchParams.searchText = filterName;
 
   const { data,isLoading } = useGetAdmin(searchParams);
-  const listAdmin = data?.data?.response?.response || [];
+  const listAdmin = data?.response || [];
 
   const {
     isCheckedAll,
@@ -105,7 +105,7 @@ function AdminListDashboard() {
   const handleEditRow = (id: number) => {
     navigate(PATH_DASHBOARD.admin.edit(id));
   };
-  const { totalRecords } = data?.data?.response?.pagination || {
+  const { totalRecords } = data?.pagination || {
     totalRecords: 0,
   };
   const isNotFound = !listAdmin.length && !isLoading;

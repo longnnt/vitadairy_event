@@ -1,7 +1,7 @@
 // form
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
-import { TextField, TextFieldProps } from '@mui/material';
+import { TextField, TextFieldProps,Stack, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -19,14 +19,18 @@ export default function RHFTextField({ name, ...other }: Props) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <TextField
-          {...field}
-          fullWidth
-          value={typeof field.value === 'number' && field.value === 0 ? '' : field.value}
-          error={!!error}
-          helperText={error?.message}
-          {...other}
-        />
+        <Stack>
+          <TextField
+            {...field}
+            fullWidth
+            value={
+              typeof field.value === 'number' && field.value === 0 ? '' : field.value
+            }
+            error={!!error}
+            {...other}
+          />
+          <Typography component='span' sx={{color: error?.message ? 'red' : 'transparent' }}>{error?.message ? error?.message :'hello' }</Typography>
+        </Stack>
       )}
     />
   );

@@ -106,12 +106,12 @@ function StoreAdminListDashboard() {
   // =========GET PERMISSION==================
   const { data: admin } = useGetAdmin({});
   const mail = useSelector(emailSelector);
-  const getPermission = admin?.data?.response?.response.find((item) =>
+  const getPermission = admin?.response.find((item) =>
    item.email === mail
   );
   dispatch(setPermission(getPermission?.permission))
   
-  const listStoreAdmin = data?.data?.response?.response || [];
+  const listStoreAdmin = data?.response || [];
 
   const {
     isCheckedAll,
@@ -145,7 +145,7 @@ function StoreAdminListDashboard() {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
 
-  const { totalRecords } = data?.data?.response?.pagination || {
+  const { totalRecords } = data?.pagination || {
     totalRecords: 0,
   };
 
