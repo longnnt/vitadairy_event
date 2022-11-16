@@ -4,8 +4,9 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import SvgIconStyle from '../../../components/SvgIconStyle';
-import { LIST_STORE, STORE_ADMIN } from 'src/store-admin/constants';
+import { LIST_STORE } from 'src/store-admin/constants';
 import { LIST_USER } from 'src/shop-invitation/common/constants';
+import { BREADCUMBS } from 'src/common/constants/common.constants';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +54,7 @@ const navConfig = [
     items: [
       // STORE
       {
-        title: STORE_ADMIN,
+        title: BREADCUMBS.STORE_ADMIN,
         path: PATH_DASHBOARD.storeAdmin.root,
         icon: ICONS.booking,
         children: [
