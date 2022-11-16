@@ -1,6 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
@@ -113,11 +114,18 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <DatePicker
+                    <MobileDateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
                       inputFormat={FORMAT_DATE_NEWS}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -130,11 +138,18 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <DatePicker
+                  <MobileDateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
                     inputFormat={FORMAT_DATE_NEWS}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}
