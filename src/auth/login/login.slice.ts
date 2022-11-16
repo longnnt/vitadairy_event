@@ -4,10 +4,12 @@ import { RootState } from 'src/common/redux/store';
 type StateProps = {
   email: string;
   showPassword: boolean;
+  permission:number
 };
 const initialState: StateProps = {
   showPassword: false,
   email: '',
+  permission:0
 };
 export const loginSlice = createSlice({
   name: 'login',
@@ -19,12 +21,17 @@ export const loginSlice = createSlice({
     setEmail: (state, action) => {
       state.email = action.payload;
     },
+    setPermission:(state,action)=>{
+      state.permission=action.payload
+    }
   },
 });
 
-export const { setShowPassword, setEmail } = loginSlice.actions;
+export const { setShowPassword, setEmail,setPermission } = loginSlice.actions;
 
 export const showPasswordSelector = (state: RootState) => state.login.showPassword;
 export const emailSelector = (state: RootState) => state.login.email;
+export const permissionSelector = (state: RootState) => state.login.permission;
+
 
 export default loginSlice.reducer;

@@ -36,6 +36,7 @@ import { AdminTableRow } from './components/AdminTableRow';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import TableSkeleton from './components/TableSkeleton';
 import { AlertDialogSlide } from './components/ModalConfirmDelete';
+import Can from 'src/common/lib/Can';
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ function AdminListDashboard() {
   if (filterName) searchParams.searchText = filterName;
 
   const { data,isLoading } = useGetAdmin(searchParams);
-  const listAdmin = data?.data?.response?.response || [];
+  const listAdmin = data?.response || [];
 
   const {
     isCheckedAll,
@@ -104,7 +105,7 @@ function AdminListDashboard() {
   const handleEditRow = (id: number) => {
     navigate(PATH_DASHBOARD.admin.edit(id));
   };
-  const { totalRecords } = data?.data?.response?.pagination || {
+  const { totalRecords } = data?.pagination || {
     totalRecords: 0,
   };
   const isNotFound = !listAdmin.length && !isLoading;
@@ -117,6 +118,7 @@ function AdminListDashboard() {
           { name: 'List admins' },
         ]}
         action={
+          <Can do="update" on="all">
           <Button
             variant="contained"
             startIcon={<Iconify icon={'eva:plus-fill'} />}
@@ -125,6 +127,7 @@ function AdminListDashboard() {
           >
             Thêm mới
           </Button>
+          </Can>
         }
       />
       <Card>
