@@ -115,6 +115,23 @@ export const POPUP_TYPE = {
   NULL: 'NULL',
 };
 
+export const POPUP_CODE = {
+  PUZZLE_PIECE: 'PUZZLE_PIECE',
+  OGGI: 'OGGI',
+  FULL_SCREEN: 'FULL_SCREEN',
+};
+
+export const popupCodeOption = [
+  {
+    value: POPUP_CODE.PUZZLE_PIECE,
+    label: POPUP_CODE.PUZZLE_PIECE,
+  },
+  {
+    value: POPUP_CODE.OGGI,
+    label: POPUP_CODE.OGGI,
+  },
+];
+
 export const popupTypeOption = [
   {
     value: POPUP_TYPE.NULL,
