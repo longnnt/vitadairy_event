@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import { ButtonType, DEDAULT_PROVINCE } from './constants';
-import { IEventDetail, IGift, IPayloadDate, IPayloadSearch } from './interfaces';
+import {
+  IEventDetail,
+  IFormCreateEvent,
+  IGift,
+  IPayloadDate,
+  IPayloadSearch,
+} from './interfaces';
 
 type StateProps = {
   searchText: string;

@@ -87,7 +87,7 @@ export interface IFormCreateEvent {
   notificationDescription: string;
   notificationTitle: string;
   ordinal: number;
-  popupCode: string;
+  popupCode: string | null;
   popupImageLink: string;
   popupLink: string;
   popupType: string;
@@ -122,6 +122,12 @@ export interface IEventDetail {
   name?: string;
   extraquantity?: number;
   isNew?: boolean;
+}
+
+export interface INotificationForm {
+  notificationContent: string;
+  notificationDescription: string;
+  notificationTitle: string;
 }
 
 export interface IResTransaction {
