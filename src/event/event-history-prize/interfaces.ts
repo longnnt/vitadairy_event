@@ -124,12 +124,6 @@ export interface IEventDetail {
   isNew?: boolean;
 }
 
-export interface INotificationForm {
-  notificationContent: string;
-  notificationDescription: string;
-  notificationTitle: string;
-}
-
 export interface IResTransaction {
   data: {
     meta: {
@@ -231,4 +225,17 @@ export interface EditToolbarProps {
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void;
+}
+
+export interface ITransactionTypeCode {
+  code: string;
+  id: number;
+}
+
+export interface PaginationProps {
+  totalPages?: number;
+  totalRecords?: number;
+  currentPage?: number;
+  recordsPerPage?: number;
+  last?: boolean;
 }

@@ -176,5 +176,13 @@ export const STYLE_GIFT = {
   p: 4,
 };
 
+export const TABLE_HEAD_TRANSACTION_TYPE = [
+  {
+    id: 'transactionType',
+    label: 'Transaction Type',
+    align: 'left',
+  },
+];
+
 export const CSV = 'csv';
 export const DEFAULT_LOADING_SIZE = 5;

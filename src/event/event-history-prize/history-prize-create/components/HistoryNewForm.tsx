@@ -19,7 +19,7 @@ import {
   setProvinceNewFormSelector,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IEventDetail, IFormCreateEvent } from '../../interfaces';
+import { IEventDetail, IFormCreateEvent, IGiftParams } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -168,10 +168,6 @@ export default function HistoryNewForm() {
                 >
                   Lưu
                 </LoadingButton>
-                {/* <ConfirmCreateModal
-                  open={openCreateModal}
-                  handleClose={handleCloseCreateModal}
-                /> */}
               </Box>
               <Box>
                 <LoadingButton

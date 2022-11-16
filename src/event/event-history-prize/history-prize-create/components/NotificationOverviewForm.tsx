@@ -1,7 +1,8 @@
 import { Card, Grid, Typography } from '@mui/material';
-import { RHFSelect, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import { styled } from '@mui/material/styles';
+import { RHFSelect, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
+import { IGiftParams } from '../../interfaces';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -10,13 +11,17 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 function NotificationOverviewForm() {
-  const { data: addTransaction } = useGetAllTranSacTion();
+  const searchParams: IGiftParams = {
+    page: 0,
+    size: 1000,
+  }
+  const { data: addTransaction } = useGetAllTranSacTion(searchParams);
   const dataTransaction = addTransaction?.data?.response || [];
   const addNewTransaction = dataTransaction.map((item) => ({
     key: item.id,
     name: item.description,
   }));
-
+  
   return (
     <Grid item xs={6}>
       <LabelStyle>Thông báo tổng quan</LabelStyle>

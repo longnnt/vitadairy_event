@@ -44,8 +44,10 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
   });
 };
 
-export const getTransactionTypeId = async () => {
-  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`);
+export const getTransactionTypeId = async (params: IGiftParams) => {
+  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`, {
+    params,
+  });
 };
 
 export const getProvince = async () => {
