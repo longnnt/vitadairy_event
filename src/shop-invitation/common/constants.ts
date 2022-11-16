@@ -19,3 +19,5 @@ export const HEADERS_CSV = [
   { label: 'QrCode', key: 'QrCode' },
   { label: 'Success', key: 'Success' },
 ];
+
+export const LIST_USER = 'Danh sách khách hàng';

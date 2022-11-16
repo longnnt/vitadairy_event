@@ -12,3 +12,7 @@ export const SUCCESS_UPLOAD_CODE = 1000;
 export const FORMATE_CREATE_DATE = 'MMMM D, YYYY h:mm A';
 
 export const FORMAT_DATE_NEWS = 'dd-MM-yyyy hh:mm a';
+
+export const STORE_ADMIN = 'Cửa hàng định danh';
+
+export const LIST_STORE = 'Danh sách cửa hàng';
