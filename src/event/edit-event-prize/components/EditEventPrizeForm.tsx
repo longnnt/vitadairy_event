@@ -4,7 +4,6 @@ import { Box, Button, Card, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   FormProvider,
@@ -16,7 +15,7 @@ import {
 import LoadingScreen from 'src/common/components/LoadingScreen';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { dispatch } from 'src/common/redux/store';
+import { dispatch, useSelector } from 'src/common/redux/store';
 import {
   DEFAULT_FORM_VALUE,
   GIFT_POINT,
@@ -132,7 +131,6 @@ export const EditEventPrizeForm = () => {
   useDeepCompareEffect(() => {
     if (giftDetail) setChoosenGift(giftDetail?.data?.response);
   }, [giftDetail]);
-  // ------------mutate---------------
   const { mutate } = useEditEventPrize();
 
   const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
@@ -157,8 +155,6 @@ export const EditEventPrizeForm = () => {
       });
     }
   }, [confirmEdit, editData]);
-
-  // ----------------set modal parameter---------------
 
   const [open, setOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
