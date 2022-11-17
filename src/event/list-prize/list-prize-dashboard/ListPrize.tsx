@@ -27,6 +27,7 @@ import {
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
+import Can from 'src/common/lib/Can';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { replacePathParams } from 'src/common/utils/replaceParams';
@@ -134,6 +135,7 @@ function ListPrizeDashboard() {
         ]}
         action={
           <Stack direction="row" spacing={'10px'}>
+            <Can do="update" on="all">
             <Button
               variant="contained"
               to={PATH_DASHBOARD.eventAdmin.createPrize(id as string)}
@@ -149,6 +151,7 @@ function ListPrizeDashboard() {
             >
               Xóa
             </Button>
+            </Can>
             <AlertDialog 
               open={alertStatus} 
               handleClose={handleCloseAlert}
