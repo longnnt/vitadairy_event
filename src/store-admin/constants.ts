@@ -3,8 +3,8 @@ export const TABLE_HEAD = [
   { id: 'phoneNumber', label: 'Số điện thoại', align: 'left', flex: 1 },
   { id: 'createdDate', label: 'Ngày tạo', align: 'left', flex: 1 },
   { id: 'address', label: 'Địa chỉ', align: 'left', flex: 1 },
-  { id: 'qrLink', label: 'Link QR', align: 'left', flex: 1 },
-  { id: 'isActive', label: 'Active', align: 'left', flex: 1 },
+  { id: 'qrLink', label: 'Link QR', align: 'right', flex: 1 },
+  { id: 'isActive', label: 'Active', align: 'right', flex: 1 },
 ];
 
 export const SUCCESS_UPLOAD_CODE = 1000;

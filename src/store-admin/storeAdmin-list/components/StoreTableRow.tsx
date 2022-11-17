@@ -56,13 +56,13 @@ function StoreTableRow({
 
       <TableCell align="left">{address}</TableCell>
 
-      <TableCell align="left">
+      <TableCell align="right">
         <a target="_blank" rel="noopener noreferrer" href={qrLink}>
           Tải QR
         </a>
       </TableCell>
 
-      <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
+      <TableCell align="right" title={isActive === true ? 'actived' : 'unAtivced'}>
         <Switch
           checked={isActive ? true : false}
           onChange={(e) => {
