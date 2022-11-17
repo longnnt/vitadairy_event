@@ -45,13 +45,13 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
   });
 };
 
-export const getTransactionTypeId = async (params: ITransactionParams) => {
+export const getTransactionTypeId = (params: ITransactionParams) => {
   return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`, {
     params,
   });
 };
 
-export const getProvince = async () => {
+export const getProvince = () => {
   return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_VN}`);
 };
 
@@ -59,7 +59,7 @@ export const addEvent = (data: IFormCreateEvent) => {
   return axiosInstance.post(`${API_CREATE_EVENT}`, data);
 };
 
-export const getGift = async (params: IGiftParams) => {
+export const getGift = (params: IGiftParams) => {
   return axiosInstance.get<unknown, IResGift>(`${API_GIFT}`, { params });
 };
 
