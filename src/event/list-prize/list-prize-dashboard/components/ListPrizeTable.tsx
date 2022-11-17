@@ -30,10 +30,10 @@ function ListPrizeTableRow({
   const itemRow= useSelector(itemRowsSelector)
   const alert = useSelector(alertStatusSelector)
   const handleOpenAlert = () =>{
-    dispatch(setAlert({itemId: row.id, alertStatus: true}))
+    dispatch(setAlert({itemId: [row.id], alertStatus: true}))
   }
   const handleCloseAlert= () =>{
-    dispatch(setAlert({itemId: '', alertStatus:false}))
+    dispatch(setAlert({itemId: [], alertStatus:false}))
   }
 
 
@@ -85,7 +85,7 @@ function ListPrizeTableRow({
             <AlertDialog 
               open={alert} 
               handleClose={handleCloseAlert} 
-              selectedId = {[itemRow.itemRowId]}
+              selectedId = {itemRow.itemRowId}
             />  
   
       </TableCell>
