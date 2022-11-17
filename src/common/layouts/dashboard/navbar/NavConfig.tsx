@@ -62,10 +62,6 @@ const navConfig = [
             title: LIST_STORE,
             path: PATH_DASHBOARD.storeAdmin.list,
           },
-          {
-            title: LIST_USER,
-            path: PATH_DASHBOARD.storeAdmin.shop_invitation,
-          },
         ],
       },
 

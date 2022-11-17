@@ -17,16 +17,6 @@ import { IParamsQuery } from '../common/interfaces';
 
 // ----------------------------------------------------------------------
 
-type Props = {
-  roleOptions: string[];
-  searchText: string;
-  statusSuccess: string;
-  firstScanStart: string;
-  firstScanEnd: string;
-  onSearchText: (value: string) => void;
-  onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
 export const InvitationTableToolbar = (handleSearch: any) => {
   const methods = useForm({
     defaultValues: initialState,
