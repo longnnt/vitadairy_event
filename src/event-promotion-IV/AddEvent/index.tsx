@@ -6,6 +6,7 @@ import {
   Card,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   InputAdornment,
   Radio,
   RadioGroup,
@@ -14,14 +15,16 @@ import {
   Typography,
 } from '@mui/material';
 
+import AsyncSelect from 'react-select/async';
+
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
-import Select from 'react-select';
+import Select, { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
@@ -32,9 +35,11 @@ import { defaultValues } from '../constant';
 import {
   buttonTypeState,
   productState,
+  searchTextSelectSelector,
   setButtonType,
   setIsOpenModal,
   setProduct,
+  setSearchTextSelect,
   setUserType,
   userTypeState,
 } from '../eventPromotionIV.slice';
@@ -42,6 +47,9 @@ import { useAddNewEvent } from '../hooks/useAddNewEvent';
 import { EventSearchParams, IEventFormData, IProductCode, UserType } from '../interface';
 import { schemaAddEvent } from '../schema';
 import { useProductCode } from '../hooks/useProductCode';
+import { getProductCode } from '../service';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { AsyncPaginate } from 'react-select-async-paginate';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -57,28 +65,74 @@ export const AddEvent = () => {
     handleSubmit,
     reset: resetSelect,
     setValue,
+    watch,
     formState: { errors },
   } = methods;
+  console.log(watch('skus'));
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { useDeepCompareEffect } = useDeepEffect();
 
   const { mutate, isSuccess, data } = useAddNewEvent({
     onError: () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
+  const [page, setPage] = useState<number>(0);
+  console.log('page', page);
 
-  const searchParams:EventSearchParams ={
-  }
+  const searchParams: EventSearchParams = {
+    searchText: useSelector(searchTextSelectSelector),
+    page: page,
+  };
+  console.log('searchParams.searchText', searchParams);
 
-  const { skusListData: skusCodeDataEvent, pagination } = useProductCode(searchParams);
-  const dataProductCodeSelect =skusCodeDataEvent.map((prodCode:IProductCode) => {
-    return{
+  const {
+    skusListData: skusCodeDataEvent,
+    pagination,
+    isLoading,
+  } = useProductCode(searchParams);
+
+  const dataProductCodeSelect = skusCodeDataEvent.map((prodCode: IProductCode) => {
+    return {
       value: prodCode.code,
       label: prodCode.code,
-    }
-  })
+    };
+  });
+  console.log('dataProductCodeSelect', dataProductCodeSelect);
 
+  const loadOptions = async (search: string, prevOptions: any) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    const hasMore = page < pagination?.totalPages;
+
+    return {
+      // options: slicedOptions,
+      // options: listProdCodeSearch,
+      options: dataProductCodeSelect,
+      hasMore,
+    };
+  };
+  const loadPageOptions = async (
+    q: string,
+    prevOptions: any,
+    { page }: { page: number }
+  ) => {
+    const { options, hasMore } = await loadOptions(q, page);
+
+    return {
+      options,
+      hasMore,
+
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+  // console.log('listProdCode', listProdCode);
+
+  const handleInputChange = (inputText: string) => {
+    dispatch(setSearchTextSelect(inputText));
+  };
 
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
@@ -97,7 +151,7 @@ export const AddEvent = () => {
     dispatch(setProduct([]));
   };
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     const idEvent = data?.data?.response?.id;
     if (isSuccess) {
       if (buttonTypeValue !== 'saveSubmit') {
@@ -115,9 +169,14 @@ export const AddEvent = () => {
 
   const product = useSelector(productState);
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (product.length > 0) setValue('skus', product);
   }, [product?.length]);
+
+  // const scroll = () => {
+  //   if (page < pagination?.totalPages) setPage(page + 1);
+  //   else return;
+  // };
 
   return (
     <>
@@ -132,10 +191,10 @@ export const AddEvent = () => {
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
-      
+
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Scrollbar sx={{ marginTop: '20px' }}>
-          <Stack sx={{ p: '20px 40px 48px', backgroundColor: 'white'}} >
+          <Stack sx={{ p: '20px 40px 48px', backgroundColor: 'white' }}>
             <Stack spacing="26px">
               <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
               <Stack
@@ -188,32 +247,64 @@ export const AddEvent = () => {
                   )}
                 />
               </Stack>
-               
-              <Box sx= {{zIndex:1001}}>
-                <Typography>Mã sản phẩm</Typography>
+
+              <Box sx={{ zIndex: 1001 }}>
+                {/* <Typography>Mã sản phẩm</Typography> */}
                 <Controller
                   name="skus"
                   control={control}
-                  render={({ field }) => (    
-                      <Select
-                        placeholder='Vui lòng chọn mã sản phẩm'
-                        name='skus'              
-                        isMulti
-                        closeMenuOnSelect={false}
-                        options={dataProductCodeSelect}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        styles={{
-                          control: (styles => 
-                            ({
-                              ...styles,
-                              backgroundColor: 'primary',
-                              borderRadius: '6px',
-                            })),
-                        }}
-                      />      
+                  render={({ field: { onChange, value } }) => (
+                    // <AsyncSelect
+                    //   placeholder="Vui lòng chọn mã sản phẩm"
+                    //   // name="skus"
+                    //   isMulti
+                    //   cacheOptions
+                    //   defaultOptions={listProdCodeSearch}
+                    //   // defaultOptions={[
+                    //   //   { value: 1, label: 1 },
+                    //   //   { value: 2, label: 1 },
+                    //   //   { value: 3, label: 1 },
+                    //   // ]}
+                    //   closeMenuOnSelect={false}
+                    //   isLoading={isLoading}
+                    //   // loadOptions={async () => listProdCode}
+                    //   loadOptions={loadOptions}
+                    //   onMenuScrollToBottom={scroll}
+                    //   onInputChange={handleInputChange}
+                    //   value={value}
+                    //   onChange={onChange}
+                    //   styles={colourStyles}
+                    // />
+                    <AsyncPaginate
+                      value={value}
+                      additional={{ page: 0 }}
+                      loadOptions={loadPageOptions}
+                      isMulti
+                      closeMenuOnSelect={false}
+                      onChange={onChange}
+                      styles={colourStyles}
+                    />
                   )}
+                  //   <Select
+                  //     placeholder="Vui lòng chọn mã sản phẩm"
+                  //     name="skus"
+                  //     isMulti
+                  //     // cacheOptions
+                  //     // defaultOptions
+                  //     closeMenuOnSelect={false}
+                  //     options={dataProductCodeSelect}
+                  //     isLoading={isLoading}
+                  //     // loadOptions={promiseOptions}
+                  //     onInputChange={handleInputChange}
+                  //     // className="basic-multi-select"
+                  //     // classNamePrefix="select"
+                  //     value={value}
+                  //     onChange={onChange}
+
+                  //   />
+                  // )}
                 />
+                {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
               </Box>
 
               <RHFTextField
@@ -291,7 +382,6 @@ export const AddEvent = () => {
                 type="number"
               />
             </Stack>
-            
           </Stack>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
@@ -315,4 +405,41 @@ export const AddEvent = () => {
       </FormProvider>
     </>
   );
+};
+
+const colourStyles: StylesConfig = {
+  control: (styles) => ({
+    ...styles,
+    backgroundColor: 'primary',
+    borderRadius: '6px',
+    minHeight: '60px',
+    height: '60px',
+    opacity: 0.7,
+  }),
+  // option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+  //   // const color = chroma(data.color);
+  //   return {
+  //     ...styles,
+  //     backgroundColor: isDisabled ? undefined : isSelected,
+  //     // ? data.color
+  //     // : isFocused
+  //     // ? color.alpha(0.1).css()
+  //     // : undefined,
+  //     color: isDisabled ? '#ccc' : isSelected,
+  //     // ? chroma.contrast(color, 'white') > 2
+  //     //   ? 'white'
+  //     //   : 'black'
+  //     // : data.color,
+  //     cursor: isDisabled ? 'not-allowed' : 'default',
+
+  //     ':active': {
+  //       ...styles[':active'],
+  //       backgroundColor: !isDisabled
+  //         ? isSelected
+  //         : // ? data.color
+  //           // : color.alpha(0.3).css()
+  //           undefined,
+  //     },
+  //   };
+  // },
 };

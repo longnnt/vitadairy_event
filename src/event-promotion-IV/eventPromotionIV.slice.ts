@@ -15,7 +15,11 @@ const initialValue: initialValueProps = {
   isOpenModal: false,
   product: [] as string[],
   confirmPopup: false,
-  filterProductCode:'',
+  filterProductCode: '',
+  searchSelectParams: {
+    searchTextSelect: '',
+    page: 1,
+  },
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -61,9 +65,12 @@ const eventPromotionIVSlice = createSlice({
     setConfirmPopup: (state, action: PayloadAction<boolean>) => {
       state.confirmPopup = action.payload;
     },
-    setSearchProductCode: (state, action: PayloadAction<string>) =>{
+    setSearchProductCode: (state, action: PayloadAction<string>) => {
       state.filterProductCode = action.payload;
-    }
+    },
+    setSearchTextSelect: (state, action: PayloadAction<string>) => {
+      state.searchSelectParams.searchTextSelect = action.payload;
+    },
   },
 });
 
@@ -82,6 +89,7 @@ export const {
   setProduct,
   setConfirmPopup,
   setSearchProductCode,
+  setSearchTextSelect,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -98,4 +106,7 @@ export const openModalState = (state: RootState) => state.eventPromotionIV.isOpe
 export const productState = (state: RootState) => state.eventPromotionIV.product;
 export const confirmPopupEventState = (state: RootState) =>
   state.eventPromotionIV.confirmPopup;
-export const filterProductCodeState= (state: RootState) =>state.eventPromotionIV.filterProductCode;
+export const filterProductCodeState = (state: RootState) =>
+  state.eventPromotionIV.filterProductCode;
+export const searchTextSelectSelector = (state: RootState) =>
+  state.eventPromotionIV.searchSelectParams.searchTextSelect;

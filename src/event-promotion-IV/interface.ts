@@ -30,6 +30,10 @@ export interface initialValueProps {
   product: string[];
   confirmPopup: boolean;
   filterProductCode: string;
+  searchSelectParams: {
+    searchTextSelect: string;
+    page: number;
+  };
 }
 
 export type TimeProps = Date | null;
