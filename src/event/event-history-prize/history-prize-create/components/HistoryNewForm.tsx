@@ -17,9 +17,10 @@ import {
   popUpTypeSelector,
   setButtonType,
   setProvinceNewFormSelector,
+  setTransactionTypeSelector,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IEventDetail, IFormCreateEvent } from '../../interfaces';
+import { IEventDetail, IFormCreateEvent, IGiftParams } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -43,6 +44,7 @@ export default function HistoryNewForm() {
   const dataProvinceform = useSelector(setProvinceNewFormSelector);
   const popUpType = useSelector(popUpTypeSelector);
   const popUpCode = useSelector(popUpCodeSelector);
+  const transactionTypeId = useSelector(setTransactionTypeSelector);
 
   const { useDeepCompareEffect } = useDeepEffect();
 
@@ -125,7 +127,7 @@ export default function HistoryNewForm() {
       popupLink: data.popupLink,
       probability: data.probability,
       quantity: data.quantity,
-      transactionTypeId: data.transactionTypeId,
+      transactionTypeId: transactionTypeId.id,
     };
     mutate(dataEvent);
   };
@@ -164,14 +166,11 @@ export default function HistoryNewForm() {
                   variant="outlined"
                   size="large"
                   type="submit"
+                  loading={isLoading}
                   onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
                 >
                   Lưu
                 </LoadingButton>
-                {/* <ConfirmCreateModal
-                  open={openCreateModal}
-                  handleClose={handleCloseCreateModal}
-                /> */}
               </Box>
               <Box>
                 <LoadingButton
@@ -179,6 +178,7 @@ export default function HistoryNewForm() {
                   variant="outlined"
                   size="large"
                   type="submit"
+                  loading={isLoading}
                   onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
                 >
                   Lưu & Chỉnh sửa

@@ -1,4 +1,8 @@
-import { API_STORE_ADMIN, API_STORE_ADMIN_EXPORT } from 'src/common/constants/apis';
+import {
+  API_STORE_ADMIN,
+  API_STORE_ADMIN_CODE,
+  API_STORE_ADMIN_EXPORT,
+} from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import { IDataStore, IStoreActive, IStoreParams } from './interfaces';
 
@@ -8,6 +12,10 @@ export const getStoreAdmin = (params: IStoreParams) => {
 
 export const deleteStoreAdmin = (id: string) => {
   return axiosInstance.delete(`${API_STORE_ADMIN}/${id}`);
+};
+
+export const getStoreAdminCode = () => {
+  return axiosInstance.get(API_STORE_ADMIN_CODE);
 };
 
 export const getActiveStore = (params: IStoreActive) => {

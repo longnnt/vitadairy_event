@@ -102,6 +102,7 @@ export interface ITransactionType {
   code: string;
   name: string;
   description: string;
+  mainCode: string;
 }
 
 export interface IProvinceType {
@@ -124,12 +125,6 @@ export interface IEventDetail {
   isNew?: boolean;
 }
 
-export interface INotificationForm {
-  notificationContent: string;
-  notificationDescription: string;
-  notificationTitle: string;
-}
-
 export interface IResTransaction {
   data: {
     meta: {
@@ -137,6 +132,32 @@ export interface IResTransaction {
       msg: string;
     };
     response: ITranSacTion[];
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
+    };
+  };
+}
+export interface IGift {
+  id: number;
+  type: string;
+  money: string;
+  name: string;
+}
+
+export interface IResGift {
+  data: {
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
+    };
+    response: IGift[];
   };
 }
 
@@ -215,7 +236,17 @@ export type IPropsGiftTableRow = {
   handleClose: Function;
 };
 
+export type IPropsTransactionTableRow = {
+  row: ITranSacTion;
+  handleClose: Function;
+};
+
 export type IGiftParams = {
+  page?: number;
+  size?: number;
+};
+
+export type ITransactionParams = {
   page?: number;
   size?: number;
 };
@@ -231,4 +262,12 @@ export interface EditToolbarProps {
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void;
+}
+
+export interface PaginationProps {
+  totalPages?: number;
+  totalRecords?: number;
+  currentPage?: number;
+  recordsPerPage?: number;
+  last?: boolean;
 }
