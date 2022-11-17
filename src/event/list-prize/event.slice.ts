@@ -5,7 +5,7 @@ import { ITablePayload } from './interfaces';
 type StateProps = {
   filterName: string;
   itemRows:{
-    itemRowId:string;
+    itemRowId:string[];
     alertStatus: boolean;
   }
 };
@@ -13,7 +13,7 @@ type StateProps = {
 const initialState: StateProps = {
   filterName: '',
   itemRows: {
-    itemRowId: '',
+    itemRowId: [],
     alertStatus: false,
   }
 };
@@ -27,7 +27,7 @@ export const listPrizeEventSlice = createSlice({
     },
     setAlert: (state, action:PayloadAction<ITablePayload>) =>{
       state.itemRows.alertStatus = action.payload.alertStatus as boolean;
-      state.itemRows.itemRowId= action.payload.itemId as string; 
+      state.itemRows.itemRowId= action.payload.itemId as string[]; 
     },
   },
 })

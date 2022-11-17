@@ -98,10 +98,10 @@ function ListPrizeDashboard() {
   const alertStatus = useSelector(alertStatusSelector)
   // const itemRow= useSelector(itemRowsSelector)
   const handleOpenAlert = () =>{
-    dispatch(setAlert({alertStatus: true}));
+    dispatch(setAlert({alertStatus: true , itemId: selectedIds}));
   }
   const handleCloseAlert= () =>{
-    dispatch(setAlert({alertStatus: false}));
+    dispatch(setAlert({alertStatus: false, itemId: []}));
   }
 
   const handleFilterName = (filterName: string) => {
@@ -147,7 +147,10 @@ function ListPrizeDashboard() {
               disabled={selectedIds.length ===0}
               variant="contained"
               color="error"
-              onClick={() => handleOpenAlert()}
+              onClick={() => {
+                handleOpenAlert()
+                resetSelect()
+              }}
             >
               Xóa
             </Button>
