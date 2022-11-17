@@ -79,7 +79,7 @@ export const AddEvent = () => {
     },
   });
   const [page, setPage] = useState<number>(0);
-  console.log('page', page);
+  // console.log('page', page);
 
   const searchParams: EventSearchParams = {
     searchText: useSelector(searchTextSelectSelector),
@@ -101,33 +101,61 @@ export const AddEvent = () => {
   });
   console.log('dataProductCodeSelect', dataProductCodeSelect);
 
-  const loadOptions = async (search: string, prevOptions: any) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    const hasMore = page < pagination?.totalPages;
-
-    return {
-      // options: slicedOptions,
-      // options: listProdCodeSearch,
-      options: dataProductCodeSelect,
-      hasMore,
-    };
-  };
-  const loadPageOptions = async (
-    q: string,
-    prevOptions: any,
+  const loadOptions = async (
+    search: string,
+    loadedOptions: any,
     { page }: { page: number }
   ) => {
-    const { options, hasMore } = await loadOptions(q, page);
+    await new Promise((r) => setTimeout(r, 1000));
+    // const hasMore = page < pagination?.totalPages;
+
+    // return {
+    //   // options: slicedOptions,
+    //   // options: listProdCodeSearch,
+    //   options: dataProductCodeSelect,
+    //   hasMore,
+    // };
+    const response = await getProductCode({ page: page, searchText: search });
+    console.log('page', page);
+
+    // const response = await await responseData.json();
+    console.log('response', response);
+    const hasMore = page < response?.data?.response.pagination.totalPages;
+
+    // const responseJSON = await response.json();
+    const opt = response
+      ? response.data?.response.response.map((prodCode: IProductCode) => {
+          return {
+            value: prodCode.code,
+            label: prodCode.code,
+          };
+        })
+      : ([] as unknown[]);
 
     return {
-      options,
-      hasMore,
-
+      options: opt as unknown,
+      hasMore: hasMore,
       additional: {
         page: page + 1,
       },
     };
   };
+  // const loadPageOptions = async (
+  //   q: string,
+  //   prevOptions: any,
+  //   { page }: { page: number }
+  // ) => {
+  //   const { options, hasMore } = await loadOptions(q, page);
+
+  //   return {
+  //     options,
+  //     hasMore,
+
+  //     additional: {
+  //       page: page + 1,
+  //     },
+  //   };
+  // };
   // console.log('listProdCode', listProdCode);
 
   const handleInputChange = (inputText: string) => {
@@ -276,9 +304,10 @@ export const AddEvent = () => {
                     //   styles={colourStyles}
                     // />
                     <AsyncPaginate
+                      placeholder="Vui lòng chọn mã sản phẩm"
                       value={value}
                       additional={{ page: 0 }}
-                      loadOptions={loadPageOptions}
+                      loadOptions={loadOptions}
                       isMulti
                       closeMenuOnSelect={false}
                       onChange={onChange}
