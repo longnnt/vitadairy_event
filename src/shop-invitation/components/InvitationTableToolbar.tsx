@@ -3,6 +3,7 @@ import { Stack, InputAdornment, TextField, Box, Grid, Card, Button } from '@mui/
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 // components
 import Iconify from 'src/common/components/Iconify';
 import {
@@ -109,6 +110,13 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                       label="Start date"
                       key={'firstScanStartDate'}
                       inputFormat="dd/MM/yyyy hh:mm a"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -126,6 +134,13 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     key="firstScanEndDate"
                     label="End date"
                     inputFormat="dd/MM/yyyy hh:mm a"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}
