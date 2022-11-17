@@ -14,11 +14,12 @@ import {
   Typography,
 } from '@mui/material';
 
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -108,7 +109,7 @@ export const AddEvent = () => {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="DANH SÁCH SỰ KIỆN"
+        heading="TẠO SỰ KIỆN MỚI"
         links={[
           { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
@@ -135,10 +136,17 @@ export const AddEvent = () => {
                   control={control}
                   render={({ field }) => (
                     <Stack position="relative" width="100%">
-                      <DateTimePicker
+                      <MobileDateTimePicker
                         {...field}
                         label="Ngày bắt đầu"
                         inputFormat="dd/MM/yyyy hh:mm a"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -157,10 +165,17 @@ export const AddEvent = () => {
                   control={control}
                   render={({ field }) => (
                     <Stack position={'relative'} width="100%">
-                      <DateTimePicker
+                      <MobileDateTimePicker
                         {...field}
                         label="Ngày kết thúc"
                         inputFormat="dd/MM/yyyy hh:mm a"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}

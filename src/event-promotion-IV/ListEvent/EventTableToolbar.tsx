@@ -14,6 +14,7 @@ import { FormProvider } from 'src/common/components/hook-form';
 import { timeout } from 'src/common/lib/common.lib';
 
 import { dispatch } from 'src/common/redux/store';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { setEndDate, setSearchText, setStartDate } from '../eventPromotionIV.slice';
 
 interface ISearchParamsProps {
@@ -70,6 +71,13 @@ export const EventTableToolbar = () => {
               label="Ngày bắt đầu"
               key={'firstScanStartDate'}
               inputFormat={'dd/MM/yyyy hh:mm a'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Calendar />
+                  </InputAdornment>
+                ),
+              }}
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
@@ -84,6 +92,13 @@ export const EventTableToolbar = () => {
               key="firstScanEndDate"
               label="Ngày kết thúc"
               inputFormat={'dd/MM/yyyy hh:mm a'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Calendar />
+                  </InputAdornment>
+                ),
+              }}
               renderInput={(params: any) => <TextField {...params} fullWidth />}
             />
           )}
