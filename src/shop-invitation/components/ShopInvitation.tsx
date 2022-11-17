@@ -88,9 +88,6 @@ export default function ShopInvitation() {
 
   const { data: dataStoreCode } = useGetStoreAdminById(code)
 
-  console.log(dataStoreCode);
-  console.log(code)
-
   return (
     <>
       {isLoading && <LoadingScreen />}
