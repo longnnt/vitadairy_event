@@ -19,6 +19,7 @@ import {
   IResGift,
   IResProvince,
   IResTransaction,
+  ITransactionParams,
 } from './interfaces';
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
@@ -44,11 +45,13 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
   });
 };
 
-export const getTransactionTypeId = async () => {
-  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`);
+export const getTransactionTypeId = (params: ITransactionParams) => {
+  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`, {
+    params,
+  });
 };
 
-export const getProvince = async () => {
+export const getProvince = () => {
   return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_VN}`);
 };
 
@@ -56,7 +59,7 @@ export const addEvent = (data: IFormCreateEvent) => {
   return axiosInstance.post(`${API_CREATE_EVENT}`, data);
 };
 
-export const getGift = async (params: IGiftParams) => {
+export const getGift = (params: IGiftParams) => {
   return axiosInstance.get<unknown, IResGift>(`${API_GIFT}`, { params });
 };
 

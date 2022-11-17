@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { CSVLink } from 'react-csv';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetAdmin } from 'src/admin/hooks/useGetAdmin';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -41,10 +41,13 @@ import {
   firstScanEndSelector,
   firstScanStartSelector,
   searchTextSelector,
+  setShowDataStore,
 } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 import { StoreTableToolbar } from './components/StoreTableToolbar';
 import { emailSelector, setPermission } from 'src/auth/login/login.slice';
+import { useGetStoreAdminById } from '../../shop-invitation/hooks/useGetStoreCode';
+import TableSkeleton from './components/TableSkeleton';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -94,8 +97,8 @@ function StoreAdminListDashboard() {
   const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
-    firstScanEndDate: firstScanEnd,
-    firstScanStartDate: firstScanStart,
+    endDate: firstScanEnd,
+    startDate: firstScanStart,
     searchText: searchText,
   };
 
@@ -141,6 +144,7 @@ function StoreAdminListDashboard() {
     }
   };
 
+
   const handleEditRow = (id: string) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
   };
@@ -152,13 +156,13 @@ function StoreAdminListDashboard() {
   const isNotFound = !listStoreAdmin.length;
 
   const handleSearch = () => {
+    dispatch(setShowDataStore(true))
     refetch();
     setPage(0);
   };
 
   return (
     <>
-      {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
         heading="Danh sách cửa hàng"
         links={[
@@ -192,7 +196,7 @@ function StoreAdminListDashboard() {
       <Card>
         <Divider />
 
-        <StoreTableToolbar handleSearch={handleSearch} />
+        <StoreTableToolbar handleSearch={handleSearch} isLoading = {isLoading} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -244,6 +248,9 @@ function StoreAdminListDashboard() {
                     onEditRow={() => handleEditRow(row.code)}
                   />
                 ))}
+                {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <TableSkeleton key={index} isNotFound={isLoading} />;
+                })}
 
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>

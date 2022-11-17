@@ -3,8 +3,9 @@ import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import Can from 'src/common/lib/Can';
 import { dispatch, useSelector } from 'src/common/redux/store';
-import { alertStatusSelector, itemRowsSelector, setAlert} from '../../event.slice';
+import { alertStatusSelector, itemRowsSelector, setAlert } from '../../event.slice';
 import { IPropsListPrizeTableRow } from '../../interfaces';
 import AlertDialog from './AlertConfirmDelete';
 // ----------------------------------------------------------------------
@@ -15,11 +16,10 @@ function ListPrizeTableRow({
   onEditRow,
   onSelectRow,
   onDeleteRow,
-
 }: IPropsListPrizeTableRow) {
   const { id, giftName, ordinal, probability, quantity } = row;
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-  
+
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(event.currentTarget);
   };
@@ -36,13 +36,13 @@ function ListPrizeTableRow({
     dispatch(setAlert({itemId: [], alertStatus:false}))
   }
 
-
-
   return (
-    <TableRow hover selected={selected} sx={{overflow: 'hidden'}}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell>
+    <TableRow hover selected={selected} sx={{ overflow: 'hidden' }}>
+      <Can do="update" on="all">
+        <TableCell padding="checkbox">
+          <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
+        </TableCell>
+      </Can>
       <TableCell align="left">{giftName}</TableCell>
       <TableCell align="center">{ordinal}</TableCell>
       <TableCell align="center">{quantity}</TableCell>
@@ -89,7 +89,6 @@ function ListPrizeTableRow({
             />  
   
       </TableCell>
-      
     </TableRow>
   );
 }

@@ -3,6 +3,7 @@ import { Stack, InputAdornment, TextField, Box, Grid, Card, Button } from '@mui/
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 // components
 import Iconify from 'src/common/components/Iconify';
 import {
@@ -16,16 +17,6 @@ import { dispatch } from 'src/common/redux/store';
 import { IParamsQuery } from '../common/interfaces';
 
 // ----------------------------------------------------------------------
-
-type Props = {
-  roleOptions: string[];
-  searchText: string;
-  statusSuccess: string;
-  firstScanStart: string;
-  firstScanEnd: string;
-  onSearchText: (value: string) => void;
-  onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
 
 export const InvitationTableToolbar = (handleSearch: any) => {
   const methods = useForm({
@@ -119,6 +110,13 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                       label="Start date"
                       key={'firstScanStartDate'}
                       inputFormat="dd/MM/yyyy hh:mm a"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -136,6 +134,13 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     key="firstScanEndDate"
                     label="End date"
                     inputFormat="dd/MM/yyyy hh:mm a"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}
