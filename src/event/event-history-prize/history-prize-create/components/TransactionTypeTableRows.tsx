@@ -1,26 +1,29 @@
-import { Checkbox, TableCell, TableRow } from '@mui/material';
+import { TableCell, TableRow } from '@mui/material';
+import { dispatch } from 'src/common/redux/store';
+import { setTransactionType } from '../../event.slice';
+import { IPropsTransactionTableRow } from '../../interfaces';
 
-export const TransactionTypeTableRows = ({
-  transactionType,
-  onSelectRow,
-  selected,
-}: {
-  transactionType: any;
-  onSelectRow: (checked: boolean) => void;
-  selected: boolean;
-}) => {
-  const { code, id } = transactionType;
+function TransactionTypeTableRow({ row, handleClose }: IPropsTransactionTableRow) {
+  const { id, code, name, description, mainCode } = row;
   return (
-    <TableRow hover sx={{ cursor: 'pointer' }} selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox
-          checked={selected}
-          onChange={(e) => {
-            onSelectRow(e.target.checked);
-          }}
-        />
-      </TableCell>
-      <TableCell>{code}</TableCell>
+    <TableRow
+      hover
+      onClick={() => {
+        dispatch(setTransactionType(row));
+        handleClose();
+      }}
+    >
+      <TableCell align="left">{id}</TableCell>
+
+      <TableCell align="left">{code}</TableCell>
+
+      <TableCell align="left">{name}</TableCell>
+
+      <TableCell align="left">{description}</TableCell>
+
+      <TableCell align="left">{mainCode}</TableCell>
     </TableRow>
   );
-};
+}
+
+export { TransactionTypeTableRow };

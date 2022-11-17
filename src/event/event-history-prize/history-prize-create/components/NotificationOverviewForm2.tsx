@@ -84,8 +84,8 @@ function NotificationOverviewForm2() {
   };
 
   const searchParams: IGiftParams = {
-    page: page,
-    size: 10,
+    page: page + 1,
+    size: rowsPerPage,
   };
   const { data: ListGift } = useGetGilf(searchParams);
   const dataGift = ListGift?.data?.response || [];
@@ -197,22 +197,13 @@ function NotificationOverviewForm2() {
             />
           </>
         )}
-        <RadioGroup
-          row
-          name={'giftId'}
-          key="giftId"
-          value={valueChoice}
-          onChange={handleChangeChoice}
-        >
-          <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
-        </RadioGroup>
         <Grid container spacing={3}>
           <Grid item xs>
             <Button
               sx={{
-                display: valueChoice !== 'point' ? 'block' : 'none',
                 width: '40%',
                 alignSelf: 'flex-start',
+                marginTop: 1
               }}
               variant="contained"
               color="info"
@@ -225,7 +216,6 @@ function NotificationOverviewForm2() {
               sx={{
                 color: 'black',
                 marginTop: '5px',
-                display: valueChoice !== 'point' ? 'block' : 'none',
               }}
             >
               {gift.name}

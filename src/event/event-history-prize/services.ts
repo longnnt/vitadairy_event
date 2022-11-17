@@ -19,6 +19,7 @@ import {
   IResGift,
   IResProvince,
   IResTransaction,
+  ITransactionParams,
 } from './interfaces';
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
@@ -44,7 +45,7 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
   });
 };
 
-export const getTransactionTypeId = async (params: IGiftParams) => {
+export const getTransactionTypeId = async (params: ITransactionParams) => {
   return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`, {
     params,
   });

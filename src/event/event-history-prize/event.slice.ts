@@ -7,6 +7,7 @@ import {
   IGift,
   IPayloadDate,
   IPayloadSearch,
+  ITransactionType,
 } from './interfaces';
 
 type StateProps = {
@@ -23,8 +24,8 @@ type StateProps = {
   provinceInFo: IEventDetail[];
   showData: boolean;
   valueChoice: string;
-  isOpenModal: boolean;
-  transactionType: string[];
+  transactionType: ITransactionType;
+  openModal: boolean;
 };
 
 export const initialState: StateProps = {
@@ -41,8 +42,8 @@ export const initialState: StateProps = {
   provinceInFo: [DEDAULT_PROVINCE],
   showData: false,
   valueChoice: '',
-  isOpenModal: false,
-  transactionType: [] as string[],
+  transactionType: {} as ITransactionType,
+  openModal: false,
 };
 
 export const eventAdminSlice = createSlice({
@@ -88,11 +89,11 @@ export const eventAdminSlice = createSlice({
     setValueChoice: (state, action: PayloadAction<string>) => {
       state.valueChoice = action.payload;
     },
-    setIsOpenModal: (state, action: PayloadAction<boolean>) => {
-      state.isOpenModal = action.payload;
-    },
-    setTransactionType: (state, action: PayloadAction<string[]>) => {
+    setTransactionType: (state, action: PayloadAction<ITransactionType>) => {
       state.transactionType = action.payload;
+    },
+    setOpenModal: (state, action: PayloadAction<boolean>) => {
+      state.openModal = action.payload;
     },
   },
 });
@@ -111,8 +112,8 @@ export const {
   setProvinceInFo,
   setShowData,
   setValueChoice,
-  setIsOpenModal,
   setTransactionType,
+  setOpenModal,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -130,8 +131,8 @@ export const setProvinceInFoSelector = (state: RootState) =>
   state.historyList.provinceInFo;
 export const showDataSelector = (state: RootState) => state.historyList.showData;
 export const setValueChoiceSelector = (state: RootState) => state.historyList.valueChoice;
-export const setOpenModalSelector = (state: RootState) => state.historyList.isOpenModal;
 export const setTransactionTypeSelector = (state: RootState) =>
   state.historyList.transactionType;
+export const setOpenModalSelector = (state: RootState) => state.historyList.openModal;
 
 export default eventAdminSlice.reducer;
