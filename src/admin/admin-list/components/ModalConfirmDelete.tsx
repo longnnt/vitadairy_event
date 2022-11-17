@@ -28,8 +28,8 @@ export const AlertDialogSlide = () => {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const mutationDelete = useDeleteAdmin ({
-    onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
-    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
+    onSuccess: () => {},
+    onError: () => showErrorSnackbar('Xóa tài khoản thất bại'),
   });
 
   const handleAgree = () => {

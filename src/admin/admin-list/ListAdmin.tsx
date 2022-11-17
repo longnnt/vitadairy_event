@@ -132,7 +132,7 @@ function AdminListDashboard() {
       />
       <Card>
         <Divider />
-        <AlertDialogSlide />
+        <AlertDialogSlide  />
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
             {!!selectedIds.length && (
