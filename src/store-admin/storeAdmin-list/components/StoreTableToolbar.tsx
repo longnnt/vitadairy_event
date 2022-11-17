@@ -18,7 +18,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-export const StoreTableToolbar = (props: { handleSearch: Function }) => {
+export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: boolean }) => {
   const dispatch = useDispatch();
   const { handleSearch } = { ...props };
   const methods = useForm({
@@ -34,7 +34,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
     formState: { isSubmitting, errors },
   } = methods;
 
-  if (!watch().firstScanEndDate && !watch().searchText && !watch().firstScanStartDate) {
+  if (!watch().endDate && !watch().searchText && !watch().startDate) {
     dispatch(setSearchText(''));
     dispatch(setFirstScanStartDate(null));
     dispatch(setFirstScanEndDate(null));
@@ -42,15 +42,15 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
 
   const onSubmit = (data: IStoreParams) => {
     dispatch(setSearchText(data.searchText as string));
-    dispatch(setFirstScanStartDate(data.firstScanStartDate));
-    dispatch(setFirstScanEndDate(data.firstScanEndDate));
+    dispatch(setFirstScanStartDate(data.startDate));
+    dispatch(setFirstScanEndDate(data.endDate));
   };
 
   const handleCancel = async () => {
     reset({
       searchText: '',
-      firstScanStartDate: null,
-      firstScanEndDate: null,
+      startDate: null,
+      endDate: null,
     });
     dispatch(setSearchText(''));
     dispatch(setFirstScanStartDate(null));
@@ -110,14 +110,14 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={3}>
               <Stack spacing={'20px'}>
                 <Controller
-                  name="firstScanStartDate"
-                  key={'firstScanStartDate'}
+                  name="startDate"
+                  key={'startDate'}
                   control={control}
                   render={({ field }) => (
                     <MobileDateTimePicker
                       {...field}
                       label="Start date"
-                      key={'firstScanStartDate'}
+                      key={'startDate'}
                       inputFormat={FORMAT_DATE_NEWS}
                       InputProps={{
                         endAdornment: (
@@ -134,13 +134,13 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
             </Grid>
             <Grid item xs={10} md={3}>
               <Controller
-                name="firstScanEndDate"
-                key="firstScanEndDate"
+                name="endDate"
+                key="endDate"
                 control={control}
                 render={({ field }: { field: any }) => (
                   <MobileDateTimePicker
                     {...field}
-                    key="firstScanEndDate"
+                    key="endDate"
                     label="End date"
                     inputFormat={FORMAT_DATE_NEWS}
                     InputProps={{

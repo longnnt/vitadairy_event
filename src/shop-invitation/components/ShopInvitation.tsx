@@ -3,41 +3,41 @@ import {
   Button,
   Card,
   Divider,
-  IconButton,
-  TableBody,
+  IconButton, Table, TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
-  Table,
+  Tooltip
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { CSVLink } from 'react-csv';
+import { useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
+import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { useGetStoreAdminById } from 'src/shop-invitation/hooks/useGetStoreCode';
+import { codeSelector } from 'src/store-admin/storeAdmin.slice';
 import { TABLE_HEAD } from '../common/constants';
 import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
+import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
+import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 import {
   firstScanEndSelector,
   firstScanStartSelector,
   searchTextSelector,
-  statusSelector,
+  statusSelector
 } from '../invitationSlice';
 import InvitationTableRow from './InvitationTableRow';
-import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
-import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
-import { CSVLink } from 'react-csv';
-import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
-import LoadingScreen from 'src/common/components/LoadingScreen';
 export default function ShopInvitation() {
   const navigate = useNavigate();
   const {
@@ -80,13 +80,22 @@ export default function ShopInvitation() {
   const handleSearch = () => {
     refetch();
     setPage(0);
-  };
+  }
+
+  const params = useParams();
+  const idParams = params?.id;
+  const code = useSelector(codeSelector);
+
+  const { data: dataStoreCode } = useGetStoreAdminById(code)
+
+  console.log(dataStoreCode);
+  console.log(code)
 
   return (
     <>
       {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
-        heading="Danh Sách Khách Hàng: "
+        heading="Danh Sách Khách Hàng"
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
           {
