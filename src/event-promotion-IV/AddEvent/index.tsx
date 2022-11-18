@@ -225,7 +225,7 @@ export const AddEvent = () => {
                 type="number"
               />
 
-              <FormControl>
+              {/* <FormControl>
                 <RadioGroup
                   defaultValue="allUser"
                   name="radio-buttons-group"
@@ -243,7 +243,7 @@ export const AddEvent = () => {
                     label="Người dùng mới"
                   />
                 </RadioGroup>
-              </FormControl>
+              </FormControl> */}
 
               <Controller
                 name="userRegisterDate"
@@ -252,9 +252,9 @@ export const AddEvent = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
-                    sx={{
-                      display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
-                    }}
+                    // sx={{
+                    //   display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
+                    // }}
                   >
                     <DatePicker
                       {...field}

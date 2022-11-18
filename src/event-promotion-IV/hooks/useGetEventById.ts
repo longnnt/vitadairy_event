@@ -3,7 +3,7 @@ import { getEventById } from './../service';
 import { useQuery } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 
-export const useGetEventById: any = ({
+export const useGetEventById= ({
   id,
   callback,
 }: {
