@@ -11,6 +11,7 @@ import {
   selectedIdsState,
   setConfirmPopup,
   setIsResetSelect,
+  setOpeneditModal,
   setSelectedIds,
 } from '../eventPromotionIV.slice';
 import { dispatch, useSelector } from 'src/common/redux/store';
@@ -40,8 +41,11 @@ export default function ListEventPromotionDashboard() {
   };
 
   const handleDeleteRows = () => {
-    dispatch(setConfirmPopup(true));
+    dispatch(setOpeneditModal(true));
     dispatch(setSelectedIds(selectedIdsValue));
+    // resetSelect();
+    // dispatch(setConfirmPopup(true));
+    // dispatch(setSelectedIds(selectedIdsValue));
   };
 
   return (

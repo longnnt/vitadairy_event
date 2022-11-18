@@ -205,3 +205,5 @@ export const STYLE_GIFT = {
 
 export const CSV = 'csv';
 export const DEFAULT_LOADING_SIZE = 5;
+
+export const SIZE_PAGE = 10;

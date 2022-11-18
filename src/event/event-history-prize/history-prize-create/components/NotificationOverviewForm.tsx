@@ -18,7 +18,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
+import { SIZE_PAGE, STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
 import {
   setOpenModal,
   setOpenModalSelector,
@@ -53,7 +53,7 @@ function NotificationOverviewForm() {
   } = useTable();
   const searchParams: ITransactionParams = {
     page: page + 1,
-    size: 10,
+    size: SIZE_PAGE,
   };
   const { data: addTransaction } = useGetAllTranSacTion(searchParams);
   const dataTransaction = addTransaction?.data?.response || [];

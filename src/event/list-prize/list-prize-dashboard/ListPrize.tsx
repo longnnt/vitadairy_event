@@ -19,6 +19,7 @@ import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import LoadingScreen from 'src/common/components/LoadingScreen';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
@@ -26,14 +27,16 @@ import {
   TableSelectedActions,
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import Can from 'src/common/lib/Can';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { replacePathParams } from 'src/common/utils/replaceParams';
+import { confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/event/edit-event-prize/editEventPrize.Slice';
 import { TABLE_HEAD } from '../contants';
-import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector, isResetSelectSelector, setIsResetSelect } from '../eventListPrize.slice';
+import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector, isResetSelectSelector, setIsResetSelect, selectedIdsState, setSelectedIds } from '../eventListPrize.slice';
 import useShowSnackbar from '../hooks/useCustomSnackBar';
 import { useDeleteListPrizeAdmin } from '../hooks/useDeleteListPrize';
 import { useGetListPrize } from '../hooks/useGetListPrize';
@@ -63,7 +66,7 @@ function ListPrizeDashboard() {
   } = useTable();
   const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
-  const mutationDetele = useDeleteListPrizeAdmin({
+  const {mutate} = useDeleteListPrizeAdmin({
     onSuccess: () => {
       showSuccessSnackbar('Delete prize successfully');
     },
@@ -80,6 +83,12 @@ function ListPrizeDashboard() {
     size: rowsPerPage,
   };
   const filterName = useSelector(filterNameSelector);
+  const { useDeepCompareEffect } = useDeepEffect();
+  const openEditModal = useSelector(openEditModalSelector);
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const selectedIdsValue = useSelector(selectedIdsState);
+  
   if (filterName.length >2) searchParams.searchText = filterName;
 
   const { data, isLoading } = useGetListPrize(searchParams);
@@ -97,37 +106,42 @@ function ListPrizeDashboard() {
   );
 
   const alertStatus = useSelector(alertStatusSelector)
-  const itemRow= useSelector(itemRowsSelector)
-  const isSelect = useSelector(isResetSelectSelector)
-  const handleOpenAlert = () =>{
-    dispatch(setAlert({alertStatus: true , itemId: selectedIds}));
-  }
-  const handleCloseAlert= () =>{
-    dispatch(setAlert({alertStatus: false, itemId: []}));
-  }
-
+  // const itemRow= useSelector(itemRowsSelector)
   const handleFilterName = (filterName: string) => {
     dispatch(setFilterName(filterName));
     setPage(0);
   };
-  const handleDeleteRows = (ids: string[]) => {   
-    for (let i = 0; i < ids.length; i++) {
-      mutationDetele.mutate(ids[i]);
+  const handleDeleteRows = (ids: number[]) => {
+    handleOpenEditModal();
+    dispatch(setSelectedIds(ids));
+    
+  };
+  const confirmEdit = useSelector(confirmEditSelector);
+
+  useDeepCompareEffect(() => {
+    if (confirmEdit) {
+      for (let i = 0; i < selectedIdsValue.length; i++) {
+        mutate(selectedIdsValue[i]);
+      }
+      dispatch(setConfirmEdit(false));
       resetSelect();
     }
-  };
-  const handleEditRow = (id: string) => {
+  }, [confirmEdit, selectedIdsValue]);
+  const handleEditRow = (id: number) => {
     navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
 
-  useEffect(() =>{
-    resetSelect()
-    dispatch(setIsResetSelect(false))
-  },[isSelect])
+  // useEffect(() =>{
+  //   resetSelect()
+  //   dispatch(setIsResetSelect(false))
+  // },[isSelect])
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;
   const tableHeight =400*rowsPerPage/5
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <HeaderBreadcrumbs
@@ -154,25 +168,26 @@ function ListPrizeDashboard() {
               disabled={selectedIds.length ===0}
               variant="contained"
               color="error"
-              onClick={() => {
-                handleOpenAlert();
-              }}
+              onClick={() => handleDeleteRows(selectedIds)}
             >
               Xóa
             </Button>
             </Can>
-            <AlertDialog 
-              open={alertStatus} 
-              handleClose={handleCloseAlert}
-              selectedId={itemRow.itemRowId}
-              />
           </Stack>
         }
       />
       <Card sx={{overflow: 'hidden'}}>
         <Divider />
         <ListPrizeFilterBar filterName={filterName} onFilterName={handleFilterName} />
+        <ConfirmEditModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type='Xóa sự kiện'
+            colorType={false}
 
+            // setConfirmEdit={setConfirmEdit}
+          />
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
             {!!selectedIds.length && (
@@ -215,7 +230,7 @@ function ListPrizeDashboard() {
                     onSelectRow={(e) => {
                       handleSelectItem(row.id, e);
                     }}
-                    onDeleteRow={() => handleDeleteRows([row.id])}
+                    onDeleteRow={() =>{handleDeleteRows([row.id])} }
                     onEditRow={() => handleEditRow(row.id)}
                     
                   />

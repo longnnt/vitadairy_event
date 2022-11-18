@@ -28,6 +28,7 @@ import {
   popupTypeOption,
   POPUP_CODE,
   POPUP_TYPE,
+  SIZE_PAGE,
   STYLE_GIFT,
   TABLE_HEAD_GIFT,
 } from '../../constants';
@@ -90,7 +91,7 @@ function NotificationOverviewForm2() {
 
   const searchParams: IGiftParams = {
     page: page + 1,
-    size: 10,
+    size: SIZE_PAGE,
   };
   const { data: ListGift } = useGetGilf(searchParams);
   const dataGift = ListGift?.data?.response || [];

@@ -371,27 +371,6 @@ export default function ProvinceTableForm() {
       flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        // if (isInEditMode) {
-        //   return [
-        //     <GridActionsCellItem
-        //       key={id}
-        //       icon={<SaveIcon />}
-        //       label="Save"
-        //       onClick={handleSaveClick(id)}
-        //     />,
-        //     <GridActionsCellItem
-        //       key={id}
-        //       icon={<CancelIcon />}
-        //       label="Cancel"
-        //       className="textPrimary"
-        //       onClick={handleCancelClick(id)}
-        //       color="inherit"
-        //     />,
-        //   ];
-        // }
-
         return [
           <GridActionsCellItem
             key={id}

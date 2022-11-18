@@ -27,15 +27,9 @@ function ListPrizeTableRow({
     setOpenMenuActions(null);
   };
 
-  const itemRow= useSelector(itemRowsSelector)
-  const alert = useSelector(alertStatusSelector)
-  const handleOpenAlert = () =>{
-    dispatch(setAlert({itemId: [row.id], alertStatus: true}))
-  }
-  const handleCloseAlert= () =>{
-    dispatch(setAlert({itemId: [], alertStatus:false}))
-  }
-
+  const itemRow = useSelector(itemRowsSelector);
+  const alert = useSelector(alertStatusSelector);
+  
   return (
     <TableRow hover selected={selected} sx={{ overflow: 'hidden' }}>
       <Can do="update" on="all">
@@ -48,46 +42,39 @@ function ListPrizeTableRow({
       <TableCell align="center">{quantity}</TableCell>
       <TableCell align="center">{probability} %</TableCell>
       <TableCell align="center">
-        <TableMoreMenu
-          open={openMenu}
-          onOpen={handleOpenMenu}
-          onClose={handleCloseMenu}
-          actions={
-            <>
-            <Stack>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'eva:edit-fill'} />
-                Edit
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleCloseMenu();
-                  handleOpenAlert()
-                  
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-                
-              </MenuItem>
-             
-            </Stack>
-           
-            </> 
-          }
-        />
-            <AlertDialog 
-              open={alert} 
-              handleClose={handleCloseAlert} 
-              selectedId = {itemRow.itemRowId}
-            />  
-  
+        <Can do="update" on="all">
+          <TableMoreMenu
+            open={openMenu}
+            onOpen={handleOpenMenu}
+            onClose={handleCloseMenu}
+            actions={
+              <>
+                <Stack>
+                  <MenuItem
+                    onClick={() => {
+                      onEditRow();
+                      handleCloseMenu();
+                    }}
+                  >
+                    <Iconify icon={'eva:edit-fill'} />
+                    Edit
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      onDeleteRow();
+                      handleCloseMenu();
+                    }}
+                    sx={{ color: 'error.main' }}
+                  >
+                    <Iconify icon={'eva:trash-2-outline'} />
+                    Delete
+                  </MenuItem>
+                </Stack>
+              </>
+            }
+          />
+        </Can>
+        
       </TableCell>
     </TableRow>
   );

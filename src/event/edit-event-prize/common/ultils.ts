@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import _ from 'lodash';
 
 export const fomatFormData = (data: IFormEdit) => {
-  // const tempEditData = { ...data };
   const { eventDetailProvinces, ...tempEditData } = data;
   delete tempEditData.typeUser;
 
@@ -29,13 +28,6 @@ export const fomatFormData = (data: IFormEdit) => {
         const provId = parseInt(item.provinceId);
         item = { ...item, provinceId: provId };
       }
-      // if (!(typeof item.extraquantity === 'string')) {
-      //   delete item.extraquantity;
-      //   item = { ...item, quantity: 0 };
-      // } else {
-      //   const totalQuantities = +item.extraquantity;
-      //   item = { ...item, quantity: totalQuantities };
-      // }
       if (!item.extraquantity) {
         delete item.extraquantity;
         item = { ...item, quantity: 0 };
@@ -50,7 +42,6 @@ export const fomatFormData = (data: IFormEdit) => {
       return item;
     }
   );
-  // tempEditData.eventDetailProvinces = tempProvince;
 
   return {
     ...tempEditData,
