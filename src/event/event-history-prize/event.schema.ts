@@ -6,7 +6,16 @@ export const createEventPrizevalidate = (provinceIds: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
     endDate: Yup.string()
       .required('This field is required')
-      .typeError('Must be a string'),
+      .typeError('Must be a string')
+      .when('startDate', (eventStartDate, schema) => {
+        return (
+          eventStartDate &&
+          schema.test(
+            'test date',
+            (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime()
+          )
+        );
+      }),
     provinceId: Yup.number()
       .required()
       .typeError('Must be a number')
