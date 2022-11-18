@@ -23,7 +23,7 @@ import { IFormCreate, ISelect } from '../../interfaces';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { fomatFormData } from '../ultils';
+import { fomatFormData } from '../utils';
 import NotificationForm from './NotificationForm';
 import NotificationOverviewForm from './NotificationOverviewForm';
 import NotificationOverviewForm2 from './NotificationOverviewForm2';

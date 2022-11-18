@@ -25,7 +25,7 @@ import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS } from '../../const
 import { setFileCSV, setProvinceInFoSelector, setProvinceNewForm } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { EditToolbarProps, IEventDetail, IFormCreate, IFormCreateEvent, ISelect } from '../../interfaces';
-import { StyledBox } from '../ultils';
+import { StyledBox } from '../utils';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { DateTimePicker } from '@mui/x-date-pickers';
 
