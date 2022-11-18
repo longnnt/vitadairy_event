@@ -81,7 +81,6 @@ export const EditEventForm = () => {
   } = methods;
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  // const watchUserType = watch('startDate');
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
       showErrorSnackbar('Tạo mới thất bại');
@@ -91,7 +90,6 @@ export const EditEventForm = () => {
   const dispatch = useDispatch();
   
   const onSubmit = (data: any) => {
-    // if (data.typeUser === 'allUser') data.userRegisterDate = null;
     const formDataAddNewEvent = {
       name: data.name,
       startDate: data.startDate,
@@ -225,14 +223,6 @@ export const EditEventForm = () => {
                 type="number"
               />
 
-              {/* <RHFRadioGroup
-                name="typeUser"
-                options={[
-                  { label: 'Toàn bộ người dùng', value: 'allUser' },
-                  { label: 'Người dùng mới', value: 'newUser' },
-                ]}
-              /> */}
-
               <Controller
                 name="userRegisterDate"
                 control={control}
@@ -240,7 +230,6 @@ export const EditEventForm = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
-                    // display={`${(watchUserType === 'allUser' && 'none') || 'display'}`}
                   >
                     <DatePicker
                       {...field}
