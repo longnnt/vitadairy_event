@@ -29,13 +29,7 @@ function ListPrizeTableRow({
 
   const itemRow = useSelector(itemRowsSelector);
   const alert = useSelector(alertStatusSelector);
-  const handleOpenAlert = () => {
-    dispatch(setAlert({ itemId: row.id, alertStatus: true }));
-  };
-  const handleCloseAlert = () => {
-    dispatch(setAlert({ itemId: '', alertStatus: false }));
-  };
-
+  
   return (
     <TableRow hover selected={selected} sx={{ overflow: 'hidden' }}>
       <Can do="update" on="all">
@@ -67,8 +61,8 @@ function ListPrizeTableRow({
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
+                      onDeleteRow();
                       handleCloseMenu();
-                      handleOpenAlert();
                     }}
                     sx={{ color: 'error.main' }}
                   >
@@ -80,11 +74,11 @@ function ListPrizeTableRow({
             }
           />
         </Can>
-        <AlertDialog
+        {/* <AlertDialog
           open={alert}
           handleClose={handleCloseAlert}
           selectedId={[itemRow.itemRowId]}
-        />
+        /> */}
       </TableCell>
     </TableRow>
   );

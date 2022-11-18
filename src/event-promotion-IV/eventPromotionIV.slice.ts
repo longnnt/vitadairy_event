@@ -15,6 +15,10 @@ const initialValue: initialValueProps = {
   isOpenModal: false,
   product: [] as string[],
   confirmPopup: false,
+
+
+  openEditModal: false,
+  confirmEdit: false,
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -60,6 +64,13 @@ const eventPromotionIVSlice = createSlice({
     setConfirmPopup: (state, action: PayloadAction<boolean>) => {
       state.confirmPopup = action.payload;
     },
+
+    setOpeneditModal: (state, action: PayloadAction<boolean>) => {
+      state.openEditModal = action.payload;
+    },
+    setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+      state.confirmEdit = action.payload;
+    },
   },
 });
 
@@ -77,6 +88,8 @@ export const {
   setIsOpenModal,
   setProduct,
   setConfirmPopup,
+  setOpeneditModal,
+  setConfirmEdit,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -93,3 +106,8 @@ export const openModalState = (state: RootState) => state.eventPromotionIV.isOpe
 export const productState = (state: RootState) => state.eventPromotionIV.product;
 export const confirmPopupEventState = (state: RootState) =>
   state.eventPromotionIV.confirmPopup;
+
+  export const openEditModalSelector = (state: RootState) =>
+  state.eventPromotionIV.openEditModal;
+export const confirmEditSelector = (state: RootState) =>
+  state.eventPromotionIV.confirmEdit;

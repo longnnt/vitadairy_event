@@ -8,6 +8,7 @@ type StateProps = {
     itemRowId:string;
     alertStatus: boolean;
   }
+  selectedIds: number[];
 };
 
 const initialState: StateProps = {
@@ -15,7 +16,9 @@ const initialState: StateProps = {
   itemRows: {
     itemRowId: '',
     alertStatus: false,
-  }
+  },
+  selectedIds: [],
+
 };
 
 export const listPrizeEventSlice = createSlice({
@@ -29,15 +32,19 @@ export const listPrizeEventSlice = createSlice({
       state.itemRows.alertStatus = action.payload.alertStatus as boolean;
       state.itemRows.itemRowId= action.payload.itemId as string; 
     },
+    setSelectedIds: (state, action: PayloadAction<number[]>) => {
+      state.selectedIds = action.payload;
+    },
   },
 })
 
-export const { setFilterName } = listPrizeEventSlice.actions;
+export const { setFilterName,setSelectedIds } = listPrizeEventSlice.actions;
 export const { setAlert } = listPrizeEventSlice.actions;
 
 export const filterNameSelector = (state: RootState) => state.listPrize.filterName;
 export const alertStatusSelector = (state: RootState) => state.listPrize.itemRows.alertStatus;
 export const itemIdSelector = (state: RootState) => state.listPrize.itemRows.itemRowId;
 export const itemRowsSelector = (state: RootState) => state.listPrize.itemRows;
+export const selectedIdsState = (state: RootState) => state.listPrize.selectedIds;
 
 export default listPrizeEventSlice.reducer;

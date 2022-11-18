@@ -57,7 +57,7 @@ import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import { useGetGiftById } from '../hooks/useGetGiftById';
 import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
-import { ConfirmEditModal } from './ConfirmEditModal';
+import { ConfirmEditModal } from '../../../common/components/modal/ConfirmEditModal';
 
 // -----------------------------------------------------------------------------
 
@@ -172,7 +172,9 @@ export const EditEventPrizeForm = () => {
   }, [choosenGift]);
 
   const loadingScreen: boolean = isLoading || isSubmitting;
-
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <Container>
@@ -406,6 +408,9 @@ export const EditEventPrizeForm = () => {
           <ConfirmEditModal
             open={openEditModal}
             handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type='Chỉnh sửa sự kiện'
+            colorType={true}
             // setConfirmEdit={setConfirmEdit}
           />
         </FormProvider>

@@ -6,7 +6,7 @@ export interface IListPrizeEventParams {
 }
 
 export interface IListPrize {
-  id: string;
+  id: number;
   giftName: string;
   ordinal: number;
   probability: number;

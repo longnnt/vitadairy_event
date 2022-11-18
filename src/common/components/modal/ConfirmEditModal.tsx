@@ -5,21 +5,27 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { dispatch } from 'src/common/redux/store';
-import { setConfirmEdit } from '../editEventPrize.Slice';
+import { setConfirmEdit } from '../../../event/edit-event-prize/editEventPrize.Slice';
 
 export const ConfirmEditModal = ({
   open,
   handleClose,
+  handleOnAgree,
+  type,
+  colorType,
 }: //   setConfirmEdit,
 {
   open: boolean;
   handleClose: () => void;
+  handleOnAgree:() => void;
+  type:string,
+  colorType:boolean
   //   setConfirmEdit: (state: boolean) => void;
 }) => {
-  const handleOnAgree = () => {
-    handleClose();
-    dispatch(setConfirmEdit(true));
-  };
+  // const handleOnAgree = () => {
+  //   handleClose();
+  //   dispatch(setConfirmEdit(true));
+  // };
   return (
     <div>
       <Dialog
@@ -35,7 +41,7 @@ export const ConfirmEditModal = ({
         }}
       >
         <DialogTitle id="alert-dialog-title">
-          Bạn có chắc chắn muốn lưu chỉnh sửa không?
+          {`Bạn có chắc chắn muốn ${type} không?`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -43,8 +49,8 @@ export const ConfirmEditModal = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Hủy bỏ</Button>
-          <Button onClick={handleOnAgree} autoFocus variant="contained">
+          <Button onClick={handleClose} color="inherit">Hủy bỏ</Button>
+          <Button onClick={()=>{handleClose();handleOnAgree();}}  sx={{bgcolor: colorType ? 'green' : 'red'}} autoFocus variant="contained">
             Xác nhận
           </Button>
         </DialogActions>
