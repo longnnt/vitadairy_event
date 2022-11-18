@@ -6,6 +6,6 @@ export const getListPrize = (params: IListPrizeParams) => {
   return axiosInstance.get<unknown, IDataListPrize>(`${API_LIST_PRiZE}`, { params });
 };
 
-export const deleteListPrizeAdmin = (id: string) => {
+export const deleteListPrizeAdmin = (id: number) => {
   return axiosInstance.delete(`${API_LIST_PRiZE}/${id}`);
 };

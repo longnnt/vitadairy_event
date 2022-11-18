@@ -6,7 +6,7 @@ import { deleteListPrizeAdmin } from '../services';
 export function useDeleteListPrizeAdmin(callback: IListPrizeCallback) {
   const queryClient = useQueryClient();
 
-  return useMutation((id: string) => deleteListPrizeAdmin(id), {
+  return useMutation((id: number) => deleteListPrizeAdmin(id), {
     onSuccess: (_rs, _variables) => {
       queryClient
         .getQueryCache()

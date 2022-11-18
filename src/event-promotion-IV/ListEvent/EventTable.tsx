@@ -26,11 +26,16 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import { AlertDialogSlide } from '../components/ModalConfirmDelete';
 import { TABLE_HEAD } from '../constant';
 import {
+  confirmEditSelector,
   endDateState,
   isResetSelectState,
+  openEditModalSelector,
   searchTextState,
+  selectedIdsState,
+  setConfirmEdit,
   setConfirmPopup,
   setIsResetSelect,
+  setOpeneditModal,
   setSelectedIds,
   startDateState,
 } from '../eventPromotionIV.slice';
@@ -39,17 +44,26 @@ import { useGetListEvent } from '../hooks/useGetListEvent';
 import { EventSearchParams, PaginationProps, RowProps } from '../interface';
 import { EventTableRow } from './EventTableRow';
 import TableSkeleton from './TableSkeleton';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+
 export const EventTable = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { onChangeRowsPerPage, dense, onChangeDense, page, rowsPerPage, onChangePage } =
     useTable();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { useDeepCompareEffect } = useDeepEffect();
 
   const startDateValue = useSelector(startDateState);
   const endDateValue = useSelector(endDateState);
   const searchTextValue = useSelector(searchTextState);
   const isResetSelect = useSelector(isResetSelectState);
+
+  const selectedIdsValue = useSelector(selectedIdsState);
+  const openEditModal = useSelector(openEditModalSelector);
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
 
   const searchParams: EventSearchParams = {
     page: page,
@@ -94,18 +108,46 @@ export const EventTable = () => {
     dispatch(setIsResetSelect(false));
   }, [isResetSelect]);
 
+  const {mutate} = useDeleteEvents({
+    onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
+    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
+    onSuccessSend: () => showErrorSnackbar('Sự kiện đã có người trúng không thể xóa'),
+  });
+  const confirmEdit = useSelector(confirmEditSelector);
+  
+  useDeepCompareEffect(() => {
+    
+    if (confirmEdit) {
+      if (selectedIdsValue.length) {
+        mutate(selectedIdsValue);
+        dispatch(setIsResetSelect(true));
+      }
+      dispatch(setConfirmEdit(false));
+    }
+  }, [confirmEdit, selectedIdsValue]);
+
   const handleViewRow = (id: number) => {
     navigate(PATH_DASHBOARD.eventPromotionIV.view(id));
   };
 
-  const handleDeleteRows = (selectedIds: number[]) => {
-    dispatch(setConfirmPopup(true));
-    dispatch(setSelectedIds(selectedIds));
+  const handleDeleteRows = (ids: number[]) => {
+    handleOpenEditModal();
+    dispatch(setSelectedIds(ids));
   };
-
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
-      <AlertDialogSlide />
+      {/* <AlertDialogSlide /> */
+      <ConfirmEditModal
+      open={openEditModal}
+      handleClose={handleCloseEditModal}
+      handleOnAgree={handleOnAgree}
+      type='Xóa sự kiện'
+      colorType={false}
+      // setConfirmEdit={setConfirmEdit}
+    />}
       <Scrollbar sx={{ mt: '10px' }}>
         <TableContainer>
           {!!selectedIds.length && (

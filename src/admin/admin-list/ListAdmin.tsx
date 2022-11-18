@@ -27,7 +27,7 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { filterNameSelector, setConfirmPopup, setFilterName, setSelectedIds } from '../admin.slice';
+import { confirmEditSelector, filterNameSelector, openEditModalSelector, selectedIdsState, setConfirmEdit, setConfirmPopup, setFilterName, setOpeneditModal, setSelectedIds } from '../admin.slice';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteAdmin } from '../hooks/useDeleteAdmin';
 import { useGetAdmin } from '../hooks/useGetAdmin';
@@ -37,6 +37,9 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import TableSkeleton from './components/TableSkeleton';
 import { AlertDialogSlide } from './components/ModalConfirmDelete';
 import Can from 'src/common/lib/Can';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+
 
 function AdminListDashboard() {
   const navigate = useNavigate();
@@ -57,9 +60,20 @@ function AdminListDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+  
+
+  const { useDeepCompareEffect } = useDeepEffect();
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const filterName = useSelector(filterNameSelector);
+
+  const openEditModal = useSelector(openEditModalSelector);
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const selectedIdsValue = useSelector(selectedIdsState);
+
+
+
 
   const mutationDetele = useDeleteAdmin({
     onSuccess: () => {
@@ -97,10 +111,25 @@ function AdminListDashboard() {
   };
 
   const handleDeleteRows = (ids: number[]) => {
-    dispatch(setConfirmPopup(true));
+    // dispatch(setConfirmPopup(true));
+    handleOpenEditModal();
     dispatch(setSelectedIds(ids));
     resetSelect();
   };
+  const confirmEdit = useSelector(confirmEditSelector);
+  const {mutate} =useDeleteAdmin({
+    onSuccess: () => {},
+    onError: () => showErrorSnackbar('Xóa tài khoản thất bại'),
+  })
+  useDeepCompareEffect(() => {
+    
+    if (confirmEdit) {
+      for (let i = 0; i < selectedIdsValue.length; i++) {
+        mutate(selectedIdsValue[i]);
+      }
+      dispatch(setConfirmEdit(false));
+    }
+  }, [confirmEdit, selectedIdsValue]);
 
   const handleEditRow = (id: number) => {
     navigate(PATH_DASHBOARD.admin.edit(id));
@@ -109,6 +138,9 @@ function AdminListDashboard() {
     totalRecords: 0,
   };
   const isNotFound = !listAdmin.length && !isLoading;
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <HeaderBreadcrumbs
@@ -132,7 +164,15 @@ function AdminListDashboard() {
       />
       <Card>
         <Divider />
-        <AlertDialogSlide  />
+        {/* <AlertDialogSlide  /> */}
+        <ConfirmEditModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type='Xóa tài khoản'
+            colorType={false}
+            // setConfirmEdit={setConfirmEdit}
+          />
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
             {!!selectedIds.length && (
