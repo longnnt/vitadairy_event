@@ -74,7 +74,26 @@ export const DEDAULT_PROVINCE = {
   isNew: false,
 };
 
-export const defaultValues = {
+export const DEFAULT_FORM_VALUE = {
+  eventDetailProvinces: {
+    0: DEDAULT_PROVINCE,
+  },
+  eventId: 0,
+  giftId: 0,
+  notificationContent: '',
+  notificationDescription: '',
+  notificationTitle: '',
+  ordinal: 0,
+  popupCode: '',
+  popupImageLink: '',
+  popupLink: '',
+  popupType: '',
+  probability: 0,
+  quantity: 0,
+  transactionTypeId: 0,
+};
+
+export const DEFAULT_FORM_VALUE_SUBMIT = {
   eventDetailProvinces: [DEDAULT_PROVINCE],
   eventId: 0,
   giftId: 0,
@@ -116,6 +135,7 @@ export const TABLE_HEAD_TRANSACTION_TYPE = [
 ];
 
 export const FORMAT_DATE_NEWS = 'dd/MM/yyyy hh:mm a';
+export const FORMAT_DATE_NEW = 'yyyy-MM-dd h:mm:ss a';
 
 export const POPUP_TYPE = {
   DEEP_LINK: 'DEEP_LINK',

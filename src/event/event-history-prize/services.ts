@@ -12,6 +12,7 @@ import axiosInstance from 'src/common/utils/axios';
 import {
   IDataPrizeHistory,
   IFormCreateEvent,
+  IFormSubmitCreate,
   IGiftParams,
   IPrizeHistoryActive,
   IPrizeHistoryParams,
@@ -55,7 +56,7 @@ export const getProvince = () => {
   return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_VN}`);
 };
 
-export const addEvent = (data: IFormCreateEvent) => {
+export const addEvent = (data: IFormSubmitCreate) => {
   return axiosInstance.post(`${API_CREATE_EVENT}`, data);
 };
 

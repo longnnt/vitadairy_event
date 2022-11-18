@@ -9,26 +9,25 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, defaultValues } from '../../constants';
+import { ButtonType, DEFAULT_FORM_VALUE } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
-  giftSelecttor,
+  buttonTypeState,
   popUpCodeSelector,
   popUpTypeSelector,
-  setButtonType,
-  setProvinceNewFormSelector,
-  setTransactionTypeSelector,
+  setButtonType, setEditDataEvent
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IEventDetail, IFormCreateEvent, IGiftParams } from '../../interfaces';
+import { IFormCreate, ISelect } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import LoadingScreen from 'src/common/components/LoadingScreen';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { useEffect } from 'react';
+import { useGetAllProvince } from '../../hooks/useGetAllProvince';
+import { fomatFormData } from '../ultils';
 import NotificationForm from './NotificationForm';
 import NotificationOverviewForm from './NotificationOverviewForm';
 import NotificationOverviewForm2 from './NotificationOverviewForm2';
-import FullFeaturedCrudGrid from './ProvinceTableRow';
+import ProvinceTableForm from './ProvinceTableRow';
 
 dayjs.extend(customParseFormat);
 
@@ -40,17 +39,20 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 export default function HistoryNewForm() {
   const dispatch = useDispatch();
-  const gift = useSelector(giftSelecttor);
-  const dataProvinceform = useSelector(setProvinceNewFormSelector);
   const popUpType = useSelector(popUpTypeSelector);
   const popUpCode = useSelector(popUpCodeSelector);
-  const transactionTypeId = useSelector(setTransactionTypeSelector);
+  const buttonType = useSelector(buttonTypeState);
 
-  const { useDeepCompareEffect } = useDeepEffect();
+  const { data: addProvince } = useGetAllProvince();
+  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const addProvinceVN = dataProvince.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
 
-  useDeepCompareEffect(() => {
-    if (dataProvinceform) setValue('eventDetailProvinces', dataProvinceform);
-  }, [dataProvinceform]);
+  const provinceId = addProvinceVN
+    ? addProvinceVN.map((item: ISelect) => item.value)
+    : [];
 
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = () => {
@@ -70,9 +72,9 @@ export default function HistoryNewForm() {
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
 
-  const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(createEventPrizevalidate()),
-    defaultValues,
+  const methods = useForm<IFormCreate>({
+    resolver: yupResolver(createEventPrizevalidate(provinceId)),
+    defaultValues: DEFAULT_FORM_VALUE,
   });
 
   const {
@@ -84,52 +86,21 @@ export default function HistoryNewForm() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data: IFormCreateEvent) => {
-    const eventDetailProvinces: Array<IEventDetail> = data.eventDetailProvinces.map(
-      (item) => {
-        let startDate = new Date().toISOString();
-        let endDate = new Date().toISOString();
+  useEffect(() => {
+    if(idEventPrize){
+      setValue('eventId', idEventPrize)
+    }
+  }, [idEventPrize])
 
-        if (item.endDate || item.startDate) {
-          startDate = item.startDate
-            ? item.startDate instanceof Date
-              ? item.startDate.toISOString()
-              : startDate
-            : startDate;
-          endDate = item.endDate
-            ? item.endDate instanceof Date
-              ? item.endDate.toISOString()
-              : endDate
-            : endDate;
-        }
-        if (item.extraquantity) {
-          item.quantity =
-            parseInt(item.quantity.toString()) + parseInt(item.extraquantity.toString());
-          delete item.extraquantity;
-        }
-        return { ...item, startDate: startDate, endDate: endDate };
-      }
-    );
+  const onSubmit = async (data: IFormCreate) => {
     if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
-    const dataEvent: IFormCreateEvent = {
-      eventDetailProvinces,
-      eventId: idEventPrize,
-      giftId: gift.id,
-      notificationContent: data.notificationContent,
-      notificationDescription: data.notificationDescription,
-      notificationTitle: data.notificationTitle,
-      ordinal: data.ordinal,
-      popupCode: popUpCode,
-      popupType: popUpType,
-      popupImageLink: data.popupImageLink,
-      popupLink: data.popupLink,
-      probability: data.probability,
-      quantity: data.quantity,
-      transactionTypeId: transactionTypeId.id,
-    };
-    mutate(dataEvent);
+    data.popupCode = popUpCode;
+    data.popupType = popUpType;
+    const tempEditData = fomatFormData(data);
+    dispatch(setEditDataEvent(tempEditData));
+    mutate(tempEditData)
   };
 
   return (
@@ -150,7 +121,7 @@ export default function HistoryNewForm() {
               <Card sx={{ p: 2 }}>
                 <Stack direction={'column'} spacing="15px">
                   <Box>
-                    <FullFeaturedCrudGrid />
+                    <ProvinceTableForm />
                   </Box>
                 </Stack>
               </Card>
@@ -163,7 +134,7 @@ export default function HistoryNewForm() {
                   variant="outlined"
                   size="large"
                   type="submit"
-                  loading={isLoading}
+                  loading={buttonType === ButtonType.SAVE_SUBMIT &&isLoading}
                   onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
                 >
                   Lưu
@@ -175,7 +146,7 @@ export default function HistoryNewForm() {
                   variant="outlined"
                   size="large"
                   type="submit"
-                  loading={isLoading}
+                  loading={buttonType === ButtonType.SAVE_CREATE_SUBMIT && isLoading}
                   onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
                 >
                   Lưu & Chỉnh sửa
