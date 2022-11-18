@@ -5,7 +5,7 @@ import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
 import Can from 'src/common/lib/Can';
 import { dispatch, useSelector } from 'src/common/redux/store';
-import { alertStatusSelector, itemRowsSelector, setAlert } from '../../event.slice';
+import { alertStatusSelector, itemRowsSelector, setAlert } from '../../eventListPrize.slice';
 import { IPropsListPrizeTableRow } from '../../interfaces';
 import AlertDialog from './AlertConfirmDelete';
 // ----------------------------------------------------------------------
