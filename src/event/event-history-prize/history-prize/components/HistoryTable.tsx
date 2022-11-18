@@ -10,7 +10,6 @@ import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
 
 function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
   const { id, phoneNumber, userName, qr, giftName, giftReceivedDate, spoonCode } = row;
-  console.log(dayjs(giftReceivedDate))
   return (
     <TableRow hover selected={selected}>
       <TableCell align="left">{id}</TableCell>

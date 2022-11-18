@@ -72,15 +72,7 @@ function EditFormAdmin() {
   }, [dataAdmin]);
   const onSubmit = async (data: IFormAdmin) => {
     handleOpenEditModal();
-    // let dataEdit = {
-    //   email: data.email,
-    //   firstName: data.firstName,
-    //   lastName: data.lastName,
-    //   status: data.status,
-    //   permission: data.permission,
-    //   id: data.id,
-    // };
-    // mutate({ data: dataEdit, id: parseInt(id as string) });
+   
   };
   useDeepCompareEffect(() => {
     const data = watch();

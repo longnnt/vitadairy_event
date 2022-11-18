@@ -230,7 +230,7 @@ function ListPrizeDashboard() {
                     onSelectRow={(e) => {
                       handleSelectItem(row.id, e);
                     }}
-                    onDeleteRow={() =>{handleDeleteRows([row.id]); console.log(row.id)} }
+                    onDeleteRow={() =>{handleDeleteRows([row.id])} }
                     onEditRow={() => handleEditRow(row.id)}
                     
                   />

@@ -103,20 +103,7 @@ export const EditEventForm = () => {
   const dispatch = useDispatch();
   const onSubmit = (data: any) => {
     handleOpenEditModal();
-    // if (data.typeUser === 'allUser') data.userRegisterDate = null;
-    // const formDataAddNewEvent = {
-    //   name: data.name,
-    //   startDate: data.startDate,
-    //   endDate: data.endDate,
-    //   skus: data.skus,
-    //   defaultWinRate: data.defaultWinRate,
-    //   upRate: data.upRate,
-    //   downRate: data.downRate,
-    //   userRegisterDate: data.userRegisterDate,
-    //   userLimit: data.userLimit,
-    //   id: Number(id),
-    // };
-    // mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
+   
   };
   const product = useSelector(productState);
 
