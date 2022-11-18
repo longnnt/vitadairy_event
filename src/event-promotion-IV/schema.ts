@@ -11,7 +11,7 @@ export const schemaAddEvent = yup
     endDate: yup.mixed().required('Vui lòng nhập thông tin vào ô trống'),
     skus: yup
       .array()
-      .of(yup.string())
+      .of(yup.mixed())
       .required('Vui lòng nhập thông tin vào ô trống')
       .min(1, 'Vui lòng chọn ít nhất một mã sản phẩm'),
     defaultWinRate: yup

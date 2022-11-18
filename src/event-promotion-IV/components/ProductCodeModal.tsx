@@ -1,4 +1,5 @@
 import {
+  Stack,
   Box,
   Button,
   Card,
@@ -7,6 +8,8 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
+  Dialog,
+  Typography,
 } from '@mui/material';
 import { useEffect } from 'react';
 import Scrollbar from 'src/common/components/Scrollbar';
@@ -16,24 +19,33 @@ import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { TABLE_HEAD_PRODUCT_CODE } from '../constant';
 import {
+  filterProductCodeState,
   openModalState,
   productState,
   setIsOpenModal,
   setProduct,
+  setSearchProductCode,
 } from '../eventPromotionIV.slice';
 import { useProductCode } from '../hooks/useProductCode';
-import { IProductCode } from '../interface';
+import { EventSearchParams, IProductCode } from '../interface';
+import ProductCodeFilterBar from './FilterProductCodeBar';
 import { ProductCodeTableRow } from './ProductCodeTableRow';
 
 export const ProductCodeModal = () => {
-  const { dense, onChangeDense, page, rowsPerPage, onChangePage, onChangeRowsPerPage } =
+  const { dense, onChangeDense, page, rowsPerPage, onChangePage, onChangeRowsPerPage, setPage } =
     useTable({
       defaultRowsPerPage: 5,
     });
-  const { skusListData: skusCodeDataEvent, pagination } = useProductCode({
+  
+
+  const searchParams:EventSearchParams ={
     page: page + 1,
     size: rowsPerPage,
-  });
+  } 
+  const filterProductCode = useSelector(filterProductCodeState);
+  if (filterProductCode) searchParams.searchText = filterProductCode;
+  
+  const { skusListData: skusCodeDataEvent, pagination } = useProductCode(searchParams);
 
   const {
     selectedIds,
@@ -52,6 +64,11 @@ export const ProductCodeModal = () => {
 
   const handleClose = () => dispatch(setIsOpenModal(false));
 
+  const handleFilterProductCode = (filterProductCode: string) => {
+    dispatch(setSearchProductCode(filterProductCode));
+    setPage(0);
+  };
+
   const totalRecords = pagination.totalRecords;
 
   const totalPages = pagination.totalPages;
@@ -67,21 +84,25 @@ export const ProductCodeModal = () => {
   }, [product]);
 
   return (
-    <Modal
+    <Dialog
       open={open}
+      onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Card sx={{ width: '500px', margin: '0 auto' }}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleClose();
-          }}
-          sx={{ ml: '10px', my: '10px' }}
-        >
-          X
-        </Button>
+      <Card sx={{ minWidth: 500 }}>
+        <Stack sx={{padding: 2}} spacing={2} direction={'row'} justifyContent='space-between'>
+          <Typography variant='h4'>Danh sách mã sản phẩm</Typography>
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            Close
+          </Button>
+        </Stack>
+        <ProductCodeFilterBar filterName={filterProductCode} onFilterName={handleFilterProductCode}/>
         <Scrollbar>
           <TableContainer>
             {!!selectedIds.length && (
@@ -128,6 +149,6 @@ export const ProductCodeModal = () => {
           )}
         </Box>
       </Card>
-    </Modal>
+    </Dialog>
   );
 };

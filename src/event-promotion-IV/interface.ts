@@ -29,6 +29,7 @@ export interface initialValueProps {
   isOpenModal: boolean;
   product: string[];
   confirmPopup: boolean;
+  filterProductCode: string;
 }
 
 export type TimeProps = Date | null;
@@ -107,14 +108,18 @@ export interface IProductCode {
   id: number;
 }
 
+export interface IProCodeSelect {
+  value: string;
+  label: string;
+}
 export interface IResEventByID {
-  data:{
+  data: {
     meta: {
       msg: string;
       status: number;
     };
     response: IEventFormData;
-  }
+  };
 }
 
 export interface IEventEditFormData {
