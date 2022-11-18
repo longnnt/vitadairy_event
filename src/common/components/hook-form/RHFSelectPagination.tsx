@@ -36,7 +36,6 @@ export const RHFSelectPagitnation = ({ name, getAsyncData, placeholder }: IProps
     loadedOptions: any,
     { page }: { page: number }
   ) => {
-    await new Promise((resolver) => setTimeout(resolver, 500));
     const response = await getAsyncData({ page: page, searchText: search });
     const hasMore = page < response?.data?.response.pagination.totalPages;
     const optionSelects = response.data?.response.response.map((prodCode: ISelect) => {

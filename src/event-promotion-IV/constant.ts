@@ -39,9 +39,8 @@ export const defaultValues = {
   defaultWinRate: 0,
   upRate: 0,
   downRate: 0,
-  typeUser: '',
   userRegisterDate: null,
   userLimit: 0,
-  id: 100,
 };
+
 export const DEFAULT_LOADING_SIZE = 5;

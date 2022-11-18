@@ -1,4 +1,4 @@
-import { EventSearchParams, IEventFormData, RowProps } from './interface';
+import { EventSearchParams, IEventFormData, IResEventByID, RowProps } from './interface';
 import axiosInstance from 'src/common/utils/axios';
 import { API_EVENT_ADMIN, API_PRODUCT } from './../common/constants/apis';
 import { AxiosResponse } from 'axios';
@@ -27,7 +27,7 @@ export const addNewEvent = async (formData: {}) => {
   return data;
 };
 export const getEventById = (id: number) => {
-  return axiosInstance.get(`${API_EVENT_ADMIN}/${id}`);
+  return axiosInstance.get<unknown, IResEventByID> (`${API_EVENT_ADMIN}/${id}`);
 };
 
 export const getProductCode = (params: EventSearchParams) => {
