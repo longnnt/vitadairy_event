@@ -30,11 +30,11 @@ export type IStoreAdminCallback = {
 export type IStories = Array<IFormStore>;
 
 export interface IStoreParams {
-  firstScanEndDate: Date | null;
+  startDate: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  firstScanStartDate: Date | null;
+  endDate: Date | null;
 }
 
 export enum MessageType {

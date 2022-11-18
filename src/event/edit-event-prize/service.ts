@@ -9,6 +9,7 @@ import {
 import axiosInstance from 'src/common/utils/axios';
 import {
   IFormEdit,
+  IFormSubmitEdit,
   IGiftById,
   IParamsGetGift,
   IQuery,
@@ -32,7 +33,7 @@ export const getAllProvinceVN = async () => {
   return axiosInstance.get<unknown, IResProvince>(API_PROVINCE_VN);
 };
 
-export const eidtEventPrize = (newData: IFormEdit) => {
+export const eidtEventPrize = (newData: IFormSubmitEdit) => {
   return axiosInstance.patch(API_EDIT_EVENT_PRIZE, newData);
 };
 

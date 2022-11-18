@@ -34,6 +34,27 @@ export const DEDAULT_PROVINCE = {
   isNew: false,
 };
 export const DEFAULT_FORM_VALUE = {
+  // eventDetailProvinces: [DEDAULT_PROVINCE],
+  eventDetailProvinces: {
+    0: DEDAULT_PROVINCE,
+  },
+  eventId: 0,
+  giftId: 0,
+  id: 0,
+  notificationContent: '',
+  notificationDescription: '',
+  notificationTitle: '',
+  ordinal: 0,
+  popupCode: '',
+  popupImageLink: '',
+  popupLink: '',
+  popupType: '',
+  probability: 0,
+  quantity: 0,
+  transactionTypeId: 0,
+  winnerAmount: 0,
+};
+export const DEFAULT_FORM_VALUE_SUBMIT = {
   eventDetailProvinces: [DEDAULT_PROVINCE],
   eventId: 0,
   giftId: 0,

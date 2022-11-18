@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
 import { IPropsPrizeHistoryTableRow } from '../../interfaces';
+import dayjs from 'dayjs';
+import { FORMATE_CREATE_DATE } from 'src/store-admin/constants';
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +18,8 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
       <TableCell align="left">{giftName}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {giftReceivedDate.slice(0, 19).replace('T', ' ')}
+        {/* {giftReceivedDate.slice(0, 19).replace('T', ' ')} */}
+        {dayjs(giftReceivedDate).format(FORMATE_CREATE_DATE)}
       </TableCell>
 
       <TableCell align="left">{qr}</TableCell>

@@ -6,7 +6,7 @@ export interface IResEventPrizeById {
       status: number;
       msg: string;
     };
-    response: IFormEdit;
+    response: IFormSubmitEdit;
   };
 }
 
@@ -24,8 +24,10 @@ export interface IEventProvince {
   isNew?: boolean;
 }
 
-export interface IFormEdit {
-  eventDetailProvinces: IEventProvince[];
+export interface IEventDetailProvinces {
+  [id: number | string]: IEventProvince;
+}
+interface IForm {
   eventId: number;
   giftId: number;
   id: number;
@@ -42,6 +44,14 @@ export interface IFormEdit {
   transactionTypeId: number;
   winnerAmount: number;
   typeUser?: string;
+}
+export interface IFormEdit extends IForm {
+  // eventDetailProvinces: IEventProvince[];
+  eventDetailProvinces: IEventDetailProvinces;
+}
+
+export interface IFormSubmitEdit extends IForm {
+  eventDetailProvinces: IEventProvince[];
 }
 
 export interface IResProvince {

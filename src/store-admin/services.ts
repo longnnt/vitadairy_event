@@ -1,4 +1,8 @@
-import { API_STORE_ADMIN, API_STORE_ADMIN_EXPORT } from 'src/common/constants/apis';
+import {
+  API_STORE_ADMIN,
+  API_STORE_ADMIN_CODE,
+  API_STORE_ADMIN_EXPORT,
+} from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import { IDataStore, IStoreActive, IStoreParams } from './interfaces';
 

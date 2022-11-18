@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogTitle, Slide } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef } from 'react';
 import { useDispatch, useSelector } from 'src/common/redux/store';
@@ -28,8 +28,8 @@ export const AlertDialogSlide = () => {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const mutationDelete = useDeleteAdmin ({
-    onSuccess: () => showSuccessSnackbar('Xóa sự kiện thành công'),
-    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
+    onSuccess: () => {},
+    onError: () => showErrorSnackbar('Xóa tài khoản thất bại'),
   });
 
   const handleAgree = () => {
@@ -54,13 +54,18 @@ export const AlertDialogSlide = () => {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{'Bạn có muốn xóa sự kiện này không'}</DialogTitle>
+        <DialogTitle>{'Bạn có muốn xóa tài khoản này không'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Thao tác này sẽ không thể hoàn tác.
+          </DialogContentText>
+        </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" onClick={handleClose}>
+          <Button variant="contained" color="inherit"  onClick={handleClose}>
             Hủy bỏ
           </Button>
           <Button variant="contained" onClick={handleAgree}>
-            Đồng ý
+            Xác nhận
           </Button>
         </DialogActions>
       </Dialog>

@@ -3,6 +3,7 @@ import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import Can from 'src/common/lib/Can';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { fDate } from 'src/common/utils/formatTime';
 import { EventTableRowProps } from '../interface';
@@ -41,11 +42,13 @@ export const EventTableRow = ({
 
   return (
     <TableRow hover selected={selected}>
+      <Can do="update" on="all">
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
-      <TableCell align="left">
-        {name}
+      </Can>
+      <TableCell align="left" onClick={() => handleViewListPrize(id.toString())}>
+        <Link underline="always">{name}</Link>
       </TableCell>
       <TableCell align="left">{fDate(startDate)}</TableCell>
       <TableCell align="left">{fDate(endDate)}</TableCell>
@@ -64,6 +67,7 @@ export const EventTableRow = ({
                 <Iconify icon={'akar-icons:eye'} />
                 View Event
               </MenuItem>
+              <Can do="update" on="all">
               <MenuItem onClick={() => handleEditEventAction(id)}>
                 <Iconify icon={'eva:edit-fill'} />
                 Edit
@@ -78,6 +82,7 @@ export const EventTableRow = ({
                 <Iconify icon={'eva:trash-2-outline'} />
                 Delete
               </MenuItem>
+              </Can>
             </>
           }
         />

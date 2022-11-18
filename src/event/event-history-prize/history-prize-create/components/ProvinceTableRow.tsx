@@ -198,13 +198,12 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
-      // width: 110,
       flex: 1,
     },
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
-      type: 'date',
+      type: 'dateTime',
       flex: 1,
       editable: true,
       preProcessEditCellProps: (params) => {
@@ -215,7 +214,7 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
-      type: 'date',
+      type: 'dateTime',
       flex: 1,
       editable: true,
       preProcessEditCellProps: (params) => {

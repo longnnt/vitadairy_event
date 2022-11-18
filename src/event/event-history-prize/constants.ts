@@ -107,6 +107,14 @@ export const TABLE_HEAD_GIFT = [
   { id: 'money', label: 'Money', align: 'right' },
 ];
 
+export const TABLE_HEAD_TRANSACTION_TYPE = [
+  { id: 'id', label: 'Id', align: 'left' },
+  { id: 'code', label: 'Code', align: 'left' },
+  { id: 'name', label: 'Name', align: 'left' },
+  { id: 'description', label: 'Description', align: 'left' },
+  { id: 'mainCode', label: 'MainCode', align: 'left' },
+];
+
 export const FORMAT_DATE_NEWS = 'dd/MM/yyyy hh:mm a';
 
 export const POPUP_TYPE = {
@@ -114,6 +122,23 @@ export const POPUP_TYPE = {
   HTML_LINK: 'HTML_LINK',
   NULL: 'NULL',
 };
+
+export const POPUP_CODE = {
+  PUZZLE_PIECE: 'PUZZLE_PIECE',
+  OGGI: 'OGGI',
+  FULL_SCREEN: 'FULL_SCREEN',
+};
+
+export const popupCodeOption = [
+  {
+    value: POPUP_CODE.PUZZLE_PIECE,
+    label: POPUP_CODE.PUZZLE_PIECE,
+  },
+  {
+    value: POPUP_CODE.OGGI,
+    label: POPUP_CODE.OGGI,
+  },
+];
 
 export const popupTypeOption = [
   {

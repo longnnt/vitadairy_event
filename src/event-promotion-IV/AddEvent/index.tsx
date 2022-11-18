@@ -177,7 +177,7 @@ export const AddEvent = () => {
                 <RHFSelectPagitnation
                   name={'skus'}
                   getAsyncData={getProductCode}
-                  placeholder=" Mã sản phẩm*"
+                  placeholder="Mã sản phẩm*"
                 />
                 {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
               </Box>

@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, TextField } from '@mui/material';
+import { Box, Card, Grid, Stack, InputAdornment, TextField } from '@mui/material';
 
-import { DatePicker } from '@mui/x-date-pickers';
+import {  MobileDateTimePicker } from '@mui/x-date-pickers';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
 import { Controller, useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ import {
   setSearchText,
 } from '../../event.slice';
 import { IFormFilter, IHistoryListEventParams } from '../../interfaces';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,7 @@ type Props = {
 };
 
 export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) => {
-  const { handleSearch,isLoading } = { ...props };
+  const { handleSearch, isLoading } = { ...props };
   const methods = useForm<IFormFilter>({
     defaultValues: {
       searchText: '',
@@ -114,11 +115,18 @@ export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) =
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <DatePicker
+                    <MobileDateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
                       inputFormat={FORMAT_DATE_NEWS}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -132,11 +140,18 @@ export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) =
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <DatePicker
+                  <MobileDateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
                     inputFormat={FORMAT_DATE_NEWS}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}

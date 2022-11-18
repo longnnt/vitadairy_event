@@ -16,7 +16,7 @@ export const EditEvent = () => {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="DANH SÁCH SỰ KIỆN"
+        heading="CHỈNH SỬA SỰ KIỆN"
         links={[
           { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
