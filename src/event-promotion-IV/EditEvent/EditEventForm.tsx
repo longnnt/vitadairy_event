@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   InputAdornment,
+  responsiveFontSizes,
   Stack,
   TextField,
   Typography,
@@ -25,7 +26,7 @@ import {
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { defaultValues } from '../constant';
+
 import {
   productState,
   setIsOpenModal,
@@ -36,22 +37,39 @@ import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
 import { schemaAddEvent } from '../schema';
 import { ProductCodeModal } from '../components/ProductCodeModal';
+import { IEventEditFormData, IEventFormData } from '../interface';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
-  const methods = useForm({
+
+  const defaultValues = {
+    name: '',
+    startDate: undefined,
+    endDate: undefined,
+    skus: [] as string[],
+    defaultWinRate: 0,
+    upRate: 0,
+    downRate: 0,
+    userRegisterDate: undefined,
+    userLimit: 0,
+  };
+
+  const methods = useForm<IEventEditFormData>({
     resolver: yupResolver(schemaAddEvent),
     defaultValues,
   });
-
+  
+  const { useDeepCompareEffect } = useDeepEffect();
   const params = useParams();
   const id = params?.id;
 
   const { data } = useGetEventById({
     id: parseInt(id as string),
+    callback: {
+      onError: () => showErrorSnackbar('Lấy thông tin sự kiện thất bại'),
+    },
   });
-
-  const dataEventDetail = data?.data?.response;
+  const dataEventDetail= data?.data?.response
 
   const {
     control,
@@ -63,8 +81,6 @@ export const EditEventForm = () => {
   } = methods;
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const watchUserType = watch('typeUser');
-
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
       showErrorSnackbar('Tạo mới thất bại');
@@ -72,9 +88,8 @@ export const EditEventForm = () => {
   });
 
   const dispatch = useDispatch();
-  const { useDeepCompareEffect } = useDeepEffect();
+  
   const onSubmit = (data: any) => {
-    if (data.typeUser === 'allUser') data.userRegisterDate = null;
     const formDataAddNewEvent = {
       name: data.name,
       startDate: data.startDate,
@@ -93,15 +108,7 @@ export const EditEventForm = () => {
 
   useDeepCompareEffect(() => {
     if (dataEventDetail) {
-      // const data1 = { ...dataEventDetail, skus: product };
-      reset(dataEventDetail);
-      let allUserOrNewUser = '';
-      if (dataEventDetail?.userRegisterDate === null) {
-        allUserOrNewUser = 'allUser';
-      } else {
-        allUserOrNewUser = 'newUser';
-      }
-      setValue('typeUser', allUserOrNewUser);
+      reset(dataEventDetail)
       dispatch(setProduct(dataEventDetail.skus));
     }
   }, [dataEventDetail]);
@@ -216,14 +223,6 @@ export const EditEventForm = () => {
                 type="number"
               />
 
-              <RHFRadioGroup
-                name="typeUser"
-                options={[
-                  { label: 'Toàn bộ người dùng', value: 'allUser' },
-                  { label: 'Người dùng mới', value: 'newUser' },
-                ]}
-              />
-
               <Controller
                 name="userRegisterDate"
                 control={control}
@@ -231,7 +230,6 @@ export const EditEventForm = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
-                    display={`${(watchUserType === 'allUser' && 'none') || 'display'}`}
                   >
                     <DatePicker
                       {...field}

@@ -4,15 +4,15 @@ import { IProductCode } from '../interface';
 
 export const useProductCode = (searchParams?: any) => {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { data: productData } = useGetProductCode({
+  const { data: productData, isLoading } = useGetProductCode({
     params: searchParams,
     callback: {
-      onSuccess: () => { 
+      onSuccess: () => {
         // showSuccessSnackbar('Tải mã sản phẩm thành công')
       },
       onError: () => {
-        showErrorSnackbar('Tải mã sản phẩm thất bại')
-      }
+        showErrorSnackbar('Tải mã sản phẩm thất bại');
+      },
     },
   });
 
@@ -24,5 +24,5 @@ export const useProductCode = (searchParams?: any) => {
     id: item.id,
   }));
 
-  return { skusListData, pagination };
+  return { skusListData, pagination, isLoading };
 };

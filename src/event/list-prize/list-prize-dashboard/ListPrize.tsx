@@ -13,6 +13,7 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
+import { useEffect } from 'react';
 
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
@@ -32,7 +33,7 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { replacePathParams } from 'src/common/utils/replaceParams';
 import { TABLE_HEAD } from '../contants';
-import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector } from '../event.slice';
+import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector, isResetSelectSelector, setIsResetSelect } from '../eventListPrize.slice';
 import useShowSnackbar from '../hooks/useCustomSnackBar';
 import { useDeleteListPrizeAdmin } from '../hooks/useDeleteListPrize';
 import { useGetListPrize } from '../hooks/useGetListPrize';
@@ -96,19 +97,20 @@ function ListPrizeDashboard() {
   );
 
   const alertStatus = useSelector(alertStatusSelector)
-  // const itemRow= useSelector(itemRowsSelector)
+  const itemRow= useSelector(itemRowsSelector)
+  const isSelect = useSelector(isResetSelectSelector)
   const handleOpenAlert = () =>{
-    dispatch(setAlert({alertStatus: true}));
+    dispatch(setAlert({alertStatus: true , itemId: selectedIds}));
   }
   const handleCloseAlert= () =>{
-    dispatch(setAlert({alertStatus: false}));
+    dispatch(setAlert({alertStatus: false, itemId: []}));
   }
 
   const handleFilterName = (filterName: string) => {
     dispatch(setFilterName(filterName));
     setPage(0);
   };
-  const handleDeleteRows = (ids: string[]) => {
+  const handleDeleteRows = (ids: string[]) => {   
     for (let i = 0; i < ids.length; i++) {
       mutationDetele.mutate(ids[i]);
       resetSelect();
@@ -117,6 +119,11 @@ function ListPrizeDashboard() {
   const handleEditRow = (id: string) => {
     navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
+
+  useEffect(() =>{
+    resetSelect()
+    dispatch(setIsResetSelect(false))
+  },[isSelect])
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;
@@ -147,7 +154,9 @@ function ListPrizeDashboard() {
               disabled={selectedIds.length ===0}
               variant="contained"
               color="error"
-              onClick={() => handleOpenAlert()}
+              onClick={() => {
+                handleOpenAlert();
+              }}
             >
               Xóa
             </Button>
@@ -155,8 +164,7 @@ function ListPrizeDashboard() {
             <AlertDialog 
               open={alertStatus} 
               handleClose={handleCloseAlert}
-              selectedId={selectedIds}
-              // onDelete={() => handleDeleteRows(selectedIds)}
+              selectedId={itemRow.itemRowId}
               />
           </Stack>
         }

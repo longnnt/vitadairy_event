@@ -15,6 +15,7 @@ const initialValue: initialValueProps = {
   isOpenModal: false,
   product: [] as string[],
   confirmPopup: false,
+  filterProductCode: '',
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -60,6 +61,9 @@ const eventPromotionIVSlice = createSlice({
     setConfirmPopup: (state, action: PayloadAction<boolean>) => {
       state.confirmPopup = action.payload;
     },
+    setSearchProductCode: (state, action: PayloadAction<string>) => {
+      state.filterProductCode = action.payload;
+    },
   },
 });
 
@@ -77,6 +81,7 @@ export const {
   setIsOpenModal,
   setProduct,
   setConfirmPopup,
+  setSearchProductCode,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -93,3 +98,5 @@ export const openModalState = (state: RootState) => state.eventPromotionIV.isOpe
 export const productState = (state: RootState) => state.eventPromotionIV.product;
 export const confirmPopupEventState = (state: RootState) =>
   state.eventPromotionIV.confirmPopup;
+export const filterProductCodeState = (state: RootState) =>
+  state.eventPromotionIV.filterProductCode;
