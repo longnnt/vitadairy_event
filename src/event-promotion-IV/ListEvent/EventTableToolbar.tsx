@@ -8,12 +8,13 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 import { timeout } from 'src/common/lib/common.lib';
 
 import { dispatch } from 'src/common/redux/store';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { setEndDate, setSearchText, setStartDate } from '../eventPromotionIV.slice';
 
 interface ISearchParamsProps {
@@ -70,6 +71,13 @@ export const EventTableToolbar = () => {
               label="Ngày bắt đầu"
               key={'firstScanStartDate'}
               inputFormat={'dd/MM/yyyy hh:mm a'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Calendar />
+                  </InputAdornment>
+                ),
+              }}
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
@@ -84,6 +92,13 @@ export const EventTableToolbar = () => {
               key="firstScanEndDate"
               label="Ngày kết thúc"
               inputFormat={'dd/MM/yyyy hh:mm a'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Calendar />
+                  </InputAdornment>
+                ),
+              }}
               renderInput={(params: any) => <TextField {...params} fullWidth />}
             />
           )}
@@ -106,8 +121,36 @@ export const EventTableToolbar = () => {
             </FormControl>
           )}
         />
+        <Controller
+          name="startDate"
+          key={'firstScanStartDate'}
+          control={control}
+          render={({ field }) => (
+            <DateTimePicker
+              {...field}
+              label="Ngày bắt đầu"
+              key={'firstScanStartDate'}
+              inputFormat={'dd/MM/yyyy hh:mm a'}
+              renderInput={(params) => <TextField {...params} fullWidth />}  
+            />
+          )}
+        />
+        <Controller
+          name="endDate"
+          key="firstScanEndDate"
+          control={control}
+          render={({ field }: { field: any }) => (
+            <DateTimePicker
+              {...field}
+              key="firstScanEndDate"
+              label="Ngày kết thúc"
+              inputFormat={'dd/MM/yyyy hh:mm a'}
+              renderInput={(params) => <TextField {...params} fullWidth />}
+            />
+          )}
+        />
       </Stack>
-      <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }}>
+      <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }} padding={1}>
         <Button variant="contained" color="info" type="submit">
           Lọc
         </Button>

@@ -64,5 +64,5 @@ export interface IShowMessage {
 
 export interface ITablePayload{
   alertStatus?: boolean;
-  itemId?: string;
+  itemId?: string[];
 }

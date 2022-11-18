@@ -19,6 +19,7 @@ const initialValue: initialValueProps = {
 
   openEditModal: false,
   confirmEdit: false,
+  filterProductCode: '',
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -70,6 +71,8 @@ const eventPromotionIVSlice = createSlice({
     },
     setConfirmEdit: (state, action: PayloadAction<boolean>) => {
       state.confirmEdit = action.payload;
+    setSearchProductCode: (state, action: PayloadAction<string>) => {
+      state.filterProductCode = action.payload;
     },
   },
 });
@@ -90,6 +93,7 @@ export const {
   setConfirmPopup,
   setOpeneditModal,
   setConfirmEdit,
+  setSearchProductCode,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -111,3 +115,5 @@ export const confirmPopupEventState = (state: RootState) =>
   state.eventPromotionIV.openEditModal;
 export const confirmEditSelector = (state: RootState) =>
   state.eventPromotionIV.confirmEdit;
+export const filterProductCodeState = (state: RootState) =>
+  state.eventPromotionIV.filterProductCode;

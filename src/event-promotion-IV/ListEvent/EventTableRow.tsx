@@ -59,9 +59,13 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
+              <MenuItem onClick={() => handleViewListPrize(id.toString())}>
+                <Iconify icon={'fa6-solid:gift'} />
+                View Gift
+              </MenuItem>
               <MenuItem onClick={handleClickView}>
                 <Iconify icon={'akar-icons:eye'} />
-                View
+                View Event
               </MenuItem>
               <Can do="update" on="all">
               <MenuItem onClick={() => handleEditEventAction(id)}>

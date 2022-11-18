@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   FormControl,
+  InputAdornment,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -11,7 +12,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
@@ -41,7 +43,7 @@ export const ViewEvent = () => {
     },
   });
 
-  const eventDetail = data?.data || [];
+  const eventDetail = data?.data?.response ;
 
   const {
     name,
@@ -53,7 +55,7 @@ export const ViewEvent = () => {
     userRegisterDate,
     userLimit,
     skus,
-  } = eventDetail.response || defaultValues;
+  } = eventDetail || defaultValues;
   const handleBackEventList = () => {
     navigate(PATH_DASHBOARD.eventPromotionIV.list);
   };
@@ -65,7 +67,7 @@ export const ViewEvent = () => {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="DANH SÁCH SỰ KIỆN"
+        heading="THÔNG TIN SỰ KIỆN"
         links={[
           { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
@@ -85,9 +87,16 @@ export const ViewEvent = () => {
               alignItems={'center'}
               position="relative"
             >
-              <DateTimePicker
+              <MobileDateTimePicker
                 label="Ngày bắt đầu"
                 inputFormat="dd/MM/yyyy hh:mm a"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Calendar />
+                    </InputAdornment>
+                  ),
+                }}
                 renderInput={(params) => <TextField {...params} fullWidth />}
                 value={startDate}
                 disabled
@@ -95,9 +104,16 @@ export const ViewEvent = () => {
               />
               <Box sx={{ mx: 2 }}>-</Box>
 
-              <DateTimePicker
+              <MobileDateTimePicker
                 label="Ngày kết thúc"
                 inputFormat="dd/MM/yyyy hh:mm a"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Calendar />
+                    </InputAdornment>
+                  ),
+                }}
                 renderInput={(params) => <TextField {...params} fullWidth />}
                 onChange={() => 0}
                 disabled
@@ -139,28 +155,6 @@ export const ViewEvent = () => {
               label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
               disabled
             />
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                name="radio-buttons-group"
-                sx={{ flexDirection: 'row' }}
-              >
-                <FormControlLabel
-                  value="allUser"
-                  control={<Radio />}
-                  label="Tất cả người dùng"
-                  disabled
-                  checked={userRegisterDate === null}
-                />
-                <FormControlLabel
-                  value="newUser"
-                  control={<Radio />}
-                  label="Người dùng mới"
-                  disabled
-                  checked={userRegisterDate !== null}
-                />
-              </RadioGroup>
-            </FormControl>
 
             <DatePicker
               label="Ngày tính người dùng mới"
@@ -170,7 +164,6 @@ export const ViewEvent = () => {
                   {...params}
                   fullWidth
                   disabled
-                  sx={{ display: `${(userRegisterDate === null && 'none') || 'block'}` }}
                 />
               )}
               onChange={() => 0}

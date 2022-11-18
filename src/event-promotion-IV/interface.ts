@@ -32,6 +32,7 @@ export interface initialValueProps {
 
   openEditModal: boolean;
   confirmEdit: boolean;
+  filterProductCode: string;
 }
 
 export type TimeProps = Date | null;
@@ -108,4 +109,30 @@ export interface PaginationProps {
 export interface IProductCode {
   code: string;
   id: number;
+}
+
+export interface IProCodeSelect {
+  value: string;
+  label: string;
+}
+export interface IResEventByID {
+  data: {
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: IEventFormData;
+  };
+}
+
+export interface IEventEditFormData {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
+  userRegisterDate: Date;
+  userLimit: number;
+  skus: string[];
 }

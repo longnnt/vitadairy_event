@@ -7,16 +7,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDeleteListPrizeAdmin } from '../../hooks/useDeleteListPrize';
 import useShowSnackbar from '../../hooks/useCustomSnackBar';
+import { dispatch } from 'src/common/redux/store';
+import { setIsResetSelect } from '../../eventListPrize.slice';
 
 type Props={
     open: boolean;
     handleClose:() => void;
     selectedId:string[];
-    resetSelect?:() => void
-
 }
 
-export default function AlertDialog({open, handleClose, selectedId, resetSelect} : Props) {
+export default function AlertDialog({open, handleClose, selectedId} : Props) {
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const mutationDelete = useDeleteListPrizeAdmin({
     onSuccess: () => {
@@ -63,6 +63,7 @@ export default function AlertDialog({open, handleClose, selectedId, resetSelect}
               () => {
                 // handleDeleteRows(selectedId)
                 handleClose();
+                // resetSelect&& resetSelect();
               }
             } 
             autoFocus 

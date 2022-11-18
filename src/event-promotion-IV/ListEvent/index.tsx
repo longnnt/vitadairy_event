@@ -50,45 +50,46 @@ export default function ListEventPromotionDashboard() {
 
   return (
     <>
-    {isLoading ? <LoadingSkeletonListEventScreen/> :
-    (
-      <>  
-      <HeaderBreadcrumbs
-        heading="DANH SÁCH SỰ KIỆN"
-        links={[
-          { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Danh sách sự kiện' },
-        ]}
-        action={
-          <><Can do="update" on="all">
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'akar-icons:file'} />}
-              onClick={handleCreateEvent}
-              sx={{ mr: '10px' }}
-            >
-              Tạo mới
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'akar-icons:file'} />}
-              color="error"
-              onClick={handleDeleteRows}
-            >
-              Xóa
-            </Button>
-            </Can>
-          </>
-        }
-      />
-      <Card sx={{ p: '10px', w: '100%' }}>
-        <EventTableToolbar />
-        <EventTable />
-      </Card>
+      {isLoading ? (
+        <LoadingSkeletonListEventScreen />
+      ) : (
+        <>
+          <HeaderBreadcrumbs
+            heading="DANH SÁCH SỰ KIỆN"
+            links={[
+              { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
+              { name: 'Danh sách sự kiện' },
+            ]}
+            action={
+              <>
+                <Can do="update" on="all">
+                  <Button
+                    variant="contained"
+                    startIcon={<Iconify icon={'akar-icons:file'} />}
+                    onClick={handleCreateEvent}
+                    sx={{ mr: '10px' }}
+                  >
+                    Tạo mới
+                  </Button>
+                  <Button
+                    disabled={!selectedIdsValue.length}
+                    variant="contained"
+                    startIcon={<Iconify icon={'akar-icons:file'} />}
+                    color="error"
+                    onClick={handleDeleteRows}
+                  >
+                    Xóa
+                  </Button>
+                </Can>
+              </>
+            }
+          />
+          <Card sx={{ p: '10px', w: '100%' }}>
+            <EventTableToolbar />
+            <EventTable />
+          </Card>
+        </>
+      )}
     </>
-    )
-    }
-    </>
-    
   );
 }

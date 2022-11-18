@@ -1,8 +1,9 @@
 import { LoadingButton } from '@mui/lab';
 import { Stack, InputAdornment, TextField, Box, Grid, Card, Button } from '@mui/material';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 // components
 import Iconify from 'src/common/components/Iconify';
 import {
@@ -16,16 +17,6 @@ import { dispatch } from 'src/common/redux/store';
 import { IParamsQuery } from '../common/interfaces';
 
 // ----------------------------------------------------------------------
-
-type Props = {
-  roleOptions: string[];
-  searchText: string;
-  statusSuccess: string;
-  firstScanStart: string;
-  firstScanEnd: string;
-  onSearchText: (value: string) => void;
-  onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
 
 export const InvitationTableToolbar = (handleSearch: any) => {
   const methods = useForm({
@@ -96,7 +87,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     </LoadingButton>
                     <Button
                       sx={{ size: '30px' }}
-                      type="submit"
+                      type="reset"
                       variant="contained"
                       size="medium"
                       onClick={handleResetSearch}
@@ -114,11 +105,18 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <MobileDateTimePicker
+                    <DateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
                       inputFormat="dd/MM/yyyy hh:mm a"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -131,11 +129,18 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
                     inputFormat="dd/MM/yyyy hh:mm a"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}

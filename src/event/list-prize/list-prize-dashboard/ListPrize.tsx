@@ -13,6 +13,7 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
+import { useEffect } from 'react';
 
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
@@ -129,6 +130,11 @@ function ListPrizeDashboard() {
   const handleEditRow = (id: number) => {
     navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
+
+  useEffect(() =>{
+    resetSelect()
+    dispatch(setIsResetSelect(false))
+  },[isSelect])
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;

@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) => {
-  const { handleSearch,isLoading } = { ...props };
+  const { handleSearch, isLoading } = { ...props };
   const methods = useForm<IFormFilter>({
     defaultValues: {
       searchText: '',

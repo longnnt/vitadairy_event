@@ -1,12 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Box,
   Button,
-  Card,
   FormControl,
   FormControlLabel,
-  InputAdornment,
+  FormHelperText,
   Radio,
   RadioGroup,
   Stack,
@@ -20,26 +18,26 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
-import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { ProductCodeModal } from '../components/ProductCodeModal';
 import { defaultValues } from '../constant';
 import {
   buttonTypeState,
   productState,
   setButtonType,
-  setIsOpenModal,
   setProduct,
   setUserType,
   userTypeState,
 } from '../eventPromotionIV.slice';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
-import { IEventFormData, UserType } from '../interface';
+import { IEventFormData, IProCodeSelect, UserType } from '../interface';
 import { schemaAddEvent } from '../schema';
+import { getProductCode } from '../service';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -53,12 +51,12 @@ export const AddEvent = () => {
   const {
     control,
     handleSubmit,
-    reset: resetSelect,
     setValue,
     formState: { errors },
   } = methods;
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { useDeepCompareEffect } = useDeepEffect();
 
   const { mutate, isSuccess, data } = useAddNewEvent({
     onError: () => {
@@ -71,7 +69,7 @@ export const AddEvent = () => {
       name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
-      skus: data.skus,
+      skus: data.skus.map((item: IProCodeSelect) => item.value),
       defaultWinRate: data.defaultWinRate,
       upRate: data.upRate,
       downRate: data.downRate,
@@ -83,7 +81,7 @@ export const AddEvent = () => {
     dispatch(setProduct([]));
   };
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     const idEvent = data?.data?.response?.id;
     if (isSuccess) {
       if (buttonTypeValue !== 'saveSubmit') {
@@ -94,14 +92,9 @@ export const AddEvent = () => {
     }
   }, [isSuccess]);
 
-  const handleStatusUserType = (userType: string) => {
-    dispatch(setUserType(userType as UserType));
-  };
-  const userTypeValue = useSelector(userTypeState);
-
   const product = useSelector(productState);
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (product.length > 0) setValue('skus', product);
   }, [product?.length]);
 
@@ -118,10 +111,10 @@ export const AddEvent = () => {
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
-      <ProductCodeModal />
+
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Scrollbar sx={{ marginTop: '20px' }}>
-          <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
+          <Stack sx={{ p: '20px 40px 48px', backgroundColor: 'white' }}>
             <Stack spacing="26px">
               <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
               <Stack
@@ -175,21 +168,14 @@ export const AddEvent = () => {
                 />
               </Stack>
 
-              <RHFTextField
-                name="skus"
-                label="Mã sản phẩm"
-                onClick={() => dispatch(setIsOpenModal(true))}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{ position: 'absolute', right: 0, marginRight: '10px' }}
-                    >
-                      <KeyboardArrowDownIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <Box sx={{ zIndex: 1001 }}>
+                <RHFSelectPagitnation
+                  name={'skus'}
+                  getAsyncData={getProductCode}
+                  placeholder="Mã sản phẩm*"
+                />
+                {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
+              </Box>
 
               <RHFTextField
                 fullWidth
@@ -210,26 +196,6 @@ export const AddEvent = () => {
                 type="number"
               />
 
-              <FormControl>
-                <RadioGroup
-                  defaultValue="allUser"
-                  name="radio-buttons-group"
-                  sx={{ flexDirection: 'row' }}
-                  onChange={(e) => handleStatusUserType(e.target.value)}
-                >
-                  <FormControlLabel
-                    value="allUser"
-                    control={<Radio />}
-                    label="Toàn bộ người dùng"
-                  />
-                  <FormControlLabel
-                    value="newUser"
-                    control={<Radio />}
-                    label="Người dùng mới"
-                  />
-                </RadioGroup>
-              </FormControl>
-
               <Controller
                 name="userRegisterDate"
                 control={control}
@@ -237,9 +203,6 @@ export const AddEvent = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
-                    sx={{
-                      display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
-                    }}
                   >
                     <DatePicker
                       {...field}
@@ -266,7 +229,7 @@ export const AddEvent = () => {
                 type="number"
               />
             </Stack>
-          </Card>
+          </Stack>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Button
