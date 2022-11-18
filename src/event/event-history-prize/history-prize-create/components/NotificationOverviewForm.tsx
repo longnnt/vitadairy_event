@@ -62,17 +62,17 @@ function NotificationOverviewForm() {
     totalRecords: 0,
   };
 
-  // useEffect(() => {
-  //   dispatch(
-  //     setTransactionType({
-  //       id: 0,
-  //       code: '',
-  //       name: '',
-  //       description: '',
-  //       mainCode: '',
-  //     })
-  //   );
-  // }, []);
+  useEffect(() => {
+    dispatch(
+      setTransactionType({
+        id: 0,
+        code: '',
+        name: '',
+        description: '',
+        mainCode: '',
+      })
+    );
+  }, []);
 
   return (
     <Grid item xs={6}>

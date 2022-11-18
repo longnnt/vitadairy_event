@@ -22,13 +22,6 @@ export const fomatFormData = (data: IFormCreate) => {
       const provId = parseInt(item.provinceId);
       item = { ...item, provinceId: provId };
     }
-    // if (!(typeof item.extraquantity === 'string')) {
-    //   delete item.extraquantity;
-    //   item = { ...item, quantity: 0 };
-    // } else {
-    //   const totalQuantities = +item.extraquantity;
-    //   item = { ...item, quantity: totalQuantities };
-    // }
     if (!item.extraquantity) {
       delete item.extraquantity;
       item = { ...item, quantity: 0 };
@@ -36,10 +29,6 @@ export const fomatFormData = (data: IFormCreate) => {
       const totalQuantities = +item.extraquantity;
       item = { ...item, quantity: totalQuantities };
     }
-    // if (typeof item.id === 'string') {
-    //   const { id, ...newItem } = item;
-    //   return newItem;
-    // }
     return item;
   });
   return {
