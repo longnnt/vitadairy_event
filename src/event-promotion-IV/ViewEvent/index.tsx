@@ -43,7 +43,7 @@ export const ViewEvent = () => {
     },
   });
 
-  const eventDetail = data?.data || [];
+  const eventDetail = data?.data?.response ;
 
   const {
     name,
@@ -55,7 +55,7 @@ export const ViewEvent = () => {
     userRegisterDate,
     userLimit,
     skus,
-  } = eventDetail.response || defaultValues;
+  } = eventDetail || defaultValues;
   const handleBackEventList = () => {
     navigate(PATH_DASHBOARD.eventPromotionIV.list);
   };
@@ -155,28 +155,6 @@ export const ViewEvent = () => {
               label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
               disabled
             />
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                name="radio-buttons-group"
-                sx={{ flexDirection: 'row' }}
-              >
-                <FormControlLabel
-                  value="allUser"
-                  control={<Radio />}
-                  label="Tất cả người dùng"
-                  disabled
-                  checked={userRegisterDate === null}
-                />
-                <FormControlLabel
-                  value="newUser"
-                  control={<Radio />}
-                  label="Người dùng mới"
-                  disabled
-                  checked={userRegisterDate !== null}
-                />
-              </RadioGroup>
-            </FormControl>
 
             <DatePicker
               label="Ngày tính người dùng mới"
@@ -186,7 +164,6 @@ export const ViewEvent = () => {
                   {...params}
                   fullWidth
                   disabled
-                  sx={{ display: `${(userRegisterDate === null && 'none') || 'block'}` }}
                 />
               )}
               onChange={() => 0}
