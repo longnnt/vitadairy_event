@@ -16,10 +16,6 @@ const initialValue: initialValueProps = {
   product: [] as string[],
   confirmPopup: false,
   filterProductCode: '',
-  searchSelectParams: {
-    searchTextSelect: '',
-    page: 1,
-  },
 };
 
 const eventPromotionIVSlice = createSlice({
@@ -68,9 +64,6 @@ const eventPromotionIVSlice = createSlice({
     setSearchProductCode: (state, action: PayloadAction<string>) => {
       state.filterProductCode = action.payload;
     },
-    setSearchTextSelect: (state, action: PayloadAction<string>) => {
-      state.searchSelectParams.searchTextSelect = action.payload;
-    },
   },
 });
 
@@ -89,7 +82,6 @@ export const {
   setProduct,
   setConfirmPopup,
   setSearchProductCode,
-  setSearchTextSelect,
 } = eventPromotionIVSlice.actions;
 
 export const startDateState = (state: RootState) => state.eventPromotionIV.startDate;
@@ -108,5 +100,3 @@ export const confirmPopupEventState = (state: RootState) =>
   state.eventPromotionIV.confirmPopup;
 export const filterProductCodeState = (state: RootState) =>
   state.eventPromotionIV.filterProductCode;
-export const searchTextSelectSelector = (state: RootState) =>
-  state.eventPromotionIV.searchSelectParams.searchTextSelect;

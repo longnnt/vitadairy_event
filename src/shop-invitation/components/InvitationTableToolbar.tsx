@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Stack, InputAdornment, TextField, Box, Grid, Card, Button } from '@mui/material';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
 // components
@@ -96,7 +96,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     </LoadingButton>
                     <Button
                       sx={{ size: '30px' }}
-                      type="submit"
+                      type="reset"
                       variant="contained"
                       size="medium"
                       onClick={handleResetSearch}
@@ -114,7 +114,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <MobileDateTimePicker
+                    <DateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
@@ -131,7 +131,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"

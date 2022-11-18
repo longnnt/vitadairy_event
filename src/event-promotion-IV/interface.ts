@@ -30,10 +30,6 @@ export interface initialValueProps {
   product: string[];
   confirmPopup: boolean;
   filterProductCode: string;
-  searchSelectParams: {
-    searchTextSelect: string;
-    page: number;
-  };
 }
 
 export type TimeProps = Date | null;
@@ -110,4 +106,9 @@ export interface PaginationProps {
 export interface IProductCode {
   code: string;
   id: number;
+}
+
+export interface IProCodeSelect {
+  value: string;
+  label: string;
 }

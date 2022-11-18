@@ -1,13 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Box,
   Button,
-  Card,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  InputAdornment,
   Radio,
   RadioGroup,
   Stack,
@@ -15,41 +12,32 @@ import {
   Typography,
 } from '@mui/material';
 
-import AsyncSelect from 'react-select/async';
-
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
-import Select, { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
-import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { ProductCodeModal } from '../components/ProductCodeModal';
 import { defaultValues } from '../constant';
 import {
   buttonTypeState,
   productState,
-  searchTextSelectSelector,
   setButtonType,
-  setIsOpenModal,
   setProduct,
-  setSearchTextSelect,
   setUserType,
   userTypeState,
 } from '../eventPromotionIV.slice';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
-import { EventSearchParams, IEventFormData, IProductCode, UserType } from '../interface';
+import { IEventFormData, IProCodeSelect, UserType } from '../interface';
 import { schemaAddEvent } from '../schema';
-import { useProductCode } from '../hooks/useProductCode';
 import { getProductCode } from '../service';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { AsyncPaginate } from 'react-select-async-paginate';
+import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -63,12 +51,9 @@ export const AddEvent = () => {
   const {
     control,
     handleSubmit,
-    reset: resetSelect,
     setValue,
-    watch,
     formState: { errors },
   } = methods;
-  console.log(watch('skus'));
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
@@ -78,96 +63,13 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
-  const [page, setPage] = useState<number>(0);
-  // console.log('page', page);
-
-  const searchParams: EventSearchParams = {
-    searchText: useSelector(searchTextSelectSelector),
-    page: page,
-  };
-  console.log('searchParams.searchText', searchParams);
-
-  const {
-    skusListData: skusCodeDataEvent,
-    pagination,
-    isLoading,
-  } = useProductCode(searchParams);
-
-  const dataProductCodeSelect = skusCodeDataEvent.map((prodCode: IProductCode) => {
-    return {
-      value: prodCode.code,
-      label: prodCode.code,
-    };
-  });
-  console.log('dataProductCodeSelect', dataProductCodeSelect);
-
-  const loadOptions = async (
-    search: string,
-    loadedOptions: any,
-    { page }: { page: number }
-  ) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    // const hasMore = page < pagination?.totalPages;
-
-    // return {
-    //   // options: slicedOptions,
-    //   // options: listProdCodeSearch,
-    //   options: dataProductCodeSelect,
-    //   hasMore,
-    // };
-    const response = await getProductCode({ page: page, searchText: search });
-    console.log('page', page);
-
-    // const response = await await responseData.json();
-    console.log('response', response);
-    const hasMore = page < response?.data?.response.pagination.totalPages;
-
-    // const responseJSON = await response.json();
-    const opt = response
-      ? response.data?.response.response.map((prodCode: IProductCode) => {
-          return {
-            value: prodCode.code,
-            label: prodCode.code,
-          };
-        })
-      : ([] as unknown[]);
-
-    return {
-      options: opt as unknown,
-      hasMore: hasMore,
-      additional: {
-        page: page + 1,
-      },
-    };
-  };
-  // const loadPageOptions = async (
-  //   q: string,
-  //   prevOptions: any,
-  //   { page }: { page: number }
-  // ) => {
-  //   const { options, hasMore } = await loadOptions(q, page);
-
-  //   return {
-  //     options,
-  //     hasMore,
-
-  //     additional: {
-  //       page: page + 1,
-  //     },
-  //   };
-  // };
-  // console.log('listProdCode', listProdCode);
-
-  const handleInputChange = (inputText: string) => {
-    dispatch(setSearchTextSelect(inputText));
-  };
 
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
       name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
-      skus: data.skus,
+      skus: data.skus.map((item: IProCodeSelect) => item.value),
       defaultWinRate: data.defaultWinRate,
       upRate: data.upRate,
       downRate: data.downRate,
@@ -200,11 +102,6 @@ export const AddEvent = () => {
   useDeepCompareEffect(() => {
     if (product.length > 0) setValue('skus', product);
   }, [product?.length]);
-
-  // const scroll = () => {
-  //   if (page < pagination?.totalPages) setPage(page + 1);
-  //   else return;
-  // };
 
   return (
     <>
@@ -277,61 +174,10 @@ export const AddEvent = () => {
               </Stack>
 
               <Box sx={{ zIndex: 1001 }}>
-                {/* <Typography>Mã sản phẩm</Typography> */}
-                <Controller
-                  name="skus"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    // <AsyncSelect
-                    //   placeholder="Vui lòng chọn mã sản phẩm"
-                    //   // name="skus"
-                    //   isMulti
-                    //   cacheOptions
-                    //   defaultOptions={listProdCodeSearch}
-                    //   // defaultOptions={[
-                    //   //   { value: 1, label: 1 },
-                    //   //   { value: 2, label: 1 },
-                    //   //   { value: 3, label: 1 },
-                    //   // ]}
-                    //   closeMenuOnSelect={false}
-                    //   isLoading={isLoading}
-                    //   // loadOptions={async () => listProdCode}
-                    //   loadOptions={loadOptions}
-                    //   onMenuScrollToBottom={scroll}
-                    //   onInputChange={handleInputChange}
-                    //   value={value}
-                    //   onChange={onChange}
-                    //   styles={colourStyles}
-                    // />
-                    <AsyncPaginate
-                      placeholder="Vui lòng chọn mã sản phẩm"
-                      value={value}
-                      additional={{ page: 0 }}
-                      loadOptions={loadOptions}
-                      isMulti
-                      closeMenuOnSelect={false}
-                      onChange={onChange}
-                      styles={colourStyles}
-                    />
-                  )}
-                  //   <Select
-                  //     placeholder="Vui lòng chọn mã sản phẩm"
-                  //     name="skus"
-                  //     isMulti
-                  //     // cacheOptions
-                  //     // defaultOptions
-                  //     closeMenuOnSelect={false}
-                  //     options={dataProductCodeSelect}
-                  //     isLoading={isLoading}
-                  //     // loadOptions={promiseOptions}
-                  //     onInputChange={handleInputChange}
-                  //     // className="basic-multi-select"
-                  //     // classNamePrefix="select"
-                  //     value={value}
-                  //     onChange={onChange}
-
-                  //   />
-                  // )}
+                <RHFSelectPagitnation
+                  name={'skus'}
+                  getAsyncData={getProductCode}
+                  placeholder=" Mã sản phẩm*"
                 />
                 {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
               </Box>
@@ -434,41 +280,4 @@ export const AddEvent = () => {
       </FormProvider>
     </>
   );
-};
-
-const colourStyles: StylesConfig = {
-  control: (styles) => ({
-    ...styles,
-    backgroundColor: 'primary',
-    borderRadius: '6px',
-    minHeight: '60px',
-    height: '60px',
-    opacity: 0.7,
-  }),
-  // option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-  //   // const color = chroma(data.color);
-  //   return {
-  //     ...styles,
-  //     backgroundColor: isDisabled ? undefined : isSelected,
-  //     // ? data.color
-  //     // : isFocused
-  //     // ? color.alpha(0.1).css()
-  //     // : undefined,
-  //     color: isDisabled ? '#ccc' : isSelected,
-  //     // ? chroma.contrast(color, 'white') > 2
-  //     //   ? 'white'
-  //     //   : 'black'
-  //     // : data.color,
-  //     cursor: isDisabled ? 'not-allowed' : 'default',
-
-  //     ':active': {
-  //       ...styles[':active'],
-  //       backgroundColor: !isDisabled
-  //         ? isSelected
-  //         : // ? data.color
-  //           // : color.alpha(0.3).css()
-  //           undefined,
-  //     },
-  //   };
-  // },
 };
