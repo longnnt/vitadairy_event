@@ -4,6 +4,7 @@ import { ButtonType, DEDAULT_PROVINCE } from './constants';
 import {
   IEventDetail,
   IFormCreateEvent,
+  IFormSubmitCreate,
   IGift,
   IPayloadDate,
   IPayloadSearch,
@@ -20,12 +21,14 @@ type StateProps = {
   popUpCode: string | null;
   open: boolean;
   fileCSV: Array<unknown>;
-  provinceNewForm: IEventDetail[];
-  provinceInFo: IEventDetail[];
+  provinceNewForm: IFormCreateEvent;
+  provinceInFo: IFormCreateEvent;
   showData: boolean;
   valueChoice: string;
   transactionType: ITransactionType;
   openModal: boolean;
+  editDataEvent: IFormSubmitCreate;
+  confirmEdit: boolean;
 };
 
 export const initialState: StateProps = {
@@ -38,12 +41,14 @@ export const initialState: StateProps = {
   popUpCode: '',
   open: false,
   fileCSV: [],
-  provinceNewForm: [],
-  provinceInFo: [DEDAULT_PROVINCE],
+  provinceNewForm: {},
+  provinceInFo: {},
   showData: false,
   valueChoice: '',
   transactionType: {} as ITransactionType,
   openModal: false,
+  editDataEvent: {} as IFormSubmitCreate,
+  confirmEdit: false,
 };
 
 export const eventAdminSlice = createSlice({
@@ -77,10 +82,10 @@ export const eventAdminSlice = createSlice({
     setFileCSV: (state, action: PayloadAction<Array<unknown>>) => {
       state.fileCSV = action.payload;
     },
-    setProvinceNewForm: (state, action: PayloadAction<Array<IEventDetail>>) => {
+    setProvinceNewForm: (state, action: PayloadAction<IFormCreateEvent>) => {
       state.provinceNewForm = action.payload;
     },
-    setProvinceInFo: (state, action: PayloadAction<Array<IEventDetail>>) => {
+    setProvinceInFo: (state, action: PayloadAction<IFormCreateEvent>) => {
       state.provinceInFo = action.payload;
     },
     setShowData: (state, action: PayloadAction<boolean>) => {
@@ -94,6 +99,12 @@ export const eventAdminSlice = createSlice({
     },
     setOpenModal: (state, action: PayloadAction<boolean>) => {
       state.openModal = action.payload;
+    },
+    setEditDataEvent: (state, action: PayloadAction<IFormSubmitCreate>) => {
+      state.editDataEvent = action.payload;
+    },
+    setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+      state.confirmEdit = action.payload;
     },
   },
 });
@@ -114,6 +125,8 @@ export const {
   setValueChoice,
   setTransactionType,
   setOpenModal,
+  setConfirmEdit,
+  setEditDataEvent,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -134,5 +147,8 @@ export const setValueChoiceSelector = (state: RootState) => state.historyList.va
 export const setTransactionTypeSelector = (state: RootState) =>
   state.historyList.transactionType;
 export const setOpenModalSelector = (state: RootState) => state.historyList.openModal;
+export const setEditDataEventSelector = (state: RootState) =>
+  state.historyList.editDataEvent;
+export const confirmEditSelector = (state: RootState) => state.historyList.confirmEdit;
 
 export default eventAdminSlice.reducer;

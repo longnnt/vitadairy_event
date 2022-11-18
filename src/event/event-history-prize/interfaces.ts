@@ -80,7 +80,9 @@ export interface IResEventById {
 }
 
 export interface IFormCreateEvent {
-  eventDetailProvinces: IEventDetail[];
+  [id: number | string]: IEventDetail;
+}
+interface IForm {
   eventId: number;
   giftId: number;
   notificationContent: string;
@@ -95,6 +97,14 @@ export interface IFormCreateEvent {
   quantity: number;
   transactionTypeId: number;
   id?: number;
+}
+
+export interface IFormCreate extends IForm {
+  eventDetailProvinces: IFormCreateEvent;
+}
+
+export interface IFormSubmitCreate extends IForm {
+  eventDetailProvinces: IEventDetail[];
 }
 
 export interface ITransactionType {

@@ -18,7 +18,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
+import { SIZE_PAGE, STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
 import {
   setOpenModal,
   setOpenModalSelector,
@@ -53,7 +53,7 @@ function NotificationOverviewForm() {
   } = useTable();
   const searchParams: ITransactionParams = {
     page: page + 1,
-    size: rowsPerPage,
+    size: SIZE_PAGE,
   };
   const { data: addTransaction } = useGetAllTranSacTion(searchParams);
   const dataTransaction = addTransaction?.data?.response || [];
@@ -129,6 +129,15 @@ function NotificationOverviewForm() {
           aria-describedby="modal-modal-description"
         >
           <Box sx={STYLE_GIFT}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ textAlign: 'center', fontWeight: 'bold', py: '20px' }}
+          >
+            Please choose a transaction type!
+          </Typography>
+
             <Scrollbar>
               <TableContainer
                 sx={{
@@ -168,7 +177,6 @@ function NotificationOverviewForm() {
           </Box>
         </Modal>
         <Typography marginTop={2}>Trạng thái quà</Typography>
-        <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
       </Card>
     </Grid>
   );

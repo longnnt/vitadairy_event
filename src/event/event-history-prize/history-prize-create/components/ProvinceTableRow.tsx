@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
-import { Stack } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import {
   DataGrid,
@@ -17,24 +17,35 @@ import dayjs from 'dayjs';
 import { parse, ParseResult } from 'papaparse';
 import * as React from 'react';
 import Iconify from 'src/common/components/Iconify';
+import { Controller, useFormContext } from 'react-hook-form';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { useDispatch } from 'src/common/redux/store';
+import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
-import { COLUMNS_HEADERS, CSV, FORMAT_DATE } from '../../constants';
-import { setFileCSV, setProvinceNewForm } from '../../event.slice';
+import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS } from '../../constants';
+import { setFileCSV, setProvinceInFoSelector, setProvinceNewForm } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { EditToolbarProps, IEventDetail, ISelect } from '../../interfaces';
-import { StyledBox } from '../ultils';
+import { EditToolbarProps, IEventDetail, IFormCreate, IFormCreateEvent, ISelect } from '../../interfaces';
+import { StyledBox } from '../utils';
+import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
+import { DateTimePicker } from '@mui/x-date-pickers';
 
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, importFile } = props;
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, provinceId: 0, quantity: 0, extraquantity: 0, isNew: true },
-    ]);
+    setRows((oldRows) => {
+      return {
+        ...oldRows,
+        [id]: {
+          id,
+          provinceId: '',
+          quantity: '',
+          extraquantity: '',
+          isNew: true,
+        },
+      };
+    });
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'provinceId' },
@@ -66,12 +77,24 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
-export default function FullFeaturedCrudGrid() {
+export default function ProvinceTableForm() {
   const dispatch = useDispatch();
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
-  const [rows, setRows] = React.useState<IEventDetail[]>([]);
+  const [rows, setRows] = React.useState<IFormCreateEvent>({});
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
+  const provinceSelector = useSelector(setProvinceInFoSelector);
+
+  const methods = useFormContext<IFormCreate>();
+
+  const {
+    control,
+    watch,
+    setValue,
+    trigger,
+    clearErrors,
+    formState: { errors },
+  } = methods;
 
   const { data: addProvince } = useGetAllProvince();
   const dataProvince = addProvince?.data?.response?.provinces || [];
@@ -81,24 +104,22 @@ export default function FullFeaturedCrudGrid() {
   }));
 
   useDeepCompareEffect(() => {
-    if (rows) {
-      const tempData = rows?.map((item) => ({
-        provinceId: item.provinceId,
-        quantity: item.quantity,
-        startDate: item.startDate,
-        endDate: item.endDate,
-        extraquantity: item.extraquantity,
-      }));
-      dispatch(setProvinceNewForm(tempData));
-    }
-  }, [rows]);
+    setRows(provinceSelector);
+    setValue('eventDetailProvinces', provinceSelector);
+  }, [provinceSelector]);
 
   const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    const newRow = rows[id];
+    const passedRow = !!newRow?.provinceId;
+    if (passedRow) {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    }
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    const { [id]: rowDelete, ...newRows } = rows;
+    setRows(newRows);
+    setValue('eventDetailProvinces', newRows);
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -106,22 +127,31 @@ export default function FullFeaturedCrudGrid() {
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(
-      rows.map((row: IEventDetail) =>
-        row.id === newRow.id ? updatedRow : row
-      ) as IEventDetail[]
-    );
+  const processRowUpdate = (row: GridRowModel) => {
+    const updatedRow = { ...row, isNew: false } as IEventDetail;
+    const newRow = { ...rows };
+    newRow[row.id] = { ...updatedRow };
+    setRows(newRow);
     return updatedRow;
   };
+
+  useDeepCompareEffect(() => {
+    if (
+      errors?.eventDetailProvinces &&
+      Object.keys(errors?.eventDetailProvinces).length
+    ) {
+      let rowEdit = {};
+      Object.keys(errors?.eventDetailProvinces).forEach((key) => {
+        rowEdit = { ...rowEdit, [key]: { mode: GridRowModes.Edit } };
+      });
+      setRowModesModel((preState) => {
+        return { ...preState, ...rowEdit };
+      });
+    }
+  }, [errors, rowModesModel]);
+
 
   const importFile = async (event: any) => {
     try {
@@ -149,17 +179,22 @@ export default function FullFeaturedCrudGrid() {
         encoding: 'utf-8',
         transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
         complete: async (results: ParseResult<IEventDetail>) => {
-          const data: IEventDetail[] = results.data.map((item: IEventDetail) => ({
-            id: randomId(),
-            name: item.name,
-            provinceId: item.provinceId,
-            quantity: item.quantity,
-            startDate: dayjs(item.startDate, FORMAT_DATE),
-            endDate: dayjs(item.endDate, FORMAT_DATE),
-            isNew: false,
-          }));
+          const data: IFormCreateEvent = {};
+          results?.data?.forEach((item: IEventDetail) => {
+            const id = randomId();
+            data[id] = {
+              id: id,
+              provinceId: item.provinceId,
+              quantity: item.quantity,
+              extraquantity: item.extraquantity,
+              startDate: dayjs(item.startDate, FORMAT_DATE_NEWS),
+              endDate: dayjs(item.endDate, FORMAT_DATE_NEWS),
+              isNew: false,
+            };
+          });
 
-          setRows([...rows, ...data]);
+          setRows({ ...rows, ...data });
+          setValue('eventDetailProvinces', { ...rows, ...data });
         },
       });
     } catch (e) {
@@ -173,18 +208,41 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Tỉnh thành',
       flex: 1,
       editable: true,
-      type: 'singleSelect',
-      valueOptions: addProvinceVN ? addProvinceVN : ([] as ISelect[]),
-      valueFormatter: ({ id: rowId, value, field, api }) => {
+      valueFormatter: ({ value }) => {
         const option = addProvinceVN?.find((item: ISelect) => {
           return item.value == parseInt(value);
         });
         return option ? option.label : '';
       },
-      preProcessEditCellProps: (params) => {
-        const hasProvinceId = !!params.props.value;
-        return { ...params.props, error: !hasProvinceId };
+      renderEditCell(params) {
+        return (
+          <RHFSelect
+            name={`eventDetailProvinces.${params.row.id}.provinceId`}
+            key={params.row.id}
+            InputLabelProps={{ shrink: true }}
+            defaultValue={params.value}
+            helperText={''}
+            onChange={(e) => {
+              clearErrors(`eventDetailProvinces.${params.row.id}.provinceId`);
+              setValue(
+                `eventDetailProvinces.${params.row.id}.provinceId`,
+                parseInt(e.target.value)
+              );
+            }}
+          >
+            <option value="" />
+            {[...(addProvinceVN || ([] as ISelect[]))].map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </RHFSelect>
+        );
       },
+      valueSetter(params) {
+        const provinceId = watch(`eventDetailProvinces.${params.row.id}.provinceId`);
+        return { ...params.row, provinceId: provinceId };
+      }
     },
     {
       field: 'quantity',
@@ -199,27 +257,111 @@ export default function FullFeaturedCrudGrid() {
       type: 'number',
       editable: true,
       flex: 1,
+      renderEditCell(params) {
+        return (
+          <RHFTextField
+            name={`eventDetailProvinces.${params.row.id}.extraquantity`}
+            key={`eventDetailProvinces.${params.row.id}.extraquantity`}
+            type="number"
+          />
+        );
+      },
+      valueSetter(params) {
+        const extraquantity = watch(
+          `eventDetailProvinces.${params.row.id}.extraquantity`
+        );
+        return { ...params.row, extraquantity: extraquantity };
+      },
     },
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
-      type: 'dateTime',
       flex: 1,
       editable: true,
-      preProcessEditCellProps: (params) => {
-        const isDate = !!params.props.value;
-        return { ...params.props, error: !isDate };
+      valueFormatter: ({ value }) => {
+        return new Date(value).toLocaleString();
+      },
+      renderEditCell(param) {
+        return (
+          <Controller
+            name={`eventDetailProvinces.${param.row.id}.startDate`}
+            key={param.row.id}
+            control={control}
+            render={({ field }) => (
+              <DateTimePicker
+                {...field}
+                value={
+                  watch(`eventDetailProvinces.${param.row.id}.startDate`) || param.value
+                }
+                onChange={(value) => {
+                  clearErrors(`eventDetailProvinces.${param.row.id}.startDate`);
+                  setValue(`eventDetailProvinces.${param.row.id}.startDate`, value);
+                }}
+                inputFormat={FORMAT_DATE_NEWS}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    error={
+                      errors?.eventDetailProvinces &&
+                      !!errors?.eventDetailProvinces[param.row.id]?.startDate?.message
+                    }
+                  />
+                )}
+              />
+            )}
+          />
+        );
+      },
+      valueSetter(params) {
+        const startDate = watch(`eventDetailProvinces.${params.row.id}.startDate`);
+        return { ...params.row, startDate: startDate };
       },
     },
     {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
-      type: 'dateTime',
       flex: 1,
       editable: true,
-      preProcessEditCellProps: (params) => {
-        const isDate = !!params.props.value;
-        return { ...params.props, error: !isDate };
+      valueFormatter: ({ value }) => {
+        return new Date(value).toLocaleString();
+      },
+
+      renderEditCell(param) {
+        return (
+          <Controller
+            name={`eventDetailProvinces.${param.row.id}.endDate`}
+            key={param.row.id}
+            control={control}
+            render={({ field }: { field: any }) => (
+              <DateTimePicker
+                {...field}
+                value={
+                  watch(`eventDetailProvinces.${param.row.id}.endDate`) || param.value
+                }
+                onChange={(value: string) => {
+                  clearErrors(`eventDetailProvinces.${param.row.id}.endDate`);
+                  setValue(`eventDetailProvinces.${param.row.id}.endDate`, value);
+                }}
+                inputFormat={FORMAT_DATE_NEWS}
+                renderInput={(params: any) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    error={
+                      errors?.eventDetailProvinces &&
+                      !!errors?.eventDetailProvinces[param.row.id]?.endDate?.message
+                    }
+                  />
+                )}
+              />
+            )}
+          />
+        );
+      },
+      valueSetter(params) {
+        const endDate = watch(`eventDetailProvinces.${params.row.id}.endDate`);
+        return { ...params.row, endDate: endDate };
       },
     },
     {
@@ -229,27 +371,6 @@ export default function FullFeaturedCrudGrid() {
       flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              key={id}
-              icon={<SaveIcon />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              key={id}
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
         return [
           <GridActionsCellItem
             key={id}
@@ -266,12 +387,15 @@ export default function FullFeaturedCrudGrid() {
   return (
     <StyledBox>
       <DataGrid
-        rows={rows}
+        rows={Object.values(rows)}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
         processRowUpdate={processRowUpdate}
+        onRowEditStop={() => {
+          trigger('eventDetailProvinces');
+        }}
         components={{
           Toolbar: EditToolbar,
         }}

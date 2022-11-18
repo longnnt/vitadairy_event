@@ -1,10 +1,8 @@
-import { Checkbox, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
-import { useState } from 'react';
+import { TableCell, TableRow } from '@mui/material';
 
-import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
-import { IPropsPrizeHistoryTableRow } from '../../interfaces';
 import dayjs from 'dayjs';
 import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
+import { IPropsPrizeHistoryTableRow } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +16,6 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
       <TableCell align="left">{giftName}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {/* {giftReceivedDate.slice(0, 19).replace('T', ' ')} */}
         {dayjs(giftReceivedDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)}
       </TableCell>
 
@@ -29,3 +26,4 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
 }
 
 export { PrizeHistoryTableRow };
+
