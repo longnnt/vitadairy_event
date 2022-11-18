@@ -135,7 +135,6 @@ export const TABLE_HEAD_TRANSACTION_TYPE = [
 ];
 
 export const FORMAT_DATE_NEWS = 'dd/MM/yyyy hh:mm a';
-export const FORMAT_DATE_NEW = 'yyyy-MM-dd h:mm:ss a';
 
 export const POPUP_TYPE = {
   DEEP_LINK: 'DEEP_LINK',
