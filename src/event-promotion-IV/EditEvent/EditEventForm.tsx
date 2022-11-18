@@ -65,7 +65,6 @@ export const EditEventForm = () => {
     defaultValues,
   });
   
-  const { useDeepCompareEffect } = useDeepEffect();
   const params = useParams();
   const id = params?.id;
 
@@ -94,7 +93,6 @@ export const EditEventForm = () => {
   const confirmEdit = useSelector(confirmEditSelector);
 
 
-  const watchUserType = watch('typeUser');
 
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {

@@ -71,6 +71,7 @@ const eventPromotionIVSlice = createSlice({
     },
     setConfirmEdit: (state, action: PayloadAction<boolean>) => {
       state.confirmEdit = action.payload;
+    },
     setSearchProductCode: (state, action: PayloadAction<string>) => {
       state.filterProductCode = action.payload;
     },

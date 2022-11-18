@@ -36,7 +36,7 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { replacePathParams } from 'src/common/utils/replaceParams';
 import { confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/event/edit-event-prize/editEventPrize.Slice';
 import { TABLE_HEAD } from '../contants';
-import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector, selectedIdsState, setSelectedIds } from '../event.slice';
+import { alertStatusSelector, filterNameSelector, setFilterName, setAlert, itemRowsSelector, isResetSelectSelector, setIsResetSelect, selectedIdsState, setSelectedIds } from '../eventListPrize.slice';
 import useShowSnackbar from '../hooks/useCustomSnackBar';
 import { useDeleteListPrizeAdmin } from '../hooks/useDeleteListPrize';
 import { useGetListPrize } from '../hooks/useGetListPrize';
@@ -131,10 +131,10 @@ function ListPrizeDashboard() {
     navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
 
-  useEffect(() =>{
-    resetSelect()
-    dispatch(setIsResetSelect(false))
-  },[isSelect])
+  // useEffect(() =>{
+  //   resetSelect()
+  //   dispatch(setIsResetSelect(false))
+  // },[isSelect])
 
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;
