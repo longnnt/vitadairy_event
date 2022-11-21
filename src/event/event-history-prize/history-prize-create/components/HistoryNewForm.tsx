@@ -20,7 +20,12 @@ import {
   setTransactionTypeSelector,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IEventDetail, IFormCreateEvent, IGiftParams } from '../../interfaces';
+import {
+  IEventDetail,
+  IFormCreateEvent,
+  IGiftParams,
+  ISelectPopup,
+} from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -85,6 +90,8 @@ export default function HistoryNewForm() {
   } = methods;
 
   const onSubmit = async (data: IFormCreateEvent) => {
+    console.log('data', data);
+
     const eventDetailProvinces: Array<IEventDetail> = data.eventDetailProvinces.map(
       (item) => {
         let startDate = new Date().toISOString();
@@ -127,7 +134,7 @@ export default function HistoryNewForm() {
       popupLink: data.popupLink,
       probability: data.probability,
       quantity: data.quantity,
-      transactionTypeId: transactionTypeId.id,
+      transactionTypeId: (data?.transactionTypeId as ISelectPopup).value as number,
     };
     mutate(dataEvent);
   };

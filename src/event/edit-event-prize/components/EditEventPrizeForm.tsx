@@ -154,10 +154,11 @@ export const EditEventPrizeForm = () => {
   const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
 
   const onSubmit = async (data: IFormEdit) => {
-    console.log('data', data);
-
     handleOpenEditModal();
     const tempEditData = fomatFormData(data);
+    if (typeof tempEditData.transactionTypeId !== 'number')
+      tempEditData.transactionTypeId = tempEditData.transactionTypeId.value;
+
     dispatch(setEditData(tempEditData));
   };
   useDeepCompareEffect(() => {

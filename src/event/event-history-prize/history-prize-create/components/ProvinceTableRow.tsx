@@ -7,10 +7,12 @@ import Button from '@mui/material/Button';
 import {
   DataGrid,
   GridActionsCellItem,
-  GridColumns, GridRowId,
+  GridColumns,
+  GridRowId,
   GridRowModel,
   GridRowModes,
-  GridRowModesModel, GridToolbarContainer
+  GridRowModesModel,
+  GridToolbarContainer,
 } from '@mui/x-data-grid';
 import { randomId } from '@mui/x-data-grid-generator';
 import dayjs from 'dayjs';
@@ -130,7 +132,6 @@ export default function FullFeaturedCrudGrid() {
         const inputFile = event.target.files[0];
 
         const fileExtension = inputFile?.type.split('/')[1];
-        FORMAT_DATE;
         if (!allowedExtensions.includes(fileExtension)) {
           showErrorSnackbar('Không phải file csv');
           return;
@@ -164,6 +165,8 @@ export default function FullFeaturedCrudGrid() {
       });
     } catch (e) {
       return;
+    } finally {
+      event.target.value = '';
     }
   };
 

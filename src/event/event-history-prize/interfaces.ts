@@ -93,7 +93,7 @@ export interface IFormCreateEvent {
   popupType: string;
   probability: number;
   quantity: number;
-  transactionTypeId: number;
+  transactionTypeId: number | ISelectPopup;
   id?: number;
 }
 
@@ -207,7 +207,7 @@ export interface IFormFilter {
 }
 
 export interface ISelectPopup {
-  value: string;
+  value: string | number;
   label: string;
 }
 

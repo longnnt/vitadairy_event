@@ -62,9 +62,8 @@ export const createEventPrizevalidate = () => {
     quantity: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
-    transactionTypeId: Yup.number()
-      .required('This field is required')
-      .typeError('Must be a number'),
+    transactionTypeId: Yup.mixed().required('This field is required'),
+    // .typeError('Must be a number'),
 
     eventDetailProvinces: Yup.array()
       .of(eventDetailProvincesSchema)
