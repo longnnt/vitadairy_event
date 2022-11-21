@@ -47,7 +47,7 @@ export const EventTableToolbar = () => {
     dispatch(setEndDate(data.endDate));
   };
 
-  const handleResetForm = async() => {
+  const handleResetForm = async () => {
     await timeout(3000);
     reset({
       endDate: null,
@@ -61,24 +61,6 @@ export const EventTableToolbar = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={'20px'} direction="row">
-      <Controller
-          name="searchText"
-          control={control}
-          render={({ field }) => (
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel>Tìm kiếm sự kiện</InputLabel>
-              <OutlinedInput
-                label="Tìm kiếm sự kiện"
-                {...field}
-                startAdornment={
-                  <InputAdornment position="end">
-                    <SearchOutlinedIcon />
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          )}
-        />
         <Controller
           name="startDate"
           key={'firstScanStartDate'}
@@ -119,6 +101,24 @@ export const EventTableToolbar = () => {
               }}
               renderInput={(params: any) => <TextField {...params} fullWidth />}
             />
+          )}
+        />
+        <Controller
+          name="searchText"
+          control={control}
+          render={({ field }) => (
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel>Tìm kiếm sự kiện</InputLabel>
+              <OutlinedInput
+                label="Tìm kiếm sự kiện"
+                {...field}
+                startAdornment={
+                  <InputAdornment position="end">
+                    <SearchOutlinedIcon />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
           )}
         />
       </Stack>
