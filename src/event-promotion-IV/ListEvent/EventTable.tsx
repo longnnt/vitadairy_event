@@ -137,6 +137,7 @@ export const EventTable = () => {
   const handleOnAgree = () => {
     dispatch(setConfirmEdit(true));
   };
+  const tableHeight =400*rowsPerPage/5
   return (
     <>
       {/* <AlertDialogSlide /> */
@@ -149,7 +150,7 @@ export const EventTable = () => {
       // setConfirmEdit={setConfirmEdit}
     />}
       <Scrollbar sx={{ mt: '10px' }}>
-        <TableContainer>
+        <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
           {!!selectedIds.length && (
             <TableSelectedActions
               dense={dense}

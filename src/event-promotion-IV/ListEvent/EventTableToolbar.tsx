@@ -60,7 +60,7 @@ export const EventTableToolbar = () => {
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={'20px'} direction="row">
+      <Stack spacing={'20px'} direction="row" paddingTop={2} px={1}>
         <Controller
           name="searchText"
           control={control}
@@ -105,7 +105,7 @@ export const EventTableToolbar = () => {
           key="firstScanEndDate"
           control={control}
           render={({ field }: { field: any }) => (
-            <MobileDateTimePicker
+            <MobileDateTimePicker 
               {...field}
               key="firstScanEndDate"
               label="Ngày kết thúc"
@@ -123,10 +123,10 @@ export const EventTableToolbar = () => {
         />
       </Stack>
       <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }} padding={1}>
-        <Button variant="contained" color="info" type="submit">
+        <Button variant="contained" color="primary" type="submit">
           Lọc
         </Button>
-        <Button variant="contained" color="primary" onClick={handleResetForm}>
+        <Button variant="contained" color="error" onClick={handleResetForm}>
           Xóa
         </Button>
       </Stack>
