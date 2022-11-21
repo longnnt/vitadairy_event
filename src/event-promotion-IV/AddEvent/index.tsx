@@ -226,7 +226,7 @@ export const AddEvent = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
-                     sx={{
+                    sx={{
                       display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
                     }}
                   >
@@ -258,7 +258,7 @@ export const AddEvent = () => {
           </Stack>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Stack direction='row' spacing={2}>
+          <Stack direction="row" spacing={2}>
             <Button
               variant="contained"
               color="inherit"
@@ -268,15 +268,21 @@ export const AddEvent = () => {
             </Button>
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               type="submit"
               onClick={() => dispatch(setButtonType('saveSubmit'))}
             >
-              Thêm
+              Thêm mới
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={() => dispatch(setButtonType('saveEditSubmit'))}
+            >
+              Thêm & Chỉnh sửa
             </Button>
           </Stack>
-          
-          
         </Box>
       </FormProvider>
     </>
