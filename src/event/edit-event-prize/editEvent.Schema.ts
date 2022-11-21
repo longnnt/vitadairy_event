@@ -89,7 +89,8 @@ export const eidtEventPrizevalidate = (provinceIds: number[]) => {
       .typeError('Must be a number'),
     transactionTypeId: Yup.mixed().required('This field is required'),
     // .typeError('Must be a number'),
-    winnerAmount: Yup.number().required('This field is required'),
+    winnerAmount: Yup.number(),
+    // .required('This field is required'),
 
     eventDetailProvinces: Yup.lazy((value: IEventDetailProvinces) => {
       const validationObject: any = {};

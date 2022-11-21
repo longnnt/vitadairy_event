@@ -106,7 +106,7 @@ export default function HistoryNewForm() {
     }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
-    let tempEditData = fomatFormData(data);
+    const tempEditData = fomatFormData(data);
     // if (typeof tempEditData.transactionTypeId !== 'number')
     // tempEditData.transactionTypeId = (tempEditData.transactionTypeId as ISelectPopup)
     //   .value as number;
