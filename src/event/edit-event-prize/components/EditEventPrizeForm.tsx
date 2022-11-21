@@ -139,6 +139,9 @@ export const EditEventPrizeForm = () => {
   const onSubmit = async (data: IFormEdit) => {
     handleOpenEditModal();
     const tempEditData = fomatFormData(data);
+    console.log('tempEditData', tempEditData);
+
+    // tempEditData.transactionTypeId=tempEditData.transactionTypeId.value as number
     dispatch(setEditData(tempEditData));
   };
   useDeepCompareEffect(() => {
@@ -409,9 +412,9 @@ export const EditEventPrizeForm = () => {
             open={openEditModal}
             handleClose={handleCloseEditModal}
             handleOnAgree={handleOnAgree}
-            type='Chỉnh sửa sự kiện'
+            type='Chỉnh sửa quà tặng sự kiện'
             colorType={true}
-            // setConfirmEdit={setConfirmEdit}
+
           />
         </FormProvider>
       </Container>
