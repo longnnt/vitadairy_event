@@ -92,6 +92,11 @@ export const AddEvent = () => {
     }
   }, [isSuccess]);
 
+  const handleStatusUserType = (userType: string) => {
+    dispatch(setUserType(userType as UserType));
+  };
+  const userTypeValue = useSelector(userTypeState);
+
   const product = useSelector(productState);
 
   useDeepCompareEffect(() => {
@@ -195,7 +200,25 @@ export const AddEvent = () => {
                 name="downRate"
                 type="number"
               />
-
+              <FormControl>
+                <RadioGroup
+                  defaultValue="allUser"
+                  name="radio-buttons-group"
+                  sx={{ flexDirection: 'row' }}
+                  onChange={(e) => handleStatusUserType(e.target.value)}
+                >
+                  <FormControlLabel
+                    value="allUser"
+                    control={<Radio />}
+                    label="Toàn bộ người dùng"
+                  />
+                  <FormControlLabel
+                    value="newUser"
+                    control={<Radio />}
+                    label="Người dùng mới"
+                  />
+                </RadioGroup>
+              </FormControl>
               <Controller
                 name="userRegisterDate"
                 control={control}
@@ -203,6 +226,9 @@ export const AddEvent = () => {
                   <Stack
                     position={'relative'}
                     width="100%"
+                     sx={{
+                      display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
+                    }}
                   >
                     <DatePicker
                       {...field}
