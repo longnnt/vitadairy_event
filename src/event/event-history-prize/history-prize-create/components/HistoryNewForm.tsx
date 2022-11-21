@@ -21,7 +21,7 @@ import {
   setButtonType,
   setConfirmEdit,
   setEditData,
-  setOpeneditModal
+  setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import { IFormCreate, ISelect } from '../../interfaces';
@@ -164,15 +164,14 @@ export default function HistoryNewForm() {
                   Lưu
                 </LoadingButton>
                 <ConfirmEditModal
-                open={openEditModal}
-                handleClose={handleCloseEditModal}
-                handleOnAgree={handleOnAgree}
-                type="Chỉnh sửa sự kiện"
-                colorType={true}
-                // setConfirmEdit={setConfirmEdit}
-              />
+                  open={openEditModal}
+                  handleClose={handleCloseEditModal}
+                  handleOnAgree={handleOnAgree}
+                  type="Chỉnh sửa sự kiện"
+                  colorType={true}
+                />
               </Box>
-              
+
               <Box>
                 <LoadingButton
                   color="inherit"
@@ -184,7 +183,6 @@ export default function HistoryNewForm() {
                 >
                   Lưu & Chỉnh sửa
                 </LoadingButton>
-                
               </Box>
               <ConfirmEditModal
                 open={openEditModal}
@@ -192,7 +190,6 @@ export default function HistoryNewForm() {
                 handleOnAgree={handleOnAgree}
                 type="Chỉnh sửa sự kiện"
                 colorType={true}
-                // setConfirmEdit={setConfirmEdit}
               />
             </Grid>
           </Grid>

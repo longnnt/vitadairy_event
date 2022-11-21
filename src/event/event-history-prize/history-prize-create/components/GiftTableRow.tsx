@@ -33,7 +33,7 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
 
       <TableCell align="left">{money}</TableCell>
 
-      <TableCell align="right" title={active === true ? 'actived' : 'unAtivced'}>
+      <TableCell align="right" title={active === true ? 'actived' : 'unActivced'}>
         <Switch
           size='medium'
           checked={active ? true : false}

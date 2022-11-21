@@ -56,7 +56,7 @@ function StoreTableRow({
         </a>
       </TableCell>
 
-      <TableCell align="right" title={isActive === true ? 'actived' : 'unAtivced'}>
+      <TableCell align="right" title={isActive === true ? 'actived' : 'unActivced'}>
         <Switch
           defaultChecked={isActive}
           size='medium'
