@@ -96,8 +96,11 @@ export const EditEventForm = () => {
 
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
-      showErrorSnackbar('Tạo mới thất bại');
+      showErrorSnackbar('Chỉnh sửa sự kiện thất bại');
     },
+    onSuccess: () => {
+      showSuccessSnackbar('Chỉnh sửa sự kiện thành công');
+    }
   });
 
   const dispatch = useDispatch();
