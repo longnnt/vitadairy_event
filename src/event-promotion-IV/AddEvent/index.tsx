@@ -258,22 +258,25 @@ export const AddEvent = () => {
           </Stack>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button
-            variant="contained"
-            color="secondary"
-            type="submit"
-            onClick={() => dispatch(setButtonType('saveSubmit'))}
-          >
-            Lưu
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ mx: '7px' }}
-            type="submit"
-            onClick={() => dispatch(setButtonType('saveEditSubmit'))}
-          >
-            Lưu & chỉnh sửa
-          </Button>
+          <Stack direction='row' spacing={2}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => navigate(PATH_DASHBOARD.eventPromotionIV.list)}
+            >
+              Hủy bỏ
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={() => dispatch(setButtonType('saveSubmit'))}
+            >
+              Thêm
+            </Button>
+          </Stack>
+          
+          
         </Box>
       </FormProvider>
     </>
