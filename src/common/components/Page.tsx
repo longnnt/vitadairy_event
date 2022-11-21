@@ -14,7 +14,7 @@ const Page = forwardRef<HTMLDivElement, Props>(
   ({ children, title = '', meta, ...other }, ref) => (
     <>
       <Helmet>
-        <title>{`${title} | Minimal-UI`}</title>
+        <title>{`${title} | VitaDairy`}</title>
         {meta}
       </Helmet>
 
