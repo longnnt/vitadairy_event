@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from '@mui/material';
+import { Switch, TableCell, TableRow } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { dispatch } from 'src/common/redux/store';
 import { setGift } from '../../event.slice';
@@ -11,7 +11,7 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
     setValue,
     formState: { errors },
   } = methods;
-  const { name, type, money, id } = row;
+  const { image, name, type, money, point, total, active, id } = row;
   return (
     <TableRow
       hover
@@ -21,11 +21,25 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
         handleClose();
       }}
     >
+      <TableCell><img src={image} alt="" height="50" width="50" /></TableCell>
+
       <TableCell align="left">{name}</TableCell>
 
-      <TableCell align="center">{type}</TableCell>
+      <TableCell align="left">{type}</TableCell>
 
-      <TableCell align="right">{money}</TableCell>
+      <TableCell align="left">{point}</TableCell>
+      
+      <TableCell align="left">{total}</TableCell>
+
+      <TableCell align="left">{money}</TableCell>
+
+      <TableCell align="right" title={active === true ? 'actived' : 'unAtivced'}>
+        <Switch
+          size='medium'
+          checked={active ? true : false}
+        />        
+      </TableCell>
+
     </TableRow>
   );
 }

@@ -61,6 +61,24 @@ export const EventTableToolbar = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={'20px'} direction="row">
+      <Controller
+          name="searchText"
+          control={control}
+          render={({ field }) => (
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel>Tìm kiếm sự kiện</InputLabel>
+              <OutlinedInput
+                label="Tìm kiếm sự kiện"
+                {...field}
+                startAdornment={
+                  <InputAdornment position="end">
+                    <SearchOutlinedIcon />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          )}
+        />
         <Controller
           name="startDate"
           key={'firstScanStartDate'}
@@ -100,52 +118,6 @@ export const EventTableToolbar = () => {
                 ),
               }}
               renderInput={(params: any) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
-        <Controller
-          name="searchText"
-          control={control}
-          render={({ field }) => (
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel>Tìm kiếm sự kiện</InputLabel>
-              <OutlinedInput
-                label="Tìm kiếm sự kiện"
-                {...field}
-                startAdornment={
-                  <InputAdornment position="end">
-                    <SearchOutlinedIcon />
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          )}
-        />
-        <Controller
-          name="startDate"
-          key={'firstScanStartDate'}
-          control={control}
-          render={({ field }) => (
-            <DateTimePicker
-              {...field}
-              label="Ngày bắt đầu"
-              key={'firstScanStartDate'}
-              inputFormat={'dd/MM/yyyy hh:mm a'}
-              renderInput={(params) => <TextField {...params} fullWidth />}  
-            />
-          )}
-        />
-        <Controller
-          name="endDate"
-          key="firstScanEndDate"
-          control={control}
-          render={({ field }: { field: any }) => (
-            <DateTimePicker
-              {...field}
-              key="firstScanEndDate"
-              label="Ngày kết thúc"
-              inputFormat={'dd/MM/yyyy hh:mm a'}
-              renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
         />

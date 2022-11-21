@@ -57,7 +57,7 @@ export interface IDataStore {
       meta: {
         status: number;
         msg: string;
-      };
+      },
       pagination: {
         totalPages: number;
         totalRecords: number;
@@ -65,7 +65,7 @@ export interface IDataStore {
         recordsPerPage: number;
         last: boolean;
       };
-      response: IStories;
+      response: IFormStore[];
     };
   };
 }

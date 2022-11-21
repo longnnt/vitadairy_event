@@ -21,12 +21,10 @@ function StoreTableRow({
   const navigate = useNavigate();
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
+
   const dispatch = useDispatch();
 
-  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-
   const { mutate } = useGetStoreActive();
-
 
   const handleOnChange = (active: boolean) => {
     mutate({ code, isActive: active });
@@ -36,7 +34,6 @@ function StoreTableRow({
     navigate(PATH_DASHBOARD.storeAdmin.edit_shop(id));
   dispatch(setCode(code))
   }
-
   return (
     <TableRow hover selected={selected}>
       <TableCell align="left" onClick={() => handleShopInvitation(code)}>
@@ -60,16 +57,14 @@ function StoreTableRow({
       </TableCell>
 
       <TableCell align="right" title={isActive === true ? 'actived' : 'unAtivced'}>
-        <Box>
         <Switch
+          defaultChecked={isActive}
           size='medium'
-          checked={isActive ? true : false}
           onChange={(e) => {
             handleOnChange(e.target.checked);
+            console.log(e.target.checked)
           }}
-        />
-        </Box>
-        
+        />        
       </TableCell>
     </TableRow>
   );
