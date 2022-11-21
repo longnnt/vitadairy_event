@@ -9,11 +9,14 @@ import { FormProvider, RHFSelect, RHFTextField } from 'src/common/components/hoo
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { defaultValues, permission, status } from '../../constants';
 import { useSelector } from 'react-redux';
-import { adminDetailSelector } from 'src/admin/admin.slice';
+import { adminDetailSelector, confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/admin/admin.slice';
 import { useEditAdmin } from 'src/admin/hooks/useEditAdmin';
 import { IFormAdmin } from 'src/admin/interfaces';
 import { NewAdminSchema } from 'src/admin/schema';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { dispatch } from 'src/common/redux/store';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -28,6 +31,13 @@ function EditFormAdmin() {
   const id = params?.id;
   const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+
+  const { useDeepCompareEffect } = useDeepEffect();
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const openEditModal = useSelector(openEditModalSelector);
+  const confirmEdit = useSelector(confirmEditSelector);
+
   const { mutate, isSuccess,isLoading } = useEditAdmin({
     onSuccess: () => {
     },
@@ -49,6 +59,7 @@ function EditFormAdmin() {
     reset,
     control,
     setValue,
+    watch,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
@@ -60,20 +71,31 @@ function EditFormAdmin() {
     }
   }, [dataAdmin]);
   const onSubmit = async (data: IFormAdmin) => {
-    const dataEdit = {
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      status: data.status,
-      permission: data.permission,
-      id: data.id,
-    };
-    mutate({ data: dataEdit, id: parseInt(id as string) });
+    handleOpenEditModal();
+   
   };
+  useDeepCompareEffect(() => {
+    const data = watch();
+    if (confirmEdit) {
+      const dataEdit:IFormAdmin={
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        status: data.status,
+        permission: data.permission,
+        id: data.id,
+      }
+      mutate({ data: dataEdit, id: parseInt(id as string) })
+      dispatch(setConfirmEdit(false));
+
+    }
+  }, [confirmEdit]);
   const handleCancel = () => {
     reset();
   };
-
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -146,6 +168,14 @@ function EditFormAdmin() {
             </LoadingButton>
           </Stack>
         </Grid>
+        <ConfirmEditModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type='Chỉnh sửa tài khoản'
+            colorType={true}
+            // setConfirmEdit={setConfirmEdit}
+          />
       </FormProvider>
     </>
   );

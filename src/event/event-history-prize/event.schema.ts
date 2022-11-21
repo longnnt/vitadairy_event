@@ -1,15 +1,28 @@
 import * as Yup from 'yup';
 import { POPUP_CODE } from './constants';
+import { IFormCreateEvent } from './interfaces';
 
-export const createEventPrizevalidate = () => {
+export const createEventPrizevalidate = (provinceIds: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
     endDate: Yup.string()
       .required('This field is required')
-      .typeError('Must be a string'),
+      .typeError('Must be a string')
+      .when('startDate', (eventStartDate, schema) => {
+        return (
+          eventStartDate &&
+          schema.test(
+            'test date',
+            (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime()
+          )
+        );
+      }),
     provinceId: Yup.number()
-      .required('This field is required')
-      .typeError('Must be a number'),
-    quantity: Yup.number().typeError('Must be a number'),
+      .required()
+      .typeError('Must be a number')
+      .test('test province id', 'this field is required', (val) =>
+        provinceIds.includes(val as number)
+      ),
+    quantity: Yup.mixed(),
     startDate: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),
@@ -39,7 +52,6 @@ export const createEventPrizevalidate = () => {
         return schema.required();
       }
     }),
-    giftStatus: Yup.boolean(),
     popupImageLink: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),
@@ -62,12 +74,18 @@ export const createEventPrizevalidate = () => {
     quantity: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
-    transactionTypeId: Yup.mixed().required('This field is required'),
-    // .typeError('Must be a number'),
-
-    eventDetailProvinces: Yup.array()
-      .of(eventDetailProvincesSchema)
-      .required('This field is required'),
+    transactionTypeId: Yup.number()
+      .required('This field is required')
+      .typeError('Must be a number'),
+    eventDetailProvinces: Yup.lazy((value: IFormCreateEvent) => {
+      const validationObject: any = {};
+      Object.keys(value).map((item) => {
+        validationObject[item] = eventDetailProvincesSchema;
+      });
+      return Yup.object()
+        .shape({ ...validationObject })
+        .required();
+    }),
   });
   return createEventPrizeSchema;
 };

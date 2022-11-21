@@ -27,12 +27,12 @@ export default function AlertDialog({open, handleClose, selectedId} : Props) {
     },
   });
 
-  const handleDeleteRows = (ids: string[]) => {
-    dispatch(setIsResetSelect(true))
-    for (let i = 0; i < ids.length; i++) {
-      mutationDelete.mutate(ids[i]);
-    }
-  };
+  // const handleDeleteRows = (ids: string[]) => {
+  //   for (let i = 0; i < ids.length; i++) {
+  //     mutationDelete.mutate(ids[i]);
+  //     resetSelect && resetSelect();
+  //   }
+  // };
 
   return (
     <div>
@@ -61,7 +61,7 @@ export default function AlertDialog({open, handleClose, selectedId} : Props) {
           <Button 
             onClick={
               () => {
-                handleDeleteRows(selectedId)
+                // handleDeleteRows(selectedId)
                 handleClose();
                 // resetSelect&& resetSelect();
               }

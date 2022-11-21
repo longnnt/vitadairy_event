@@ -12,7 +12,8 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TablePagination
+  Typography,
+  TablePagination,
 } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,12 +23,14 @@ import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
-  defaultValues,
+  DEFAULT_FORM_VALUE,
+  DEFAULT_FORM_VALUE_SUBMIT,
   popupTypeOption,
   POPUP_CODE,
   POPUP_TYPE,
+  SIZE_PAGE,
   STYLE_GIFT,
-  TABLE_HEAD_GIFT
+  TABLE_HEAD_GIFT,
 } from '../../constants';
 import { createEventPrizevalidate } from '../../event.schema';
 import {
@@ -41,10 +44,11 @@ import {
   setPopUpCode,
   setPopUpType,
   setValueChoice,
-  setValueChoiceSelector
+  setValueChoiceSelector,
 } from '../../event.slice';
+import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetGilf } from '../../hooks/useGetGilf';
-import { IFormCreateEvent, IGiftParams, ISelectPopup } from '../../interfaces';
+import { IFormCreate, IFormCreateEvent, IGiftParams, ISelect, ISelectPopup } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
 
 function NotificationOverviewForm2() {
@@ -76,22 +80,35 @@ function NotificationOverviewForm2() {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setPopUpType(event.target.value));
+    setValue('popupType', event.target.value);
   };
   const changePopUpCode = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setPopUpCode(event.target.value));
+    setValue('popupCode', event.target.value);
   };
 
   const searchParams: IGiftParams = {
     page: page + 1,
-    size: rowsPerPage,
+    size: SIZE_PAGE,
   };
   const { data: ListGift } = useGetGilf(searchParams);
   const dataGift = ListGift?.data?.response || [];
   const { totalRecords } = ListGift?.data?.pagination || {
     totalRecords: 0,
   };
+
+  const { data: addProvince } = useGetAllProvince();
+  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const addProvinceVN = dataProvince.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
+  const provinceId = addProvinceVN
+    ? addProvinceVN.map((item: ISelect) => item.value)
+    : [];
 
   useEffect(() => {
     dispatch(
@@ -110,9 +127,9 @@ function NotificationOverviewForm2() {
     };
   }, []);
 
-  const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(createEventPrizevalidate()),
-    defaultValues,
+  const methods = useForm<IFormCreate>({
+    resolver: yupResolver(createEventPrizevalidate(provinceId)),
+    defaultValues: DEFAULT_FORM_VALUE,
   });
 
   const {
@@ -144,7 +161,6 @@ function NotificationOverviewForm2() {
           onChange={(e) => {
             changePopUpType(e);
           }}
-
         >
           <option value="" />
           {popupTypeOption.map((item: ISelectPopup) => (
@@ -203,7 +219,7 @@ function NotificationOverviewForm2() {
               sx={{
                 width: '40%',
                 alignSelf: 'flex-start',
-                marginTop: 1
+                marginTop: 1,
               }}
               variant="contained"
               color="info"
@@ -227,6 +243,15 @@ function NotificationOverviewForm2() {
               aria-describedby="modal-modal-description"
             >
               <Box sx={STYLE_GIFT}>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  sx={{ textAlign: 'center', fontWeight: 'bold', py: '20px' }}
+                >
+                  Please choose a gift!
+                </Typography>
+
                 <Scrollbar>
                   <TableContainer
                     sx={{

@@ -21,7 +21,7 @@ import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { RHFSelectPagitnation } from 'src/event/edit-event-prize/components/RHFSelectPagination';
 import { getAllTransactionType } from 'src/event/edit-event-prize/service';
-import { STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
+import { SIZE_PAGE, STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
 import {
   setOpenModal,
   setOpenModalSelector,
@@ -59,7 +59,7 @@ function NotificationOverviewForm() {
   };
   const searchParams: ITransactionParams = {
     page: page + 1,
-    size: rowsPerPage,
+    size: SIZE_PAGE,
   };
   const { data: addTransaction } = useGetAllTranSacTion(searchParams);
   const dataTransaction = addTransaction?.data?.response || [];

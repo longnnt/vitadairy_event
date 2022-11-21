@@ -29,8 +29,12 @@ import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 
 import {
+  confirmEditSelector,
+  openEditModalSelector,
   productState,
+  setConfirmEdit,
   setIsOpenModal,
+  setOpeneditModal,
   setProduct,
   setSelectedIds,
 } from '../eventPromotionIV.slice';
@@ -38,9 +42,10 @@ import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
 import { schemaAddEvent } from '../schema';
 import { ProductCodeModal } from '../components/ProductCodeModal';
-import { IEventEditFormData, IEventFormData, IProCodeSelect } from '../interface';
+import { IEventEditFormData, IProCodeSelect, IEventFormData } from '../interface';
 import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
 import { getProductCode } from '../service';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
@@ -62,7 +67,6 @@ export const EditEventForm = () => {
     defaultValues,
   });
 
-  const { useDeepCompareEffect } = useDeepEffect();
   const params = useParams();
   const id = params?.id;
 
@@ -83,6 +87,12 @@ export const EditEventForm = () => {
     formState: { errors },
   } = methods;
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+
+  const { useDeepCompareEffect } = useDeepEffect();
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const openEditModal = useSelector(openEditModalSelector);
+  const confirmEdit = useSelector(confirmEditSelector);
 
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
@@ -131,7 +141,28 @@ export const EditEventForm = () => {
   const handleRedirectToView = () => {
     navigate(PATH_DASHBOARD.eventPromotionIV.list);
   };
-
+  useDeepCompareEffect(() => {
+    const data = watch();
+    if (confirmEdit) {
+      const dataEdit: any = {
+        name: data.name,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        skus: data.skus,
+        defaultWinRate: data.defaultWinRate,
+        upRate: data.upRate,
+        downRate: data.downRate,
+        userRegisterDate: data.userRegisterDate,
+        userLimit: data.userLimit,
+        id: Number(id),
+      };
+      mutate({ id: parseInt(id as string), formEditData: dataEdit });
+      dispatch(setConfirmEdit(false));
+    }
+  }, [confirmEdit]);
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -278,6 +309,15 @@ export const EditEventForm = () => {
             Hủy chỉnh sửa
           </Button>
         </Box>
+        <ConfirmEditModal
+          open={openEditModal}
+          handleClose={handleCloseEditModal}
+          handleOnAgree={handleOnAgree}
+          type="Chỉnh sửa sự kiện"
+          colorType={true}
+
+          // setConfirmEdit={setConfirmEdit}
+        />
       </FormProvider>
     </>
   );

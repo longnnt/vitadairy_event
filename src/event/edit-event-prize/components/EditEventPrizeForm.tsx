@@ -192,7 +192,9 @@ export const EditEventPrizeForm = () => {
   }, [choosenGift]);
 
   const loadingScreen: boolean = isLoading || isSubmitting;
-
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <Container>
@@ -440,6 +442,9 @@ export const EditEventPrizeForm = () => {
           <ConfirmEditModal
             open={openEditModal}
             handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type="Chỉnh sửa sự kiện"
+            colorType={true}
             // setConfirmEdit={setConfirmEdit}
           />
         </FormProvider>
