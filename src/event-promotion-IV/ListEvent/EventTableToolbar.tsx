@@ -47,7 +47,7 @@ export const EventTableToolbar = () => {
     dispatch(setEndDate(data.endDate));
   };
 
-  const handleResetForm = async() => {
+  const handleResetForm = async () => {
     await timeout(3000);
     reset({
       endDate: null,
@@ -61,6 +61,24 @@ export const EventTableToolbar = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={'20px'} direction="row">
+        <Controller
+          name="searchText"
+          control={control}
+          render={({ field }) => (
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel>Tìm kiếm sự kiện</InputLabel>
+              <OutlinedInput
+                label="Tìm kiếm sự kiện"
+                {...field}
+                startAdornment={
+                  <InputAdornment position="end">
+                    <SearchOutlinedIcon />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          )}
+        />
         <Controller
           name="startDate"
           key={'firstScanStartDate'}
@@ -103,25 +121,7 @@ export const EventTableToolbar = () => {
             />
           )}
         />
-        <Controller
-          name="searchText"
-          control={control}
-          render={({ field }) => (
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel>Tìm kiếm sự kiện</InputLabel>
-              <OutlinedInput
-                label="Tìm kiếm sự kiện"
-                {...field}
-                startAdornment={
-                  <InputAdornment position="end">
-                    <SearchOutlinedIcon />
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          )}
-        />
-        <Controller
+        {/* <Controller
           name="startDate"
           key={'firstScanStartDate'}
           control={control}
@@ -131,7 +131,7 @@ export const EventTableToolbar = () => {
               label="Ngày bắt đầu"
               key={'firstScanStartDate'}
               inputFormat={'dd/MM/yyyy hh:mm a'}
-              renderInput={(params) => <TextField {...params} fullWidth />}  
+              renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
         />
@@ -148,7 +148,7 @@ export const EventTableToolbar = () => {
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
-        />
+        /> */}
       </Stack>
       <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }} padding={1}>
         <Button variant="contained" color="info" type="submit">

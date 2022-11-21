@@ -200,10 +200,7 @@ export const AddEvent = () => {
                 name="userRegisterDate"
                 control={control}
                 render={({ field }) => (
-                  <Stack
-                    position={'relative'}
-                    width="100%"
-                  >
+                  <Stack position={'relative'} width="100%">
                     <DatePicker
                       {...field}
                       label="Ngày tính người dùng mới"

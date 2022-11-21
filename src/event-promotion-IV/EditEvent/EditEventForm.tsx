@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  FormHelperText,
   InputAdornment,
   responsiveFontSizes,
   Stack,
@@ -37,7 +38,9 @@ import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
 import { schemaAddEvent } from '../schema';
 import { ProductCodeModal } from '../components/ProductCodeModal';
-import { IEventEditFormData, IEventFormData } from '../interface';
+import { IEventEditFormData, IEventFormData, IProCodeSelect } from '../interface';
+import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
+import { getProductCode } from '../service';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
@@ -58,7 +61,7 @@ export const EditEventForm = () => {
     resolver: yupResolver(schemaAddEvent),
     defaultValues,
   });
-  
+
   const { useDeepCompareEffect } = useDeepEffect();
   const params = useParams();
   const id = params?.id;
@@ -69,7 +72,7 @@ export const EditEventForm = () => {
       onError: () => showErrorSnackbar('Lấy thông tin sự kiện thất bại'),
     },
   });
-  const dataEventDetail= data?.data?.response
+  const dataEventDetail = data?.data?.response;
 
   const {
     control,
@@ -88,13 +91,13 @@ export const EditEventForm = () => {
   });
 
   const dispatch = useDispatch();
-  
+
   const onSubmit = (data: any) => {
     const formDataAddNewEvent = {
       name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
-      skus: data.skus,
+      skus: data.skus.map((item: IProCodeSelect) => item.value),
       defaultWinRate: data.defaultWinRate,
       upRate: data.upRate,
       downRate: data.downRate,
@@ -104,18 +107,22 @@ export const EditEventForm = () => {
     };
     mutate({ id: parseInt(id as string), formEditData: formDataAddNewEvent });
   };
-  const product = useSelector(productState);
+  // const product = useSelector(productState);
 
   useDeepCompareEffect(() => {
     if (dataEventDetail) {
-      reset(dataEventDetail)
-      dispatch(setProduct(dataEventDetail.skus));
+      reset(dataEventDetail);
+      // dispatch(setProduct(dataEventDetail.skus));
     }
   }, [dataEventDetail]);
 
   useEffect(() => {
-    setValue('skus', product);
-  }, [product]);
+    if (dataEventDetail)
+      setValue(
+        'skus',
+        dataEventDetail.skus.map((item: string) => ({ value: item, label: item }))
+      );
+  }, [dataEventDetail]);
 
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
@@ -188,7 +195,7 @@ export const EditEventForm = () => {
                 />
               </Stack>
 
-              <RHFTextField
+              {/* <RHFTextField
                 name="skus"
                 label="Mã sản phẩm"
                 onClick={() => dispatch(setIsOpenModal(true))}
@@ -202,7 +209,15 @@ export const EditEventForm = () => {
                     </InputAdornment>
                   ),
                 }}
-              />
+              /> */}
+              <Box sx={{ zIndex: 1001 }}>
+                <RHFSelectPagitnation
+                  name={'skus'}
+                  getAsyncData={getProductCode}
+                  placeholder="Mã sản phẩm*"
+                />
+                {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
+              </Box>
 
               <RHFTextField
                 fullWidth
@@ -227,10 +242,7 @@ export const EditEventForm = () => {
                 name="userRegisterDate"
                 control={control}
                 render={({ field }) => (
-                  <Stack
-                    position={'relative'}
-                    width="100%"
-                  >
+                  <Stack position={'relative'} width="100%">
                     <DatePicker
                       {...field}
                       label="Ngày tính người dùng mới"
