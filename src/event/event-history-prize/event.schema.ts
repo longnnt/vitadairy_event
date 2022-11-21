@@ -74,9 +74,8 @@ export const createEventPrizevalidate = (provinceIds: number[]) => {
     quantity: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
-    transactionTypeId: Yup.number()
-      .required('This field is required')
-      .typeError('Must be a number'),
+    transactionTypeId: Yup.mixed().required('This field is required'),
+    // .typeError('Must be a number'),
     eventDetailProvinces: Yup.lazy((value: IFormCreateEvent) => {
       const validationObject: any = {};
       Object.keys(value).map((item) => {

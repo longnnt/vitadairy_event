@@ -106,7 +106,10 @@ export default function HistoryNewForm() {
     }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
-    const tempEditData = fomatFormData(data);
+    let tempEditData = fomatFormData(data);
+    // if (typeof tempEditData.transactionTypeId !== 'number')
+    // tempEditData.transactionTypeId = (tempEditData.transactionTypeId as ISelectPopup)
+    //   .value as number;
     dispatch(setEditDataEvent(tempEditData));
     mutate(tempEditData);
   };
