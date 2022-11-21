@@ -5,6 +5,6 @@ import { getAllGifts } from '../service';
 
 export const useGetAllGift = (params: IParamsGetGift) => {
   return {
-    ...useQuery([QUERY_KEYS.SHOP_INVITATION_LIST, params], () => getAllGifts(params)),
+    ...useQuery([QUERY_KEYS.LIST_GIFT, params], () => getAllGifts(params)),
   };
 };

@@ -4,6 +4,9 @@ import { getEventPrizeById } from '../service';
 
 export const useGetEventPrizeById = (id: number) => {
   return {
-    ...useQuery([QUERY_KEYS.EVENT_PRIZE_DETAIL, id], () => getEventPrizeById(id)),
+    ...useQuery([QUERY_KEYS.EVENT_PRIZE_DETAIL, id], () => getEventPrizeById(id), {
+      select: (data) => data.data.response,
+      enabled: !!id,
+    }),
   };
 };
