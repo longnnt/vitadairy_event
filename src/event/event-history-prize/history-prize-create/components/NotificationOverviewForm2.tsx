@@ -32,7 +32,7 @@ import {
   STYLE_GIFT,
   TABLE_HEAD_GIFT,
 } from '../../constants';
-import { createEventPrizevalidate } from '../../event.schema';
+import { createEventPrizeValidate } from '../../event.schema';
 import {
   giftSelecttor,
   popUpCodeSelector,
@@ -113,10 +113,14 @@ function NotificationOverviewForm2() {
   useEffect(() => {
     dispatch(
       setGift({
+        image: '',
         id: 0,
         name: '',
         type: '',
         money: '',
+        point: 0,
+        total: 0,
+        active: false || true,
       })
     );
 
@@ -128,7 +132,7 @@ function NotificationOverviewForm2() {
   }, []);
 
   const methods = useForm<IFormCreate>({
-    resolver: yupResolver(createEventPrizevalidate(provinceId)),
+    resolver: yupResolver(createEventPrizeValidate(provinceId)),
     defaultValues: DEFAULT_FORM_VALUE,
   });
 

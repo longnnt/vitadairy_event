@@ -105,7 +105,7 @@ function StoreAdminListDashboard() {
   if (searchText) searchParams.searchText = searchText;
 
   const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
-  const { data: csvData } = useExportFile();
+
   // =========GET PERMISSION==================
   const { data: admin } = useGetAdmin({});
   const mail = useSelector(emailSelector);
@@ -181,7 +181,7 @@ function StoreAdminListDashboard() {
                 <input hidden multiple type="file" onChange={importFile} />
               </Button>
             </Box>
-            <CSVLink data={csvData ? csvData.data : ''}>
+            <CSVLink data={listStoreAdmin}>
               <Button
                 variant="contained"
                 startIcon={<Iconify icon={'akar-icons:file'} />}

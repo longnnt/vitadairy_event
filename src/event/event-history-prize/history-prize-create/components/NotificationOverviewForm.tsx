@@ -177,6 +177,7 @@ function NotificationOverviewForm() {
           </Box>
         </Modal>
         <Typography marginTop={2}>Trạng thái quà</Typography>
+        <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
       </Card>
     </Grid>
   );
