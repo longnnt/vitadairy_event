@@ -412,9 +412,9 @@ export const EditEventPrizeForm = () => {
             open={openEditModal}
             handleClose={handleCloseEditModal}
             handleOnAgree={handleOnAgree}
-            type='Chỉnh sửa sự kiện'
+            type='Chỉnh sửa quà tặng sự kiện'
             colorType={true}
-            // setConfirmEdit={setConfirmEdit}
+
           />
         </FormProvider>
       </Container>

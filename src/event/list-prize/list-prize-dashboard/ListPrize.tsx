@@ -183,10 +183,8 @@ function ListPrizeDashboard() {
             open={openEditModal}
             handleClose={handleCloseEditModal}
             handleOnAgree={handleOnAgree}
-            type='Xóa sự kiện'
+            type='Xóa giải thưởng sự kiện'
             colorType={false}
-
-            // setConfirmEdit={setConfirmEdit}
           />
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
