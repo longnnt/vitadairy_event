@@ -13,6 +13,7 @@ import { IEventFormData } from '../interface';
 import dayjs from 'dayjs';
 
 export const EditEvent = () => {
+
   return (
     <>
       <HeaderBreadcrumbs
