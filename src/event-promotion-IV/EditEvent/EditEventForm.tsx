@@ -40,37 +40,26 @@ import {
 } from '../eventPromotionIV.slice';
 import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
-import { schemaAddEvent } from '../schema';
+import { schemaAddEvent, schemaEditEvent } from '../schema';
 import { ProductCodeModal } from '../components/ProductCodeModal';
 import { IEventEditFormData, IProCodeSelect, IEventFormData } from '../interface';
 import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
 import { getProductCode } from '../service';
 import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import { DEFAULT_EDIT_VALUE } from '../constant';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
 
-  const defaultValues = {
-    name: '',
-    startDate: undefined,
-    endDate: undefined,
-    skus: [] as string[],
-    defaultWinRate: 0,
-    upRate: 0,
-    downRate: 0,
-    userRegisterDate: undefined,
-    userLimit: 0,
-  };
-
   const methods = useForm<IEventEditFormData>({
-    resolver: yupResolver(schemaAddEvent),
-    defaultValues,
+    resolver: yupResolver(schemaEditEvent),
+    defaultValues: DEFAULT_EDIT_VALUE,
   });
 
   const params = useParams();
   const id = params?.id;
 
-  const { data } = useGetEventById({
+  const { data, isLoading } = useGetEventById({
     id: parseInt(id as string),
     callback: {
       onError: () => showErrorSnackbar('Lấy thông tin sự kiện thất bại'),
@@ -93,6 +82,8 @@ export const EditEventForm = () => {
   const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
   const openEditModal = useSelector(openEditModalSelector);
   const confirmEdit = useSelector(confirmEditSelector);
+
+  const watchUserType = watch('typeUser');
 
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
@@ -143,6 +134,7 @@ export const EditEventForm = () => {
   };
   useDeepCompareEffect(() => {
     const data = watch();
+    if (data.typeUser === 'allUser') data.userRegisterDate = null;
     if (confirmEdit) {
       const dataEdit: any = {
         name: data.name,
@@ -269,11 +261,23 @@ export const EditEventForm = () => {
                 type="number"
               />
 
+              <RHFRadioGroup
+                name="typeUser"
+                options={[
+                  { label: 'Toàn bộ người dùng', value: 'allUser' },
+                  { label: 'Người dùng mới', value: 'newUser' },
+                ]}
+              />
+
               <Controller
                 name="userRegisterDate"
                 control={control}
                 render={({ field }) => (
-                  <Stack position={'relative'} width="100%">
+                  <Stack
+                    position={'relative'}
+                    width="100%"
+                    display={`${(watchUserType === 'allUser' && 'none') || 'display'}`}
+                  >
                     <DatePicker
                       {...field}
                       label="Ngày tính người dùng mới"

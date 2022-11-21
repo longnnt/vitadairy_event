@@ -217,7 +217,7 @@ export interface IFormFilter {
 }
 
 export interface ISelectPopup {
-  value: number;
+  value: number | string;
   label: string;
 }
 

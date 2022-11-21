@@ -65,7 +65,7 @@ import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import { useGetGiftById } from '../hooks/useGetGiftById';
 import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
-import { ConfirmEditModal } from './ConfirmEditModal';
+// import { ConfirmEditModal } from './ConfirmEditModal';
 import { getAllTransactionType } from '../service';
 import { RHFSelectPagitnation } from './RHFSelectPagination';
 
@@ -439,14 +439,13 @@ export const EditEventPrizeForm = () => {
           >
             Lưu
           </LoadingButton>
-          <ConfirmEditModal
+          {/* <ConfirmEditModal
             open={openEditModal}
             handleClose={handleCloseEditModal}
             handleOnAgree={handleOnAgree}
-            type="Chỉnh sửa sự kiện"
+            type="Chỉnh sửa quà tặng sự kiện"
             colorType={true}
-            // setConfirmEdit={setConfirmEdit}
-          />
+          /> */}
         </FormProvider>
       </Container>
     </>

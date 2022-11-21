@@ -132,7 +132,9 @@ export interface IEventEditFormData {
   defaultWinRate: number;
   upRate: number;
   downRate: number;
-  userRegisterDate: Date;
+  userRegisterDate: Date | null;
   userLimit: number;
   skus: any[];
+  // skus: string[];
+  typeUser: string;
 }

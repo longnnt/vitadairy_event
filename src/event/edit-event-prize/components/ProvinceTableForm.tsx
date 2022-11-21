@@ -197,11 +197,7 @@ export default function PovinceTableForm() {
 
           setRows({ ...rows, ...data });
           setValue('eventDetailProvinces', { ...rows, ...data });
-<<<<<<< HEAD
-          event.target.value = '';
-=======
           // event.target.value = '';
->>>>>>> 69f17291540109f8b967cce80422352cfaa72e21
         },
       });
     } catch (e) {

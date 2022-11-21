@@ -121,34 +121,6 @@ export const EventTableToolbar = () => {
             />
           )}
         />
-        {/* <Controller
-          name="startDate"
-          key={'firstScanStartDate'}
-          control={control}
-          render={({ field }) => (
-            <DateTimePicker
-              {...field}
-              label="Ngày bắt đầu"
-              key={'firstScanStartDate'}
-              inputFormat={'dd/MM/yyyy hh:mm a'}
-              renderInput={(params) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
-        <Controller
-          name="endDate"
-          key="firstScanEndDate"
-          control={control}
-          render={({ field }: { field: any }) => (
-            <DateTimePicker
-              {...field}
-              key="firstScanEndDate"
-              label="Ngày kết thúc"
-              inputFormat={'dd/MM/yyyy hh:mm a'}
-              renderInput={(params) => <TextField {...params} fullWidth />}
-            />
-          )}
-        /> */}
       </Stack>
       <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }} padding={1}>
         <Button variant="contained" color="info" type="submit">
