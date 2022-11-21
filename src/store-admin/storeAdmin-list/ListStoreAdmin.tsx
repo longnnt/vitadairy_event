@@ -115,7 +115,6 @@ function StoreAdminListDashboard() {
   dispatch(setPermission(getPermission?.permission))
   
   const listStoreAdmin = data?.response || [];
-  console.log(data?.response)
 
   const {
     isCheckedAll,

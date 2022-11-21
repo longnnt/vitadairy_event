@@ -62,7 +62,6 @@ function StoreTableRow({
           size='medium'
           onChange={(e) => {
             handleOnChange(e.target.checked);
-            console.log(e.target.checked)
           }}
         />        
       </TableCell>
