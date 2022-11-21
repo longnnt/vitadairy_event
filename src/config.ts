@@ -11,6 +11,7 @@ import { PATH_DASHBOARD } from './common/routes/paths';
 export const HOST_API =
   // process.env.REACT_APP_BASE_URL || 'https://api-stg.vitadairyvietnam.vn/api';
   process.env.REACT_APP_BASE_URL || 'https://api.vitadairyvietnam.vn/api';
+// process.env.REACT_APP_BASE_URL || 'https://api-sandbox.vitadairyvietnam.vn';
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'

@@ -185,17 +185,23 @@ export const EditEventPrizeForm = () => {
   }, [dtaEventPrizeById]);
 
   const handleOnInuputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    try {
+      const files = e.target.files;
 
-    if (files && files[0]) {
-      convertExcelFileToObj(files[0], setFileImport, fileImport);
-    }
-    const testValidateImport = validateFileImportFormat(fileImport);
+      if (files && files[0]) {
+        convertExcelFileToObj(files[0], setFileImport, fileImport);
+      }
+      const testValidateImport = validateFileImportFormat(fileImport);
 
-    if (!testValidateImport) {
-      showErrorSnackbar('File import  không đúng định dạng');
-    } else {
-      showSuccessSnackbar('import file thành công');
+      if (!testValidateImport) {
+        showErrorSnackbar('File import  không đúng định dạng');
+      } else {
+        showSuccessSnackbar('import file thành công');
+      }
+    } catch (e) {
+      return;
+    } finally {
+      e.target.value = '';
     }
   };
 
