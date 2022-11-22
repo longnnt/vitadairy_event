@@ -24,9 +24,19 @@ import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
 import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS } from '../../constants';
-import { setFileCSV, setProvinceInFoSelector, setProvinceNewForm } from '../../event.slice';
+import {
+  setFileCSV,
+  setProvinceInFoSelector,
+  setProvinceNewForm,
+} from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { EditToolbarProps, IEventDetail, IFormCreate, IFormCreateEvent, ISelect } from '../../interfaces';
+import {
+  EditToolbarProps,
+  IEventDetail,
+  IFormCreate,
+  IFormCreateEvent,
+  ISelect,
+} from '../../interfaces';
 import { StyledBox } from '../utils';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -154,7 +164,6 @@ export default function ProvinceTableForm() {
     }
   }, [errors, rowModesModel]);
 
-
   const importFile = async (event: any) => {
     try {
       const allowedExtensions = [CSV];
@@ -245,7 +254,7 @@ export default function ProvinceTableForm() {
       valueSetter(params) {
         const provinceId = watch(`eventDetailProvinces.${params.row.id}.provinceId`);
         return { ...params.row, provinceId: provinceId };
-      }
+      },
     },
     {
       field: 'quantity',

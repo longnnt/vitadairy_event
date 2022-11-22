@@ -222,10 +222,14 @@ export interface ISelectPopup {
 }
 
 export interface IGift {
+  image: string;
   id: number;
   type: string;
   money: string;
   name: string;
+  point: number;
+  total: number;
+  active: boolean;
 }
 
 export interface IResGift {

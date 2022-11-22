@@ -115,6 +115,7 @@ export interface IGiftDetail {
   type: string;
   money: number;
   name: string;
+  image: string;
 }
 export interface IGiftById {
   data: {

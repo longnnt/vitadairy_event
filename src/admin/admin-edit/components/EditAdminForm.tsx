@@ -39,10 +39,11 @@ function EditFormAdmin() {
   const confirmEdit = useSelector(confirmEditSelector);
 
   const { mutate, isSuccess,isLoading } = useEditAdmin({
-    onSuccess: () => {
+    onSuccess: () => { 
+      showSuccessSnackbar('Chỉnh sửa tài khoản thành công')
     },
     onError: () => {
-      showErrorSnackbar('Get admin fail');
+      showErrorSnackbar('Chỉnh sửa tài khoản thất bại');
     },
   });
 

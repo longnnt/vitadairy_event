@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  Card,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -118,8 +119,8 @@ export const AddEvent = () => {
       </Typography>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Scrollbar sx={{ marginTop: '20px' }}>
-          <Stack sx={{ p: '20px 40px 48px', backgroundColor: 'white' }}>
+        <Card sx={{ padding: 2, mt: '20px' }}>
+          <Scrollbar>
             <Stack spacing="26px">
               <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
               <Stack
@@ -204,7 +205,7 @@ export const AddEvent = () => {
                 <RadioGroup
                   defaultValue="allUser"
                   name="radio-buttons-group"
-                  sx={{ flexDirection: 'row' }}
+                  sx={{ flexDirection: 'row', paddingLeft: 2 }}
                   onChange={(e) => handleStatusUserType(e.target.value)}
                 >
                   <FormControlLabel
@@ -255,25 +256,116 @@ export const AddEvent = () => {
                 type="number"
               />
             </Stack>
-          </Stack>
-        </Scrollbar>
+
+            <Box sx={{ zIndex: 1001 }}>
+              <RHFSelectPagitnation
+                name={'skus'}
+                getAsyncData={getProductCode}
+                placeholder="Mã sản phẩm*"
+              />
+              {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
+            </Box>
+
+            <RHFTextField
+              fullWidth
+              label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
+              name="defaultWinRate"
+              type="number"
+            />
+            <RHFTextField
+              fullWidth
+              label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
+              name="upRate"
+              type="number"
+            />
+            <RHFTextField
+              fullWidth
+              label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
+              name="downRate"
+              type="number"
+            />
+            <FormControl>
+              <RadioGroup
+                defaultValue="allUser"
+                name="radio-buttons-group"
+                sx={{ flexDirection: 'row' }}
+                onChange={(e) => handleStatusUserType(e.target.value)}
+              >
+                <FormControlLabel
+                  value="allUser"
+                  control={<Radio />}
+                  label="Toàn bộ người dùng"
+                />
+                <FormControlLabel
+                  value="newUser"
+                  control={<Radio />}
+                  label="Người dùng mới"
+                />
+              </RadioGroup>
+            </FormControl>
+            <Controller
+              name="userRegisterDate"
+              control={control}
+              render={({ field }) => (
+                <Stack
+                  position={'relative'}
+                  width="100%"
+                  sx={{
+                    display: `${(userTypeValue === 'allUser' && 'none') || 'block'}`,
+                  }}
+                >
+                  <DatePicker
+                    {...field}
+                    label="Ngày tính người dùng mới"
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        helperText={
+                          errors.userRegisterDate && errors.userRegisterDate.message
+                        }
+                        error={!!errors.userRegisterDate}
+                      />
+                    )}
+                  />
+                </Stack>
+              )}
+            />
+            <RHFTextField
+              name="userLimit"
+              fullWidth
+              label="Số lần người dùng nhận quà tối đa*"
+              type="number"
+            />
+          </Scrollbar>
+        </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button
-            variant="contained"
-            color="secondary"
-            type="submit"
-            onClick={() => dispatch(setButtonType('saveSubmit'))}
-          >
-            Lưu
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ mx: '7px' }}
-            type="submit"
-            onClick={() => dispatch(setButtonType('saveEditSubmit'))}
-          >
-            Lưu & chỉnh sửa
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => navigate(PATH_DASHBOARD.eventPromotionIV.list)}
+            >
+              Hủy bỏ
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              type="submit"
+              onClick={() => dispatch(setButtonType('saveSubmit'))}
+            >
+              Thêm mới
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={() => dispatch(setButtonType('saveEditSubmit'))}
+            >
+              Thêm & Chỉnh sửa
+            </Button>
+          </Stack>
         </Box>
       </FormProvider>
     </>

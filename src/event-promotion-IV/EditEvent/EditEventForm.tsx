@@ -47,6 +47,9 @@ import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectP
 import { getProductCode } from '../service';
 import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { DEFAULT_EDIT_VALUE } from '../constant';
+import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
+import { BREADCUMBS } from 'src/common/constants/common.constants';
+import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
@@ -87,7 +90,10 @@ export const EditEventForm = () => {
 
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
-      showErrorSnackbar('Tạo mới thất bại');
+      showErrorSnackbar('Chỉnh sửa sự kiện thất bại');
+    },
+    onSuccess: () => {
+      showSuccessSnackbar('Chỉnh sửa sự kiện thành công');
     },
   });
 
@@ -157,68 +163,85 @@ export const EditEventForm = () => {
   };
   return (
     <>
-      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-        Thông tin tổng quát
-      </Typography>
-      <ProductCodeModal />
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Scrollbar sx={{ marginTop: '20px' }}>
-          <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
-            <Stack spacing="26px">
-              <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
-              <Stack
-                spacing={'10px'}
-                direction="row"
-                alignItems={'center'}
-                position="relative"
-              >
-                <Controller
-                  name="startDate"
-                  control={control}
-                  render={({ field }) => (
-                    <Stack position="relative" width="100%">
-                      <DateTimePicker
-                        {...field}
-                        label="Ngày bắt đầu"
-                        inputFormat="dd/MM/yyyy hh:mm a"
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            helperText={errors.startDate && errors.startDate?.message}
-                            error={!!errors.startDate}
-                          />
+      {isLoading ? (
+        <LoadingSkeletonViewEventScreen />
+      ) : (
+        <>
+          <HeaderBreadcrumbs
+            heading="CHỈNH SỬA SỰ KIỆN"
+            links={[
+              { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
+              { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
+              { name: 'Sửa sự kiện' },
+            ]}
+          />
+          <>
+            <Typography variant="body2" sx={{ fontWeight: 700 }}>
+              Thông tin tổng quát
+            </Typography>
+            <ProductCodeModal />
+            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <Scrollbar sx={{ marginTop: '20px' }}>
+                <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
+                  <Stack spacing="26px">
+                    <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
+                    <Stack
+                      spacing={'10px'}
+                      direction="row"
+                      alignItems={'center'}
+                      position="relative"
+                    >
+                      <Controller
+                        name="startDate"
+                        control={control}
+                        render={({ field }) => (
+                          <Stack position="relative" width="100%">
+                            <DateTimePicker
+                              {...field}
+                              label="Ngày bắt đầu"
+                              inputFormat="dd/MM/yyyy hh:mm a"
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  fullWidth
+                                  helperText={
+                                    errors.startDate && errors.startDate?.message
+                                  }
+                                  error={!!errors.startDate}
+                                />
+                              )}
+                            />
+                          </Stack>
+                        )}
+                      />
+                      <Box sx={{ mx: 2 }}>-</Box>
+
+                      <Controller
+                        name="endDate"
+                        control={control}
+                        render={({ field }) => (
+                          <Stack position={'relative'} width="100%">
+                            <DateTimePicker
+                              {...field}
+                              label="Ngày kết thúc"
+                              inputFormat="dd/MM/yyyy hh:mm a"
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  fullWidth
+                                  helperText={errors.endDate && errors.endDate?.message}
+                                  error={!!errors.endDate}
+                                />
+                              )}
+                            />
+                          </Stack>
                         )}
                       />
                     </Stack>
-                  )}
-                />
-                <Box sx={{ mx: 2 }}>-</Box>
 
-                <Controller
-                  name="endDate"
-                  control={control}
-                  render={({ field }) => (
-                    <Stack position={'relative'} width="100%">
-                      <DateTimePicker
-                        {...field}
-                        label="Ngày kết thúc"
-                        inputFormat="dd/MM/yyyy hh:mm a"
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            helperText={errors.endDate && errors.endDate?.message}
-                            error={!!errors.endDate}
-                          />
-                        )}
-                      />
-                    </Stack>
-                  )}
-                />
-              </Stack>
-
-              {/* <RHFTextField
+                    {/* <RHFTextField
+  
+              <RHFTextField
                 name="skus"
                 label="Mã sản phẩm"
                 onClick={() => dispatch(setIsOpenModal(true))}
@@ -233,96 +256,109 @@ export const EditEventForm = () => {
                   ),
                 }}
               /> */}
-              <Box sx={{ zIndex: 1001 }}>
-                <RHFSelectPagitnation
-                  name={'skus'}
-                  getAsyncData={getProductCode}
-                  placeholder="Mã sản phẩm*"
-                />
-                {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
-              </Box>
+                    <Box sx={{ zIndex: 1001 }}>
+                      <RHFSelectPagitnation
+                        name={'skus'}
+                        getAsyncData={getProductCode}
+                        placeholder="Mã sản phẩm*"
+                      />
+                      {errors && (
+                        <FormHelperText error>{errors?.skus?.message}</FormHelperText>
+                      )}
+                    </Box>
 
-              <RHFTextField
-                fullWidth
-                label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
-                name="defaultWinRate"
-                type="number"
-              />
-              <RHFTextField
-                fullWidth
-                label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
-                name="upRate"
-                type="number"
-              />
-              <RHFTextField
-                fullWidth
-                label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
-                name="downRate"
-                type="number"
-              />
+                    <RHFTextField
+                      fullWidth
+                      label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
+                      name="defaultWinRate"
+                      type="number"
+                    />
+                    <RHFTextField
+                      fullWidth
+                      label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
+                      name="upRate"
+                      type="number"
+                    />
+                    <RHFTextField
+                      fullWidth
+                      label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
+                      name="downRate"
+                      type="number"
+                    />
 
-              <RHFRadioGroup
-                name="typeUser"
-                options={[
-                  { label: 'Toàn bộ người dùng', value: 'allUser' },
-                  { label: 'Người dùng mới', value: 'newUser' },
-                ]}
-              />
+                    <RHFRadioGroup
+                      name="typeUser"
+                      options={[
+                        { label: 'Toàn bộ người dùng', value: 'allUser' },
+                        { label: 'Người dùng mới', value: 'newUser' },
+                      ]}
+                    />
 
-              <Controller
-                name="userRegisterDate"
-                control={control}
-                render={({ field }) => (
-                  <Stack
-                    position={'relative'}
-                    width="100%"
-                    display={`${(watchUserType === 'allUser' && 'none') || 'display'}`}
-                  >
-                    <DatePicker
-                      {...field}
-                      label="Ngày tính người dùng mới"
-                      inputFormat="dd/MM/yyyy"
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          helperText={
-                            errors.userRegisterDate && errors.userRegisterDate.message
-                          }
-                          error={!!errors.userRegisterDate}
-                        />
+                    <Controller
+                      name="userRegisterDate"
+                      control={control}
+                      render={({ field }) => (
+                        <Stack
+                          position={'relative'}
+                          width="100%"
+                          display={`${
+                            (watchUserType === 'allUser' && 'none') || 'display'
+                          }`}
+                        >
+                          <DatePicker
+                            {...field}
+                            label="Ngày tính người dùng mới"
+                            inputFormat="dd/MM/yyyy"
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                fullWidth
+                                helperText={
+                                  errors.userRegisterDate &&
+                                  errors.userRegisterDate.message
+                                }
+                                error={!!errors.userRegisterDate}
+                              />
+                            )}
+                          />
+                        </Stack>
                       )}
                     />
+                    <RHFTextField
+                      name="userLimit"
+                      fullWidth
+                      label="Số lần người dùng nhận quà tối đa*"
+                      type="number"
+                    />
                   </Stack>
-                )}
-              />
-              <RHFTextField
-                name="userLimit"
-                fullWidth
-                label="Số lần người dùng nhận quà tối đa*"
-                type="number"
-              />
-            </Stack>
-          </Card>
-        </Scrollbar>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button variant="contained" color="secondary" type="submit">
-            Lưu
-          </Button>
-          <Button variant="contained" sx={{ mx: '7px' }} onClick={handleRedirectToView}>
-            Hủy chỉnh sửa
-          </Button>
-        </Box>
-        <ConfirmEditModal
-          open={openEditModal}
-          handleClose={handleCloseEditModal}
-          handleOnAgree={handleOnAgree}
-          type="Chỉnh sửa sự kiện"
-          colorType={true}
+                </Card>
+              </Scrollbar>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
+                <Button variant="contained" color="primary" type="submit">
+                  Lưu
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{ mx: '7px' }}
+                  color="inherit"
+                  onClick={handleRedirectToView}
+                >
+                  Hủy chỉnh sửa
+                </Button>
+              </Box>
+              <ConfirmEditModal
+                open={openEditModal}
+                handleClose={handleCloseEditModal}
+                handleOnAgree={handleOnAgree}
+                type="Chỉnh sửa sự kiện"
+                colorType={true}
 
-          // setConfirmEdit={setConfirmEdit}
-        />
-      </FormProvider>
+                // setConfirmEdit={setConfirmEdit}
+              />
+            </FormProvider>
+          </>
+        </>
+      )}
     </>
   );
 };
