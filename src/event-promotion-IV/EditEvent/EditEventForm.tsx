@@ -44,6 +44,9 @@ import { ProductCodeModal } from '../components/ProductCodeModal';
 import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { IEventEditFormData, IEventFormData } from '../interface';
 import { DEFAULT_EDIT_VALUE } from '../constant';
+import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
+import { BREADCUMBS } from 'src/common/constants/common.constants';
+import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
@@ -144,6 +147,17 @@ export const EditEventForm = () => {
   };
   return (
     <>
+    {isLoading ? (<LoadingSkeletonViewEventScreen/>) :(
+    <>
+      <HeaderBreadcrumbs
+        heading="CHỈNH SỬA SỰ KIỆN"
+        links={[
+          { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
+          { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
+          { name: 'Sửa sự kiện' },
+        ]}
+      />
+    <>
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Thông tin tổng quát
       </Typography>
@@ -181,7 +195,7 @@ export const EditEventForm = () => {
                   )}
                 />
                 <Box sx={{ mx: 2 }}>-</Box>
-
+  
                 <Controller
                   name="endDate"
                   control={control}
@@ -204,7 +218,7 @@ export const EditEventForm = () => {
                   )}
                 />
               </Stack>
-
+  
               <RHFTextField
                 name="skus"
                 label="Mã sản phẩm"
@@ -220,7 +234,7 @@ export const EditEventForm = () => {
                   ),
                 }}
               />
-
+  
               <RHFTextField
                 fullWidth
                 label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
@@ -239,7 +253,7 @@ export const EditEventForm = () => {
                 name="downRate"
                 type="number"
               />
-
+  
                <RHFRadioGroup
                 name="typeUser"
                 options={[
@@ -247,7 +261,7 @@ export const EditEventForm = () => {
                   { label: 'Người dùng mới', value: 'newUser' },
                 ]}
               />
-
+  
               <Controller
                 name="userRegisterDate"
                 control={control}
@@ -285,10 +299,10 @@ export const EditEventForm = () => {
           </Card>
         </Scrollbar>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button variant="contained" color="secondary" type="submit">
+          <Button variant="contained" color="primary" type="submit">
             Lưu
           </Button>
-          <Button variant="contained" sx={{ mx: '7px' }} onClick={handleRedirectToView}>
+          <Button variant="contained" sx={{ mx: '7px' }} color='inherit' onClick={handleRedirectToView}>
             Hủy chỉnh sửa
           </Button>
         </Box>
@@ -298,10 +312,13 @@ export const EditEventForm = () => {
             handleOnAgree={handleOnAgree}
             type='Chỉnh sửa sự kiện'
             colorType={true}
-
+  
             // setConfirmEdit={setConfirmEdit}
           />
       </FormProvider>
     </>
+    </>
+    )} 
+  </>
   );
 };

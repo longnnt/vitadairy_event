@@ -16,14 +16,6 @@ export const EditEvent = () => {
 
   return (
     <>
-      <HeaderBreadcrumbs
-        heading="CHỈNH SỬA SỰ KIỆN"
-        links={[
-          { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Sửa sự kiện' },
-        ]}
-      />
       <EditEventForm />
     </>
   );
