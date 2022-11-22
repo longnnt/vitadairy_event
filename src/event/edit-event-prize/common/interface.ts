@@ -11,7 +11,9 @@ export interface IResEventPrizeById {
 }
 
 export interface IQuery {
-  except: number;
+  except?: number;
+  page?: number;
+  size?: number;
 }
 
 export interface IEventProvince {
@@ -41,7 +43,8 @@ interface IForm {
   popupType: string;
   probability: number;
   quantity: number;
-  transactionTypeId: number;
+  // transactionTypeId: number;
+  transactionTypeId: ISelect | number;
   winnerAmount: number;
   typeUser?: string;
 }
@@ -112,6 +115,7 @@ export interface IGiftDetail {
   type: string;
   money: number;
   name: string;
+  image: string;
 }
 export interface IGiftById {
   data: {

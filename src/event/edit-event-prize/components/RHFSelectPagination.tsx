@@ -48,11 +48,12 @@ export const RHFSelectPagitnation = ({
       page: page,
       searchText: search,
     });
-    const hasMore = page < response?.data?.response.pagination.totalPages;
-    const optionSelects = response.data?.response.response.map((prodCode: any) => {
+
+    const hasMore = page < response?.data?.pagination.totalPages;
+    const optionSelects = response.data?.response.map((item: any) => {
       return {
-        value: prodCode.code,
-        label: prodCode.code,
+        value: item.id,
+        label: item.description,
       };
     });
     return {
@@ -77,6 +78,7 @@ export const RHFSelectPagitnation = ({
             placeholder={placeholder}
             value={value}
             additional={{ page: 0 }}
+            isSearchable
             loadOptions={
               loadOptions as unknown as LoadOptions<
                 unknown,
@@ -84,7 +86,6 @@ export const RHFSelectPagitnation = ({
                 { page: number }
               >
             }
-            isMulti
             closeMenuOnSelect={false}
             onChange={onChange}
             styles={colourStyles(isFocus)}
@@ -124,6 +125,12 @@ const colourStyles = (isFocus: boolean) => {
       padding: 10,
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
     }),
+    // menuList: (provided) => ({
+    //   ...provided,
+    //   maxHeight: '300px!important',
+    //   position: 'relative',
+    //   zIndex: 1,
+    // }),
 
     placeholder: (base, state) => ({
       ...base,
@@ -134,12 +141,13 @@ const colourStyles = (isFocus: boolean) => {
         (isFocus as unknown as ControlProps<boolean>)
           ? 'white'
           : 'primary',
-      top:
-        state.hasValue || state.selectProps.inputValue
-          ? '-10px'
-          : (isFocus as unknown as ControlProps<boolean>)
-          ? '-22px'
-          : '10%',
+      top: state.hasValue
+        ? '-22px'
+        : state.selectProps.inputValue
+        ? '-22px'
+        : (isFocus as unknown as ControlProps<boolean>)
+        ? '-22px'
+        : '10%',
       transition: 'top 0.2s, font-size 0.2s',
       fontSize:
         (state.hasValue ||

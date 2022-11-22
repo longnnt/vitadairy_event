@@ -11,6 +11,7 @@ import _ from 'lodash';
 export const fomatFormData = (data: IFormEdit) => {
   const { eventDetailProvinces, ...tempEditData } = data;
   delete tempEditData.typeUser;
+  // tempEditData.transactionTypeId = tempEditData.transactionTypeId.value as number;
 
   const tempProvince = Object.values(eventDetailProvinces)?.map(
     (item: IEventProvince) => {

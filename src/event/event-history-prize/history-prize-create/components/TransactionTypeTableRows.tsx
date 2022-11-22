@@ -2,7 +2,7 @@ import { TableCell, TableRow } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { dispatch } from 'src/common/redux/store';
 import { setTransactionType } from '../../event.slice';
-import { IFormCreate, IPropsTransactionTableRow } from '../../interfaces';
+import { IFormCreate, IPropsTransactionTableRow, ISelectPopup } from '../../interfaces';
 
 function TransactionTypeTableRow({ row, handleClose }: IPropsTransactionTableRow) {
   const { id, code, name, description, mainCode } = row;
@@ -17,7 +17,7 @@ function TransactionTypeTableRow({ row, handleClose }: IPropsTransactionTableRow
       hover
       onClick={() => {
         dispatch(setTransactionType(row));
-        setValue('transactionTypeId', id);
+        // setValue('transactionTypeId', id);
         handleClose();
       }}
     >
@@ -35,4 +35,3 @@ function TransactionTypeTableRow({ row, handleClose }: IPropsTransactionTableRow
 }
 
 export { TransactionTypeTableRow };
-
