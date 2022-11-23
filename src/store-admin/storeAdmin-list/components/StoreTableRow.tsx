@@ -1,4 +1,4 @@
-import { Switch, TableCell, TableRow, Link, Box } from '@mui/material';
+import { Switch, TableCell, TableRow, Link, Box, Checkbox } from '@mui/material';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -6,33 +6,43 @@ import { useNavigate } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { FORMATE_CREATE_DATE } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
-import { setCode } from 'src/store-admin/storeAdmin.slice';
+import { setActive, setActiveSelector, setCode } from 'src/store-admin/storeAdmin.slice';
 import { IPropsStoreTableRow } from '../../interfaces';
+import utc from 'dayjs/plugin/utc'
+import useMessage from 'src/store-admin/hooks/useMessage';
+import { useGetStoreAdmin } from 'src/store-admin/hooks/useGetStoreAdmin';
+import { useQueryClient } from 'react-query';
+import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 
 // ----------------------------------------------------------------------
 
 function StoreTableRow({
   row,
   selected,
-  onEditRow,
-  onSelectRow,
-  onDeleteRow,
+  // onEditRow,
+  // onSelectRow,
+  // onDeleteRow,
 }: IPropsStoreTableRow) {
+  dayjs().utcOffset()
+  dayjs.extend(utc)
+  const queryClient = useQueryClient()
   const navigate = useNavigate();
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const dispatch = useDispatch();
-
-  const { mutate } = useGetStoreActive();
-
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { mutate } = useGetStoreActive({
+    onSuccess: () => {showSuccessSnackbar('Cập nhật thành công')},
+    onError: () => showErrorSnackbar('Cập nhật thất bại'),
+  });
   const handleOnChange = (active: boolean) => {
     mutate({ code, isActive: active });
   };
 
   const handleShopInvitation = (id: string) => {
     navigate(PATH_DASHBOARD.storeAdmin.edit_shop(id));
-  dispatch(setCode(code))
+  dispatch(setCode(code)) 
   }
   return (
     <TableRow hover selected={selected}>
@@ -45,7 +55,7 @@ function StoreTableRow({
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(createdDate).format(FORMATE_CREATE_DATE)}
+      {new Date(createdDate).toUTCString()}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
@@ -58,12 +68,12 @@ function StoreTableRow({
 
       <TableCell align="right" title={isActive === true ? 'actived' : 'unActivced'}>
         <Switch
-          defaultChecked={isActive}
           size='medium'
+          checked={isActive}
           onChange={(e) => {
             handleOnChange(e.target.checked);
           }}
-        />        
+        />
       </TableCell>
     </TableRow>
   );

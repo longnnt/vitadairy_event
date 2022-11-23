@@ -167,7 +167,7 @@ export default function HistoryNewForm() {
                   open={openEditModal}
                   handleClose={handleCloseEditModal}
                   handleOnAgree={handleOnAgree}
-                  type="Chỉnh sửa sự kiện"
+                  type="Lưu sự kiện"
                   colorType={true}
                 />
               </Box>
@@ -188,7 +188,7 @@ export default function HistoryNewForm() {
                 open={openEditModal}
                 handleClose={handleCloseEditModal}
                 handleOnAgree={handleOnAgree}
-                type="Chỉnh sửa sự kiện"
+                type="Lưu và Chỉnh sửa sự kiện"
                 colorType={true}
               />
             </Grid>

@@ -105,6 +105,7 @@ function StoreAdminListDashboard() {
   if (searchText) searchParams.searchText = searchText;
 
   const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
+  console.log(data)
 
   // =========GET PERMISSION==================
   const { data: admin } = useGetAdmin({});
