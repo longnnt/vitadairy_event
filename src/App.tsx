@@ -18,15 +18,16 @@ import { permissionSelector, setPermission } from './auth/login/login.slice';
 
 // ----------------------------------------------------------------------
 // Rebuild cloud run with env
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      cacheTime: 2 * 1000 * 60
+    },
+  },
+});
 
 export default function App() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
   const permissionAbility = useSelector(permissionSelector)
   const ability = buildAbilityFor(permissionAbility);
   return (

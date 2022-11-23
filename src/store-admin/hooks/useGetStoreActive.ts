@@ -13,8 +13,8 @@ export function useGetStoreActive(callback: IStoreAdminCallback) {
   // console.log('active',queryClient.getQueryCache())
   return useMutation(getActiveStore, {
     onSuccess: (_rs, _variables) => {
-      console.log('storeadsadas',queryClient.getQueryData([QUERY_KEYS.STORE_ADMIN]))
-      console.log(queryClient.getQueryCache())
+      console.log('store admin data', queryClient.getQueryData([QUERY_KEYS.STORE_ADMIN]))
+      // console.log(queryClient.getQueryCache())
       queryClient
         .getQueryCache()
         .findAll(QUERY_KEYS.STORE_ADMIN)

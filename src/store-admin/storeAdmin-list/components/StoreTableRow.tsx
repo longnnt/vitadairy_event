@@ -23,15 +23,18 @@ function StoreTableRow({
   // onSelectRow,
   // onDeleteRow,
 }: IPropsStoreTableRow) {
+
+  // Chỗ này set global đúng chưa?
   dayjs().utcOffset()
   dayjs.extend(utc)
-  const queryClient = useQueryClient()
   const navigate = useNavigate();
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const dispatch = useDispatch();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+
+  // useMutateStoreActive
   const { mutate } = useGetStoreActive({
     onSuccess: () => {showSuccessSnackbar('Cập nhật thành công')},
     onError: () => showErrorSnackbar('Cập nhật thất bại'),

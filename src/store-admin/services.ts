@@ -6,7 +6,7 @@ import {
 import axiosInstance from 'src/common/utils/axios';
 import { IDataStore, IFormStore, IFormStoreAction, IStoreActive, IStoreParams } from './interfaces';
 
-export const getStoreAdmin = (params: IStoreParams) => {
+export const getStoreAdmin = (params?: IStoreParams) => {
   return axiosInstance.get<unknown, IDataStore>(`${API_STORE_ADMIN}`, { params });
 };
 

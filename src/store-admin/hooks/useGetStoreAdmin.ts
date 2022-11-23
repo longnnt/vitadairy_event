@@ -8,7 +8,7 @@ export function useGetStoreAdmin(params: IStoreParams) {
   const queryClient = useQueryClient();
   // console.log('store',queryClient.getQueryData(QUERY_KEYS.STORE_ADMIN))
   return {
-    ...useQuery([QUERY_KEYS.STORE_ADMIN], () => getStoreAdmin(params), {
+    ...useQuery([QUERY_KEYS.STORE_ADMIN], () => getStoreAdmin(), {
       select: (data) => data?.data?.response,
       cacheTime:Infinity
     }),
