@@ -12,12 +12,15 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Stack } from '@mui/system';
 import { useEffect } from 'react';
 import { RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
+import { RHFSelectPagitnation } from 'src/event/edit-event-prize/components/RHFSelectPagination';
+import { getAllTransactionType } from 'src/event/edit-event-prize/service';
 import { SIZE_PAGE, STYLE_GIFT, TABLE_HEAD_TRANSACTION_TYPE } from '../../constants';
 import {
   setOpenModal,
@@ -51,6 +54,9 @@ function NotificationOverviewForm() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+  const searchParamsPaginate: ITransactionParams = {
+    page: 0,
+  };
   const searchParams: ITransactionParams = {
     page: page + 1,
     size: SIZE_PAGE,
@@ -78,104 +84,112 @@ function NotificationOverviewForm() {
     <Grid item xs={6}>
       <LabelStyle>Thông báo tổng quan</LabelStyle>
       <Card sx={{ p: 2, width: '100%' }}>
-        <RHFTextField
-          name={'ordinal'}
-          key={'ordinal'}
-          label="Thứ tự ưu tiên*"
-          margin="dense"
-        />
-        <RHFTextField
-          name="probability"
-          key={'probability'}
-          label="Tỉ lệ trúng quà của sự kiện(%)*"
-          margin="dense"
-        />
-        <RHFTextField
-          name="quantity"
-          key={'quantity'}
-          label="Tổng số lượng quà*"
-          margin="dense"
-        />
-        <RHFTextField
-          name="id"
-          key={'id'}
-          InputProps={{
-            readOnly: true,
-          }}
-          label="Số lượng quà user đã trúng"
-          margin="dense"
-        />
-        <Button
-          variant="contained"
-          color="info"
-          size="large"
-          onClick={handleOpenModal}
-          sx={{ marginTop: 1 }}
-        >
-          Chọn Transaction Type
-        </Button>
-        <Box
-          sx={{
-            color: 'black',
-            marginTop: 1.5,
-          }}
-        >
-          {transactionType.description}
-        </Box>
-        <Modal
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={STYLE_GIFT}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            sx={{ textAlign: 'center', fontWeight: 'bold', py: '20px' }}
-          >
-            Please choose a transaction type!
-          </Typography>
+        <Stack spacing={3}>
+          <RHFTextField
+            name={'ordinal'}
+            key={'ordinal'}
+            label="Thứ tự ưu tiên*"
+            margin="dense"
+          />
+          <RHFTextField
+            name="probability"
+            key={'probability'}
+            label="Tỉ lệ trúng quà của sự kiện(%)*"
+            margin="dense"
+          />
+          <RHFTextField
+            name="quantity"
+            key={'quantity'}
+            label="Tổng số lượng quà*"
+            margin="dense"
+          />
 
-            <Scrollbar>
-              <TableContainer
-                sx={{
-                  minWidth: 800,
-                  maxHeight: 500,
-                  position: 'relative',
-                  overflowY: 'scroll',
-                  overflowX: 'auto',
-                }}
-                component={Paper}
-              >
-                <Table>
-                  <TableHeadCustom headLabel={TABLE_HEAD_TRANSACTION_TYPE} />
-                  <TableBody>
-                    {dataTransaction.map((row) => (
-                      <TransactionTypeTableRow
-                        key={row.id}
-                        row={row}
-                        handleClose={handleCloseModal}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Scrollbar>
-            {!!addTransaction?.data?.pagination?.totalPages && (
-              <TablePagination
-                rowsPerPageOptions={[10]}
-                component="div"
-                count={totalRecords}
-                rowsPerPage={10}
-                page={page}
-                onPageChange={onChangePage}
-                onRowsPerPageChange={onChangeRowsPerPage}
-              />
-            )}
+          <Box sx={{ zIndex: 1001 }}>
+            <RHFSelectPagitnation
+              name={'transactionTypeId'}
+              placeholder="Transaction type"
+              getAsyncData={getAllTransactionType}
+              searchParams={searchParamsPaginate}
+            />
+            {/* {errors && (
+            <FormHelperText error>{errors?.transactionTypeId?.message}</FormHelperText>
+          )} */}
           </Box>
-        </Modal>
+          <RHFTextField
+            name="id"
+            key={'id'}
+            InputProps={{
+              readOnly: true,
+            }}
+            label="Số lượng quà user đã trúng"
+            margin="dense"
+          />
+          {/* <Button
+            variant="contained"
+            color="info"
+            size="large"
+            onClick={handleOpenModal}
+            sx={{ marginTop: 1 }}
+          >
+            Chọn Transaction Type
+          </Button>
+          <Box
+            sx={{
+              color: 'black',
+              marginTop: 1.5,
+            }}
+          >
+            {transactionType.description}
+          </Box>
+          <Modal
+            open={openModal}
+            onClose={handleCloseModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={STYLE_GIFT}>
+              <Scrollbar>
+                <TableContainer
+                  sx={{
+                    minWidth: 800,
+                    maxHeight: 500,
+                    position: 'relative',
+                    overflowY: 'scroll',
+                    overflowX: 'auto',
+                  }}
+                  component={Paper}
+                >
+                  <Table>
+                    <TableHeadCustom headLabel={TABLE_HEAD_TRANSACTION_TYPE} />
+                    <TableBody>
+                      {dataTransaction.map((row) => (
+                        <TransactionTypeTableRow
+                          key={row.id}
+                          row={row}
+                          handleClose={handleCloseModal}
+                        />
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Scrollbar>
+              {!!addTransaction?.data?.pagination?.totalPages && (
+                <TablePagination
+                  rowsPerPageOptions={[10]}
+                  component="div"
+                  count={totalRecords}
+                  rowsPerPage={10}
+                  page={page}
+                  onPageChange={onChangePage}
+                  onRowsPerPageChange={onChangeRowsPerPage}
+                />
+              )}
+            </Box>
+          </Modal> */}
+          <Typography marginTop={2}>Trạng thái quà</Typography>
+          <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
+        </Stack>
+        {/* </Modal> */}
         <Typography marginTop={2}>Trạng thái quà</Typography>
         <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
       </Card>

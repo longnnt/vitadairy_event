@@ -134,6 +134,7 @@ export interface IEventEditFormData {
   downRate: number;
   userRegisterDate: Date | null;
   userLimit: number;
-  skus: string[];
-  typeUser:string;
+  skus: any[];
+  // skus: string[];
+  typeUser: string;
 }

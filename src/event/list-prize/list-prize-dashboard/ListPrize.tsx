@@ -131,11 +131,6 @@ function ListPrizeDashboard() {
     navigate(replacePathParams(PATH_DASHBOARD.eventAdmin.editEventPrize, { id: id }));
   };
 
-  // useEffect(() =>{
-  //   resetSelect()
-  //   dispatch(setIsResetSelect(false))
-  // },[isSelect])
-
   const totalRecords = data?.data?.pagination?.totalRecords || 0;
   const isNotFound = !listPrize.length;
   const tableHeight =400*rowsPerPage/5

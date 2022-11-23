@@ -24,7 +24,15 @@ import {
   setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IFormCreate, ISelect } from '../../interfaces';
+import {
+  IEventDetail,
+  IFormCreateEvent,
+  IGiftParams,
+  ISelectPopup,
+  IFormCreate,
+  ISelect,
+  IFormSubmitCreate,
+} from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
@@ -118,7 +126,11 @@ export default function HistoryNewForm() {
   };
   useDeepCompareEffect(() => {
     if (confirmEdit) {
-      mutate(editData);
+      const newData = {
+        ...editData,
+        transactionTypeId: editData.transactionTypeId.value,
+      } as unknown as IFormSubmitCreate;
+      mutate(newData);
       dispatch(setConfirmEdit(false));
     }
   }, [confirmEdit, editData]);
