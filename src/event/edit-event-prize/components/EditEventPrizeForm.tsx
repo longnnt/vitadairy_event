@@ -184,7 +184,6 @@ export const EditEventPrizeForm = () => {
   const SIZE = 10;
   const paramsGift = { page: page, size: SIZE };
   const { data } = useGetAllGift(paramsGift);
-  console.log('data?.data?.response', data?.data?.response);
 
   const giftDta = data?.data?.response ? data?.data?.response : [];
   useDeepCompareEffect(() => {

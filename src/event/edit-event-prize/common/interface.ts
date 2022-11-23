@@ -116,6 +116,9 @@ export interface IGiftDetail {
   money: number;
   name: string;
   image: string;
+  point: number;
+  total: number;
+  active: boolean;
 }
 export interface IGiftById {
   data: {

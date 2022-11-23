@@ -13,6 +13,7 @@ import {
   TableBody,
   Table,
   TablePagination,
+  Switch,
 } from '@mui/material';
 
 const styleGiftModal = {
@@ -90,7 +91,10 @@ export const GiftModal = ({
                     <TableCell>Image</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell align="right">Type</TableCell>
+                    <TableCell align="right">Points</TableCell>
+                    <TableCell align="right">Totals</TableCell>
                     <TableCell align="right">Money</TableCell>
+                    <TableCell align="right">Active</TableCell>
                     <TableCell align="right">Operation</TableCell>
                   </TableRow>
                 </TableHead>
@@ -109,11 +113,22 @@ export const GiftModal = ({
                       <TableCell component="th" scope="row" sx={{ color: '#3c8dbc' }}>
                         {row.name}
                       </TableCell>
+
                       <TableCell align="right" sx={{ color: '#3c8dbc' }}>
                         {row.type}
                       </TableCell>
                       <TableCell align="right" sx={{ color: '#3c8dbc' }}>
+                        {row.point}
+                      </TableCell>
+                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
+                        {row.total}
+                      </TableCell>
+                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
                         {row.money}
+                      </TableCell>
+
+                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
+                        <Switch checked={row.active} disabled />
                       </TableCell>
                       <TableCell align="right">
                         <Checkbox onClick={() => handleOnclick(row.id)} />
