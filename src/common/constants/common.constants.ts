@@ -51,3 +51,5 @@ export const BREADCUMBS = {
   EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
   LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
 };
+
+export const CACHE_TIME = 2 * 1000 * 60;

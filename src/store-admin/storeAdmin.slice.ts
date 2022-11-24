@@ -53,5 +53,4 @@ export const firstScanStartSelector = (state: RootState) => state.storeAdmin.sta
 export const firstScanEndSelector = (state: RootState) => state.storeAdmin.endDate;
 export const codeSelector = (state: RootState) => state.storeAdmin.code;
 export const showDataStoreSelector = (state: RootState) => state.storeAdmin.showDataStore;
-
 export default storeAdminSlice.reducer;
