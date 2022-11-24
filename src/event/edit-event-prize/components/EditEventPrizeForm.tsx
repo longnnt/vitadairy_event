@@ -1,6 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, Grid, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  FormHelperText,
+  Grid,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Container } from '@mui/system';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -57,7 +65,9 @@ import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import { useGetGiftById } from '../hooks/useGetGiftById';
 import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
-import { ConfirmEditModal } from '../../../common/components/modal/ConfirmEditModal';
+import { ConfirmEditModal } from './ConfirmEditModal';
+import { getAllTransactionType } from '../service';
+import { RHFSelectPagitnation } from './RHFSelectPagination';
 
 // -----------------------------------------------------------------------------
 
@@ -99,18 +109,25 @@ export const EditEventPrizeForm = () => {
     if (popUpTypedata) setValue('popupType', popUpTypedata);
   }, [popUpTypedata]);
 
-  useDeepCompareEffect(() => {
-    if (dataEventPrizeById) {
-      const data = tranferData(dataEventPrizeById);
-      reset(data);
-    }
-  }, [dataEventPrizeById]);
-
   const { data: transactionType } = useGetAllTransactionType({ except: idEventPrize });
   const transactionTypeOptions = transactionType?.map((item: ITransactionType) => ({
     value: item.id,
     label: item.description,
   }));
+  const defaultTransactionType = transactionTypeOptions?.filter(
+    (item: any) => item.value === dataEventPrizeById?.transactionTypeId
+  );
+  useDeepCompareEffect(() => {
+    if (dataEventPrizeById) {
+      const data = tranferData(dataEventPrizeById);
+      reset(data);
+      setValue(
+        'transactionTypeId',
+        defaultTransactionType ? defaultTransactionType[0] : ({} as ISelect)
+      );
+    }
+  }, [dataEventPrizeById, defaultTransactionType]);
+  const searchParams = { except: idEventPrize };
 
   const methods = useForm<IFormEdit>({
     resolver: yupResolver(eidtEventPrizevalidate(provinceId)),
@@ -139,9 +156,9 @@ export const EditEventPrizeForm = () => {
   const onSubmit = async (data: IFormEdit) => {
     handleOpenEditModal();
     const tempEditData = fomatFormData(data);
-    console.log('tempEditData', tempEditData);
+    if (typeof tempEditData.transactionTypeId !== 'number')
+      tempEditData.transactionTypeId = tempEditData.transactionTypeId.value;
 
-    // tempEditData.transactionTypeId=tempEditData.transactionTypeId.value as number
     dispatch(setEditData(tempEditData));
   };
   useDeepCompareEffect(() => {
@@ -167,6 +184,7 @@ export const EditEventPrizeForm = () => {
   const SIZE = 10;
   const paramsGift = { page: page, size: SIZE };
   const { data } = useGetAllGift(paramsGift);
+
   const giftDta = data?.data?.response ? data?.data?.response : [];
   useDeepCompareEffect(() => {
     if (choosenGift) {
@@ -206,13 +224,26 @@ export const EditEventPrizeForm = () => {
                     key={'quantity'}
                     label="Tổng số lượng quà"
                   />
+                  <Box sx={{ zIndex: 1001 }}>
+                    <RHFSelectPagitnation
+                      name={'transactionTypeId'}
+                      placeholder="Transaction type"
+                      getAsyncData={getAllTransactionType}
+                      searchParams={searchParams}
+                    />
+                    {errors && (
+                      <FormHelperText error>
+                        {errors?.transactionTypeId?.message}
+                      </FormHelperText>
+                    )}
+                  </Box>
                   <RHFTextField
                     disabled
                     name="winnerAmount"
                     key={'winnerAmount'}
                     label="Số lượng user đã trúng"
                   />
-                  <RHFSelect
+                  {/* <RHFSelect
                     name={'transactionTypeId'}
                     key="transactionTypeId"
                     label={'Transaction Type'}
@@ -223,7 +254,8 @@ export const EditEventPrizeForm = () => {
                         {item.label}
                       </option>
                     ))}
-                  </RHFSelect>
+                  </RHFSelect> */}
+
                   <Typography>Trạng thái quà</Typography>
                   <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
                 </Stack>
@@ -408,14 +440,7 @@ export const EditEventPrizeForm = () => {
           >
             Lưu
           </LoadingButton>
-          <ConfirmEditModal
-            open={openEditModal}
-            handleClose={handleCloseEditModal}
-            handleOnAgree={handleOnAgree}
-            type='Chỉnh sửa quà tặng sự kiện'
-            colorType={true}
-
-          />
+          <ConfirmEditModal open={openEditModal} handleClose={handleCloseEditModal} />
         </FormProvider>
       </Container>
     </>

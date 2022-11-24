@@ -95,7 +95,7 @@ interface IForm {
   popupType: string;
   probability: number;
   quantity: number;
-  transactionTypeId: number;
+  transactionTypeId: ISelectPopup;
   id?: number;
 }
 
@@ -217,15 +217,19 @@ export interface IFormFilter {
 }
 
 export interface ISelectPopup {
-  value: string;
+  value: number | string;
   label: string;
 }
 
 export interface IGift {
+  image: string;
   id: number;
   type: string;
   money: string;
   name: string;
+  point: number;
+  total: number;
+  active: boolean;
 }
 
 export interface IResGift {

@@ -8,6 +8,14 @@ export interface IFormStore {
   createdDate: string;
 }
 
+export interface IFormStoreAction {
+  data:{
+    response:{
+      response:IFormStore
+    }
+  }
+}
+
 export interface IPayloadSearch {
   payload: string;
   type: string;
@@ -27,7 +35,10 @@ export type IStoreAdminCallback = {
   onError: VoidFunction;
 };
 
-export type IStories = Array<IFormStore>;
+export interface IStories { 
+  data: Array<IFormStore>;
+  total: number;
+}
 
 export interface IStoreParams {
   startDate: Date | null;
@@ -57,7 +68,7 @@ export interface IDataStore {
       meta: {
         status: number;
         msg: string;
-      };
+      },
       pagination: {
         totalPages: number;
         totalRecords: number;
@@ -65,7 +76,7 @@ export interface IDataStore {
         recordsPerPage: number;
         last: boolean;
       };
-      response: IStories;
+      response: IFormStore[];
     };
   };
 }

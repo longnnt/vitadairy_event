@@ -47,7 +47,7 @@ export const EventTableToolbar = () => {
     dispatch(setEndDate(data.endDate));
   };
 
-  const handleResetForm = async() => {
+  const handleResetForm = async () => {
     await timeout(3000);
     reset({
       endDate: null,

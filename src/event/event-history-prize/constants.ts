@@ -90,7 +90,7 @@ export const DEFAULT_FORM_VALUE = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  transactionTypeId: 0,
+  transactionTypeId: { value: 0, label: '' },
 };
 
 export const DEFAULT_FORM_VALUE_SUBMIT = {
@@ -121,9 +121,13 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
 ];
 
 export const TABLE_HEAD_GIFT = [
+  { id: 'image', label: 'Image', align: 'left' },
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'type', label: 'Type', align: 'center' },
-  { id: 'money', label: 'Money', align: 'right' },
+  { id: 'type', label: 'Type', align: 'left' },
+  { id: 'point', label: 'Point', align: 'left' },
+  { id: 'total', label: 'Total', align: 'left' },
+  { id: 'money', label: 'Money', align: 'left' },
+  { id: 'active', label: 'Active', align: 'left' },
 ];
 
 export const TABLE_HEAD_TRANSACTION_TYPE = [

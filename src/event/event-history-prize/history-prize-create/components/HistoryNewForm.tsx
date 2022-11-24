@@ -10,18 +10,28 @@ import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import { ButtonType, DEFAULT_FORM_VALUE } from '../../constants';
-import { createEventPrizevalidate } from '../../event.schema';
+import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
+  confirmEditSelector,
+  editDataSelector,
+  openEditModalSelector,
   popUpCodeSelector,
   popUpTypeSelector,
-  setButtonType, setEditDataEvent
+  setButtonType,
+  setConfirmEdit,
+  setEditData,
+  setOpeneditModal
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IFormCreate, ISelect } from '../../interfaces';
+import {
+  IFormCreate, IFormSubmitCreate, ISelect
+} from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { fomatFormData } from '../utils';
 import NotificationForm from './NotificationForm';
@@ -38,10 +48,16 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function HistoryNewForm() {
+  const { useDeepCompareEffect } = useDeepEffect();
   const dispatch = useDispatch();
   const popUpType = useSelector(popUpTypeSelector);
   const popUpCode = useSelector(popUpCodeSelector);
   const buttonType = useSelector(buttonTypeState);
+  const confirmEdit = useSelector(confirmEditSelector);
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const openEditModal = useSelector(openEditModalSelector);
+  const editData = useSelector(editDataSelector);
 
   const { data: addProvince } = useGetAllProvince();
   const dataProvince = addProvince?.data?.response?.provinces || [];
@@ -73,7 +89,7 @@ export default function HistoryNewForm() {
   const idEventPrize = parseInt(id as string);
 
   const methods = useForm<IFormCreate>({
-    resolver: yupResolver(createEventPrizevalidate(provinceId)),
+    resolver: yupResolver(createEventPrizeValidate(provinceId)),
     defaultValues: DEFAULT_FORM_VALUE,
   });
 
@@ -87,10 +103,10 @@ export default function HistoryNewForm() {
   } = methods;
 
   useEffect(() => {
-    if(idEventPrize){
-      setValue('eventId', idEventPrize)
+    if (idEventPrize) {
+      setValue('eventId', idEventPrize);
     }
-  }, [idEventPrize])
+  }, [idEventPrize]);
 
   const onSubmit = async (data: IFormCreate) => {
     if (popUpType === 'NULL') {
@@ -98,9 +114,23 @@ export default function HistoryNewForm() {
     }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
+    handleOpenEditModal();
     const tempEditData = fomatFormData(data);
-    dispatch(setEditDataEvent(tempEditData));
-    mutate(tempEditData)
+    dispatch(setEditData(tempEditData));
+  };
+  useDeepCompareEffect(() => {
+    if (confirmEdit) {
+      const newData = {
+        ...editData,
+        transactionTypeId: editData.transactionTypeId.value,
+      } as unknown as IFormSubmitCreate;
+      mutate(newData);
+      dispatch(setConfirmEdit(false));
+    }
+  }, [confirmEdit, editData]);
+
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
   };
 
   return (
@@ -134,12 +164,20 @@ export default function HistoryNewForm() {
                   variant="outlined"
                   size="large"
                   type="submit"
-                  loading={buttonType === ButtonType.SAVE_SUBMIT &&isLoading}
+                  loading={buttonType === ButtonType.SAVE_SUBMIT && isLoading}
                   onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
                 >
                   Lưu
                 </LoadingButton>
+                <ConfirmEditModal
+                  open={openEditModal}
+                  handleClose={handleCloseEditModal}
+                  handleOnAgree={handleOnAgree}
+                  type="Lưu sự kiện"
+                  colorType={true}
+                />
               </Box>
+
               <Box>
                 <LoadingButton
                   color="inherit"
@@ -152,6 +190,13 @@ export default function HistoryNewForm() {
                   Lưu & Chỉnh sửa
                 </LoadingButton>
               </Box>
+              <ConfirmEditModal
+                open={openEditModal}
+                handleClose={handleCloseEditModal}
+                handleOnAgree={handleOnAgree}
+                type="Lưu và Chỉnh sửa sự kiện"
+                colorType={true}
+              />
             </Grid>
           </Grid>
         </FormProvider>

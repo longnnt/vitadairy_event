@@ -43,6 +43,7 @@ export default function EditAdminDashboard() {
         heading="Cập nhật admin"
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.admin.root },
+          { name: BREADCUMBS.ADMIN_LIST, href: PATH_DASHBOARD.admin.list },
           { name: 'Cập nhật admin' },
         ]}
       />

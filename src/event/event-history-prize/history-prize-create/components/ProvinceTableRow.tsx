@@ -7,10 +7,12 @@ import Button from '@mui/material/Button';
 import {
   DataGrid,
   GridActionsCellItem,
-  GridColumns, GridRowId,
+  GridColumns,
+  GridRowId,
   GridRowModel,
   GridRowModes,
-  GridRowModesModel, GridToolbarContainer
+  GridRowModesModel,
+  GridToolbarContainer,
 } from '@mui/x-data-grid';
 import { randomId } from '@mui/x-data-grid-generator';
 import dayjs from 'dayjs';
@@ -22,9 +24,19 @@ import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
 import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS } from '../../constants';
-import { setFileCSV, setProvinceInFoSelector, setProvinceNewForm } from '../../event.slice';
+import {
+  setFileCSV,
+  setProvinceInFoSelector,
+  setProvinceNewForm,
+} from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { EditToolbarProps, IEventDetail, IFormCreate, IFormCreateEvent, ISelect } from '../../interfaces';
+import {
+  EditToolbarProps,
+  IEventDetail,
+  IFormCreate,
+  IFormCreateEvent,
+  ISelect,
+} from '../../interfaces';
 import { StyledBox } from '../utils';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -152,7 +164,6 @@ export default function ProvinceTableForm() {
     }
   }, [errors, rowModesModel]);
 
-
   const importFile = async (event: any) => {
     try {
       const allowedExtensions = [CSV];
@@ -160,7 +171,6 @@ export default function ProvinceTableForm() {
         const inputFile = event.target.files[0];
 
         const fileExtension = inputFile?.type.split('/')[1];
-        FORMAT_DATE;
         if (!allowedExtensions.includes(fileExtension)) {
           showErrorSnackbar('Không phải file csv');
           return;
@@ -199,6 +209,8 @@ export default function ProvinceTableForm() {
       });
     } catch (e) {
       return;
+    } finally {
+      event.target.value = '';
     }
   };
 
@@ -242,7 +254,7 @@ export default function ProvinceTableForm() {
       valueSetter(params) {
         const provinceId = watch(`eventDetailProvinces.${params.row.id}.provinceId`);
         return { ...params.row, provinceId: provinceId };
-      }
+      },
     },
     {
       field: 'quantity',

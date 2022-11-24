@@ -1,42 +1,44 @@
-import { Switch, TableCell, TableRow, Link, Box } from '@mui/material';
+import { Link, Switch, TableCell, TableRow } from '@mui/material';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { FORMATE_CREATE_DATE } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
+import useMessage from 'src/store-admin/hooks/useMessage';
 import { setCode } from 'src/store-admin/storeAdmin.slice';
 import { IPropsStoreTableRow } from '../../interfaces';
-
+import utc from 'dayjs/plugin/utc';
+import { FORMATE_CREATE_DATE } from 'src/store-admin/constants';
+import timezone from "dayjs/plugin/timezone";
 // ----------------------------------------------------------------------
 
 function StoreTableRow({
   row,
   selected,
-  onEditRow,
-  onSelectRow,
-  onDeleteRow,
 }: IPropsStoreTableRow) {
+  
   const navigate = useNavigate();
+  dayjs.extend(utc)
+  dayjs.extend(timezone)
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
+
   const dispatch = useDispatch();
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
-  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-
-  const { mutate } = useGetStoreActive();
-
-
+  // useMutateStoreActive
+  const { mutate } = useGetStoreActive({
+    onSuccess: () => {showSuccessSnackbar('Cập nhật thành công')},
+    onError: () => showErrorSnackbar('Cập nhật thất bại'),
+  });
   const handleOnChange = (active: boolean) => {
     mutate({ code, isActive: active });
   };
-
+  
   const handleShopInvitation = (id: string) => {
     navigate(PATH_DASHBOARD.storeAdmin.edit_shop(id));
-  dispatch(setCode(code))
-  }
-
+  dispatch(setCode(code)) 
+}
   return (
     <TableRow hover selected={selected}>
       <TableCell align="left" onClick={() => handleShopInvitation(code)}>
@@ -59,20 +61,18 @@ function StoreTableRow({
         </a>
       </TableCell>
 
-      <TableCell align="right" title={isActive === true ? 'actived' : 'unAtivced'}>
-        <Box>
+      <TableCell align="right" title={isActive === true ? 'actived' : 'unActivced'}>
         <Switch
           size='medium'
-          checked={isActive ? true : false}
+          checked={isActive}
           onChange={(e) => {
             handleOnChange(e.target.checked);
           }}
         />
-        </Box>
-        
       </TableCell>
     </TableRow>
   );
 }
 
 export { StoreTableRow };
+

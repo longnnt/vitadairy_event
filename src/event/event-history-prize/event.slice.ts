@@ -27,8 +27,9 @@ type StateProps = {
   valueChoice: string;
   transactionType: ITransactionType;
   openModal: boolean;
-  editDataEvent: IFormSubmitCreate;
+  editData: IFormSubmitCreate;
   confirmEdit: boolean;
+  openEditModal: boolean;
 };
 
 export const initialState: StateProps = {
@@ -47,8 +48,9 @@ export const initialState: StateProps = {
   valueChoice: '',
   transactionType: {} as ITransactionType,
   openModal: false,
-  editDataEvent: {} as IFormSubmitCreate,
+  editData: {} as IFormSubmitCreate,
   confirmEdit: false,
+  openEditModal: false,
 };
 
 export const eventAdminSlice = createSlice({
@@ -100,11 +102,14 @@ export const eventAdminSlice = createSlice({
     setOpenModal: (state, action: PayloadAction<boolean>) => {
       state.openModal = action.payload;
     },
-    setEditDataEvent: (state, action: PayloadAction<IFormSubmitCreate>) => {
-      state.editDataEvent = action.payload;
+    setEditData: (state, action: PayloadAction<IFormSubmitCreate>) => {
+      state.editData = action.payload;
     },
     setConfirmEdit: (state, action: PayloadAction<boolean>) => {
       state.confirmEdit = action.payload;
+    },
+    setOpeneditModal: (state, action: PayloadAction<boolean>) => {
+      state.openEditModal = action.payload;
     },
   },
 });
@@ -126,7 +131,8 @@ export const {
   setTransactionType,
   setOpenModal,
   setConfirmEdit,
-  setEditDataEvent,
+  setEditData,
+  setOpeneditModal,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -147,8 +153,10 @@ export const setValueChoiceSelector = (state: RootState) => state.historyList.va
 export const setTransactionTypeSelector = (state: RootState) =>
   state.historyList.transactionType;
 export const setOpenModalSelector = (state: RootState) => state.historyList.openModal;
-export const setEditDataEventSelector = (state: RootState) =>
-  state.historyList.editDataEvent;
+export const editDataSelector = (state: RootState) =>
+  state.historyList.editData;
 export const confirmEditSelector = (state: RootState) => state.historyList.confirmEdit;
+export const openEditModalSelector = (state: RootState) =>
+  state.historyList.openEditModal;
 
 export default eventAdminSlice.reducer;

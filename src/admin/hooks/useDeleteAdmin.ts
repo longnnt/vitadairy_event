@@ -4,7 +4,7 @@ import { IAdminCallback } from '../interfaces';
 import { deleteAdmin } from '../services';
 
 export function useDeleteAdmin(callback: IAdminCallback) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient();   
   return useMutation((id: number) => deleteAdmin(id), {
     onSuccess: (_rs, _variables) => {
       queryClient

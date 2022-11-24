@@ -10,7 +10,10 @@ export const eidtEventPrizevalidate = (provinceIds: number[]) => {
       .when('startDate', (eventStartDate, schema) => {
         return (
           eventStartDate &&
-          schema.test('test date', (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime())
+          schema.test(
+            'test date',
+            (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime()
+          )
         );
       }),
     provinceId: Yup.number()
@@ -84,10 +87,10 @@ export const eidtEventPrizevalidate = (provinceIds: number[]) => {
     quantity: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
-    transactionTypeId: Yup.number()
-      .required('This field is required')
-      .typeError('Must be a number'),
-    winnerAmount: Yup.number().required('This field is required'),
+    transactionTypeId: Yup.mixed().required('This field is required'),
+    // .typeError('Must be a number'),
+    winnerAmount: Yup.number(),
+    // .required('This field is required'),
 
     eventDetailProvinces: Yup.lazy((value: IEventDetailProvinces) => {
       const validationObject: any = {};

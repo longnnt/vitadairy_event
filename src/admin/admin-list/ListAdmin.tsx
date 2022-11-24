@@ -118,7 +118,7 @@ function AdminListDashboard() {
   };
   const confirmEdit = useSelector(confirmEditSelector);
   const {mutate} =useDeleteAdmin({
-    onSuccess: () => {},
+    onSuccess: () => {showSuccessSnackbar('Xóa tài khoản thành công')},
     onError: () => showErrorSnackbar('Xóa tài khoản thất bại'),
   })
   useDeepCompareEffect(() => {

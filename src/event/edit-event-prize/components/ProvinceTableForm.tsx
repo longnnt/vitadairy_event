@@ -166,7 +166,6 @@ export default function PovinceTableForm() {
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
         const fileExtension = inputFile?.type.split('/')[1];
-        DATE_FORMAT;
         if (!allowedExtensions.includes(fileExtension)) {
           showErrorSnackbar('Không phải file csv');
           return;
