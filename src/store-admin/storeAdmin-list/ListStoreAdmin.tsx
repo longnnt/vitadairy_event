@@ -48,6 +48,8 @@ import { StoreTableToolbar } from './components/StoreTableToolbar';
 import { emailSelector, setPermission } from 'src/auth/login/login.slice';
 import { useGetStoreAdminById } from '../../shop-invitation/hooks/useGetStoreCode';
 import TableSkeleton from './components/TableSkeleton';
+import { useQueryClient } from 'react-query';
+import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();

@@ -21,17 +21,11 @@ import {
   setButtonType,
   setConfirmEdit,
   setEditData,
-  setOpeneditModal,
+  setOpeneditModal
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
 import {
-  IEventDetail,
-  IFormCreateEvent,
-  IGiftParams,
-  ISelectPopup,
-  IFormCreate,
-  ISelect,
-  IFormSubmitCreate,
+  IFormCreate, IFormSubmitCreate, ISelect
 } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -181,7 +175,7 @@ export default function HistoryNewForm() {
                   open={openEditModal}
                   handleClose={handleCloseEditModal}
                   handleOnAgree={handleOnAgree}
-                  type="Chỉnh sửa sự kiện"
+                  type="Lưu sự kiện"
                   colorType={true}
                 />
               </Box>
@@ -202,7 +196,7 @@ export default function HistoryNewForm() {
                 open={openEditModal}
                 handleClose={handleCloseEditModal}
                 handleOnAgree={handleOnAgree}
-                type="Chỉnh sửa sự kiện"
+                type="Lưu và Chỉnh sửa sự kiện"
                 colorType={true}
               />
             </Grid>

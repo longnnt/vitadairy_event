@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient, QueryKey } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 import { IStoreParams } from '../interfaces';
 import { getStoreAdmin } from '../services';
