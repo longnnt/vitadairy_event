@@ -26,14 +26,8 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 function NotificationOverviewForm() {
   const dispatch = useDispatch();
   const {
-    dense,
     page,
-    order,
-    orderBy,
-    rowsPerPage,
     selected: selectedRows,
-    onChangePage,
-    onChangeRowsPerPage,
   } = useTable();
   const searchParamsPaginate: ITransactionParams = {
     page: 0,
