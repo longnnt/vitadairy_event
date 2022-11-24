@@ -169,13 +169,16 @@ export default function HistoryNewForm() {
                 >
                   Lưu
                 </LoadingButton>
-                <ConfirmEditModal
+                { buttonType === ButtonType.SAVE_SUBMIT &&
+                  <ConfirmEditModal
                   open={openEditModal}
                   handleClose={handleCloseEditModal}
                   handleOnAgree={handleOnAgree}
                   type="Lưu sự kiện"
                   colorType={true}
                 />
+                }
+                
               </Box>
 
               <Box>
@@ -190,13 +193,16 @@ export default function HistoryNewForm() {
                   Lưu & Chỉnh sửa
                 </LoadingButton>
               </Box>
-              <ConfirmEditModal
-                open={openEditModal}
-                handleClose={handleCloseEditModal}
-                handleOnAgree={handleOnAgree}
-                type="Lưu và Chỉnh sửa sự kiện"
-                colorType={true}
-              />
+              { buttonType === ButtonType.SAVE_CREATE_SUBMIT &&
+                  <ConfirmEditModal
+                  open={openEditModal}
+                  handleClose={handleCloseEditModal}
+                  handleOnAgree={handleOnAgree}
+                  type="Lưu và Chỉnh sửa sự kiện"
+                  colorType={true}
+                />
+                }
+              
             </Grid>
           </Grid>
         </FormProvider>
