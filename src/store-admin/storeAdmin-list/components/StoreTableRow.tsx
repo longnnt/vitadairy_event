@@ -9,6 +9,8 @@ import { setCode } from 'src/store-admin/storeAdmin.slice';
 import { IPropsStoreTableRow } from '../../interfaces';
 import utc from 'dayjs/plugin/utc';
 import { FORMATE_CREATE_DATE } from 'src/store-admin/constants';
+import timezone from "dayjs/plugin/timezone";
+import moment from 'moment';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +21,7 @@ function StoreTableRow({
   
   const navigate = useNavigate();
   dayjs.extend(utc)
+  dayjs.extend(timezone)
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
@@ -49,7 +52,9 @@ function StoreTableRow({
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-      {dayjs.utc(createdDate).utcOffset(7, true).format(FORMATE_CREATE_DATE) }
+      {/* {dayjs.utc(createdDate).utcOffset(7, true).format(FORMATE_CREATE_DATE) } */}
+      {/* {moment(createdDate).format(FORMATE_CREATE_DATE)} */}
+      {dayjs(createdDate).format(FORMATE_CREATE_DATE)}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
