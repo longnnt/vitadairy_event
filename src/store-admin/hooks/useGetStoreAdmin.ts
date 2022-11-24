@@ -4,13 +4,9 @@ import { IStoreParams } from '../interfaces';
 import { getStoreAdmin } from '../services';
 
 export function useGetStoreAdmin(params: IStoreParams) {
-  // console.log(params)
-  const queryClient = useQueryClient();
-  // console.log('store',queryClient.getQueryData(QUERY_KEYS.STORE_ADMIN))
   return {
-    ...useQuery([QUERY_KEYS.STORE_ADMIN], () => getStoreAdmin(), {
+    ...useQuery([QUERY_KEYS.STORE_ADMIN, params], () => getStoreAdmin(params), {
       select: (data) => data?.data?.response,
-      cacheTime:Infinity
     }),
   };
 }

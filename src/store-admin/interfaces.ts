@@ -41,11 +41,11 @@ export interface IStories {
 }
 
 export interface IStoreParams {
-  startDate?: Date | null;
+  startDate: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  endDate?: Date | null;
+  endDate: Date | null;
 }
 
 export enum MessageType {

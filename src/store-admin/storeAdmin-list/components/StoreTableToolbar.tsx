@@ -42,8 +42,8 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
 
   const onSubmit = (data: IStoreParams) => {
     dispatch(setSearchText(data.searchText as string));
-    // dispatch(setFirstScanStartDate(data.startDate));
-    // dispatch(setFirstScanEndDate(data.endDate));
+    dispatch(setFirstScanStartDate(data.startDate));
+    dispatch(setFirstScanEndDate(data.endDate));
   };
 
   const handleCancel = async () => {

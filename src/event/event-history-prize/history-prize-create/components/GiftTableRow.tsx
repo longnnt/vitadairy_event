@@ -36,7 +36,8 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
       <TableCell align="right" title={active === true ? 'actived' : 'unActivced'}>
         <Switch
           size='medium'
-          checked={active ? true : false}
+          checked={active ? true : false} 
+          disabled
         />        
       </TableCell>
 
