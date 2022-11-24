@@ -119,10 +119,10 @@ export const AddEvent = () => {
       </Typography>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Card sx={{ padding: 2, mt: '20px' }}>
+        <Card sx={{ padding: 2 }}>
           <Scrollbar>
             <Stack spacing="26px">
-              <RHFTextField name="name" label="Tên sự kiện*" fullWidth />
+              <RHFTextField name="name" label="Tên sự kiện*" fullWidth sx={{ mt:2 }}/>
               <Stack
                 spacing={'10px'}
                 direction="row"
