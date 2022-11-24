@@ -9,7 +9,6 @@ type StateProps = {
   code: string;
   showDataStore: boolean;
   active: boolean;
-  // isActive:boolean
 };
 
 export const initialState: StateProps = {
@@ -19,7 +18,6 @@ export const initialState: StateProps = {
   code: '',
   showDataStore: false,
   active: false || true,
-  // isActive:false
 };
 
 export const storeAdminSlice = createSlice({
