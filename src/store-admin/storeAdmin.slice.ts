@@ -8,7 +8,6 @@ type StateProps = {
   endDate: Date | null;
   code: string;
   showDataStore: boolean;
-  active: boolean;
 };
 
 export const initialState: StateProps = {
@@ -17,7 +16,6 @@ export const initialState: StateProps = {
   endDate: null,
   code: '',
   showDataStore: false,
-  active: false || true,
 };
 
 export const storeAdminSlice = createSlice({
@@ -39,9 +37,6 @@ export const storeAdminSlice = createSlice({
     setShowDataStore: (state, action: PayloadAction<boolean>) => {
       state.showDataStore = action.payload;
     },
-    setActive: (state, action: PayloadAction<boolean>) => {
-      state.active = action.payload;
-    },
   },
 });
 
@@ -51,7 +46,6 @@ export const {
   setSearchText,
   setCode,
   setShowDataStore,
-  setActive
 } = storeAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.storeAdmin.searchText;
@@ -59,5 +53,4 @@ export const firstScanStartSelector = (state: RootState) => state.storeAdmin.sta
 export const firstScanEndSelector = (state: RootState) => state.storeAdmin.endDate;
 export const codeSelector = (state: RootState) => state.storeAdmin.code;
 export const showDataStoreSelector = (state: RootState) => state.storeAdmin.showDataStore;
-export const setActiveSelector = (state: RootState) => state.storeAdmin.active;
 export default storeAdminSlice.reducer;

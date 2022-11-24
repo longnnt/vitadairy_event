@@ -15,6 +15,7 @@ import { buildAbilityFor} from './common/lib/ability';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { permissionSelector, setPermission } from './auth/login/login.slice';
+import { CACHE_TIME } from './common/constants/common.constants';
 
 // ----------------------------------------------------------------------
 // Rebuild cloud run with env
@@ -22,7 +23,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      cacheTime: 2 * 1000 * 60
+      cacheTime: CACHE_TIME
     },
   },
 });

@@ -11,18 +11,12 @@ import { IStoreAdminCallback } from '../interfaces';
 export function useGetStoreActive(callback: IStoreAdminCallback) {
   const queryClient = useQueryClient();
   return useMutation(getActiveStore, {
-    onMutate: () => {
-      const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.STORE_ADMIN);
-      cancelMultiQueries(queryClient, keys);
-      const previousTodos = queryClient.getQueryData(keys)
-      return { previousTodos }
-    },
     onSuccess: (_rs, _variables) => {
       queryClient
       .getQueryCache()
       .findAll(QUERY_KEYS.STORE_ADMIN)
       .forEach(({ queryKey }) => {
-        queryClient.invalidateQueries(queryKey);
+        queryClient.invalidateQueries(queryKey);  
       });
       callback.onSuccess && callback.onSuccess();
     },
