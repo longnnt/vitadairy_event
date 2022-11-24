@@ -121,7 +121,7 @@ export interface IResEventByID {
       msg: string;
       status: number;
     };
-    response: IEventFormData;
+    response: IEventEditFormData;
   };
 }
 
@@ -134,6 +134,6 @@ export interface IEventEditFormData {
   downRate: number;
   userRegisterDate: Date | null;
   userLimit: number;
-  skus: string[];
+  skus: any[];
   typeUser:string;
 }

@@ -8,6 +8,7 @@ import {
   Stack,
   TextField,
   Typography,
+  FormHelperText,
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -42,11 +43,13 @@ import { useGetEventById } from '../hooks/useGetEventById';
 import { schemaAddEvent, schemaEditEvent } from '../schema';
 import { ProductCodeModal } from '../components/ProductCodeModal';
 import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
-import { IEventEditFormData, IEventFormData } from '../interface';
+import { IEventEditFormData, IEventFormData, IProCodeSelect } from '../interface';
 import { DEFAULT_EDIT_VALUE } from '../constant';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
+import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
+import { getProductCode } from '../service';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
@@ -87,8 +90,11 @@ export const EditEventForm = () => {
 
   const { mutate, isSuccess } = useEditEvent({
     onError: () => {
-      showErrorSnackbar('Tạo mới thất bại');
+      showErrorSnackbar('Chỉnh sửa sự kiện thất bại');
     },
+    onSuccess: () => {
+      showSuccessSnackbar('Chỉnh sửa sự kiện thành công');
+    }
   });
 
   const dispatch = useDispatch();
@@ -108,8 +114,12 @@ export const EditEventForm = () => {
   }, [dataEventDetail]);
 
   useEffect(() => {
-    setValue('skus', product);
-  }, [product]);
+    if (dataEventDetail)
+    setValue(
+      'skus',
+      dataEventDetail.skus.map((item: string) => ({ value: item, label: item }))
+    );
+}, [dataEventDetail]);
 
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.eventPromotionIV.list);
@@ -126,7 +136,7 @@ export const EditEventForm = () => {
       name: data.name,
       startDate: data.startDate,
       endDate: data.endDate,
-      skus: data.skus,
+      skus: data.skus.map((item: IProCodeSelect) => item.value),
       defaultWinRate: data.defaultWinRate,
       upRate: data.upRate,
       downRate: data.downRate,
@@ -216,21 +226,17 @@ export const EditEventForm = () => {
                 />
               </Stack>
   
-              <RHFTextField
-                name="skus"
-                label="Mã sản phẩm"
-                onClick={() => dispatch(setIsOpenModal(true))}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{ position: 'absolute', right: 0, marginRight: '10px' }}
-                    >
-                      <KeyboardArrowDownIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <Box sx={{ zIndex: 1001 }}>
+                <RHFSelectPagitnation
+                  name={'skus'}
+                  getAsyncData={getProductCode}
+                  placeholder="Mã sản phẩm*"
+                  />
+                {errors && (
+                  <FormHelperText error>{errors?.skus?.message}</FormHelperText>
+                )}
+              </Box>
+
   
               <RHFTextField
                 fullWidth
