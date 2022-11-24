@@ -1,3 +1,5 @@
+import { ISelectPopup } from './interfaces';
+
 // event table filter definition
 export const ROLE_OPTIONS = ['ALL', 'FEATURE', 'NOT_FEATURE', 'WOOD'];
 
@@ -90,7 +92,7 @@ export const DEFAULT_FORM_VALUE = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  transactionTypeId: { value: 0, label: '' },
+  // transactionTypeId: {} as ISelectPopup,
 };
 
 export const DEFAULT_FORM_VALUE_SUBMIT = {

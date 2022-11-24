@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Container } from '@mui/system';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
@@ -33,6 +33,7 @@ import {
   POPUP_TYPE,
 } from '../common/constants';
 import {
+  IEventProvince,
   IFormEdit,
   IGiftDetail,
   IProvince,
@@ -47,12 +48,14 @@ import {
   confirmEditSelector,
   editDataSelector,
   giftByIdSelector,
+  leftGiftSelector,
   openEditModalSelector,
   popUpTypeSelector,
   setChoosenGiftPoint,
   setConfirmEdit,
   setEditData,
   setGiftById,
+  setLeftGift,
   setOpeneditModal,
   setPopUpType,
   setProvinceInfor,
@@ -95,6 +98,8 @@ export const EditEventPrizeForm = () => {
   const openEditModal = useSelector(openEditModalSelector);
   const confirmEdit = useSelector(confirmEditSelector);
   const editData = useSelector(editDataSelector);
+  const leftGift = useSelector(leftGiftSelector);
+  console.log('leftGift', leftGift);
 
   useDeepCompareEffect(() => {
     if (eventPrizeById) {
@@ -130,7 +135,7 @@ export const EditEventPrizeForm = () => {
   const searchParams = { except: idEventPrize };
 
   const methods = useForm<IFormEdit>({
-    resolver: yupResolver(eidtEventPrizevalidate(provinceId)),
+    resolver: yupResolver(eidtEventPrizevalidate(provinceId, leftGift)),
     defaultValues: DEFAULT_FORM_VALUE,
   });
   const {
@@ -141,6 +146,19 @@ export const EditEventPrizeForm = () => {
     formState: { isSubmitting, errors },
   } = methods;
   const watchPopupCode = watch('popupCode');
+  const watchQuantity = watch('quantity');
+  const watchEventDetailProvinces = Object.values(watch('eventDetailProvinces'));
+  let usedGift = 0;
+  if (watchEventDetailProvinces) {
+    watchEventDetailProvinces.map((item: IEventProvince) => {
+      if (item.quantity) usedGift = usedGift + item?.quantity;
+      if (item.extraquantity) usedGift = usedGift + Number(item?.extraquantity);
+    });
+  }
+
+  useDeepCompareEffect(() => {
+    dispatch(setLeftGift(watchQuantity - usedGift));
+  }, [usedGift, watchQuantity]);
 
   const { data: giftDetail } = useGetGiftById(
     dataEventPrizeById ? dataEventPrizeById?.giftId : NO_ID

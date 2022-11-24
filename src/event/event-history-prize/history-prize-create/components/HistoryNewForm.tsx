@@ -105,8 +105,10 @@ export default function HistoryNewForm() {
     control,
     getValues,
     handleSubmit,
+    watch,
     formState: { isSubmitting },
   } = methods;
+  console.log('watch trans', watch('transactionTypeId'));
 
   useEffect(() => {
     if (idEventPrize) {
