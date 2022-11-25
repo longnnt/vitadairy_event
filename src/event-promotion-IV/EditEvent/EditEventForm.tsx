@@ -231,9 +231,12 @@ export const EditEventForm = () => {
                   name={'skus'}
                   getAsyncData={getProductCode}
                   placeholder="Mã sản phẩm*"
+                  error={errors}
                   />
-                {errors && (
-                  <FormHelperText error>{errors?.skus?.message}</FormHelperText>
+                 {errors && (
+                  <FormHelperText error sx={{ marginLeft: '10px' }}>
+                    {errors?.skus?.message}
+                  </FormHelperText>
                 )}
               </Box>
 
