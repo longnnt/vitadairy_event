@@ -1,7 +1,4 @@
-import {
-  Box, Card,
-  Grid, Typography
-} from '@mui/material';
+import { Box, Card, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Stack } from '@mui/system';
 import { useEffect } from 'react';
@@ -11,9 +8,7 @@ import { useDispatch } from 'src/common/redux/store';
 import { RHFSelectPagitnation } from 'src/event/edit-event-prize/components/RHFSelectPagination';
 import { getAllTransactionType } from 'src/event/edit-event-prize/service';
 import { SIZE_PAGE } from '../../constants';
-import {
-  setTransactionType
-} from '../../event.slice';
+import { setTransactionType } from '../../event.slice';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
 import { ITransactionParams } from '../../interfaces';
 
@@ -25,10 +20,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 function NotificationOverviewForm() {
   const dispatch = useDispatch();
-  const {
-    page,
-    selected: selectedRows,
-  } = useTable();
+  const { page, selected: selectedRows } = useTable();
   const searchParamsPaginate: ITransactionParams = {
     page: 0,
   };
@@ -56,25 +48,27 @@ function NotificationOverviewForm() {
       <Card sx={{ p: 2, width: '100%' }}>
         <Stack spacing={3}>
           <RHFTextField
+            required
             name={'ordinal'}
             key={'ordinal'}
-            label="Thứ tự ưu tiên*"
+            label="Thứ tự ưu tiên"
             margin="dense"
           />
           <RHFTextField
+            required
             name="probability"
             key={'probability'}
-            label="Tỉ lệ trúng quà của sự kiện(%)*"
+            label="Tỉ lệ trúng quà của sự kiện(%)"
             margin="dense"
           />
           <RHFTextField
+            required
             name="quantity"
             key={'quantity'}
-            label="Tổng số lượng quà*"
+            label="Tổng số lượng quà"
             margin="dense"
           />
-
-          <Box sx={{ zIndex: 1001 }}>
+          <Box sx={{ zIndex: 1001, marginTop: 1 }}>
             <RHFSelectPagitnation
               name={'transactionTypeId'}
               placeholder="Transaction type"

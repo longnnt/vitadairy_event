@@ -99,7 +99,7 @@ export const EditEventPrizeForm = () => {
   const confirmEdit = useSelector(confirmEditSelector);
   const editData = useSelector(editDataSelector);
   const leftGift = useSelector(leftGiftSelector);
-  console.log('leftGift', leftGift);
+
 
   useDeepCompareEffect(() => {
     if (eventPrizeById) {
