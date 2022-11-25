@@ -136,7 +136,7 @@ export const AddEvent = () => {
                     <Stack position="relative" width="100%">
                       <DateTimePicker
                         {...field}
-                        label="Ngày bắt đầu"
+                        label="Ngày bắt đầu*"
                         inputFormat="dd/MM/yyyy hh:mm a"
                         renderInput={(params) => (
                           <TextField
@@ -158,7 +158,7 @@ export const AddEvent = () => {
                     <Stack position={'relative'} width="100%">
                       <DateTimePicker
                         {...field}
-                        label="Ngày kết thúc"
+                        label="Ngày kết thúc*"
                         inputFormat="dd/MM/yyyy hh:mm a"
                         renderInput={(params) => (
                           <TextField
@@ -174,13 +174,16 @@ export const AddEvent = () => {
                 />
               </Stack>
 
-              <Box sx={{ zIndex: 1001 }}>
+              <Box sx={{ zIndex: 1001 }} >
                 <RHFSelectPagitnation
                   name={'skus'}
                   getAsyncData={getProductCode}
-                  placeholder="Mã sản phẩm*"
+                  placeholder="  Mã sản phẩm*  "
+                  error={errors}
                 />
-                {errors && <FormHelperText error>{errors?.skus?.message}</FormHelperText>}
+                <FormHelperText error sx={{ marginLeft: '10px' }}>
+                  {errors?.skus?.message}
+                </FormHelperText>
               </Box>
 
               <RHFTextField
@@ -233,7 +236,7 @@ export const AddEvent = () => {
                   >
                     <DatePicker
                       {...field}
-                      label="Ngày tính người dùng mới"
+                      label="Ngày tính người dùng mới*"
                       inputFormat="dd/MM/yyyy"
                       renderInput={(params) => (
                         <TextField
