@@ -39,8 +39,6 @@ export const RHFSelectPagitnation = ({
   searchParams,
   error,
 }: IProps) => {
-  console.log('error', error?.skus?.message);
-
   const { control } = useFormContext();
   const loadOptions = async (
     search: string,
