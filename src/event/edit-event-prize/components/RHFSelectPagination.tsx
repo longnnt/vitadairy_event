@@ -116,7 +116,7 @@ const colourStyles = (isFocus: boolean) => {
     }),
     container: (provided, state) => ({
       ...provided,
-      marginTop: 0.025,
+      marginTop: 25,
     }),
 
     valueContainer: (provided, state) => ({
