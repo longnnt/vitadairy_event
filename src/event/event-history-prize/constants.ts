@@ -92,7 +92,6 @@ export const DEFAULT_FORM_VALUE = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  // transactionTypeId: {} as ISelectPopup,
 };
 
 export const DEFAULT_FORM_VALUE_SUBMIT = {
