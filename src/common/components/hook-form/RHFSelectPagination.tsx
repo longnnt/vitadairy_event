@@ -39,10 +39,7 @@ export const RHFSelectPagitnation = ({
   searchParams,
   error,
 }: IProps) => {
-<<<<<<< HEAD
   console.log('error', error?.skus?.message);
-=======
->>>>>>> 2c6a36c1d76464d4e15474c20e3e04ae11472f52
 
   const { control } = useFormContext();
   const loadOptions = async (
@@ -111,7 +108,6 @@ const colourStyles = (isFocus: boolean, error: any) => {
       ...styles,
       backgroundColor: 'primary',
       borderRadius: '8px',
-<<<<<<< HEAD
       minHeight: '60px',
       margin: '1px',
       boxShadow: 'none',
@@ -122,22 +118,10 @@ const colourStyles = (isFocus: boolean, error: any) => {
         : !state.hasValue || !state.selectProps.inputValue
         ? '#e2dbdb'
         : '#00ab55!important',
-=======
-      boxShadow: 'none',
-      '&:hover': {
-        border:'1px solid black'
-      },
-      border: error?.skus?.message
-        ? '1.5px solid #ff4842!important'
-        : (isFocus as unknown as ControlProps<boolean>)
-        ? '2px solid #00ab55!important'
-        : !state.hasValue || !state.selectProps.inputValue
-        ? '1px solid #e2dbdb'
-        : '1px solid #00ab55!important',
->>>>>>> 2c6a36c1d76464d4e15474c20e3e04ae11472f52
     }),
     container: (provided, state) => ({
       ...provided,
+      marginTop: 25,
     }),
 
     valueContainer: (provided, state) => ({
@@ -145,11 +129,6 @@ const colourStyles = (isFocus: boolean, error: any) => {
       overflow: 'visible',
       padding: 10,
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
-    }),
-
-    menu: (provided, state) => ({
-      ...provided,
-      marginLeft: 1,
     }),
 
     placeholder: (base, state) => ({
