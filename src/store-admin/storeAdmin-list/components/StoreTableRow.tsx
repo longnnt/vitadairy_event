@@ -1,25 +1,18 @@
 import { Link, Switch, TableCell, TableRow } from '@mui/material';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { setCode } from 'src/store-admin/storeAdmin.slice';
 import { IPropsStoreTableRow } from '../../interfaces';
-import utc from 'dayjs/plugin/utc';
-import { FORMATE_CREATE_DATE } from 'src/store-admin/constants';
-import timezone from "dayjs/plugin/timezone";
 // ----------------------------------------------------------------------
 
-function StoreTableRow({
-  row,
-  selected,
-}: IPropsStoreTableRow) {
-  
+function StoreTableRow({ row, selected }: IPropsStoreTableRow) {
   const navigate = useNavigate();
-  dayjs.extend(utc)
-  dayjs.extend(timezone)
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
@@ -28,29 +21,31 @@ function StoreTableRow({
 
   // useMutateStoreActive
   const { mutate } = useGetStoreActive({
-    onSuccess: () => {showSuccessSnackbar('Cập nhật thành công')},
+    onSuccess: () => {
+      showSuccessSnackbar('Cập nhật thành công');
+    },
     onError: () => showErrorSnackbar('Cập nhật thất bại'),
   });
   const handleOnChange = (active: boolean) => {
     mutate({ code, isActive: active });
   };
-  
+
   const handleShopInvitation = (id: string) => {
     navigate(PATH_DASHBOARD.storeAdmin.edit_shop(id));
-  dispatch(setCode(code)) 
-}
+    dispatch(setCode(code));
+  };
   return (
     <TableRow hover selected={selected}>
       <TableCell align="left" onClick={() => handleShopInvitation(code)}>
-        <Link underline="always">
-          {code}
-        </Link>
+        <Link underline="always">{code}</Link>
       </TableCell>
 
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(createdDate).format(FORMATE_CREATE_DATE)}
+        {_.isDate(dayjs(createdDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
+          ? dayjs(createdDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
+          : createdDate}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
@@ -63,7 +58,7 @@ function StoreTableRow({
 
       <TableCell align="right" title={isActive === true ? 'actived' : 'unActivced'}>
         <Switch
-          size='medium'
+          size="medium"
           checked={isActive}
           onChange={(e) => {
             handleOnChange(e.target.checked);
@@ -75,4 +70,3 @@ function StoreTableRow({
 }
 
 export { StoreTableRow };
-
