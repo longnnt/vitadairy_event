@@ -56,7 +56,7 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/store/new'),
     shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
     edit_shop: (shopID: string) =>
-      path(ROOTS_DASHBOARD, `/shop-invitation/shop-${shopID}`),
+      path(ROOTS_DASHBOARD, `/shop-invitation/${shopID}`),
   },
   eventPromotionIV: {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),

@@ -5,6 +5,9 @@ import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { IResShopInvitation } from '../common/interfaces';
 // components
 import Iconify from 'src/common/components/Iconify';
+import _ from 'lodash';
+import dayjs from 'dayjs';
+import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
 // import { TableMoreMenu } from 'src/components/table';
 
 // ----------------------------------------------------------------------
@@ -31,6 +34,7 @@ export default function InvitationTableRow({
     isSuccess,
     firstScanDate,
     registrationDate,
+    spoonCode,
     qrCode,
   } = row;
 
@@ -46,10 +50,6 @@ export default function InvitationTableRow({
 
   return (
     <TableRow hover selected={selected}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell> */}
-
       <TableCell align="left">{storeCode}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
@@ -60,17 +60,30 @@ export default function InvitationTableRow({
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {new Date(firstScanDate).toUTCString()}
+        {_.isDate(dayjs(registrationDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
+          ? dayjs(registrationDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
+          : registrationDate}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {new Date(registrationDate).toUTCString()}
-      </TableCell>
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {qrCode}
+        {_.isDate(dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
+          ? dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
+          : firstScanDate}
       </TableCell>
 
-      <TableCell padding="checkbox">
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        <a target="_blank" rel="noopener noreferrer" href={qrCode}>
+          Mã QR
+        </a>
+      </TableCell>
+
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        <a target="_blank" rel="noopener noreferrer" href={spoonCode}>
+          Mã Muỗng
+        </a>
+      </TableCell>
+
+      <TableCell padding="checkbox" align="left">
         <Checkbox checked={isSuccess} disabled />
       </TableCell>
     </TableRow>
