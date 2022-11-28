@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, DEFAULT_FORM_VALUE } from '../../constants';
+import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE } from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
@@ -24,7 +24,7 @@ import {
   setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IFormCreate, IFormSubmitCreate, ISelect } from '../../interfaces';
+import { IFormCreate, IFormSubmitCreate, ISelect, ISelectPopup } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
@@ -95,6 +95,7 @@ export default function HistoryNewForm() {
 
   const {
     reset,
+    setError,
     setValue,
     control,
     getValues,
@@ -111,7 +112,6 @@ export default function HistoryNewForm() {
   const onSubmit = async (data: IFormCreate) => {
     const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map((key) => data.eventDetailProvinces[key]);
     const sum = [...eventDetailProvincesArray].reduce((sum, item) => sum += (item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0), 0)
-    
     if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
@@ -133,7 +133,7 @@ export default function HistoryNewForm() {
     if (confirmEdit) {
       const newData = {
         ...editData,
-        transactionTypeId: editData.transactionTypeId.value,
+        transactionTypeId: (((editData.transactionTypeId) as ISelectPopup).value),
       } as unknown as IFormSubmitCreate;
       mutate(newData);
       dispatch(setConfirmEdit(false));

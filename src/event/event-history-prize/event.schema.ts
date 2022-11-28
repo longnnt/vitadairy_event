@@ -30,12 +30,6 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
 
   const createEventPrizeSchema = Yup.object().shape({
     giftId: Yup.number().required('This field is required').typeError('Must be a number'),
-    popupCode: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
-    popupType: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
     popUpCodeTitle: Yup.string()
       .max(60, 'Title must be less than 60 characters')
       .min(25, 'Title must be greater than 25 characters')
@@ -81,7 +75,6 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
     quantity: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
-    transactionTypeId: Yup.mixed().required('This field is required'),
     eventDetailProvinces: Yup.lazy((value: IFormCreateEvent) => {
       const validationObject: any = {};
       Object.keys(value).map((item) => {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { ButtonType, DEDAULT_PROVINCE } from './constants';
+import { ButtonType, DEDAULT_PROVINCE, POPUP_TYPE } from './constants';
 import {
   IEventDetail,
   IFormCreateEvent,
