@@ -141,7 +141,6 @@ export default function ShopInvitation() {
               <TableHeadCustom
                 order={order}
                 orderBy={orderBy}
-                // isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={
                   tableData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -149,7 +148,6 @@ export default function ShopInvitation() {
                 }
                 numSelected={selectedIds.length}
                 onSort={onSort}
-                // onSelectAllRows={handleCheckAll}
               />
 
               <TableBody>
