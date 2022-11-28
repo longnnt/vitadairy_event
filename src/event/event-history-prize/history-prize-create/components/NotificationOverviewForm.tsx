@@ -22,7 +22,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-function NotificationOverviewForm({errors}:{errors:any}) {
+function NotificationOverviewForm() {
   const dispatch = useDispatch();
   const { page, selected: selectedRows } = useTable();
   const searchParamsPaginate: ITransactionParams = {

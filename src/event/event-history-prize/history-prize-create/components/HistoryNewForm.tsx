@@ -151,7 +151,7 @@ export default function HistoryNewForm() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Grid spacing={3} container>
-                <NotificationOverviewForm errors={errors}/>
+                <NotificationOverviewForm />
                 <NotificationOverviewForm2 />
               </Grid>
               <LabelStyle marginTop={2}>Thông báo</LabelStyle>
