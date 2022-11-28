@@ -133,7 +133,7 @@ export default function HistoryNewForm() {
     if (confirmEdit) {
       const newData = {
         ...editData,
-        transactionTypeId: (((editData.transactionTypeId) as ISelectPopup).value),
+        transactionTypeId: editData.transactionTypeId.value,
       } as unknown as IFormSubmitCreate;
       mutate(newData);
       dispatch(setConfirmEdit(false));
