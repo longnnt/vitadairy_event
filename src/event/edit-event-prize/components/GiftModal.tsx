@@ -26,7 +26,7 @@ const styleGiftModal = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  color: '#3c8dbc',
+  color: 'black',
 };
 // --------------------------------------------------------------------------------------------
 export const GiftModal = ({
@@ -110,24 +110,16 @@ export const GiftModal = ({
                       <TableCell>
                         <img src={row.image} alt="row.name" height="50" width="50" />
                       </TableCell>
-                      <TableCell component="th" scope="row" sx={{ color: '#3c8dbc' }}>
+                      <TableCell component="th" scope="row">
                         {row.name}
                       </TableCell>
 
-                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
-                        {row.type}
-                      </TableCell>
-                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
-                        {row.point}
-                      </TableCell>
-                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
-                        {row.total}
-                      </TableCell>
-                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
-                        {row.money}
-                      </TableCell>
+                      <TableCell align="right">{row.type}</TableCell>
+                      <TableCell align="right">{row.point}</TableCell>
+                      <TableCell align="right">{row.total}</TableCell>
+                      <TableCell align="right">{row.money}</TableCell>
 
-                      <TableCell align="right" sx={{ color: '#3c8dbc' }}>
+                      <TableCell align="right">
                         <Switch checked={row.active} disabled />
                       </TableCell>
                       <TableCell align="right">

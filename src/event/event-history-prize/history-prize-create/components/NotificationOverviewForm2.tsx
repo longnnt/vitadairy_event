@@ -2,11 +2,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
-  Card, Grid,
+  Card,
+  Grid,
   Modal,
-  Paper, Table,
+  Paper,
+  Table,
   TableBody,
-  TableContainer, TablePagination, Typography
+  TableContainer,
+  TablePagination,
+  Typography,
 } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,12 +20,13 @@ import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
-  DEFAULT_FORM_VALUE, popupTypeOption,
+  DEFAULT_FORM_VALUE,
+  popupTypeOption,
   POPUP_CODE,
   POPUP_TYPE,
   SIZE_PAGE,
   STYLE_GIFT,
-  TABLE_HEAD_GIFT
+  TABLE_HEAD_GIFT,
 } from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
@@ -35,7 +40,7 @@ import {
   setPopUpCode,
   setPopUpType,
   setValueChoice,
-  setValueChoiceSelector
+  setValueChoiceSelector,
 } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetGilf } from '../../hooks/useGetGilf';
@@ -79,7 +84,6 @@ function NotificationOverviewForm2() {
     dispatch(setPopUpCode(event.target.value));
     setValue('popupCode', event.target.value);
   };
-
   const searchParams: IGiftParams = {
     page: page + 1,
     size: SIZE_PAGE,
@@ -129,14 +133,14 @@ function NotificationOverviewForm2() {
 
   const {
     reset,
+    register,
     setValue,
     control,
     getValues,
     watch,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
-
   return (
     <Grid item xs={6} marginTop={3.5}>
       <Card sx={{ p: 2, width: '100%' }}>
@@ -165,19 +169,31 @@ function NotificationOverviewForm2() {
           ))}
         </RHFSelect>
         {popUpType === POPUP_TYPE.HTML_LINK && (
-          <RHFTextField name="popupLink" key={'popupHtmlLink'} label="Popup html link*" />
+          <RHFTextField
+            required
+            name="popupLink"
+            key={'popupHtmlLink'}
+            label="Popup html link"
+          />
         )}
         {popUpType === POPUP_TYPE.DEEP_LINK && (
-          <RHFTextField name="popupLink" key={'popupDeepLink'} label="Popup deep link*" />
+          <RHFTextField
+            required
+            name="popupLink"
+            key={'popupDeepLink'}
+            label="Popup deep link"
+          />
         )}
         <RHFSelect
           name="popupCode"
           key={'popupCode'}
           label="Pop up Code"
           placeholder="Pop up Code"
-          margin="dense"
-          onChange={(e) => changePopUpCode(e)}
           value={popUpCode}
+          margin="dense"
+          onChange={(e) => {
+            changePopUpCode(e);
+          }}
         >
           <option value=""></option>
           <option value={POPUP_CODE.PUZZLE_PIECE}>PUZZLE PIECE</option>
