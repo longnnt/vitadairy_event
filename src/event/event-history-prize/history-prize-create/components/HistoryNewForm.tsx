@@ -100,7 +100,7 @@ export default function HistoryNewForm() {
     control,
     getValues,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {

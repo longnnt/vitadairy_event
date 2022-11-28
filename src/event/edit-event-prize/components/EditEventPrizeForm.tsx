@@ -248,6 +248,7 @@ export const EditEventPrizeForm = () => {
                       placeholder="Transaction type"
                       getAsyncData={getAllTransactionType}
                       searchParams={searchParams}
+                      error={errors}
                     />
                     {errors && (
                       <FormHelperText error>

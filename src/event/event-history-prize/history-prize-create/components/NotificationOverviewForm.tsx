@@ -89,9 +89,10 @@ function NotificationOverviewForm() {
           <Box sx={{ zIndex: 1001, marginTop: 1 }}>
             <RHFSelectPagitnation
               name={'transactionTypeId'}
-              placeholder="Transaction type"
+              placeholder="Transaction type*"
               getAsyncData={getAllTransactionType}
               searchParams={searchParamsPaginate}
+              error={errors}
             />
             {errors && (
               <FormHelperText error>{errors?.transactionTypeId?.message}</FormHelperText>
