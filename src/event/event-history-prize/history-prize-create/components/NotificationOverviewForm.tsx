@@ -23,7 +23,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-function NotificationOverviewForm() {
+function NotificationOverviewForm({errors}:{errors:any}) {
   const dispatch = useDispatch();
   const {
     page,
@@ -77,9 +77,10 @@ function NotificationOverviewForm() {
           <Box sx={{ zIndex: 1001 }}>
             <RHFSelectPagitnation
               name={'transactionTypeId'}
-              placeholder="Transaction type"
+              placeholder="Transaction type*"
               getAsyncData={getAllTransactionType}
               searchParams={searchParamsPaginate}
+              error={errors}
             />
           </Box>
           <RHFTextField

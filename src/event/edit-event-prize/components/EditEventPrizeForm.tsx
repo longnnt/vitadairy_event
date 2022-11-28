@@ -224,12 +224,13 @@ export const EditEventPrizeForm = () => {
                     key={'quantity'}
                     label="Tổng số lượng quà"
                   />
-                  <Box sx={{ zIndex: 1001 }}>
+                  <Box sx={{ zIndex: 1001, minHeight: '65px' }}>
                     <RHFSelectPagitnation
                       name={'transactionTypeId'}
                       placeholder="Transaction type"
                       getAsyncData={getAllTransactionType}
                       searchParams={searchParams}
+                      error={errors}
                     />
                     {errors && (
                       <FormHelperText error>

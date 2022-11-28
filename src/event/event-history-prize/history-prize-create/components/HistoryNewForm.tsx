@@ -99,7 +99,7 @@ export default function HistoryNewForm() {
     control,
     getValues,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
@@ -140,7 +140,7 @@ export default function HistoryNewForm() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Grid spacing={3} container>
-                <NotificationOverviewForm />
+                <NotificationOverviewForm errors={errors}/>
                 <NotificationOverviewForm2 />
               </Grid>
               <LabelStyle marginTop={2}>Thông báo</LabelStyle>

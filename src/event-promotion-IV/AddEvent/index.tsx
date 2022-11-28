@@ -174,7 +174,7 @@ export const AddEvent = () => {
                 />
               </Stack>
 
-              <Box sx={{ zIndex: 1001 }} >
+              <Box sx={{ zIndex: 1001 }} minHeight='65px'>
                 <RHFSelectPagitnation
                   name={'skus'}
                   getAsyncData={getProductCode}

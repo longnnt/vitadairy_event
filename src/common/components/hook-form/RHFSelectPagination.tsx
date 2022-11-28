@@ -114,7 +114,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
       border: error?.skus?.message
         ? '1.5px solid #ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
-        ? '2px solid #00ab55!important'
+        ? '1px solid #00ab55!important'
         : !state.hasValue || !state.selectProps.inputValue
         ? '1px solid #e2dbdb'
         : '1px solid #00ab55!important',

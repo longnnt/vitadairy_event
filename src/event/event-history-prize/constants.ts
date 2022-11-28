@@ -90,7 +90,7 @@ export const DEFAULT_FORM_VALUE = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  transactionTypeId: { value: 0, label: '' },
+  // transactionTypeId: { value: 0, label: '' },
 };
 
 export const DEFAULT_FORM_VALUE_SUBMIT = {
