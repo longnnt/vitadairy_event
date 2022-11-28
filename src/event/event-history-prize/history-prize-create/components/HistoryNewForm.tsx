@@ -122,7 +122,7 @@ export default function HistoryNewForm() {
       const tempEditData = fomatFormData(data);
       dispatch(setEditData(tempEditData));
     }
-    else if (sum > data.quantity) {
+    else if (sum > (data.quantity as number)) {
       showErrorSnackbar('Tổng số giải theo tỉnh lớn hơn');
     }
     else {

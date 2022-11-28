@@ -18,7 +18,7 @@ type StateProps = {
   gift: IGift;
   buttonType: ButtonType;
   popUpType: string;
-  popUpCode: string | null;
+  popUpCode: string;
   open: boolean;
   fileCSV: Array<unknown>;
   provinceNewForm: IFormCreateEvent;

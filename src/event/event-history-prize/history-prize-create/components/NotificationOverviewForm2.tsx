@@ -83,8 +83,9 @@ function NotificationOverviewForm2() {
   ) => {
     dispatch(setPopUpCode(event.target.value));
     setValue('popupCode', event.target.value);
+    // console.log(event.target.value)
+    // console.log(popUpCode)
   };
-
   const searchParams: IGiftParams = {
     page: page + 1,
     size: SIZE_PAGE,
@@ -126,7 +127,7 @@ function NotificationOverviewForm2() {
       dispatch(setFileCSV([]));
     };
   }, []);
-
+  
   const methods = useForm<IFormCreate>({
     resolver: yupResolver(createEventPrizeValidate(provinceId)),
     defaultValues: DEFAULT_FORM_VALUE,
@@ -145,12 +146,11 @@ function NotificationOverviewForm2() {
     <Grid item xs={6} marginTop={3.5}>
       <Card sx={{ p: 2, width: '100%' }}>
         <RHFTextField
-          required
           name="popupImageLink"
           key={'popupImageLink'}
           label="Link hình ảnh Pop up"
           margin="dense"
-        />
+          />
         <RHFSelect
           name="popupType"
           key="popupType"
@@ -171,16 +171,16 @@ function NotificationOverviewForm2() {
         </RHFSelect>
         {popUpType === POPUP_TYPE.HTML_LINK && (
           <RHFTextField
-            required
-            name="popupLink"
-            key={'popupHtmlLink'}
-            label="Popup html link*"
+          required
+          name="popupLink"
+          key={'popupHtmlLink'}
+          label="Popup html link*"
           />
-        )}
+          )}
         {popUpType === POPUP_TYPE.DEEP_LINK && (
           <RHFTextField
-            required
-            name="popupLink"
+          required
+          name="popupLink"
             key={'popupDeepLink'}
             label="Popup deep link*"
           />
@@ -190,9 +190,12 @@ function NotificationOverviewForm2() {
           key={'popupCode'}
           label="Pop up Code"
           placeholder="Pop up Code"
-          margin="dense"
-          onChange={(e) => changePopUpCode(e)}
           value={popUpCode}
+          margin="dense"
+          onChange={(e) =>{
+            changePopUpCode(e);
+            console.log(popUpCode)
+          }}
         >
           <option value=""></option>
           <option value={POPUP_CODE.PUZZLE_PIECE}>PUZZLE PIECE</option>

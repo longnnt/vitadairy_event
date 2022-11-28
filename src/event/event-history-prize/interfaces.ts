@@ -88,13 +88,13 @@ interface IForm {
   notificationContent: string;
   notificationDescription: string;
   notificationTitle: string;
-  ordinal: number;
+  ordinal: number | null;
   popupCode: string | null;
   popupImageLink: string;
   popupLink: string;
   popupType: string;
-  probability: number;
-  quantity: number;
+  probability: number | null;
+  quantity: number | null;
   transactionTypeId: ISelectPopup;
   id?: number;
 }

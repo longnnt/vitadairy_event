@@ -48,21 +48,18 @@ function NotificationOverviewForm() {
       <Card sx={{ p: 2, width: '100%' }}>
         <Stack spacing={3}>
           <RHFTextField
-            required
             name={'ordinal'}
             key={'ordinal'}
             label="Thứ tự ưu tiên"
             margin="dense"
           />
           <RHFTextField
-            required
             name="probability"
             key={'probability'}
             label="Tỉ lệ trúng quà của sự kiện(%)"
             margin="dense"
           />
           <RHFTextField
-            required
             name="quantity"
             key={'quantity'}
             label="Tổng số lượng quà"

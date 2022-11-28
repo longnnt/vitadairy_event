@@ -85,13 +85,13 @@ export const DEFAULT_FORM_VALUE = {
   notificationContent: '',
   notificationDescription: '',
   notificationTitle: '',
-  ordinal: 0,
+  ordinal: null,
   popupCode: '',
   popupImageLink: '',
   popupLink: '',
   popupType: '',
-  probability: 0,
-  quantity: 0,
+  probability: null,
+  quantity: null,
 };
 
 export const DEFAULT_FORM_VALUE_SUBMIT = {
