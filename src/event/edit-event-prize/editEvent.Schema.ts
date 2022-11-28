@@ -2,8 +2,11 @@ import * as Yup from 'yup';
 import { IEventDetailProvinces } from './common/interface';
 import { POPUP_CODE } from './common/constants';
 
-export const eidtEventPrizevalidate = (provinceIds: number[]) => {
+export const eidtEventPrizevalidate = (provinceIds: number[], leftGift: number) => {
   const eventDetailProvincesSchema = Yup.object().shape({
+    extraquantity: Yup.mixed().test('test extraquantity', '', (val) =>
+      val ? leftGift === 0 : true
+    ),
     endDate: Yup.string()
       .required('This field is required')
       .typeError('Must be a string')

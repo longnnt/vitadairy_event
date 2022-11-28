@@ -106,7 +106,7 @@ const colourStyles = (isFocus: boolean) => {
       backgroundColor: 'primary',
       borderRadius: '6px',
       minHeight: '60px',
-      // opacity: (isFocus as unknown as ControlProps<boolean>) ? 1 : 0.6,
+      margin: '1px',
       borderColor: (isFocus as unknown as ControlProps<boolean>)
         ? '#00ab55!important'
         : !state.hasValue || !state.selectProps.inputValue
@@ -116,7 +116,6 @@ const colourStyles = (isFocus: boolean) => {
     }),
     container: (provided, state) => ({
       ...provided,
-      marginTop: 25,
     }),
 
     valueContainer: (provided, state) => ({
@@ -125,12 +124,6 @@ const colourStyles = (isFocus: boolean) => {
       padding: 10,
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
     }),
-    // menuList: (provided) => ({
-    //   ...provided,
-    //   maxHeight: '300px!important',
-    //   position: 'relative',
-    //   zIndex: 1,
-    // }),
 
     placeholder: (base, state) => ({
       ...base,

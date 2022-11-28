@@ -1,7 +1,4 @@
-import {
-  Box, Card,
-  Grid, Typography
-} from '@mui/material';
+import { Box, Card, FormHelperText, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Stack } from '@mui/system';
 import { useEffect } from 'react';
@@ -10,12 +7,14 @@ import useTable from 'src/common/hooks/useTable';
 import { useDispatch } from 'src/common/redux/store';
 import { RHFSelectPagitnation } from 'src/event/edit-event-prize/components/RHFSelectPagination';
 import { getAllTransactionType } from 'src/event/edit-event-prize/service';
-import { SIZE_PAGE } from '../../constants';
-import {
-  setTransactionType
-} from '../../event.slice';
+import { DEFAULT_FORM_VALUE, SIZE_PAGE } from '../../constants';
+import { setTransactionType } from '../../event.slice';
 import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { ITransactionParams } from '../../interfaces';
+import { IFormCreate, ISelect, ITransactionParams } from '../../interfaces';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { createEventPrizeValidate } from '../../event.schema';
+import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -25,18 +24,19 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 function NotificationOverviewForm() {
   const dispatch = useDispatch();
-  const {
-    page,
-    selected: selectedRows,
-  } = useTable();
+  const { page, selected: selectedRows } = useTable();
   const searchParamsPaginate: ITransactionParams = {
     page: 0,
   };
-  const searchParams: ITransactionParams = {
-    page: page + 1,
-    size: SIZE_PAGE,
-  };
-  const { data: addTransaction } = useGetAllTranSacTion(searchParams);
+  const { data: addProvince } = useGetAllProvince();
+  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const addProvinceVN = dataProvince.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+  const provinceId = addProvinceVN
+    ? addProvinceVN.map((item: ISelect) => item.value)
+    : [];
 
   useEffect(() => {
     dispatch(
@@ -50,6 +50,19 @@ function NotificationOverviewForm() {
     );
   }, []);
 
+  const methods = useForm<IFormCreate>({
+    resolver: yupResolver(createEventPrizeValidate(provinceId)),
+    defaultValues: DEFAULT_FORM_VALUE,
+  });
+
+  const {
+    reset,
+    setValue,
+    control,
+    getValues,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = methods;
   return (
     <Grid item xs={6}>
       <LabelStyle>Thông báo tổng quan</LabelStyle>
@@ -73,14 +86,16 @@ function NotificationOverviewForm() {
             label="Tổng số lượng quà*"
             margin="dense"
           />
-
-          <Box sx={{ zIndex: 1001 }}>
+          <Box sx={{ zIndex: 1001, marginTop: 1 }}>
             <RHFSelectPagitnation
               name={'transactionTypeId'}
               placeholder="Transaction type"
               getAsyncData={getAllTransactionType}
               searchParams={searchParamsPaginate}
             />
+            {errors && (
+              <FormHelperText error>{errors?.transactionTypeId?.message}</FormHelperText>
+            )}
           </Box>
           <RHFTextField
             name="id"

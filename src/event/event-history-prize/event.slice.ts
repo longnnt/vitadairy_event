@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { ButtonType, DEDAULT_PROVINCE } from './constants';
+import { ButtonType, DEDAULT_PROVINCE, POPUP_TYPE } from './constants';
 import {
   IEventDetail,
   IFormCreateEvent,
@@ -18,7 +18,7 @@ type StateProps = {
   gift: IGift;
   buttonType: ButtonType;
   popUpType: string;
-  popUpCode: string | null;
+  popUpCode: string;
   open: boolean;
   fileCSV: Array<unknown>;
   provinceNewForm: IFormCreateEvent;

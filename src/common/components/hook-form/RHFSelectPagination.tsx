@@ -39,7 +39,6 @@ export const RHFSelectPagitnation = ({
   searchParams,
   error,
 }: IProps) => {
-
   const { control } = useFormContext();
   const loadOptions = async (
     search: string,
@@ -107,20 +106,20 @@ const colourStyles = (isFocus: boolean, error: any) => {
       ...styles,
       backgroundColor: 'primary',
       borderRadius: '8px',
+      minHeight: '60px',
+      margin: '1px',
       boxShadow: 'none',
-      '&:hover': {
-        border:'1px solid black'
-      },
-      border: error?.skus?.message
-        ? '1.5px solid #ff4842!important'
+      borderColor: error?.skus?.message
+        ? '#ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
-        ? '2px solid #00ab55!important'
+        ? '#00ab55!important'
         : !state.hasValue || !state.selectProps.inputValue
-        ? '1px solid #e2dbdb'
-        : '1px solid #00ab55!important',
+        ? '#e2dbdb'
+        : '#00ab55!important',
     }),
     container: (provided, state) => ({
       ...provided,
+      marginTop: 25,
     }),
 
     valueContainer: (provided, state) => ({
@@ -128,11 +127,6 @@ const colourStyles = (isFocus: boolean, error: any) => {
       overflow: 'visible',
       padding: 10,
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
-    }),
-
-    menu: (provided, state) => ({
-      ...provided,
-      marginLeft: 1,
     }),
 
     placeholder: (base, state) => ({

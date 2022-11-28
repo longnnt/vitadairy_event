@@ -59,7 +59,7 @@ function EditToolbar(props: EditToolbarProps) {
           id,
           provinceId: '',
           quantity: '',
-          extraquantity: '',
+          extraquantity: 0,
           isNew: true,
         },
       };
@@ -98,7 +98,6 @@ function EditToolbar(props: EditToolbarProps) {
 export default function PovinceTableForm() {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-
   const [rows, setRows] = React.useState<IEventDetailProvinces>({});
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
@@ -197,7 +196,6 @@ export default function PovinceTableForm() {
 
           setRows({ ...rows, ...data });
           setValue('eventDetailProvinces', { ...rows, ...data });
-          // event.target.value = '';
         },
       });
     } catch (e) {
@@ -276,6 +274,7 @@ export default function PovinceTableForm() {
         const extraquantity = watch(
           `eventDetailProvinces.${params.row.id}.extraquantity`
         );
+
         return { ...params.row, extraquantity: extraquantity };
       },
     },

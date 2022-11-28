@@ -13,6 +13,7 @@ interface stateType {
   confirmEdit: boolean;
   editData: IFormSubmitEdit;
   rows: IEventDetailProvinces;
+  leftGift: number;
 }
 
 const initialState: stateType = {
@@ -25,6 +26,7 @@ const initialState: stateType = {
   confirmEdit: false,
   editData: {} as IFormSubmitEdit,
   rows: {},
+  leftGift: 0,
 };
 
 export const editEventPrizeSlice = createSlice({
@@ -58,6 +60,9 @@ export const editEventPrizeSlice = createSlice({
     setRows: (state, action: PayloadAction<IEventDetailProvinces>) => {
       state.rows = action.payload;
     },
+    setLeftGift: (state, action: PayloadAction<number>) => {
+      state.leftGift = action.payload;
+    },
   },
 });
 
@@ -71,6 +76,7 @@ export const {
   setConfirmEdit,
   setEditData,
   setRows,
+  setLeftGift,
 } = editEventPrizeSlice.actions;
 
 export const giftByIdSelector = (state: RootState) => state.edit_event_prize.dataGiftById;
@@ -88,5 +94,6 @@ export const confirmEditSelector = (state: RootState) =>
 export const editDataSelector = (state: RootState) => state.edit_event_prize.editData;
 
 export const rowsSelector = (state: RootState) => state.edit_event_prize.rows;
+export const leftGiftSelector = (state: RootState) => state.edit_event_prize.leftGift;
 
 export default editEventPrizeSlice.reducer;
