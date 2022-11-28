@@ -242,7 +242,7 @@ export const EditEventPrizeForm = () => {
                     key={'quantity'}
                     label="Tổng số lượng quà"
                   />
-                  <Box sx={{ zIndex: 1001, minHeight: '65px' }}>
+                  <Box sx={{ zIndex: 1001 }}>
                     <RHFSelectPagitnation
                       name={'transactionTypeId'}
                       placeholder="Transaction type"
