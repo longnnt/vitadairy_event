@@ -162,7 +162,7 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
         : (isFocus as unknown as ControlProps<boolean>)
         ? '#00ab55'
         : state.hasValue || state.selectProps.inputValue
-        ? 'grey'
+        ? '#919EAB'
         : '#919eab',
     }),
   };
