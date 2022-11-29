@@ -32,7 +32,7 @@ const CustomValueContainer = ({ children, ...props }: any) => {
   );
 };
 
-export const RHFSelectPagitnation = ({
+export const RHFSelectPaginationSingle = ({
   name,
   getAsyncData,
   placeholder,
@@ -51,11 +51,12 @@ export const RHFSelectPagitnation = ({
       page: page,
       searchText: search,
     });
-    const hasMore = page < response?.data?.response.pagination.totalPages;
-    const optionSelects = response.data?.response.response.map((prodCode: any) => {
+
+    const hasMore = page < response?.data?.pagination.totalPages;
+    const optionSelects = response.data?.response.map((item: any) => {
       return {
-        value: prodCode.code,
-        label: prodCode.code,
+        value: item.id,
+        label: item.description,
       };
     });
     return {
@@ -87,10 +88,8 @@ export const RHFSelectPagitnation = ({
                 { page: number }
               >
             }
-            isMulti
-            closeMenuOnSelect={false}
             onChange={onChange}
-            styles={colourStyles(isFocus, error)}
+            styles={colourStyles(isFocus, error, name)}
             components={{
               ValueContainer: CustomValueContainer,
             }}
@@ -101,7 +100,7 @@ export const RHFSelectPagitnation = ({
   );
 };
 
-const colourStyles = (isFocus: boolean, error: any) => {
+const colourStyles = (isFocus: boolean, error: any, name: string) => {
   const styles: StylesConfig = {
     control: (styles, state) => ({
       ...styles,
@@ -111,7 +110,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
       '&:hover': {
         border:'1px solid black'
       },
-      border: error?.skus?.message
+      border: error[name]?.message
         ? '1.5px solid #ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '1px solid #00ab55!important'
@@ -130,11 +129,6 @@ const colourStyles = (isFocus: boolean, error: any) => {
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
     }),
 
-    menu: (provided, state) => ({
-      ...provided,
-      marginLeft: 1,
-    }),
-
     placeholder: (base, state) => ({
       ...base,
       position: 'absolute',
@@ -149,9 +143,10 @@ const colourStyles = (isFocus: boolean, error: any) => {
         (isFocus as unknown as ControlProps<boolean>)
           ? 'white'
           : 'primary',
-      top:
-        state.hasValue || state.selectProps.inputValue
-          ? '-10px'
+      top: state.hasValue
+          ? '-22px'
+          : state.selectProps.inputValue
+          ? '-22px'
           : (isFocus as unknown as ControlProps<boolean>)
           ? '-22px'
           : '10%',
@@ -162,7 +157,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
           state.selectProps.inputValue ||
           (isFocus as unknown as ControlProps<boolean>)) &&
         12,
-      color: error?.skus?.message
+      color: error[name]?.message
         ? '#ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '#00ab55'

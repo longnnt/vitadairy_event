@@ -38,7 +38,7 @@ import { IEventFormData, IProCodeSelect, UserType } from '../interface';
 import { schemaAddEvent } from '../schema';
 import { getProductCode } from '../service';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
+import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -175,7 +175,7 @@ export const AddEvent = () => {
               </Stack>
 
               <Box sx={{ zIndex: 1001 }} minHeight='65px'>
-                <RHFSelectPagitnation
+                <RHFSelectPagitnationMultiple
                   name={'skus'}
                   getAsyncData={getProductCode}
                   placeholder="  Mã sản phẩm*  "

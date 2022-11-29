@@ -2,15 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
-  Card,
-  InputAdornment,
-  responsiveFontSizes,
-  Stack,
+  Card, FormHelperText, Stack,
   TextField,
-  Typography,
-  FormHelperText,
+  Typography
 } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import Scrollbar from 'src/common/components/Scrollbar';
@@ -22,33 +17,30 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   FormProvider,
   RHFRadioGroup,
-  RHFTextField,
+  RHFTextField
 } from 'src/common/components/hook-form';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 
+import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
+import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import { BREADCUMBS } from 'src/common/constants/common.constants';
+import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
+import { ProductCodeModal } from '../components/ProductCodeModal';
+import { DEFAULT_EDIT_VALUE } from '../constant';
 import {
   confirmEditSelector,
   openEditModalSelector,
   productState,
-  setConfirmEdit,
-  setIsOpenModal,
-  setOpeneditModal,
-  setProduct,
-  setSelectedIds,
+  setConfirmEdit, setOpeneditModal,
+  setProduct
 } from '../eventPromotionIV.slice';
 import { useEditEvent } from '../hooks/useEditEvent';
 import { useGetEventById } from '../hooks/useGetEventById';
-import { schemaAddEvent, schemaEditEvent } from '../schema';
-import { ProductCodeModal } from '../components/ProductCodeModal';
-import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
-import { IEventEditFormData, IEventFormData, IProCodeSelect } from '../interface';
-import { DEFAULT_EDIT_VALUE } from '../constant';
-import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
-import { BREADCUMBS } from 'src/common/constants/common.constants';
-import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
-import { RHFSelectPagitnation } from 'src/common/components/hook-form/RHFSelectPagination';
+import { IEventEditFormData, IProCodeSelect } from '../interface';
+import { schemaEditEvent } from '../schema';
 import { getProductCode } from '../service';
 
 export const EditEventForm = () => {
@@ -227,7 +219,7 @@ export const EditEventForm = () => {
               </Stack>
   
               <Box sx={{ zIndex: 1001 }}>
-                <RHFSelectPagitnation
+                <RHFSelectPagitnationMultiple
                   name={'skus'}
                   getAsyncData={getProductCode}
                   placeholder="Mã sản phẩm*"

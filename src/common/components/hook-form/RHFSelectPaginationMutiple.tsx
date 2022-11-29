@@ -32,7 +32,7 @@ const CustomValueContainer = ({ children, ...props }: any) => {
   );
 };
 
-export const RHFSelectPagitnation = ({
+export const RHFSelectPagitnationMultiple = ({
   name,
   getAsyncData,
   placeholder,
@@ -51,12 +51,11 @@ export const RHFSelectPagitnation = ({
       page: page,
       searchText: search,
     });
-
-    const hasMore = page < response?.data?.pagination.totalPages;
-    const optionSelects = response.data?.response.map((item: any) => {
+    const hasMore = page < response?.data?.response.pagination.totalPages;
+    const optionSelects = response.data?.response.response.map((prodCode: any) => {
       return {
-        value: item.id,
-        label: item.description,
+        value: prodCode.code,
+        label: prodCode.code,
       };
     });
     return {
@@ -88,6 +87,8 @@ export const RHFSelectPagitnation = ({
                 { page: number }
               >
             }
+            isMulti
+            closeMenuOnSelect={false}
             onChange={onChange}
             styles={colourStyles(isFocus, error)}
             components={{
@@ -129,6 +130,11 @@ const colourStyles = (isFocus: boolean, error: any) => {
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
     }),
 
+    menu: (provided, state) => ({
+      ...provided,
+      marginLeft: 1,
+    }),
+
     placeholder: (base, state) => ({
       ...base,
       position: 'absolute',
@@ -143,10 +149,9 @@ const colourStyles = (isFocus: boolean, error: any) => {
         (isFocus as unknown as ControlProps<boolean>)
           ? 'white'
           : 'primary',
-      top: state.hasValue
-          ? '-22px'
-          : state.selectProps.inputValue
-          ? '-22px'
+      top:
+        state.hasValue || state.selectProps.inputValue
+          ? '-10px'
           : (isFocus as unknown as ControlProps<boolean>)
           ? '-22px'
           : '10%',

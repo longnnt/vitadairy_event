@@ -90,8 +90,8 @@ export const DEFAULT_FORM_VALUE = {
   popupImageLink: '',
   popupLink: '',
   popupType: '',
-  probability: 0,
-  quantity: 0,
+  probability: null,
+  quantity: null,
 };
 
 export const DEFAULT_FORM_VALUE_SUBMIT = {
