@@ -251,7 +251,7 @@ export const EditEventPrizeForm = () => {
                       error={errors}
                     />
                     {errors && (
-                      <FormHelperText error>
+                      <FormHelperText error sx={{ marginLeft: '10px' }}>
                         {errors?.transactionTypeId?.message}
                       </FormHelperText>
                     )}
@@ -262,18 +262,6 @@ export const EditEventPrizeForm = () => {
                     key={'winnerAmount'}
                     label="Số lượng user đã trúng"
                   />
-                  {/* <RHFSelect
-                    name={'transactionTypeId'}
-                    key="transactionTypeId"
-                    label={'Transaction Type'}
-                  >
-                    <option value="" />
-                    {transactionTypeOptions?.map((item: ISelect) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </RHFSelect> */}
 
                   <Typography>Trạng thái quà</Typography>
                   <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />

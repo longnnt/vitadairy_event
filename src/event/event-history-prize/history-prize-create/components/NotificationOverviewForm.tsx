@@ -2,19 +2,15 @@ import { Box, Card, FormHelperText, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Stack } from '@mui/system';
 import { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch } from 'src/common/redux/store';
 import { RHFSelectPagitnation } from 'src/event/edit-event-prize/components/RHFSelectPagination';
 import { getAllTransactionType } from 'src/event/edit-event-prize/service';
-import { DEFAULT_FORM_VALUE, SIZE_PAGE } from '../../constants';
 import { setTransactionType } from '../../event.slice';
-import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { IFormCreate, ISelect, ITransactionParams } from '../../interfaces';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { createEventPrizeValidate } from '../../event.schema';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
+import { IFormCreate, ISelect, ITransactionParams } from '../../interfaces';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -24,7 +20,6 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 function NotificationOverviewForm() {
   const dispatch = useDispatch();
-  const { page, selected: selectedRows } = useTable();
   const searchParamsPaginate: ITransactionParams = {
     page: 0,
   };
@@ -34,9 +29,6 @@ function NotificationOverviewForm() {
     value: item.id,
     label: item.name,
   }));
-  const provinceId = addProvinceVN
-    ? addProvinceVN.map((item: ISelect) => item.value)
-    : [];
 
   useEffect(() => {
     dispatch(
@@ -50,11 +42,7 @@ function NotificationOverviewForm() {
     );
   }, []);
 
-  const methods = useForm<IFormCreate>({
-    resolver: yupResolver(createEventPrizeValidate(provinceId)),
-    defaultValues: DEFAULT_FORM_VALUE,
-  });
-
+  const methods = useFormContext<IFormCreate>();
   const {
     reset,
     setValue,
@@ -67,7 +55,7 @@ function NotificationOverviewForm() {
     <Grid item xs={6}>
       <LabelStyle>Thông báo tổng quan</LabelStyle>
       <Card sx={{ p: 2, width: '100%' }}>
-        <Stack spacing={3}>
+        <Stack spacing={2}>
           <RHFTextField
             name={'ordinal'}
             key={'ordinal'}
@@ -94,9 +82,9 @@ function NotificationOverviewForm() {
               searchParams={searchParamsPaginate}
               error={errors}
             />
-            {errors && (
-              <FormHelperText error>{errors?.transactionTypeId?.message}</FormHelperText>
-            )}
+            <FormHelperText error sx={{ marginLeft: '10px' }}>
+              {errors?.transactionTypeId?.message}
+            </FormHelperText>
           </Box>
           <RHFTextField
             name="id"

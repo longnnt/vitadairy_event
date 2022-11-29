@@ -110,7 +110,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
       '&:hover': {
         border:'1px solid black'
       },
-      border: error?.skus?.message
+      border: error?.transactionTypeId?.message
         ? '1.5px solid #ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '1px solid #00ab55!important'
@@ -157,7 +157,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
           state.selectProps.inputValue ||
           (isFocus as unknown as ControlProps<boolean>)) &&
         12,
-      color: error?.skus?.message
+      color: error?.transactionTypeId?.message
         ? '#ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '#00ab55'

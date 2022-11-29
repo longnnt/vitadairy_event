@@ -1,6 +1,5 @@
 import { Dayjs } from 'dayjs';
 import { GridRowsProp, GridRowModesModel } from '@mui/x-data-grid-pro';
-
 export interface IHistoryListEventParams {
   endDate?: Date | null;
   page?: number;
@@ -89,13 +88,13 @@ interface IForm {
   notificationDescription: string;
   notificationTitle: string;
   ordinal: number | null;
-  popupCode: string;
+  popupCode: boolean | string;
   popupImageLink: string;
   popupLink: string;
-  popupType: string;
+  popupType: boolean | string;
   probability: number | null;
   quantity: number | null;
-  transactionTypeId: ISelectPopup | number;
+  transactionTypeId: ISelectPopup | string;
   id?: number;
 }
 

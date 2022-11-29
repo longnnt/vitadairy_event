@@ -1,7 +1,12 @@
 import * as Yup from 'yup';
+// import * as Yup from './interfaces';
 import { POPUP_CODE } from './constants';
 import { IFormCreateEvent } from './interfaces';
-
+import { useSelector } from 'src/common/redux/store';
+import {
+  popUpCodeSelector,
+  popUpTypeSelector,
+} from './event.slice';
 export const createEventPrizeValidate = (provinceIds: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
     endDate: Yup.string()
@@ -53,6 +58,8 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
       }
     }),
     giftStatus: Yup.boolean(),
+    popupCode: Yup.string().required('This field is required'),
+    popupType: Yup.string().required('This field is required'),
     popupImageLink: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),

@@ -7,6 +7,7 @@ import {
   Grid,
   Modal,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableContainer,
@@ -14,7 +15,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
@@ -47,6 +47,7 @@ import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetGilf } from '../../hooks/useGetGilf';
 import { IFormCreate, IGiftParams, ISelect, ISelectPopup } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
+import { useFormContext } from 'react-hook-form';
 
 function NotificationOverviewForm2() {
   const dispatch = useDispatch();
@@ -76,14 +77,14 @@ function NotificationOverviewForm2() {
   const changePopUpType = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    setValue('popupType', event.target.value, {shouldValidate: true} );
     dispatch(setPopUpType(event.target.value));
-    setValue('popupType', event.target.value);
   };
   const changePopUpCode = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    setValue('popupCode', event.target.value,  {shouldValidate: true} );
     dispatch(setPopUpCode(event.target.value));
-    setValue('popupCode', event.target.value);
   };
   const searchParams: IGiftParams = {
     page: page + 1,
@@ -101,10 +102,6 @@ function NotificationOverviewForm2() {
     value: item.id,
     label: item.name,
   }));
-
-  const provinceId = addProvinceVN
-    ? addProvinceVN.map((item: ISelect) => item.value)
-    : [];
 
   useEffect(() => {
     dispatch(
@@ -127,10 +124,7 @@ function NotificationOverviewForm2() {
     };
   }, []);
 
-  const methods = useForm<IFormCreate>({
-    resolver: yupResolver(createEventPrizeValidate(provinceId)),
-    defaultValues: DEFAULT_FORM_VALUE,
-  });
+  const methods = useFormContext<IFormCreate>();
 
   const {
     reset,
@@ -144,7 +138,8 @@ function NotificationOverviewForm2() {
   } = methods;
   return (
     <Grid item xs={6} marginTop={3.5}>
-      <Card sx={{ p: 2, width: '100%' }}>
+      <Card sx={{ p: 3, width: '100%' }}>
+        <Stack spacing={2}>
         <RHFTextField
           name="popupImageLink"
           key={'popupImageLink'}
@@ -153,8 +148,7 @@ function NotificationOverviewForm2() {
         />
         <RHFSelect
           name="popupType"
-          error={popUpType === ""}
-          helperText={popUpType === "" ? 'This field is required' : ' '}
+          error = {!!errors.popupType}
           key="popupType"
           label="Pop up Type"
           placeholder="Pop up Type"
@@ -163,7 +157,7 @@ function NotificationOverviewForm2() {
           onChange={(e) => {
             changePopUpType(e);
           }}
-        >
+          >
           <option value="" />
           {popupTypeOption.map((item: ISelectPopup) => (
             <option key={item.value} value={item.value}>
@@ -189,8 +183,7 @@ function NotificationOverviewForm2() {
         )}
         <RHFSelect
           name="popupCode"
-          error={popUpCode === ""}
-          helperText={popUpCode === "" ? 'This field is required' : ' '}
+          error = {!!errors.popupCode}
           key={'popupCode'}
           label="Pop up Code"
           placeholder="Pop up Code"
@@ -229,7 +222,7 @@ function NotificationOverviewForm2() {
             />
           </>
         )}
-        <Grid container spacing={3}>
+        <Grid container spacing={0.5}>
           <Grid item xs>
             <Button
               sx={{
@@ -308,6 +301,8 @@ function NotificationOverviewForm2() {
             </Modal>
           </Grid>
         </Grid>
+        </Stack>
+        
       </Card>
     </Grid>
   );
