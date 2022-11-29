@@ -1,10 +1,7 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
-  Card,
-  FormHelperText,
-  Grid,
+  Card, Grid,
   Modal,
   Paper,
   Stack,
@@ -12,24 +9,23 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
+  Typography
 } from '@mui/material';
 import { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
-  DEFAULT_FORM_VALUE,
   popupTypeOption,
   POPUP_CODE,
   POPUP_TYPE,
   SIZE_PAGE,
   STYLE_GIFT,
-  TABLE_HEAD_GIFT,
+  TABLE_HEAD_GIFT
 } from '../../constants';
-import { createEventPrizeValidate } from '../../event.schema';
 import {
   giftSelecttor,
   popUpCodeSelector,
@@ -41,13 +37,12 @@ import {
   setPopUpCode,
   setPopUpType,
   setValueChoice,
-  setValueChoiceSelector,
+  setValueChoiceSelector
 } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import { useGetGilf } from '../../hooks/useGetGilf';
-import { IFormCreate, IGiftParams, ISelect, ISelectPopup } from '../../interfaces';
+import { IFormCreate, IGiftParams, ISelectPopup } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
-import { useFormContext } from 'react-hook-form';
 
 function NotificationOverviewForm2() {
   const dispatch = useDispatch();

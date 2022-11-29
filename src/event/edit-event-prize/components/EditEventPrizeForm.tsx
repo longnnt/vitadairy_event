@@ -70,7 +70,9 @@ import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
 import { ConfirmEditModal } from './ConfirmEditModal';
 import { getAllTransactionType } from '../service';
-import { SelectPaginationTransaction } from './SelectPaginationTransaction';
+import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
+
+// import { SelectPaginationTransaction } from './SelectPaginationTransaction';
 
 // -----------------------------------------------------------------------------
 
@@ -243,7 +245,7 @@ export const EditEventPrizeForm = () => {
                     label="Tổng số lượng quà"
                   />
                   <Box sx={{ zIndex: 1001 }}>
-                    <SelectPaginationTransaction
+                    <RHFSelectPaginationSingle
                       name={'transactionTypeId'}
                       placeholder="Transaction type"
                       getAsyncData={getAllTransactionType}

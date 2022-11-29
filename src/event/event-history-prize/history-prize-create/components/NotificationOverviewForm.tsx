@@ -4,13 +4,11 @@ import { Stack } from '@mui/system';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
-import useTable from 'src/common/hooks/useTable';
+import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
 import { useDispatch } from 'src/common/redux/store';
-import { SelectPaginationTransaction } from 'src/event/edit-event-prize/components/SelectPaginationTransaction';
 import { getAllTransactionType } from 'src/event/edit-event-prize/service';
 import { setTransactionType } from '../../event.slice';
-import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { IFormCreate, ISelect, ITransactionParams } from '../../interfaces';
+import { IFormCreate, ITransactionParams } from '../../interfaces';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -23,12 +21,6 @@ function NotificationOverviewForm() {
   const searchParamsPaginate: ITransactionParams = {
     page: 0,
   };
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
-  const addProvinceVN = dataProvince.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
 
   useEffect(() => {
     dispatch(
@@ -75,7 +67,7 @@ function NotificationOverviewForm() {
             margin="dense"
           />
           <Box sx={{ zIndex: 1001, marginTop: 1 }}>
-            <SelectPaginationTransaction
+            <RHFSelectPaginationSingle
               name={'transactionTypeId'}
               placeholder="Transaction type"
               getAsyncData={getAllTransactionType}
