@@ -32,7 +32,7 @@ const CustomValueContainer = ({ children, ...props }: any) => {
   );
 };
 
-export const RHFSelectPagitnation = ({
+export const SelectPaginationTransaction = ({
   name,
   getAsyncData,
   placeholder,

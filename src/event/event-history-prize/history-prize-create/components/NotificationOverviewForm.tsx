@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch } from 'src/common/redux/store';
-import { RHFSelectPagitnation } from 'src/event/edit-event-prize/components/RHFSelectPagination';
+import { SelectPaginationTransaction } from 'src/event/edit-event-prize/components/SelectPaginationTransaction';
 import { getAllTransactionType } from 'src/event/edit-event-prize/service';
 import { setTransactionType } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
@@ -75,7 +75,7 @@ function NotificationOverviewForm() {
             margin="dense"
           />
           <Box sx={{ zIndex: 1001, marginTop: 1 }}>
-            <RHFSelectPagitnation
+            <SelectPaginationTransaction
               name={'transactionTypeId'}
               placeholder="Transaction type"
               getAsyncData={getAllTransactionType}

@@ -70,7 +70,7 @@ import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
 import { ConfirmEditModal } from './ConfirmEditModal';
 import { getAllTransactionType } from '../service';
-import { RHFSelectPagitnation } from './RHFSelectPagination';
+import { SelectPaginationTransaction } from './SelectPaginationTransaction';
 
 // -----------------------------------------------------------------------------
 
@@ -243,7 +243,7 @@ export const EditEventPrizeForm = () => {
                     label="Tổng số lượng quà"
                   />
                   <Box sx={{ zIndex: 1001 }}>
-                    <RHFSelectPagitnation
+                    <SelectPaginationTransaction
                       name={'transactionTypeId'}
                       placeholder="Transaction type"
                       getAsyncData={getAllTransactionType}
