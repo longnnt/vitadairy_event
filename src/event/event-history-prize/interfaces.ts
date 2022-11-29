@@ -95,7 +95,7 @@ interface IForm {
   popupType: string;
   probability: number | null;
   quantity: number | null;
-  transactionTypeId: ISelectPopup;
+  transactionTypeId: ISelectPopup | number;
   id?: number;
 }
 

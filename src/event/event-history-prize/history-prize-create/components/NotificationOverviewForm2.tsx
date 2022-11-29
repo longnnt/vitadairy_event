@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  FormHelperText,
   Grid,
   Modal,
   Paper,
@@ -152,6 +153,8 @@ function NotificationOverviewForm2() {
         />
         <RHFSelect
           name="popupType"
+          error={popUpType === ""}
+          helperText={popUpType === "" ? 'This field is required' : ' '}
           key="popupType"
           label="Pop up Type"
           placeholder="Pop up Type"
@@ -186,6 +189,8 @@ function NotificationOverviewForm2() {
         )}
         <RHFSelect
           name="popupCode"
+          error={popUpCode === ""}
+          helperText={popUpCode === "" ? 'This field is required' : ' '}
           key={'popupCode'}
           label="Pop up Code"
           placeholder="Pop up Code"

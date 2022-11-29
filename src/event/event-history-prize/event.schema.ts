@@ -52,6 +52,12 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
         return schema.required();
       }
     }),
+    // popupType: Yup.string()
+    //   .required('This field is required')
+    //   .typeError('Must be a string'),
+    // popupCode: Yup.string()
+    //   .required('This field is required')
+    //   .typeError('Must be a string'),
     giftStatus: Yup.boolean(),
     popupImageLink: Yup.string()
       .required('This field is required')
@@ -75,6 +81,7 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
     quantity: Yup.number()
       .required('This field is required')
       .typeError('Must be a number'),
+    transactionTypeId: Yup.mixed().required('This field is required'),
     eventDetailProvinces: Yup.lazy((value: IFormCreateEvent) => {
       const validationObject: any = {};
       Object.keys(value).map((item) => {
