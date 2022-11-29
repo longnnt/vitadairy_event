@@ -87,7 +87,7 @@ function NotificationOverviewForm() {
             label="Số lượng quà user đã trúng"
             margin="dense"
           />
-          <Typography marginTop={2}>Trạng thái quà</Typography>
+          <Typography marginTop={2} color="#919EAB">Trạng thái quà</Typography>
           <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
         </Stack>
       </Card>

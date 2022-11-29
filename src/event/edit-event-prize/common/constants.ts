@@ -90,3 +90,8 @@ export const GIFT_POINT = {
   POINT: 'point',
   GIFT_POINT: 'gift_point',
 };
+
+export enum ButtonType {
+  SAVE_SUBMIT = 'saveSubmit',
+  UNSAVE_EDIT_SUBMIT = 'unsaveEditSubmit',
+}

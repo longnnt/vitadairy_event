@@ -65,4 +65,7 @@ export const StyledBox = styled(Box)(({ theme }) => ({
   '& .textPrimary': {
     color: 'text.primary',
   },
+  '& .css-191bxd1-MuiDataGrid-columnHeaderTitle': {
+    color: '#919EAB',
+  }
 }));
