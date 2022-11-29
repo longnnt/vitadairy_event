@@ -11,8 +11,8 @@ export interface IResShopInvitation {
   userName: string;
   storeCode: string;
   phoneNumber: string;
-  registrationDate: number;
-  firstScanDate: number;
+  registrationDate: string;
+  firstScanDate: string;
   qrCode: string;
   spoonCode: string;
   isSuccess: boolean;

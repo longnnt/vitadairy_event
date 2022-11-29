@@ -58,7 +58,7 @@ export default function Router() {
       ),
       children: [
         {
-          path: 'shop-invitation/shop-:id',
+          path: 'shop-invitation/:id',
           element: <ShopInvitation />,
         },
         // STORE
