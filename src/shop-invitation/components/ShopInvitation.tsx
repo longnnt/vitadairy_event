@@ -57,13 +57,14 @@ export default function ShopInvitation() {
   const statusSuccess = useSelector(statusSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
+  const storeCode = useSelector(codeSelector);
 
   const searchParams: IParamsQuery = {
-    page: page + 1,
+    page: page,
     size: rowsPerPage,
     firstScanEndDate: firstScanEnd,
     firstScanStartDate: firstScanStart,
-    searchText: searchText,
+    searchText: storeCode,
     status: statusSuccess,
   };
 
@@ -74,7 +75,7 @@ export default function ShopInvitation() {
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
       tableData?.map((item) => item.spoonCode),
-      page + 1
+      page
     );
 
   const handleSearch = () => {
@@ -92,7 +93,7 @@ export default function ShopInvitation() {
     <>
       {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
-        heading="Danh Sách Khách Hàng"
+        heading="Danh Sách Khách Hàng Nhập Mã Giới Thiệu Của Chủ Cửa Hàng"
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
           {
@@ -140,7 +141,6 @@ export default function ShopInvitation() {
               <TableHeadCustom
                 order={order}
                 orderBy={orderBy}
-                isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={
                   tableData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -148,7 +148,6 @@ export default function ShopInvitation() {
                 }
                 numSelected={selectedIds.length}
                 onSort={onSort}
-                onSelectAllRows={handleCheckAll}
               />
 
               <TableBody>

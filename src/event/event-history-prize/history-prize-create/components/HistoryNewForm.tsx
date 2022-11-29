@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, DEFAULT_FORM_VALUE } from '../../constants';
+import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE } from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
@@ -21,12 +21,10 @@ import {
   setButtonType,
   setConfirmEdit,
   setEditData,
-  setOpeneditModal
+  setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import {
-  IFormCreate, IFormSubmitCreate, ISelect
-} from '../../interfaces';
+import { IFormCreate, IFormSubmitCreate, ISelect, ISelectPopup } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
@@ -37,6 +35,7 @@ import { fomatFormData } from '../utils';
 import NotificationForm from './NotificationForm';
 import NotificationOverviewForm from './NotificationOverviewForm';
 import NotificationOverviewForm2 from './NotificationOverviewForm2';
+import useMessage from 'src/store-admin/hooks/useMessage';
 import ProvinceTableForm from './ProvinceTableRow';
 
 dayjs.extend(customParseFormat);
@@ -58,6 +57,7 @@ export default function HistoryNewForm() {
   const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
   const openEditModal = useSelector(openEditModalSelector);
   const editData = useSelector(editDataSelector);
+  const { showErrorSnackbar } = useMessage();
 
   const { data: addProvince } = useGetAllProvince();
   const dataProvince = addProvince?.data?.response?.provinces || [];
@@ -95,11 +95,12 @@ export default function HistoryNewForm() {
 
   const {
     reset,
+    setError,
     setValue,
     control,
     getValues,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
@@ -109,14 +110,24 @@ export default function HistoryNewForm() {
   }, [idEventPrize]);
 
   const onSubmit = async (data: IFormCreate) => {
+    const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map((key) => data.eventDetailProvinces[key]);
+    const sum = [...eventDetailProvincesArray].reduce((sum, item) => sum += (item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0), 0)
     if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
-    handleOpenEditModal();
-    const tempEditData = fomatFormData(data);
-    dispatch(setEditData(tempEditData));
+    if(sum === data.quantity) {
+      handleOpenEditModal();
+      const tempEditData = fomatFormData(data);
+      dispatch(setEditData(tempEditData));
+    }
+    else if (sum > (data.quantity as number)) {
+      showErrorSnackbar('Tổng số giải theo tỉnh lớn hơn');
+    }
+    else {
+      showErrorSnackbar('Tổng số lượng quà lớn hơn');
+    }
   };
   useDeepCompareEffect(() => {
     if (confirmEdit) {
@@ -169,16 +180,15 @@ export default function HistoryNewForm() {
                 >
                   Lưu
                 </LoadingButton>
-                { buttonType === ButtonType.SAVE_SUBMIT &&
+                {buttonType === ButtonType.SAVE_SUBMIT && (
                   <ConfirmEditModal
-                  open={openEditModal}
-                  handleClose={handleCloseEditModal}
-                  handleOnAgree={handleOnAgree}
-                  type="Lưu sự kiện"
-                  colorType={true}
-                />
-                }
-                
+                    open={openEditModal}
+                    handleClose={handleCloseEditModal}
+                    handleOnAgree={handleOnAgree}
+                    type="Lưu sự kiện"
+                    colorType={true}
+                  />
+                )}
               </Box>
 
               <Box>
@@ -193,16 +203,15 @@ export default function HistoryNewForm() {
                   Lưu & Chỉnh sửa
                 </LoadingButton>
               </Box>
-              { buttonType === ButtonType.SAVE_CREATE_SUBMIT &&
-                  <ConfirmEditModal
+              {buttonType === ButtonType.SAVE_CREATE_SUBMIT && (
+                <ConfirmEditModal
                   open={openEditModal}
                   handleClose={handleCloseEditModal}
                   handleOnAgree={handleOnAgree}
                   type="Lưu và Chỉnh sửa sự kiện"
                   colorType={true}
                 />
-                }
-              
+              )}
             </Grid>
           </Grid>
         </FormProvider>

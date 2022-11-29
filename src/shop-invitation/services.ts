@@ -10,12 +10,9 @@ export const getAllShopInvitation = (): Promise<IResShopInvitationData> => {
   return axiosInstance.get(API_SHOP_INVITATION);
 };
 
-export const getAllShopInvitationByparams = (
-  params: IParamsQuery
-): Promise<IResShopInvitationData> => {
-  return axiosInstance.get(API_SHOP_INVITATION, { params });
+export const getAllShopInvitationByparams = (params: IParamsQuery) => {
+  return axiosInstance.get<unknown, IResShopInvitationData>(`${API_SHOP_INVITATION}`, { params });
 };
-
 export const getAllShopInvitationExport = () => {
   return axiosInstance.get(API_SHOP_INVITATION_EXPORTCSV);
 };

@@ -14,6 +14,7 @@ type IProps = {
   getAsyncData: any;
   placeholder: string;
   searchParams?: ISearchParams;
+  error: any;
 };
 
 const { ValueContainer, Placeholder } = components;
@@ -36,7 +37,9 @@ export const RHFSelectPagitnation = ({
   getAsyncData,
   placeholder,
   searchParams,
+  error,
 }: IProps) => {
+
   const { control } = useFormContext();
   const loadOptions = async (
     search: string,
@@ -87,7 +90,7 @@ export const RHFSelectPagitnation = ({
             isMulti
             closeMenuOnSelect={false}
             onChange={onChange}
-            styles={colourStyles(isFocus)}
+            styles={colourStyles(isFocus, error)}
             components={{
               ValueContainer: CustomValueContainer,
             }}
@@ -98,24 +101,26 @@ export const RHFSelectPagitnation = ({
   );
 };
 
-const colourStyles = (isFocus: boolean) => {
+const colourStyles = (isFocus: boolean, error: any) => {
   const styles: StylesConfig = {
     control: (styles, state) => ({
       ...styles,
       backgroundColor: 'primary',
-      borderRadius: '6px',
-      minHeight: '60px',
-      // opacity: (isFocus as unknown as ControlProps<boolean>) ? 1 : 0.6,
-      borderColor: (isFocus as unknown as ControlProps<boolean>)
-        ? '#00ab55!important'
+      borderRadius: '8px',
+      boxShadow: 'none',
+      '&:hover': {
+        border:'1px solid black'
+      },
+      border: error?.skus?.message
+        ? '1.5px solid #ff4842!important'
+        : (isFocus as unknown as ControlProps<boolean>)
+        ? '1px solid #00ab55!important'
         : !state.hasValue || !state.selectProps.inputValue
-        ? '#e2dbdb'
-        : '#00ab55!important',
-      color: 'black!important',
+        ? '1px solid #e2dbdb'
+        : '1px solid #00ab55!important',
     }),
     container: (provided, state) => ({
       ...provided,
-      marginTop: 25,
     }),
 
     valueContainer: (provided, state) => ({
@@ -125,9 +130,19 @@ const colourStyles = (isFocus: boolean) => {
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
     }),
 
+    menu: (provided, state) => ({
+      ...provided,
+      marginLeft: 1,
+    }),
+
     placeholder: (base, state) => ({
       ...base,
       position: 'absolute',
+      paddingInline:
+        (state.hasValue ||
+          state.selectProps.inputValue ||
+          (isFocus as unknown as ControlProps<boolean>)) &&
+        '8px',
       backgroundColor:
         state.hasValue ||
         state.selectProps.inputValue ||
@@ -140,17 +155,20 @@ const colourStyles = (isFocus: boolean) => {
           : (isFocus as unknown as ControlProps<boolean>)
           ? '-22px'
           : '10%',
+
       transition: 'top 0.2s, font-size 0.2s',
       fontSize:
         (state.hasValue ||
           state.selectProps.inputValue ||
           (isFocus as unknown as ControlProps<boolean>)) &&
         12,
-      color: (isFocus as unknown as ControlProps<boolean>)
+      color: error?.skus?.message
+        ? '#ff4842!important'
+        : (isFocus as unknown as ControlProps<boolean>)
         ? '#00ab55'
         : state.hasValue || state.selectProps.inputValue
         ? 'grey'
-        : '#a09696',
+        : '#919eab',
     }),
   };
   return styles;
