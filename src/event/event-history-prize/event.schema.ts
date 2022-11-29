@@ -52,12 +52,6 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
         return schema.required();
       }
     }),
-    // popupType: Yup.string()
-    //   .required('This field is required')
-    //   .typeError('Must be a string'),
-    // popupCode: Yup.string()
-    //   .required('This field is required')
-    //   .typeError('Must be a string'),
     giftStatus: Yup.boolean(),
     popupImageLink: Yup.string()
       .required('This field is required')
