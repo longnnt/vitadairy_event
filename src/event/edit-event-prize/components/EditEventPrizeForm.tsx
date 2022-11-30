@@ -25,7 +25,7 @@ import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import useShowSnackbar from 'src/common/hooks/useMessage';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { PAGE_PROVINCE, SIZE_PROVINCE } from 'src/event/event-history-prize/constants';
+import { ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
 import {
   ButtonType,
   DEFAULT_FORM_VALUE,
@@ -89,8 +89,8 @@ export const EditEventPrizeForm = () => {
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
   const searchProvince: IProvinceParams = {
-    page: PAGE_PROVINCE,
-    size: SIZE_PROVINCE,
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
     type: 'PROVINCE'
   }
   const { data: provincesData } = useGetAllProvinceVN(searchProvince);

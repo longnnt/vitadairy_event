@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, DEFAULT_FORM_VALUE, PAGE_PROVINCE, POPUP_CODE, SIZE_PROVINCE } from '../../constants';
+import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE, ScrollProvinceEnum } from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
@@ -60,8 +60,8 @@ export default function HistoryNewForm() {
   const { showErrorSnackbar } = useMessage();
 
   const searchParams: IProvinceParams = {
-    page: PAGE_PROVINCE,
-    size: SIZE_PROVINCE,
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
     type: 'PROVINCE'
   }
 

@@ -38,7 +38,7 @@ import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 import { Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
-import { PAGE_PROVINCE, SIZE_PROVINCE } from 'src/event/event-history-prize/constants';
+import { ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
 
 // --------------------------------------------------------------------------
 
@@ -116,8 +116,8 @@ export default function PovinceTableForm() {
   } = methods;
 
   const searchProvince: IProvinceParams = {
-    page: PAGE_PROVINCE,
-    size: SIZE_PROVINCE,
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
     type: 'PROVINCE'
   }
 

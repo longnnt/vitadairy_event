@@ -23,7 +23,7 @@ import Iconify from 'src/common/components/Iconify';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
-import { COLUMNS_HEADERS, CSV, FORMAT_DATE_NEWS, PAGE_PROVINCE, SIZE_PROVINCE } from '../../constants';
+import { COLUMNS_HEADERS, CSV, FORMAT_DATE_NEWS, ScrollProvinceEnum } from '../../constants';
 import {
   setFileCSV,
   setProvinceInFoSelector
@@ -107,8 +107,8 @@ export default function ProvinceTableForm() {
   } = methods;
 
   const searchParams: IProvinceParams = {
-    page: PAGE_PROVINCE,
-    size: SIZE_PROVINCE,
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
     type: 'PROVINCE'
   }
 
