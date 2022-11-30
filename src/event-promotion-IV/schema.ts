@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { newUser } from './constant';
+import { userTypeCons } from './constant';
 
 export const schemaAddEvent = yup
   .object()
@@ -34,8 +34,8 @@ export const schemaAddEvent = yup
       .transform((value) => (isNaN(value) ? undefined : value))
       .max(100, 'Kí tự từ 1 tới 100'),
     userRegisterDate: yup.mixed().when('typeUser', (typeUser, schema) => {
-      return schema.test('test create', (val: any) => {
-        if (typeUser === newUser && val === null) {
+      return schema.test('test create','Ngày tính người dùng mới không được để trống', (val: any) => {
+        if (typeUser === userTypeCons.NEWUSER && val === null) {
           return false;
         }
         return true;
@@ -83,8 +83,8 @@ export const schemaEditEvent = yup
       .transform((value) => (isNaN(value) ? undefined : value))
       .max(100, 'Kí tự từ 1 tới 100'),
     userRegisterDate: yup.mixed().when('typeUser', (typeUser, schema) => {
-      return schema.test('test editS', (val: any) => {
-        if (typeUser === newUser && val === null) {
+      return schema.test('test editS','Ngày tính người dùng mới không được để trống', (val: any) => {
+        if (typeUser === userTypeCons.NEWUSER && val === null) {
           return false;
         }
         return true;

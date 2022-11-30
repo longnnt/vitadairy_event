@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { allUser, defaultValues } from '../constant';
+import { defaultValues, userTypeCons } from '../constant';
 import {
   buttonTypeState,
   productState,
@@ -94,10 +94,10 @@ export const AddEvent = () => {
     }
   }, [isSuccess]);
 
-  const handleStatusUserType = (userType: string) => {
-    dispatch(setUserType(userType as UserType));
-    setValue('typeUser',userType)
-    if(userType === allUser ){
+  const handleStatusUserType = (userType: userTypeCons) => {
+    dispatch(setUserType(userType ));
+    setValue('typeUser',userType )
+    if(userType === userTypeCons.ALLUSER ){
       reset({
         userRegisterDate: null,
       });
@@ -215,7 +215,7 @@ export const AddEvent = () => {
                   defaultValue="allUser"
                   name="radio-buttons-group"
                   sx={{ flexDirection: 'row', paddingLeft: 2 }}
-                  onChange={(e) => handleStatusUserType(e.target.value)}
+                  onChange={(e) => handleStatusUserType(e.target.value as  userTypeCons )}
                 >
                   <FormControlLabel
                     value="allUser"
