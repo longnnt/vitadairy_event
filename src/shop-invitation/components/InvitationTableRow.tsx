@@ -38,6 +38,7 @@ export default function InvitationTableRow({
     qrCode,
   } = row;
 
+  console.log(firstScanDate)
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
