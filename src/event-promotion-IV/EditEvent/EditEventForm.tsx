@@ -112,8 +112,7 @@ export const EditEventForm = () => {
       else setValue('typeUser', 'newUser')
     }
   }, [dataEventDetail]);
-  console.log(watch())
-  console.log(errors)
+
   useEffect(() => {
     if (dataEventDetail)
     setValue(
