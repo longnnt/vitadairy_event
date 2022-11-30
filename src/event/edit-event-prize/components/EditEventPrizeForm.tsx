@@ -42,7 +42,7 @@ import {
   ISelectPopup,
   ITransactionType,
 } from '../common/interface';
-import { fomatFormData, formatDataProvinces, tranferData } from '../common/ultils';
+import { fomatFormData, formatDataProvinces, tranferData } from '../common/utils';
 import { eidtEventPrizevalidate } from '../editEvent.Schema';
 import {
   buttonTypeSelector,

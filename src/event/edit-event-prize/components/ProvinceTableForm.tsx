@@ -30,7 +30,7 @@ import {
   IProvince,
   ISelect,
 } from '../common/interface';
-import { StyledBox } from '../common/ultils';
+import { StyledBox } from '../common/utils';
 import { provinceInforSelector } from '../editEventPrize.Slice';
 import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 // @mui
