@@ -63,10 +63,13 @@ export interface IResProvince {
       status: number;
       msg: string;
     };
-    response: {
-      provinces: IProvince[];
-    };
+    response: IProvince[];
   };
+}
+export interface IProvinceParams {
+  page?: number;
+  size?: number;
+  type: string;
 }
 export interface IProvince {
   id: number;

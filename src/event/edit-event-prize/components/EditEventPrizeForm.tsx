@@ -7,10 +7,10 @@ import {
   FormHelperText,
   Grid,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material';
 import { Container } from '@mui/system';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -18,12 +18,14 @@ import {
   RHFRadioGroup,
   RHFSelect,
   RHFSwitch,
-  RHFTextField,
+  RHFTextField
 } from 'src/common/components/hook-form';
-import LoadingScreen from 'src/common/components/LoadingScreen';
+import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import useShowSnackbar from 'src/common/hooks/useMessage';
 import { dispatch, useSelector } from 'src/common/redux/store';
+import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
 import {
   ButtonType,
   DEFAULT_FORM_VALUE,
@@ -31,16 +33,17 @@ import {
   NO_ID,
   popupTypeOption,
   POPUP_CODE,
-  POPUP_TYPE,
+  POPUP_TYPE
 } from '../common/constants';
 import {
   IEventProvince,
   IFormEdit,
   IGiftDetail,
   IProvince,
+  IProvinceParams,
   ISelect,
   ISelectPopup,
-  ITransactionType,
+  ITransactionType
 } from '../common/interface';
 import { fomatFormData, formatDataProvinces, tranferData } from '../common/utils';
 import { eidtEventPrizevalidate } from '../editEvent.Schema';
@@ -61,7 +64,7 @@ import {
   setOpeneditModal,
   setPopUpCode,
   setPopUpType,
-  setProvinceInfor,
+  setProvinceInfor
 } from '../editEventPrize.Slice';
 import { useEditEventPrize } from '../hooks/useEditEventPrize';
 import { useGetAllGift } from '../hooks/useGetAllGift';
@@ -69,14 +72,10 @@ import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
 import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import { useGetGiftById } from '../hooks/useGetGiftById';
+import { getAllTransactionType } from '../service';
+import { ConfirmEditModal } from './ConfirmEditModal';
 import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
-import { ConfirmEditModal } from './ConfirmEditModal';
-import { getAllTransactionType } from '../service';
-import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
-
-// import { SelectPaginationTransaction } from './SelectPaginationTransaction';
 
 // -----------------------------------------------------------------------------
 
@@ -89,7 +88,12 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data: provincesData } = useGetAllProvinceVN();
+  const searchProvince: IProvinceParams = {
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
+    type: PROVINCE,
+  }
+  const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
 
   const provinceOptions = provincesData?.map((item: IProvince) => ({

@@ -1,7 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
 import { Stack, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import {
@@ -12,22 +10,23 @@ import {
   GridRowModel,
   GridRowModes,
   GridRowModesModel,
-  GridToolbarContainer,
+  GridToolbarContainer
 } from '@mui/x-data-grid';
 import { randomId } from '@mui/x-data-grid-generator';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { parse, ParseResult } from 'papaparse';
 import * as React from 'react';
-import Iconify from 'src/common/components/Iconify';
 import { Controller, useFormContext } from 'react-hook-form';
+import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
+import Iconify from 'src/common/components/Iconify';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
-import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS } from '../../constants';
+import { COLUMNS_HEADERS, CSV, FORMAT_DATE_NEWS, PROVINCE, ScrollProvinceEnum } from '../../constants';
 import {
   setFileCSV,
-  setProvinceInFoSelector,
-  setProvinceNewForm,
+  setProvinceInFoSelector
 } from '../../event.slice';
 import { useGetAllProvince } from '../../hooks/useGetAllProvince';
 import {
@@ -35,11 +34,10 @@ import {
   IEventDetail,
   IFormCreate,
   IFormCreateEvent,
-  ISelect,
+  IProvinceParams,
+  ISelect
 } from '../../interfaces';
 import { StyledBox } from '../utils';
-import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
-import { DateTimePicker } from '@mui/x-date-pickers';
 
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, importFile } = props;
@@ -108,8 +106,14 @@ export default function ProvinceTableForm() {
     formState: { errors },
   } = methods;
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const searchParams: IProvinceParams = {
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
+    type: PROVINCE
+  }
+
+  const { data: addProvince } = useGetAllProvince(searchParams);
+  const dataProvince = addProvince?.data?.response || [];
   const addProvinceVN = dataProvince.map((item) => ({
     value: item.id,
     label: item.name,
