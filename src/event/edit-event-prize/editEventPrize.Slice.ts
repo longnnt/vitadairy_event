@@ -16,6 +16,7 @@ interface stateType {
   rows: IEventDetailProvinces;
   leftGift: number;
   buttonType: ButtonType;
+  filterGift: string;
 }
 
 const initialState: stateType = {
@@ -31,6 +32,7 @@ const initialState: stateType = {
   rows: {},
   leftGift: 0,
   buttonType: ButtonType.SAVE_SUBMIT,
+  filterGift: '',
 };
 
 export const editEventPrizeSlice = createSlice({
@@ -73,6 +75,9 @@ export const editEventPrizeSlice = createSlice({
     setButtonType: (state, action: PayloadAction<ButtonType>) => {
       state.buttonType = action.payload;
     },
+    setFilterGift: (state, action: PayloadAction<string>) => {
+      state.filterGift = action.payload;
+    }
   },
 });
 
@@ -89,6 +94,7 @@ export const {
   setRows,
   setLeftGift,
   setButtonType,
+  setFilterGift,
 } = editEventPrizeSlice.actions;
 
 export const giftByIdSelector = (state: RootState) => state.edit_event_prize.dataGiftById;
@@ -109,5 +115,7 @@ export const editDataSelector = (state: RootState) => state.edit_event_prize.edi
 export const rowsSelector = (state: RootState) => state.edit_event_prize.rows;
 export const leftGiftSelector = (state: RootState) => state.edit_event_prize.leftGift;
 export const buttonTypeSelector = (state: RootState) => state.edit_event_prize.buttonType;
+
+export const filterGiftSelector = (state: RootState) => state.edit_event_prize.filterGift;
 
 export default editEventPrizeSlice.reducer;

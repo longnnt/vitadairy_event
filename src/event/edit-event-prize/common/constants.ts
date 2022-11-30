@@ -95,3 +95,5 @@ export enum ButtonType {
   SAVE_SUBMIT = 'saveSubmit',
   UNSAVE_EDIT_SUBMIT = 'unsaveEditSubmit',
 }
+
+export const DEFAULT_SIZE_GIFT =10;

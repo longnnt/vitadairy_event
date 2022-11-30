@@ -6,16 +6,17 @@ import Iconify from 'src/common/components/Iconify';
 type Props = {
   filterName: string;
   onFilterName: (value: string) => void;
+  placeholder: string;
 };
 
-export default function ListPrizeFilterBar({ filterName, onFilterName }: Props) {
+export default function ListPrizeFilterBar({ filterName, onFilterName, placeholder }: Props) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2, px: 1 }}>
       <TextField
         fullWidth
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
-        placeholder="Lọc theo tên quà tặng"
+        placeholder={placeholder}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

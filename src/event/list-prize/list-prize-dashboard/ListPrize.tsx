@@ -173,7 +173,7 @@ function ListPrizeDashboard() {
       />
       <Card sx={{overflow: 'hidden'}}>
         <Divider />
-        <ListPrizeFilterBar filterName={filterName} onFilterName={handleFilterName} />
+        <ListPrizeFilterBar filterName={filterName} onFilterName={handleFilterName} placeholder={'Lọc theo tên quà tặng'}/>
         <ConfirmEditModal
             open={openEditModal}
             handleClose={handleCloseEditModal}
