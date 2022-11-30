@@ -27,6 +27,7 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import {
   ButtonType,
   DEFAULT_FORM_VALUE,
+  DEFAULT_SIZE_GIFT,
   GIFT_POINT,
   NO_ID,
   popupTypeOption,
@@ -226,10 +227,9 @@ export const EditEventPrizeForm = () => {
   const [choosenGift, setChoosenGift] = useState<IGiftDetail>();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const SIZE = 10;
 
   const filterGift = useSelector(filterGiftSelector)
-  const paramsGift = { page: page, size: SIZE, keySearch:''};
+  const paramsGift = { page: page, size: DEFAULT_SIZE_GIFT, keySearch:''};
   if(filterGift.length > 2) paramsGift.keySearch = filterGift
 
   const { data } = useGetAllGift(paramsGift);
