@@ -136,7 +136,7 @@ export const AddEvent = () => {
                     <Stack position="relative" width="100%">
                       <DateTimePicker
                         {...field}
-                        label="Ngày bắt đầu*"
+                        label="Ngày bắt đầu"
                         inputFormat="dd/MM/yyyy hh:mm a"
                         renderInput={(params) => (
                           <TextField
@@ -158,7 +158,7 @@ export const AddEvent = () => {
                     <Stack position={'relative'} width="100%">
                       <DateTimePicker
                         {...field}
-                        label="Ngày kết thúc*"
+                        label="Ngày kết thúc"
                         inputFormat="dd/MM/yyyy hh:mm a"
                         renderInput={(params) => (
                           <TextField
