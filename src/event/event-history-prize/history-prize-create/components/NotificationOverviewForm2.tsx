@@ -138,7 +138,6 @@ function NotificationOverviewForm2() {
         />
         <RHFSelect
           name="popupType"
-          error = {!!errors.popupType}
           key="popupType"
           label="Pop up Type"
           placeholder="Pop up Type"
@@ -171,7 +170,6 @@ function NotificationOverviewForm2() {
         )}
         <RHFSelect
           name="popupCode"
-          error = {!!errors.popupCode}
           key={'popupCode'}
           label="Pop up Code"
           placeholder="Pop up Code"

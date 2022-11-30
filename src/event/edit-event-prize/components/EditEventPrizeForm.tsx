@@ -293,7 +293,6 @@ export const EditEventPrizeForm = () => {
                   <RHFSelect
                     name={'popupType'}
                     key="popupType"
-                    error={!!errors.popupType}
                     value={popUpTypedata}
                     label={'Pop up type'}
                     onChange={(e) => {
@@ -325,7 +324,6 @@ export const EditEventPrizeForm = () => {
                   <RHFSelect
                     name="popupCode"
                     key={'popupCode'}
-                    error={!!errors.popupCode}
                     label="Pop up Code"
                     placeholder="Pop up Code"
                     margin="dense"
@@ -446,26 +444,30 @@ export const EditEventPrizeForm = () => {
               </Stack>
             </Card>
           </Box>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            size="large"
-            sx={{ width: '20%', alignSelf: 'flex-end' }}
-            loading={buttonType === ButtonType.SAVE_SUBMIT && isLoading}
-          >
-            Lưu
-          </LoadingButton>
-          <LoadingButton
-            variant="contained"
-            size="large"
-            sx={{ width: '20%', marginLeft: 2,alignSelf: 'flex-end' }}
-            color="inherit"
-            loading={buttonType === ButtonType.UNSAVE_EDIT_SUBMIT && isLoading}
-            onClick={handleRedirectToList}
-          >
-            Hủy chỉnh sửa
-          </LoadingButton>
-          <ConfirmEditModal open={openEditModal} handleClose={handleCloseEditModal} />
+          <Grid direction="row" justifyContent="flex-end" container mt={2}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{ width: '20%', alignSelf: 'flex-end' }}
+              loading={buttonType === ButtonType.SAVE_SUBMIT && isLoading}
+            >
+              Lưu
+            </LoadingButton>
+            {buttonType === ButtonType.SAVE_SUBMIT && (
+              <ConfirmEditModal open={openEditModal} handleClose={handleCloseEditModal} />
+            )}
+            <LoadingButton
+              variant="contained"
+              size="large"
+              sx={{ width: '20%', marginLeft: 2, alignSelf: 'flex-end' }}
+              color="inherit"
+              loading={buttonType === ButtonType.UNSAVE_EDIT_SUBMIT && isLoading}
+              onClick={handleRedirectToList}
+            >
+              Hủy chỉnh sửa
+            </LoadingButton>
+          </Grid>
         </FormProvider>
       </Container>
     </>
