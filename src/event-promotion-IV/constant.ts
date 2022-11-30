@@ -30,7 +30,10 @@ export const TABLE_HEAD_PRODUCT_CODE = [
     align: 'left',
   },
 ];
-
+export enum userTypeCons {
+  NEWUSER = 'newUser',
+  ALLUSER = 'allUser'
+}
 export const defaultValues = {
   name: '',
   startDate: null,
@@ -41,7 +44,7 @@ export const defaultValues = {
   downRate: 0,
   userRegisterDate: null,
   userLimit: 0,
-  typeUser: '',
+  typeUser: userTypeCons.ALLUSER ,
 };
 
 export const DEFAULT_EDIT_VALUE = {
@@ -56,5 +59,6 @@ export const DEFAULT_EDIT_VALUE = {
   userLimit: 0,
   typeUser: '',
 };
+
 
 export const DEFAULT_LOADING_SIZE = 5;

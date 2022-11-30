@@ -258,6 +258,7 @@ export const EditEventForm = () => {
                   { label: 'Toàn bộ người dùng', value: 'allUser' },
                   { label: 'Người dùng mới', value: 'newUser' },
                 ]}
+                
               />
   
               <Controller
