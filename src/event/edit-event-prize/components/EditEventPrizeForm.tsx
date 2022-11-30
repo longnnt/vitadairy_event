@@ -49,6 +49,7 @@ import {
   choosenGiftPointSelector,
   confirmEditSelector,
   editDataSelector,
+  filterGiftSelector,
   giftByIdSelector,
   leftGiftSelector,
   openEditModalSelector,
@@ -56,6 +57,7 @@ import {
   setChoosenGiftPoint,
   setConfirmEdit,
   setEditData,
+  setFilterGift,
   setGiftById,
   setLeftGift,
   setOpeneditModal,
@@ -225,10 +227,14 @@ export const EditEventPrizeForm = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const SIZE = 10;
-  const paramsGift = { page: page, size: SIZE };
-  const { data } = useGetAllGift(paramsGift);
 
+  const filterGift = useSelector(filterGiftSelector)
+  const paramsGift = { page: page, size: SIZE, keySearch:''};
+  if(filterGift.length > 2) paramsGift.keySearch = filterGift
+
+  const { data } = useGetAllGift(paramsGift);
   const giftDta = data?.data?.response ? data?.data?.response : [];
+  
   useDeepCompareEffect(() => {
     if (choosenGift) {
       setValue('giftId', choosenGift.id);
@@ -402,6 +408,7 @@ export const EditEventPrizeForm = () => {
                     giftDta={giftDta}
                     page={page}
                     totalRecords={data ? data?.data?.pagination?.totalRecords : 0}
+                    // onFilterGift={handleFilterGift}
                   />
                 </Stack>
               </Card>
