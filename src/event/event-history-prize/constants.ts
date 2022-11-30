@@ -190,7 +190,9 @@ export const COLUMNS_HEADERS: Array<string> = [
 export enum ScrollProvinceEnum {
   SIZE_PROVINCE = 1000,
   PAGE_PROVINCE = 0,
-}
+};
+
+export const PROVINCE = 'PROVINCE';
 
 export enum ButtonType {
   SAVE_SUBMIT = 'saveSubmit',

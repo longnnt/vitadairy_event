@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE, ScrollProvinceEnum } from '../../constants';
+import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE, PROVINCE, ScrollProvinceEnum } from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
@@ -62,7 +62,7 @@ export default function HistoryNewForm() {
   const searchParams: IProvinceParams = {
     page: ScrollProvinceEnum.PAGE_PROVINCE,
     size: ScrollProvinceEnum.SIZE_PROVINCE,
-    type: 'PROVINCE'
+    type: PROVINCE
   }
 
   const { data: addProvince } = useGetAllProvince(searchParams);
