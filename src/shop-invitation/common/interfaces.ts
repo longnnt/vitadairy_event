@@ -10,7 +10,7 @@ export interface IParamsQuery {
 export interface IResShopInvitation {
   userName: string;
   storeCode: string;
-  phoneNumber: string;
+  phoneNumber: number;
   registrationDate: string;
   firstScanDate: string;
   qrCode: string;
@@ -33,7 +33,15 @@ export interface IPayloadStatus {
 
 export interface IResShopInvitationData {
   data: {
+    meta: {
+      status: number;
+      msg: string;
+    },
     response: {
+      meta: {
+        status: number;
+        msg: string;
+      },
       response: IResShopInvitation[];
     };
   };
