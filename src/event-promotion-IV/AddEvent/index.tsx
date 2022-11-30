@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { defaultValues } from '../constant';
+import { allUser, defaultValues } from '../constant';
 import {
   buttonTypeState,
   productState,
@@ -53,6 +53,8 @@ export const AddEvent = () => {
     control,
     handleSubmit,
     setValue,
+    watch,
+    reset,
     formState: { errors },
   } = methods;
 
@@ -64,7 +66,7 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
-
+  console.log(errors)
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
       name: data.name,
@@ -95,6 +97,12 @@ export const AddEvent = () => {
 
   const handleStatusUserType = (userType: string) => {
     dispatch(setUserType(userType as UserType));
+    setValue('typeUser',userType)
+    if(userType === allUser ){
+      reset({
+        userRegisterDate: null,
+      });
+    }
   };
   const userTypeValue = useSelector(userTypeState);
 
@@ -103,7 +111,7 @@ export const AddEvent = () => {
   useDeepCompareEffect(() => {
     if (product.length > 0) setValue('skus', product);
   }, [product?.length]);
-
+ console.log(watch())
   return (
     <>
       <HeaderBreadcrumbs

@@ -41,7 +41,7 @@ export const defaultValues = {
   downRate: 0,
   userRegisterDate: null,
   userLimit: 0,
-  typeUser: '',
+  typeUser: 'allUser',
 };
 
 export const DEFAULT_EDIT_VALUE = {
@@ -56,5 +56,6 @@ export const DEFAULT_EDIT_VALUE = {
   userLimit: 0,
   typeUser: '',
 };
-
+export const newUser='newUser'
+export const allUser ='allUser'
 export const DEFAULT_LOADING_SIZE = 5;
