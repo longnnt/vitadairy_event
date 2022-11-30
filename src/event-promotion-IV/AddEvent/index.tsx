@@ -66,7 +66,6 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
-  console.log(errors)
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
       name: data.name,
