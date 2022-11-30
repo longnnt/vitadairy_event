@@ -133,7 +133,7 @@ export default function HistoryNewForm() {
     if (confirmEdit) {
       const newData = {
         ...editData,
-        transactionTypeId: (((editData.transactionTypeId) as ISelectPopup).value),
+        transactionTypeId: editData.transactionTypeId.value,
       } as unknown as IFormSubmitCreate;
       mutate(newData);
       dispatch(setConfirmEdit(false));
@@ -171,8 +171,8 @@ export default function HistoryNewForm() {
             <Grid direction="row" justifyContent="flex-end" container mt={2}>
               <Box sx={{ paddingRight: 2 }}>
                 <LoadingButton
-                  color="inherit"
-                  variant="outlined"
+                  variant="contained"
+                  color="secondary"
                   size="large"
                   type="submit"
                   loading={buttonType === ButtonType.SAVE_SUBMIT && isLoading}
@@ -193,8 +193,8 @@ export default function HistoryNewForm() {
 
               <Box>
                 <LoadingButton
-                  color="inherit"
-                  variant="outlined"
+                  variant="contained"
+                  color="primary"
                   size="large"
                   type="submit"
                   loading={buttonType === ButtonType.SAVE_CREATE_SUBMIT && isLoading}

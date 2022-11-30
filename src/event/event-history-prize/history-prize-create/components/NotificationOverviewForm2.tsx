@@ -52,11 +52,6 @@ function NotificationOverviewForm2() {
   const gift = useSelector(giftSelecttor);
   const handleOpen = () => dispatch(setOpen(true));
   const handleClose = () => dispatch(setOpen(false));
-  const valueChoice = useSelector(setValueChoiceSelector);
-
-  const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setValueChoice((event.target as HTMLInputElement).value));
-  };
 
   const {
     dense,
@@ -143,7 +138,6 @@ function NotificationOverviewForm2() {
         />
         <RHFSelect
           name="popupType"
-          error = {!!errors.popupType}
           key="popupType"
           label="Pop up Type"
           placeholder="Pop up Type"
@@ -162,7 +156,6 @@ function NotificationOverviewForm2() {
         </RHFSelect>
         {popUpType === POPUP_TYPE.HTML_LINK && (
           <RHFTextField
-            required
             name="popupLink"
             key={'popupHtmlLink'}
             label="Popup html link"
@@ -170,7 +163,6 @@ function NotificationOverviewForm2() {
         )}
         {popUpType === POPUP_TYPE.DEEP_LINK && (
           <RHFTextField
-            required
             name="popupLink"
             key={'popupDeepLink'}
             label="Popup deep link"
@@ -178,7 +170,6 @@ function NotificationOverviewForm2() {
         )}
         <RHFSelect
           name="popupCode"
-          error = {!!errors.popupCode}
           key={'popupCode'}
           label="Pop up Code"
           placeholder="Pop up Code"

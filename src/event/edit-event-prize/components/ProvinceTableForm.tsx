@@ -30,7 +30,7 @@ import {
   IProvince,
   ISelect,
 } from '../common/interface';
-import { StyledBox } from '../common/ultils';
+import { StyledBox } from '../common/utils';
 import { provinceInforSelector } from '../editEventPrize.Slice';
 import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 // @mui
@@ -209,7 +209,7 @@ export default function PovinceTableForm() {
     {
       field: 'provinceId',
       headerName: 'Tên tỉnh ',
-      width: 180,
+      flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
         const option = provinceOptions?.find((item: ISelect) => {
@@ -253,14 +253,14 @@ export default function PovinceTableForm() {
       headerName: 'Tổng Số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
-      width: 150,
+      flex: 1,
     },
     {
       field: 'extraquantity',
       headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
-      width: 150,
+      flex: 1,
       renderEditCell(params) {
         return (
           <RHFTextField
@@ -281,7 +281,7 @@ export default function PovinceTableForm() {
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
-      width: 200,
+      flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
         return new Date(value).toLocaleString();
@@ -326,7 +326,7 @@ export default function PovinceTableForm() {
     {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
-      width: 220,
+      flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
         return new Date(value).toLocaleString();
@@ -373,29 +373,9 @@ export default function PovinceTableForm() {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 80,
+      flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        // if (isInEditMode) {
-        //   return [
-        //     // <GridActionsCellItem
-        //     //   key={id}
-        //     //   icon={<SaveIcon />}
-        //     //   label="Save"
-        //     //   onClick={handleSaveClick(id)}
-        //     // />,
-        //     <GridActionsCellItem
-        //       key={id}
-        //       icon={<DeleteIcon />}
-        //       label="Delete"
-        //       onClick={handleDeleteClick(id)}
-        //       color="inherit"
-        //     />,
-        //   ];
-        // }
-
         return [
           <GridActionsCellItem
             key={id}

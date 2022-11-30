@@ -43,7 +43,7 @@ export const ConfirmEditModal = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Hủy bỏ</Button>
+          <Button onClick={handleClose} color="inherit" variant="contained">Hủy bỏ</Button>
           <Button onClick={handleOnAgree} autoFocus variant="contained">
             Xác nhận
           </Button>

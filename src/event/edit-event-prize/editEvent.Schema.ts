@@ -33,10 +33,6 @@ export const eidtEventPrizevalidate = (provinceIds: number[], leftGift: number) 
 
   const eidtEventPrizeSchema = Yup.object().shape({
     giftId: Yup.number().required('This field is required').typeError('Must be a number'),
-    popupCode: Yup.string()
-      .typeError('Must be a string')
-      .required('This field is required')
-      .test('test empty', 'Content is required', (val) => val !== ''),
     popUpCodeTitle: Yup.string()
       .max(60, 'Title must be less than 60 characters')
       .min(25, 'Title must be greater than 25 characters')
@@ -66,9 +62,8 @@ export const eidtEventPrizevalidate = (provinceIds: number[], leftGift: number) 
     popupLink: Yup.string()
       .required('This field is required')
       .typeError('Must be a string'),
-    popupType: Yup.string()
-      .required('This field is required')
-      .typeError('Must be a string'),
+    popupCode: Yup.string().required('This field is required'),
+    popupType: Yup.string().required('This field is required'),
 
     notificationContent: Yup.string()
       .required('This field is required')
