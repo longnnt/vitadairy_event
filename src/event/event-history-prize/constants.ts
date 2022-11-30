@@ -187,6 +187,9 @@ export const COLUMNS_HEADERS: Array<string> = [
   'endDate',
 ];
 
+export const SIZE_PROVINCE = 1000;
+export const PAGE_PROVINCE = 0;
+
 export enum ButtonType {
   SAVE_SUBMIT = 'saveSubmit',
   SAVE_CREATE_SUBMIT = 'saveCreateSubmit',

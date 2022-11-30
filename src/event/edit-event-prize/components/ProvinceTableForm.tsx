@@ -28,6 +28,7 @@ import {
   IEventProvince,
   IFormEdit,
   IProvince,
+  IProvinceParams,
   ISelect,
 } from '../common/interface';
 import { StyledBox } from '../common/utils';
@@ -37,6 +38,7 @@ import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 import { Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
+import { PAGE_PROVINCE, SIZE_PROVINCE } from 'src/event/event-history-prize/constants';
 
 // --------------------------------------------------------------------------
 
@@ -113,7 +115,13 @@ export default function PovinceTableForm() {
     formState: { errors },
   } = methods;
 
-  const { data: provincesData } = useGetAllProvinceVN();
+  const searchProvince: IProvinceParams = {
+    page: PAGE_PROVINCE,
+    size: SIZE_PROVINCE,
+    type: 'PROVINCE'
+  }
+
+  const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const provinceOptions = provincesData?.map((item: IProvince) => ({
     value: item?.id,
     label: item?.name,

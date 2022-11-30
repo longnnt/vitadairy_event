@@ -38,6 +38,7 @@ import {
   IFormEdit,
   IGiftDetail,
   IProvince,
+  IProvinceParams,
   ISelect,
   ISelectPopup,
   ITransactionType,
@@ -75,6 +76,7 @@ import { ConfirmEditModal } from './ConfirmEditModal';
 import { getAllTransactionType } from '../service';
 import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { PAGE_PROVINCE, SIZE_PROVINCE } from 'src/event/event-history-prize/constants';
 
 // import { SelectPaginationTransaction } from './SelectPaginationTransaction';
 
@@ -89,7 +91,12 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data: provincesData } = useGetAllProvinceVN();
+  const searchProvince: IProvinceParams = {
+    page: PAGE_PROVINCE,
+    size: SIZE_PROVINCE,
+    type: 'PROVINCE'
+  }
+  const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
 
   const provinceOptions = provincesData?.map((item: IProvince) => ({

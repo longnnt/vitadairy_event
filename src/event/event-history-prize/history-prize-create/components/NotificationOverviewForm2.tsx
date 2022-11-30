@@ -86,13 +86,6 @@ function NotificationOverviewForm2() {
     totalRecords: 0,
   };
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
-  const addProvinceVN = dataProvince.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
   useEffect(() => {
     dispatch(
       setGift({

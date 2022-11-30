@@ -4,6 +4,7 @@ import {
   API_GIFT,
   API_PRIZE_EDIT,
   API_PRIZE_HISTORY,
+  API_PROVINCE_SEARCH_BY_FILTER,
   API_PROVINCE_VN,
   API_STORE_ADMIN,
   API_TRANSACTION_TYPE,
@@ -16,6 +17,7 @@ import {
   IGiftParams,
   IPrizeHistoryActive,
   IPrizeHistoryParams,
+  IProvinceParams,
   IResEventById,
   IResGift,
   IResProvince,
@@ -52,8 +54,8 @@ export const getTransactionTypeId = (params: ITransactionParams) => {
   });
 };
 
-export const getProvince = () => {
-  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_VN}`);
+export const getProvince = (params: IProvinceParams) => {
+  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_SEARCH_BY_FILTER}`, {params});
 };
 
 export const addEvent = (data: IFormSubmitCreate) => {

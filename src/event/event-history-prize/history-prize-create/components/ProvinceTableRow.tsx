@@ -23,7 +23,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
-import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS } from '../../constants';
+import { COLUMNS_HEADERS, CSV, FORMAT_DATE, FORMAT_DATE_NEWS, PAGE_PROVINCE, SIZE_PROVINCE } from '../../constants';
 import {
   setFileCSV,
   setProvinceInFoSelector,
@@ -35,6 +35,7 @@ import {
   IEventDetail,
   IFormCreate,
   IFormCreateEvent,
+  IProvinceParams,
   ISelect,
 } from '../../interfaces';
 import { StyledBox } from '../utils';
@@ -108,8 +109,14 @@ export default function ProvinceTableForm() {
     formState: { errors },
   } = methods;
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const searchParams: IProvinceParams = {
+    page: PAGE_PROVINCE,
+    size: SIZE_PROVINCE,
+    type: 'PROVINCE'
+  }
+
+  const { data: addProvince } = useGetAllProvince(searchParams);
+  const dataProvince = addProvince?.data?.response || [];
   const addProvinceVN = dataProvince.map((item) => ({
     value: item.id,
     label: item.name,

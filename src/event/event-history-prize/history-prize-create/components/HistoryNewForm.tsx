@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE } from '../../constants';
+import { ButtonType, DEFAULT_FORM_VALUE, PAGE_PROVINCE, POPUP_CODE, SIZE_PROVINCE } from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
@@ -24,7 +24,7 @@ import {
   setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IFormCreate, IFormSubmitCreate, ISelect, ISelectPopup } from '../../interfaces';
+import { IFormCreate, IFormSubmitCreate, IProvinceParams, ISelect, ISelectPopup } from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
@@ -59,8 +59,14 @@ export default function HistoryNewForm() {
   const editData = useSelector(editDataSelector);
   const { showErrorSnackbar } = useMessage();
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const searchParams: IProvinceParams = {
+    page: PAGE_PROVINCE,
+    size: SIZE_PROVINCE,
+    type: 'PROVINCE'
+  }
+
+  const { data: addProvince } = useGetAllProvince(searchParams);
+  const dataProvince = addProvince?.data?.response || [];
   const addProvinceVN = dataProvince.map((item) => ({
     value: item.id,
     label: item.name,
