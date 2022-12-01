@@ -70,7 +70,6 @@ export default function ShopInvitation() {
 
   const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);
   const tableData = data || [];
-  console.log(tableData)
   const { data: csvData } = useGetAllShopInvitationExportCsv();
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =

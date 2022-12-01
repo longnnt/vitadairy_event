@@ -9,8 +9,6 @@ import {
 
 export const initialState: IParamsQuery = {
   searchText: '',
-  // firstScanStartDate: '',
-  // firstScanEndDate: '',
   firstScanStartDate: null,
   firstScanEndDate: null,
   status: '',
