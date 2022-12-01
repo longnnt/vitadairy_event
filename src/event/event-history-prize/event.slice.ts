@@ -30,6 +30,7 @@ type StateProps = {
   editData: IFormSubmitCreate;
   confirmEdit: boolean;
   openEditModal: boolean;
+  filterGift: string;
 };
 
 export const initialState: StateProps = {
@@ -51,6 +52,7 @@ export const initialState: StateProps = {
   editData: {} as IFormSubmitCreate,
   confirmEdit: false,
   openEditModal: false,
+  filterGift: '',
 };
 
 export const eventAdminSlice = createSlice({
@@ -111,6 +113,9 @@ export const eventAdminSlice = createSlice({
     setOpeneditModal: (state, action: PayloadAction<boolean>) => {
       state.openEditModal = action.payload;
     },
+    setFilterGift: (state, action: PayloadAction<string>) => {
+      state.filterGift = action.payload;
+    },
   },
 });
 
@@ -133,6 +138,7 @@ export const {
   setConfirmEdit,
   setEditData,
   setOpeneditModal,
+  setFilterGift,
 } = eventAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.historyList.searchText;
@@ -158,5 +164,6 @@ export const editDataSelector = (state: RootState) =>
 export const confirmEditSelector = (state: RootState) => state.historyList.confirmEdit;
 export const openEditModalSelector = (state: RootState) =>
   state.historyList.openEditModal;
+export const filterGiftSelector = (state: RootState) => state.historyList.filterGift;
 
 export default eventAdminSlice.reducer;

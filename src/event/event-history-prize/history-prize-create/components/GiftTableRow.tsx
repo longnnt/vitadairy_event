@@ -1,16 +1,18 @@
 import { Switch, TableCell, TableRow } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { dispatch } from 'src/common/redux/store';
-import { setGift } from '../../event.slice';
+import useTable from 'src/common/hooks/useTable';
+import { useDispatch, useSelector } from 'src/common/redux/store';
+import { filterGiftSelector, setFilterGift, setGift } from '../../event.slice';
 import { IFormCreate, IPropsGiftTableRow } from '../../interfaces';
 
 function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
   const methods = useFormContext<IFormCreate>();
-
+  const dispatch = useDispatch();
   const {
     setValue,
     formState: { errors },
   } = methods;
+  const {setPage} = useTable();
   const { image, name, type, money, point, total, active, id } = row;
   return (
     <TableRow
