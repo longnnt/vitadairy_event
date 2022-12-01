@@ -43,6 +43,7 @@ export const GiftModal = ({
   const handleOnclick = (id: number) => {
     const choosenGift = giftDta?.filter((item: IGiftDetail) => item.id === id);
     setChoosenGift(choosenGift[0]);
+    dispatch(setFilterGift(''));
     handleClose();
   };
 
