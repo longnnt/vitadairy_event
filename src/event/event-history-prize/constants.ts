@@ -151,7 +151,7 @@ export const StyleGift = {
 };
 
 export enum ScrollProvinceEnum {
-  SIZE_PROVINCE = 1000000,
+  SIZE_PROVINCE = 100,
   PAGE_PROVINCE = 0,
 };
 
