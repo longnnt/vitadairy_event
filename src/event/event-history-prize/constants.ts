@@ -149,3 +149,10 @@ export const StyleGift = {
   boxShadow: 24,
   p: 4,
 };
+
+export enum ScrollProvinceEnum {
+  SIZE_PROVINCE = 100,
+  PAGE_PROVINCE = 0,
+};
+
+export const PROVINCE = 'PROVINCE';
