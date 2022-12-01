@@ -72,15 +72,11 @@ export default function InvitationTableRow({
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        <a target="_blank" rel="noopener noreferrer" href={qrCode}>
-          Mã QR
-        </a>
+        {qrCode}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        <a target="_blank" rel="noopener noreferrer" href={spoonCode}>
-          Mã Muỗng
-        </a>
+        {spoonCode}
       </TableCell>
 
       <TableCell padding="checkbox" align="left">

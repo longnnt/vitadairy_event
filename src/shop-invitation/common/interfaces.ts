@@ -33,7 +33,15 @@ export interface IPayloadStatus {
 
 export interface IResShopInvitationData {
   data: {
+    meta: {
+      status: number;
+      msg: string;
+    },
     response: {
+      meta: {
+        status: number;
+        msg: string;
+      },
       response: IResShopInvitation[];
     };
   };

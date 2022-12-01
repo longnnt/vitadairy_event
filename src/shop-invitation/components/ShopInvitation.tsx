@@ -69,7 +69,7 @@ export default function ShopInvitation() {
   };
 
   const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);
-  const tableData: IResShopInvitation[] = data ? data : [];
+  const tableData = data || [];
   const { data: csvData } = useGetAllShopInvitationExportCsv();
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
@@ -153,11 +153,15 @@ export default function ShopInvitation() {
               <TableBody>
                 {tableData?.map((row: IResShopInvitation) => (
                   <InvitationTableRow
-                    key={row.qrCode}
-                    row={row}
-                    selected={selectedIds.includes(row.spoonCode)}
+                    key={row.storeCode}
+                    row={{
+                      ...row,
+                      registrationDate: new Date(row.registrationDate).toLocaleString(),
+                      firstScanDate: new Date(row.firstScanDate).toLocaleString(),
+                    }}
+                    selected={selectedIds.includes(row.storeCode)}
                     onSelectRow={(e) => {
-                      handleSelectItem(row.spoonCode, e);
+                      handleSelectItem(row.storeCode, e);
                     }}
                     // onDeleteRow={() => handleDeleteRows([row.storeCode])}
                     // onEditRow={() => handleEditRow(row.storeCode.toString())}
