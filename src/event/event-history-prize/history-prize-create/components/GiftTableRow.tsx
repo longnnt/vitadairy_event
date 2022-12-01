@@ -12,7 +12,6 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
     setValue,
     formState: { errors },
   } = methods;
-  const {setPage} = useTable();
   const { image, name, type, money, point, total, active, id } = row;
   return (
     <TableRow
