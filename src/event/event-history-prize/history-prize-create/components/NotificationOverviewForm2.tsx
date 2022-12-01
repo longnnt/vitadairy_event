@@ -94,7 +94,7 @@ function NotificationOverviewForm2() {
   };
   const handleFilterGift = (filterGift: string) => {
     dispatch(setFilterGift(filterGift));
-    setPage(0);
+    // setPage(0);
   }
 
   useEffect(() => {

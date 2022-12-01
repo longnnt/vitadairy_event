@@ -20,6 +20,7 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
         dispatch(setGift(row));
         setValue('giftId', id);
         handleClose();
+        dispatch(setFilterGift(''))
       }}
     >
       <TableCell><img src={image} alt="" height="50" width="50" /></TableCell>
@@ -36,7 +37,7 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
 
       <TableCell align="right" title={active === true ? 'actived' : 'unActivced'}>
         <Switch
-          size='medium'
+          size='small'
           checked={active ? true : false} 
           disabled
         />        
