@@ -10,7 +10,7 @@ export interface IParamsQuery {
 export interface IResShopInvitation {
   userName: string;
   storeCode: string;
-  phoneNumber: number;
+  phoneNumber: string;
   registrationDate: string;
   firstScanDate: string;
   qrCode: string;
