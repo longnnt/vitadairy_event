@@ -3,11 +3,11 @@ import dayjs from 'dayjs';
 import _ from 'lodash';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setCode } from 'src/auth/login/login.slice';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { setCode } from 'src/store-admin/storeAdmin.slice';
 import { IPropsStoreTableRow } from '../../interfaces';
 // ----------------------------------------------------------------------
 
