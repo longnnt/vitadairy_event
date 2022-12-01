@@ -1,5 +1,4 @@
 import { IStoreActive } from './../interfaces';
-import { codeSelector } from './../storeAdmin.slice';
 import { useSelector } from 'src/common/redux/store';
 import { useMutation, useQueryClient } from 'react-query';
 import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';

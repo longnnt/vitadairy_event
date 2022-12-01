@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { CSVLink } from 'react-csv';
 import { useNavigate, useParams } from 'react-router-dom';
+import { codeSelector } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -25,7 +26,6 @@ import useTable from 'src/common/hooks/useTable';
 import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { useGetStoreAdminById } from 'src/shop-invitation/hooks/useGetStoreCode';
-import { codeSelector } from 'src/store-admin/storeAdmin.slice';
 import { TABLE_HEAD } from '../common/constants';
 import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
