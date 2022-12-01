@@ -36,6 +36,7 @@ import {
   IFormEdit,
   IGiftDetail,
   IProvince,
+  IProvinceParams,
   ISelect,
   ISelectPopup,
   ITransactionType,
@@ -68,6 +69,7 @@ import PovinceTableForm from './ProvinceTableForm';
 import { ConfirmEditModal } from './ConfirmEditModal';
 import { getAllTransactionType } from '../service';
 import { RHFSelectPagitnation } from './RHFSelectPagination';
+import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
 
 // -----------------------------------------------------------------------------
 
@@ -78,7 +80,14 @@ export const EditEventPrizeForm = () => {
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-  const { data: provincesData } = useGetAllProvinceVN();
+
+  const searchParamsProvince: IProvinceParams = {
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
+    type: PROVINCE
+  }
+
+  const { data: provincesData } = useGetAllProvinceVN(searchParamsProvince);
   const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
 
   const provinceOptions = provincesData?.map((item: IProvince) => ({

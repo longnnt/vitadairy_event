@@ -44,6 +44,8 @@ import {
   FormatDate,
   popupTypeOption,
   POPUP_TYPE,
+  PROVINCE,
+  ScrollProvinceEnum,
   StyleGift,
   TABLE_HEAD_GIFT,
 } from '../../constants';
@@ -62,6 +64,7 @@ import {
   IEventDetail,
   IFormCreateEvent,
   IGiftParams,
+  IProvinceParams,
   ISelectPopup,
 } from '../../interfaces';
 import { GiftTableRow } from './GiftTableRow';
@@ -190,8 +193,14 @@ export default function HistoryNewForm() {
     name: item.description,
   }));
 
-  const { data: addProvince } = useGetAllProvince();
-  const dataProvince = addProvince?.data?.response?.provinces || [];
+  const searchParamsProvince: IProvinceParams = {
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
+    type: PROVINCE
+  }
+
+  const { data: addProvince } = useGetAllProvince(searchParamsProvince);
+  const dataProvince = addProvince?.data?.response || [];
   const addNewOption2 = dataProvince.map((item) => ({
     key: item.id,
     name: item.name,

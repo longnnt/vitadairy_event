@@ -3,6 +3,7 @@ import {
   API_GET_ALL_GIFTS,
   API_GIFT,
   API_PRIZE_EDIT,
+  API_PROVINCE_SEARCH_BY_FILTER,
   API_PROVINCE_VN,
   API_TRANSACTION_TYPE,
   API_TRANSACTION_TYPE_UNUSE,
@@ -13,6 +14,7 @@ import {
   IFormSubmitEdit,
   IGiftById,
   IParamsGetGift,
+  IProvinceParams,
   IQuery,
   IResEventPrizeById,
   IResGetGifts,
@@ -33,8 +35,8 @@ export const getAllTransactionType = () => {
   return axiosInstance.get<unknown, IResTransactionType>(API_TRANSACTION_TYPE);
 };
 
-export const getAllProvinceVN = async () => {
-  return axiosInstance.get<unknown, IResProvince>(API_PROVINCE_VN);
+export const getAllProvinceVN = (params: IProvinceParams) => {
+  return axiosInstance.get<unknown, IResProvince>(API_PROVINCE_SEARCH_BY_FILTER, {params});
 };
 
 export const eidtEventPrize = (newData: IFormSubmitEdit) => {

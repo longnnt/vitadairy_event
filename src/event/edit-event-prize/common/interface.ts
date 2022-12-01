@@ -184,15 +184,20 @@ export interface IFormSubmitEdit extends IForm {
   eventDetailProvinces: IEventProvince[];
 }
 
+
+export interface IProvinceParams {
+  page?: number;
+  size?: number;
+  type: string;
+}
+
 export interface IResProvince {
   data: {
     meta: {
       status: number;
       msg: string;
     };
-    response: {
-      provinces: IProvince[];
-    };
+    response: IProvince[]
   };
 }
 export interface IProvince {
@@ -202,6 +207,7 @@ export interface IProvince {
   type: string;
   parentId: number;
   regionId: number;
+  regionName: string;
 }
 
 export interface ISelect {

@@ -131,15 +131,19 @@ export interface IResTransaction {
   };
 }
 
+export interface IProvinceParams {
+  page?: number;
+  size?: number;
+  type: string;
+}
+
 export interface IResProvince {
   data: {
     meta: {
       status: number;
       msg: string;
     };
-    response: {
-      provinces: IProvince[];
-    };
+    response: IProvince[];
   };
 }
 
@@ -159,6 +163,7 @@ interface IProvince {
   type: string;
   parentId: number;
   regionId: null;
+  regionName: string;
 }
 
 export interface IPayloadSearch {
