@@ -35,27 +35,34 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
 
   const createEventPrizeSchema = Yup.object().shape({
     giftId: Yup.number().required('This field is required').typeError('Must be a number'),
-    popUpCodeTitle: Yup.string()
+    popupTitle: Yup.string()
       .max(60, 'Title must be less than 60 characters')
       .min(25, 'Title must be greater than 25 characters')
       .matches(/^[a-zA-Z0-9]+$/, 'Title must not includes any special characters')
       .when('popupCode', (popupCode, schema) => {
-        if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
-          return schema.required();
-        }
+        return schema.test('test editS','Title không được để trống', (val: any) => {
+          if ((popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) && val === null) {
+            return false;
+          }
+          return true
+        })
       }),
-    popUpCodeContent: Yup.string()
+    popupContent: Yup.string()
       .max(81, 'Content must be less than 81 characters')
       .matches(/^[a-zA-Z0-9]+$/, 'Content must not includes any special characters')
       .when('popupCode', (popupCode, schema) => {
-        if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
-          return schema.required();
-        }
+        return schema.test('test editS','Title không được để trống', (val: any) => {
+          if ((popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) && val === null) {
+            return false
+          }
+          return true
+        })
       }),
-    popUpCodeCTA: Yup.string().when('popupCode', (popupCode, schema) => {
-      if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
-        return schema.required();
-      }
+    popupText: Yup.string()
+      .when('popupCode', (popupCode, schema) => {
+        if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
+          return schema.required('This field is required');
+        }
     }),
     giftStatus: Yup.boolean(),
     popupCode: Yup.string().required('This field is required'),

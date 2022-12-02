@@ -76,6 +76,8 @@ export const DEDAULT_PROVINCE = {
   isNew: false,
 };
 
+
+
 export const DEFAULT_FORM_VALUE = {
   eventDetailProvinces: {
     0: DEDAULT_PROVINCE,
@@ -90,6 +92,9 @@ export const DEFAULT_FORM_VALUE = {
   popupImageLink: '',
   popupLink: '',
   popupType: '',
+  popupTitle: '',
+  popupContent: '',
+  popupText: '',
   probability: null,
   quantity: null,
 };
@@ -219,3 +224,5 @@ export const CSV = 'csv';
 export const DEFAULT_LOADING_SIZE = 5;
 
 export const SIZE_PAGE = 10;
+
+
