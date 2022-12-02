@@ -105,9 +105,6 @@ export default function ShopInvitation() {
     setPage(0);
   };
 
-  const params = useParams();
-  const idParams = params?.id;
-
   return (
     <>
       {isLoading && <LoadingScreen />}
@@ -176,7 +173,7 @@ export default function ShopInvitation() {
                     row={{
                       ...row,
                       registrationDate: new Date(row.registrationDate).toLocaleString(),
-                      firstScanDate: new Date(row.firstScanDate).toLocaleString(),
+                      firstScanDate: new Date((row.firstScanDate) as string).toLocaleString(),
                     }}
                     selected={selectedIds.includes(row.storeCode)}
                     onSelectRow={(e) => {

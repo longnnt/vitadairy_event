@@ -38,6 +38,8 @@ export default function InvitationTableRow({
     qrCode,
   } = row;
 
+  console.log(firstScanDate)
+
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -68,7 +70,9 @@ export default function InvitationTableRow({
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {_.isDate(dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
           ? dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
-          : firstScanDate}
+          : firstScanDate
+          // ?? dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST) === null
+        }
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
