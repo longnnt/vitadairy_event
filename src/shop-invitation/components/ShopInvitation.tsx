@@ -10,7 +10,7 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
-import { CSVLink } from 'react-csv';
+import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
 import { codeSelector } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
@@ -27,11 +27,10 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { useGetStoreAdminById } from 'src/shop-invitation/hooks/useGetStoreCode';
+import { FORMAT_DATE_EXPORT_FILE } from 'src/store-admin/constants';
 import { TABLE_HEAD } from '../common/constants';
 import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
-import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 import {
   firstScanEndSelector,
   firstScanStartSelector,
@@ -84,7 +83,9 @@ export default function ShopInvitation() {
           type: 'text/csv; charset=utf-8',
         });
 
-        const fileName = `export_store_invitation_${Date.now()}.csv`;
+        const fileName = `export_store_invitation_${dayjs().format(
+          FORMAT_DATE_EXPORT_FILE
+        )}.csv`;
 
         fileLink.href = window.URL.createObjectURL(blob);
         fileLink.download = fileName;
@@ -181,8 +182,6 @@ export default function ShopInvitation() {
                     onSelectRow={(e) => {
                       handleSelectItem(row.storeCode, e);
                     }}
-                    // onDeleteRow={() => handleDeleteRows([row.storeCode])}
-                    // onEditRow={() => handleEditRow(row.storeCode.toString())}
                   />
                 ))}
 

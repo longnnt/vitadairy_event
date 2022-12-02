@@ -16,3 +16,5 @@ export const FORMATE_CREATE_DATE_HISTORY_LIST = 'HH:mm:ss DD/MM/YYYY';
 export const FORMAT_DATE_NEWS = 'dd-MM-yyyy hh:mm a';
 
 export const LIST_STORE = 'Danh sách cửa hàng';
+
+export const FORMAT_DATE_EXPORT_FILE= 'DD_MM_YYYY';
