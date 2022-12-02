@@ -10,19 +10,18 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
-import { CSVLink } from 'react-csv';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetAdmin } from 'src/admin/hooks/useGetAdmin';
+import { emailSelector, setPermission } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
-import LoadingScreen from 'src/common/components/LoadingScreen';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -31,7 +30,6 @@ import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
-import { useExportFile } from '../hooks/useExportFile';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
 import useMessage from '../hooks/useMessage';
@@ -41,15 +39,11 @@ import {
   firstScanEndSelector,
   firstScanStartSelector,
   searchTextSelector,
-  setShowDataStore,
+  setShowDataStore
 } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 import { StoreTableToolbar } from './components/StoreTableToolbar';
-import { emailSelector, setPermission } from 'src/auth/login/login.slice';
-import { useGetStoreAdminById } from '../../shop-invitation/hooks/useGetStoreCode';
 import TableSkeleton from './components/TableSkeleton';
-import { useQueryClient } from 'react-query';
-import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -146,6 +140,25 @@ function StoreAdminListDashboard() {
     }
   };
 
+  const exportFile = () => {
+    const response = exportStoreAdmin();
+    response
+      .then((data) => {
+        const fileLink = document.createElement('a');
+
+        const blob = new Blob([data?.data], {
+          type: 'text/csv; charset=utf-8',
+        });
+
+        const fileName = `export_store_admin_${Date.now()}.csv`;
+
+        fileLink.href = window.URL.createObjectURL(blob);
+        fileLink.download = fileName;
+        fileLink.click();
+      })
+      .catch((error) => console.log(error));
+  }
+
 
   const handleEditRow = (id: string) => {
     // navigate(PATH_DASHBOARD.policy.editCategory(id));
@@ -183,15 +196,15 @@ function StoreAdminListDashboard() {
                 <input hidden multiple type="file" onChange={importFile} />
               </Button>
             </Box>
-            <CSVLink data={listStoreAdmin}>
               <Button
                 variant="contained"
                 startIcon={<Iconify icon={'akar-icons:file'} />}
-                onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
+                onClick={() => {
+                  exportFile();
+                }}
               >
                 Export
               </Button>
-            </CSVLink>
           </>
         }
       />
@@ -283,3 +296,4 @@ function StoreAdminListDashboard() {
 }
 
 export { StoreAdminListDashboard };
+
