@@ -29,5 +29,7 @@ export const importStoreAdmin = (formData: FormData) => {
 };
 
 export const exportStoreAdmin = () => {
-  return axiosInstance.get<unknown, IDataStore>(API_STORE_ADMIN_EXPORT);
+  return axiosInstance.get(API_STORE_ADMIN_EXPORT, {
+    headers: { responseType: 'blob' },
+  });
 };

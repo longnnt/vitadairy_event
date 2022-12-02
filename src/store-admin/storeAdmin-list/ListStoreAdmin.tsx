@@ -12,12 +12,12 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
-import { CSVLink } from 'react-csv';
-import { useNavigate, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { useGetAdmin } from 'src/admin/hooks/useGetAdmin';
+import { emailSelector, setPermission } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
-import LoadingScreen from 'src/common/components/LoadingScreen';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
@@ -29,9 +29,8 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { TABLE_HEAD } from '../constants';
+import { FORMAT_DATE_EXPORT_FILE, TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
-import { useExportFile } from '../hooks/useExportFile';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
 import useMessage from '../hooks/useMessage';
@@ -45,11 +44,7 @@ import {
 } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 import { StoreTableToolbar } from './components/StoreTableToolbar';
-import { emailSelector, setPermission } from 'src/auth/login/login.slice';
-import { useGetStoreAdminById } from '../../shop-invitation/hooks/useGetStoreCode';
 import TableSkeleton from './components/TableSkeleton';
-import { useQueryClient } from 'react-query';
-import { QUERY_KEYS } from 'src/common/constants/queryKeys.constant';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -111,11 +106,9 @@ function StoreAdminListDashboard() {
   // =========GET PERMISSION==================
   const { data: admin } = useGetAdmin({});
   const mail = useSelector(emailSelector);
-  const getPermission = admin?.response.find((item) =>
-   item.email === mail
-  );
-  dispatch(setPermission(getPermission?.permission))
-  
+  const getPermission = admin?.response.find((item) => item.email === mail);
+  dispatch(setPermission(getPermission?.permission));
+
   const listStoreAdmin = data?.response || [];
 
   const {
@@ -146,10 +139,28 @@ function StoreAdminListDashboard() {
     }
   };
 
+  const exportFile = () => {
+    const response = exportStoreAdmin();
+    response
+      .then((data) => {
+        const fileLink = document.createElement('a');
 
-  const handleEditRow = (id: string) => {
-    // navigate(PATH_DASHBOARD.policy.editCategory(id));
+        const blob = new Blob([data?.data], {
+          type: 'text/csv; charset=utf-8',
+        });
+
+        const fileName = `export_store_admin_${dayjs().format(
+          FORMAT_DATE_EXPORT_FILE
+        )}.csv`;
+
+        fileLink.href = window.URL.createObjectURL(blob);
+        fileLink.download = fileName;
+        fileLink.click();
+      })
+      .catch((error) => console.log(error));
   };
+
+  const handleEditRow = (id: string) => {};
 
   const { totalRecords } = data?.pagination || {
     totalRecords: 0,
@@ -158,7 +169,7 @@ function StoreAdminListDashboard() {
   const isNotFound = !listStoreAdmin.length;
 
   const handleSearch = () => {
-    dispatch(setShowDataStore(true))
+    dispatch(setShowDataStore(true));
     refetch();
     setPage(0);
   };
@@ -183,22 +194,22 @@ function StoreAdminListDashboard() {
                 <input hidden multiple type="file" onChange={importFile} />
               </Button>
             </Box>
-            <CSVLink data={listStoreAdmin}>
-              <Button
-                variant="contained"
-                startIcon={<Iconify icon={'akar-icons:file'} />}
-                onClick={() => navigate(PATH_DASHBOARD.storeAdmin.list)}
-              >
-                Export
-              </Button>
-            </CSVLink>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon={'akar-icons:file'} />}
+              onClick={() => {
+                exportFile();
+              }}
+            >
+              Export
+            </Button>
           </>
         }
       />
       <Card>
         <Divider />
 
-        <StoreTableToolbar handleSearch={handleSearch} isLoading = {isLoading} />
+        <StoreTableToolbar handleSearch={handleSearch} isLoading={isLoading} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
