@@ -15,17 +15,16 @@ export default function ResetPassword() {
       <Container>
         <ContentStyle sx={{ textAlign: 'center' }}>
           <Typography variant="h3" paragraph>
-            Forgot your password?
+            Reset your password
           </Typography>
 
           <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-            Please enter the email address associated with your account and We will email
-            you a link to reset your password.
+            Please enter your new password below
           </Typography>
 
           <ResetPassWordForm />
 
-          <Button
+          {/* <Button
             fullWidth
             size="large"
             component={RouterLink}
@@ -33,7 +32,7 @@ export default function ResetPassword() {
             sx={{ mt: 1 }}
           >
             Back
-          </Button>
+          </Button> */}
         </ContentStyle>
       </Container>
     </Page>

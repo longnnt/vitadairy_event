@@ -45,6 +45,10 @@ export default function Router() {
           path: 'forgot-password',
           element: <ForgotPassword />,
         },
+        {
+          path: 'reset-password',
+          element: <ResetPassword />,
+        },
       ],
     },
 
@@ -131,7 +135,10 @@ export default function Router() {
 // login
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 const ForgotPassword = Loadable(
-  lazy(() => import('../../auth/forgot-password/ResetPassword'))
+  lazy(() => import('../../auth/forgot-password/ForgotPassword'))
+);
+const ResetPassword = Loadable(
+  lazy(() => import('../../auth/reset-password/ResetPassword'))
 );
 
 // STORE ADMIN

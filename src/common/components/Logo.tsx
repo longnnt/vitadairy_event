@@ -29,8 +29,8 @@ export default function Logo({ disabledLink = false, sx }: Props) {
   // );
 
   const logo = (
-    <Box sx={{ width: 40, height: 40, ...sx }}>
-      <svg
+    <Box sx={{ width: 100, height: 40, ...sx }}>
+      {/* <svg
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
         height="100%"
@@ -65,7 +65,8 @@ export default function Logo({ disabledLink = false, sx }: Props) {
             d="M450 384c26.509 0 48-21.491 48-48s-21.491-48-48-48-48 21.491-48 48 21.491 48 48 48"
           />
         </g>
-      </svg>
+      </svg> */}
+      <img src='/logoVita.png' />
     </Box>
   );
 

@@ -29,7 +29,7 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { TABLE_HEAD } from '../constants';
+import { SIZE, TABLE_HEAD } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useExportFile } from '../hooks/useExportFile';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
@@ -109,7 +109,7 @@ function StoreAdminListDashboard() {
   const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
 
   // =========GET PERMISSION==================
-  const { data: admin } = useGetAdmin({});
+  const { data: admin } = useGetAdmin({size:SIZE});
   const mail = useSelector(emailSelector);
   const getPermission = admin?.response.find((item) =>
    item.email === mail
