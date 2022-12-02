@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { defaultValues } from '../constant';
+import { defaultValues, userTypeCons } from '../constant';
 import {
   buttonTypeState,
   productState,
@@ -53,6 +53,8 @@ export const AddEvent = () => {
     control,
     handleSubmit,
     setValue,
+    watch,
+    reset,
     formState: { errors },
   } = methods;
 
@@ -64,7 +66,6 @@ export const AddEvent = () => {
       showErrorSnackbar('Tạo mới thất bại');
     },
   });
-
   const onSubmit = (data: any) => {
     const formDataAddNewEvent: IEventFormData = {
       name: data.name,
@@ -93,8 +94,14 @@ export const AddEvent = () => {
     }
   }, [isSuccess]);
 
-  const handleStatusUserType = (userType: string) => {
-    dispatch(setUserType(userType as UserType));
+  const handleStatusUserType = (userType: userTypeCons) => {
+    dispatch(setUserType(userType ));
+    setValue('typeUser',userType )
+    if(userType === userTypeCons.ALLUSER ){
+      reset({
+        userRegisterDate: null,
+      });
+    }
   };
   const userTypeValue = useSelector(userTypeState);
 
@@ -103,7 +110,6 @@ export const AddEvent = () => {
   useDeepCompareEffect(() => {
     if (product.length > 0) setValue('skus', product);
   }, [product?.length]);
-
   return (
     <>
       <HeaderBreadcrumbs
@@ -209,7 +215,7 @@ export const AddEvent = () => {
                   defaultValue="allUser"
                   name="radio-buttons-group"
                   sx={{ flexDirection: 'row', paddingLeft: 2 }}
-                  onChange={(e) => handleStatusUserType(e.target.value)}
+                  onChange={(e) => handleStatusUserType(e.target.value as  userTypeCons )}
                 >
                   <FormControlLabel
                     value="allUser"

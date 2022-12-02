@@ -1,12 +1,13 @@
 import { Switch, TableCell, TableRow } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { dispatch } from 'src/common/redux/store';
-import { setGift } from '../../event.slice';
+import useTable from 'src/common/hooks/useTable';
+import { useDispatch, useSelector } from 'src/common/redux/store';
+import { filterGiftSelector, setFilterGift, setGift } from '../../event.slice';
 import { IFormCreate, IPropsGiftTableRow } from '../../interfaces';
 
 function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
   const methods = useFormContext<IFormCreate>();
-
+  const dispatch = useDispatch();
   const {
     setValue,
     formState: { errors },
@@ -19,6 +20,7 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
         dispatch(setGift(row));
         setValue('giftId', id);
         handleClose();
+        dispatch(setFilterGift(''))
       }}
     >
       <TableCell><img src={image} alt="" height="50" width="50" /></TableCell>
@@ -35,7 +37,7 @@ function GiftTableRow({ row, handleClose }: IPropsGiftTableRow) {
 
       <TableCell align="right" title={active === true ? 'actived' : 'unActivced'}>
         <Switch
-          size='medium'
+          size='small'
           checked={active ? true : false} 
           disabled
         />        

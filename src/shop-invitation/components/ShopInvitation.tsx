@@ -3,13 +3,16 @@ import {
   Button,
   Card,
   Divider,
-  IconButton, Table, TableBody,
+  IconButton,
+  Table,
+  TableBody,
   TableContainer,
   TablePagination,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
-import { CSVLink } from 'react-csv';
+import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
+import { codeSelector } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -17,25 +20,24 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions
+  TableSelectedActions,
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { useGetStoreAdminById } from 'src/shop-invitation/hooks/useGetStoreCode';
-import { codeSelector } from 'src/store-admin/storeAdmin.slice';
+import { FORMAT_DATE_EXPORT_FILE } from 'src/store-admin/constants';
 import { TABLE_HEAD } from '../common/constants';
 import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
 import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
-import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 import {
   firstScanEndSelector,
   firstScanStartSelector,
   searchTextSelector,
-  statusSelector
+  statusSelector,
 } from '../invitationSlice';
+import { getAllShopInvitationExport } from '../services';
 import InvitationTableRow from './InvitationTableRow';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
 export default function ShopInvitation() {
@@ -69,8 +71,28 @@ export default function ShopInvitation() {
   };
 
   const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);
-  const tableData: IResShopInvitation[] = data ? data : [];
-  const { data: csvData } = useGetAllShopInvitationExportCsv();
+  const tableData = data || [];
+
+  const exportFile = () => {
+    const response = getAllShopInvitationExport();
+    response
+      .then((data) => {
+        const fileLink = document.createElement('a');
+
+        const blob = new Blob([data?.data], {
+          type: 'text/csv; charset=utf-8',
+        });
+
+        const fileName = `export_store_invitation_${dayjs().format(
+          FORMAT_DATE_EXPORT_FILE
+        )}.csv`;
+
+        fileLink.href = window.URL.createObjectURL(blob);
+        fileLink.download = fileName;
+        fileLink.click();
+      })
+      .catch((error) => console.log(error));
+  };
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
@@ -81,13 +103,10 @@ export default function ShopInvitation() {
   const handleSearch = () => {
     refetch();
     setPage(0);
-  }
+  };
 
   const params = useParams();
   const idParams = params?.id;
-  const code = useSelector(codeSelector);
-
-  const { data: dataStoreCode } = useGetStoreAdminById(code)
 
   return (
     <>
@@ -103,15 +122,15 @@ export default function ShopInvitation() {
           { name: BREADCUMBS.SHOP_INVITATION_lIST },
         ]}
         action={
-          <CSVLink data={csvData ? csvData.data : ''}>
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'akar-icons:file'} />}
-              onClick={() => navigate(PATH_DASHBOARD.storeAdmin.shop_invitation)}
-            >
-              Export
-            </Button>
-          </CSVLink>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon={'akar-icons:file'} />}
+            onClick={() => {
+              exportFile();
+            }}
+          >
+            Export
+          </Button>
         }
       />
       <Card>
@@ -153,14 +172,16 @@ export default function ShopInvitation() {
               <TableBody>
                 {tableData?.map((row: IResShopInvitation) => (
                   <InvitationTableRow
-                    key={row.qrCode}
-                    row={row}
-                    selected={selectedIds.includes(row.spoonCode)}
-                    onSelectRow={(e) => {
-                      handleSelectItem(row.spoonCode, e);
+                    key={row.storeCode}
+                    row={{
+                      ...row,
+                      registrationDate: new Date(row.registrationDate).toLocaleString(),
+                      firstScanDate: new Date(row.firstScanDate).toLocaleString(),
                     }}
-                    // onDeleteRow={() => handleDeleteRows([row.storeCode])}
-                    // onEditRow={() => handleEditRow(row.storeCode.toString())}
+                    selected={selectedIds.includes(row.storeCode)}
+                    onSelectRow={(e) => {
+                      handleSelectItem(row.storeCode, e);
+                    }}
                   />
                 ))}
 

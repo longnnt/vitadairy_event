@@ -76,7 +76,7 @@ export default function Router() {
         {
           path: '',
           children: [
-            { element: <Navigate to="/stories" replace />, index: true },
+            { element: <Navigate to="/" replace />, index: true },
             { path: 'admins', element: <AdminList /> },
             { path: 'admins/create', element: <AddNewAdmin /> },
             { path: 'admins/:id', element: <EditAdmin /> },
@@ -123,11 +123,16 @@ export default function Router() {
     },
     {
       path: '/',
-      element: (
-        <AuthGuard>
-          <DashboardLayout />
-        </AuthGuard>
-      ),
+      
+      children: [
+        {
+          path: '',
+          children: [
+            { element: <Navigate to="/dashboard/stories" replace />, index: true },
+            { path: 'stories', element: <ListStore /> },
+          ],
+        },
+      ]
     },
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);

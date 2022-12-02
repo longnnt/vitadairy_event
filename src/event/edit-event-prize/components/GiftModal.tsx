@@ -14,20 +14,14 @@ import {
   Table,
   TablePagination,
   Switch,
+  Dialog,
+  DialogContent,
 } from '@mui/material';
+import ListPrizeFilterBar from 'src/event/list-prize/list-prize-dashboard/components/ListPrizeFilterBar';
+import { useSelector } from 'react-redux';
+import { filterGiftSelector, setFilterGift } from '../editEventPrize.Slice';
+import { dispatch } from 'src/common/redux/store';
 
-const styleGiftModal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 900,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  color: 'black',
-};
 // --------------------------------------------------------------------------------------------
 export const GiftModal = ({
   open,
@@ -49,22 +43,32 @@ export const GiftModal = ({
   const handleOnclick = (id: number) => {
     const choosenGift = giftDta?.filter((item: IGiftDetail) => item.id === id);
     setChoosenGift(choosenGift[0]);
+    dispatch(setFilterGift(''));
     handleClose();
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
+  const filterGift = useSelector(filterGiftSelector)
+  const handleFilterGift = (filterGift: string)=>{
+    dispatch(setFilterGift(filterGift));
+    setPage(0);
+  }
 
   return (
-    <div>
-      <Modal
+      <Dialog
         open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        onClose={() => {
+          handleClose();
+          dispatch(setFilterGift(''))
+        }}
+        aria-labelledby="modal-dialog-title"
+        aria-describedby="modal-dialog-description"
+        fullWidth
+        maxWidth={'xl'}
       >
-        <Box sx={styleGiftModal}>
+        <DialogContent sx={{ minHeight: 770}}>
           <Typography
             id="modal-modal-title"
             variant="h6"
@@ -73,7 +77,11 @@ export const GiftModal = ({
           >
             Please choose a gift!
           </Typography>
-
+          <ListPrizeFilterBar
+            filterName={filterGift}
+            onFilterName={handleFilterGift}
+            placeholder={'Lọc theo tên quà'}
+          />
           <Scrollbar>
             <TableContainer
               sx={{
@@ -140,8 +148,7 @@ export const GiftModal = ({
               onPageChange={handleChangePage}
             />
           </Scrollbar>
-        </Box>
-      </Modal>
-    </div>
+        </DialogContent>
+      </Dialog>
   );
 };

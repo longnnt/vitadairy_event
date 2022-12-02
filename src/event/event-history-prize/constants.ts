@@ -122,13 +122,13 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
 ];
 
 export const TABLE_HEAD_GIFT = [
-  { id: 'image', label: 'Image', align: 'left' },
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'type', label: 'Type', align: 'left' },
-  { id: 'point', label: 'Point', align: 'left' },
-  { id: 'total', label: 'Total', align: 'left' },
-  { id: 'money', label: 'Money', align: 'left' },
-  { id: 'active', label: 'Active', align: 'left' },
+  { id: 'image', label: 'Image', align: 'left', flex: 1 },
+  { id: 'name', label: 'Name', align: 'left', flex: 1 },
+  { id: 'type', label: 'Type', align: 'left', flex: 1 },
+  { id: 'point', label: 'Point', align: 'left', flex: 1 },
+  { id: 'total', label: 'Total', align: 'left', flex: 1 },
+  { id: 'money', label: 'Money', align: 'left', flex: 1 },
+  { id: 'active', label: 'Active', align: 'right', flex: 1 },
 ];
 
 export const TABLE_HEAD_TRANSACTION_TYPE = [

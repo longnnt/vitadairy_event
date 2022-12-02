@@ -1,7 +1,7 @@
 import {
   Box,
   Button,
-  Card, Grid,
+  Card, Dialog, DialogContent, Grid,
   Modal,
   Paper,
   Stack,
@@ -18,6 +18,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import { TableHeadCustom } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
+import ListPrizeFilterBar from 'src/event/list-prize/list-prize-dashboard/components/ListPrizeFilterBar';
 import {
   popupTypeOption,
   POPUP_CODE,
@@ -27,10 +28,12 @@ import {
   TABLE_HEAD_GIFT
 } from '../../constants';
 import {
+  filterGiftSelector,
   giftSelecttor,
   popUpCodeSelector,
   popUpTypeSelector,
   setFileCSV,
+  setFilterGift,
   setGift,
   setOpen,
   setOpenSelector,
@@ -52,11 +55,13 @@ function NotificationOverviewForm2() {
   const gift = useSelector(giftSelecttor);
   const handleOpen = () => dispatch(setOpen(true));
   const handleClose = () => dispatch(setOpen(false));
+  const filterGift = useSelector(filterGiftSelector);
 
   const {
     dense,
     page,
     order,
+    setPage,
     orderBy,
     rowsPerPage,
     selected: selectedRows,
@@ -79,12 +84,17 @@ function NotificationOverviewForm2() {
   const searchParams: IGiftParams = {
     page: page + 1,
     size: SIZE_PAGE,
+    keySearch: '',
   };
+  if(filterGift.length > 2) searchParams.keySearch = filterGift;
   const { data: ListGift } = useGetGilf(searchParams);
   const dataGift = ListGift?.data?.response || [];
   const { totalRecords } = ListGift?.data?.pagination || {
     totalRecords: 0,
   };
+  const handleFilterGift = (filterGift: string) => {
+    dispatch(setFilterGift(filterGift));
+  }
 
   useEffect(() => {
     dispatch(
@@ -224,13 +234,18 @@ function NotificationOverviewForm2() {
             >
               {gift.name}
             </Box>
-            <Modal
+            <Dialog
               open={open}
-              onClose={handleClose}
+              onClose={() => {
+                handleClose();
+                dispatch(setFilterGift(''))
+              }}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
+              fullWidth
+              maxWidth={'xl'}
             >
-              <Box sx={STYLE_GIFT}>
+              <DialogContent sx={{ minHeight: 770 }}>
                 <Typography
                   id="modal-modal-title"
                   variant="h6"
@@ -239,6 +254,12 @@ function NotificationOverviewForm2() {
                 >
                   Please choose a gift!
                 </Typography>
+
+                <ListPrizeFilterBar
+                  filterName={filterGift}
+                  onFilterName={handleFilterGift}
+                  placeholder={'Lọc theo tên quà'}
+                />
 
                 <Scrollbar>
                   <TableContainer
@@ -276,8 +297,8 @@ function NotificationOverviewForm2() {
                     onRowsPerPageChange={onChangeRowsPerPage}
                   />
                 )}
-              </Box>
-            </Modal>
+              </DialogContent>
+            </Dialog>
           </Grid>
         </Grid>
         </Stack>

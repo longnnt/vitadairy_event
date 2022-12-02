@@ -256,6 +256,7 @@ export type IPropsTransactionTableRow = {
 export type IGiftParams = {
   page?: number;
   size?: number;
+  keySearch: string;
 };
 
 export type ITransactionParams = {

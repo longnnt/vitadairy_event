@@ -258,6 +258,7 @@ export const EditEventForm = () => {
                   { label: 'Toàn bộ người dùng', value: 'allUser' },
                   { label: 'Người dùng mới', value: 'newUser' },
                 ]}
+                
               />
   
               <Controller
@@ -271,7 +272,7 @@ export const EditEventForm = () => {
                   >
                     <DatePicker
                       {...field}
-                      label="Ngày tính người dùng mới"
+                      label="Ngày tính người dùng mới*"
                       inputFormat="dd/MM/yyyy"
                       renderInput={(params) => (
                         <TextField

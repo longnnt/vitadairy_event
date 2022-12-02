@@ -1,7 +1,7 @@
 export interface IFormStore {
   code: string;
   name: string;
-  phoneNumber: number;
+  phoneNumber: string;
   address: string;
   qrLink: string;
   isActive: boolean;
