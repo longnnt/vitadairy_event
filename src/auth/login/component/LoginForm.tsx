@@ -48,7 +48,7 @@ export default function LoginForm() {
   };
   const { mutate, isSuccess } = useAuthlogin({ onError });
   useEffect(() => {
-    if (isSuccess) window.location.href =PATH_DASHBOARD.root;
+    if (isSuccess) navigate(PATH_DASHBOARD.root);
   }, [isSuccess]);
   const onSubmit = (data: IFormLoginValuesProps) => {
     dispatch(setEmail(data.email));
