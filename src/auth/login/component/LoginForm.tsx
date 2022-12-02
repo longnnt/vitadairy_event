@@ -26,7 +26,6 @@ import { Link } from 'react-router-dom';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import RHFTextFieldLogin from 'src/common/components/hook-form/RHFTextFieldLogin';
 
-
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -48,7 +47,7 @@ export default function LoginForm() {
   };
   const { mutate, isSuccess } = useAuthlogin({ onError });
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.root);
+    if (isSuccess) window.location.href = PATH_DASHBOARD.root;
   }, [isSuccess]);
   const onSubmit = (data: IFormLoginValuesProps) => {
     dispatch(setEmail(data.email));

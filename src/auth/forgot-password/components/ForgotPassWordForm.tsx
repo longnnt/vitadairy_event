@@ -10,7 +10,7 @@ import { forgotPassword } from '../services';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
 import { statusEnum } from 'src/auth/login/constants';
 
-export default function ResetPassWordForm() {
+export default function ForgotPassWordForm() {
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string()
