@@ -121,6 +121,11 @@ export default function HistoryNewForm() {
     if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
+    // if (data.popupCode === POPUP_CODE.FULL_SCREEN) {
+    //   data.popupTitile = null;
+    //   data.popupText = null;
+    //   data.popupContent = null
+    // }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
     if(sum === data.quantity) {
