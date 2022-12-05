@@ -60,15 +60,15 @@ export default function InvitationTableRow({
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {_.isDate(dayjs(registrationDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
+        {dayjs(registrationDate).isValid()
           ? dayjs(registrationDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
-          : registrationDate}
+          : ''}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {_.isDate(dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
+        {dayjs(firstScanDate).isValid()
           ? dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
-          : firstScanDate}
+          : ''}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
