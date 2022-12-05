@@ -43,9 +43,9 @@ function StoreTableRow({ row, selected }: IPropsStoreTableRow) {
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {_.isDate(dayjs(createdDate).format(FORMATE_CREATE_DATE_HISTORY_LIST))
+        {dayjs(createdDate).isValid()
           ? dayjs(createdDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
-          : createdDate}
+          : ''}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>

@@ -105,9 +105,6 @@ export default function ShopInvitation() {
     setPage(0);
   };
 
-  const params = useParams();
-  const idParams = params?.id;
-
   return (
     <>
       {isLoading && <LoadingScreen />}
@@ -173,11 +170,7 @@ export default function ShopInvitation() {
                 {tableData?.map((row: IResShopInvitation) => (
                   <InvitationTableRow
                     key={row.storeCode}
-                    row={{
-                      ...row,
-                      registrationDate: new Date(row.registrationDate).toLocaleString(),
-                      firstScanDate: new Date(row.firstScanDate).toLocaleString(),
-                    }}
+                    row={{ ...row }}
                     selected={selectedIds.includes(row.storeCode)}
                     onSelectRow={(e) => {
                       handleSelectItem(row.storeCode, e);
