@@ -114,18 +114,13 @@ export default function HistoryNewForm() {
       setValue('eventId', idEventPrize);
     }
   }, [idEventPrize]);
-
+  console.log(errors)
   const onSubmit = async (data: IFormCreate) => {
     const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map((key) => data.eventDetailProvinces[key]);
     const sum = [...eventDetailProvincesArray].reduce((sum, item) => sum += (item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0), 0)
     if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
-    // if (data.popupCode === POPUP_CODE.FULL_SCREEN) {
-    //   data.popupTitile = null;
-    //   data.popupText = null;
-    //   data.popupContent = null
-    // }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
     if(sum === data.quantity) {

@@ -350,20 +350,20 @@ export const EditEventPrizeForm = () => {
                     watchPopupCode === POPUP_CODE.PUZZLE_PIECE) && (
                     <>
                       <RHFTextField
-                        name="popUpCodeTitle"
-                        key={'popUpCodeTitle'}
+                        name="popupTitle"
+                        key={'popupTitle'}
                         label="Tiêu đề Pop up*"
                       />
                       <RHFTextField
                         multiline
                         rows={5}
-                        name="popUpCodeContent"
-                        key={'popUpCodeContent'}
+                        name="popupContent"
+                        key={'popupContent'}
                         label="Nội dung Pop up*"
                       />
                       <RHFTextField
-                        name="popUpCodeCTA"
-                        key={'popUpCodeCTA'}
+                        name="popupText"
+                        key={'popupText'}
                         label="CTA*"
                       />
                     </>

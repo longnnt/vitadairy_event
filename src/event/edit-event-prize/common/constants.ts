@@ -68,7 +68,9 @@ export const DEFAULT_FORM_VALUE_SUBMIT = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  // transactionTypeId: 0,
+  popupTitle: '',
+  popupContent: '',
+  popupText: '',
   transactionTypeId: { value: 0, label: '' },
   winnerAmount: 0,
 };
