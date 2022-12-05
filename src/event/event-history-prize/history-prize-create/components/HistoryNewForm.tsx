@@ -114,7 +114,6 @@ export default function HistoryNewForm() {
       setValue('eventId', idEventPrize);
     }
   }, [idEventPrize]);
-
   const onSubmit = async (data: IFormCreate) => {
     const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map((key) => data.eventDetailProvinces[key]);
     const sum = [...eventDetailProvincesArray].reduce((sum, item) => sum += (item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0), 0)

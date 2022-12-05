@@ -3,10 +3,7 @@ import * as Yup from 'yup';
 import { POPUP_CODE } from './constants';
 import { IFormCreateEvent } from './interfaces';
 import { useSelector } from 'src/common/redux/store';
-import {
-  popUpCodeSelector,
-  popUpTypeSelector,
-} from './event.slice';
+import { popUpCodeSelector, popUpTypeSelector } from './event.slice';
 export const createEventPrizeValidate = (provinceIds: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
     endDate: Yup.string()
@@ -35,27 +32,68 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
 
   const createEventPrizeSchema = Yup.object().shape({
     giftId: Yup.number().required('This field is required').typeError('Must be a number'),
-    popUpCodeTitle: Yup.string()
-      .max(60, 'Title must be less than 60 characters')
-      .min(25, 'Title must be greater than 25 characters')
-      .matches(/^[a-zA-Z0-9]+$/, 'Title must not includes any special characters')
-      .when('popupCode', (popupCode, schema) => {
-        if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
-          return schema.required();
+    popupTitle: Yup.string().when('popupCode', (popupCode, schema) => {
+      return schema
+        .test('test emty', 'This field is required', (val: any) => {
+          if (
+            (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) &&
+            val === ''
+          ) {
+            return false;
+          }
+          return true;
+        })
+        .test(
+          'test lon hon 25 va nho hon 60',
+          'This field is greater than 25 and less than 60 characters',
+          (val: any) => {
+            if (popupCode !== POPUP_CODE.FULL_SCREEN && val === '') {
+              return false;
+            }
+            if (
+              popupCode !== POPUP_CODE.FULL_SCREEN &&
+              (val.length < 25 || val.length > 60)
+            ) {
+              return false;
+            }
+            return true;
+          }
+        );
+    }),
+    popupContent: Yup.string().when('popupCode', (popupCode, schema) => {
+      return schema
+        .test('test emty', 'This field is required', (val: any) => {
+          if (
+            (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) &&
+            val === ''
+          ) {
+            return false;
+          }
+          return true;
+        })
+        .test('test nho hon 81', 'This field is less than 81 characters', (val: any) => {
+          if (
+            (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) &&
+            val === ''
+          ) {
+            return false;
+          }
+          if (val.length > 81) {
+            return false;
+          }
+          return true;
+        });
+    }),
+    popupText: Yup.string().when('popupCode', (popupCode, schema) => {
+      return schema.test('test text', 'This field is requried', (val: any) => {
+        if (
+          (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.OGGI) &&
+          val === ''
+        ) {
+          return false;
         }
-      }),
-    popUpCodeContent: Yup.string()
-      .max(81, 'Content must be less than 81 characters')
-      .matches(/^[a-zA-Z0-9]+$/, 'Content must not includes any special characters')
-      .when('popupCode', (popupCode, schema) => {
-        if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
-          return schema.required();
-        }
-      }),
-    popUpCodeCTA: Yup.string().when('popupCode', (popupCode, schema) => {
-      if (popupCode === POPUP_CODE.OGGI || popupCode === POPUP_CODE.PUZZLE_PIECE) {
-        return schema.required();
-      }
+        return true;
+      });
     }),
     giftStatus: Yup.boolean(),
     popupCode: Yup.string().required('This field is required'),

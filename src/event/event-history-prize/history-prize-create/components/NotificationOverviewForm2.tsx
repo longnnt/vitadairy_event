@@ -190,22 +190,22 @@ function NotificationOverviewForm2() {
         {(popUpCode === POPUP_CODE.PUZZLE_PIECE || popUpCode === POPUP_CODE.OGGI) && (
           <>
             <RHFTextField
-              name="popUpCodeTitle"
-              key={'popUpCodeTitle'}
+              name="popupTitle"
+              key={'popupTitle'}
               label="Tiêu đề Pop up*"
               margin="dense"
             />
             <RHFTextField
-              name="popUpCodeContent"
-              key={'popUpCodeContent'}
+              name="popupContent"
+              key={'popupContent'}
               label="Nội dung Pop Up*"
               multiline
               rows={7}
               margin="dense"
             />
             <RHFTextField
-              name="popUpCodeCTA"
-              key={'popUpCodeCTA'}
+              name="popupText"
+              key={'popupText'}
               label="CTA*"
               margin="dense"
             />

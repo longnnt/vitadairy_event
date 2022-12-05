@@ -43,7 +43,9 @@ interface IForm {
   popupType: string;
   probability: number;
   quantity: number;
-  // transactionTypeId: number;
+  popupTitle: string;
+  popupContent: string;
+  popupText: string;
   transactionTypeId: ISelect | number;
   winnerAmount: number;
   typeUser?: string;

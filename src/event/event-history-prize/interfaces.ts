@@ -96,6 +96,9 @@ interface IForm {
   quantity: number | null;
   transactionTypeId: ISelectPopup;
   id?: number;
+  popupText: string;
+  popupTitile: string;
+  popupContent: string;
 }
 
 export interface IFormCreate extends IForm {
