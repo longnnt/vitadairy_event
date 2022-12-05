@@ -69,11 +69,11 @@ function EventPrizeHistoryDashboard() {
   } = useTable();
 
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch =useDispatch() 
+  const dispatch = useDispatch();
   const searchText = useSelector(searchTextSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
-  const showData =useSelector(showDataSelector)
+  const showData = useSelector(showDataSelector);
   const searchParams: IPrizeHistoryParams = {
     page: page,
     size: rowsPerPage,
@@ -84,7 +84,7 @@ function EventPrizeHistoryDashboard() {
   if (!searchText) delete searchParams.searchText;
   if (!firstScanEnd) delete searchParams.endDate;
   if (!firstScanStart) delete searchParams.startDate;
-  
+
   const { data, refetch, isLoading } = useGetPrizeHistory(searchParams);
   const listStoreAdmin = data?.data?.response || [];
 
@@ -100,17 +100,17 @@ function EventPrizeHistoryDashboard() {
   );
 
   const handleSearch = () => {
-    dispatch(setShowData(true))
+    dispatch(setShowData(true));
     refetch();
     setPage(0);
   };
 
   const handleDeleteRows = (ids: string[]) => {};
-  useEffect(()=>{
-    return ()=>{
-      dispatch(setShowData(false))
-    }
-  },[])
+  useEffect(() => {
+    return () => {
+      dispatch(setShowData(false));
+    };
+  }, []);
   const handleEditRow = (id: string) => {};
 
   const { totalRecords } = data?.data?.pagination || {
@@ -120,6 +120,8 @@ function EventPrizeHistoryDashboard() {
     const response = exportPrizeHistory(searchParams);
     response
       .then((data) => {
+        console.log(data);
+
         const fileLink = document.createElement('a');
 
         const blob = new Blob([data?.data], {
@@ -161,7 +163,7 @@ function EventPrizeHistoryDashboard() {
       />
       <Card>
         <Divider />
-        <FilterBar handleSearch={handleSearch} isLoading ={isLoading} />
+        <FilterBar handleSearch={handleSearch} isLoading={isLoading} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -198,21 +200,22 @@ function EventPrizeHistoryDashboard() {
               />
 
               <TableBody>
-                {showData && listStoreAdmin.map((row: IPrizeHistory) => (
-                  <PrizeHistoryTableRow
-                    key={row.id}
-                    row={{
-                      ...row,
-                      giftReceivedDate: new Date(row.giftReceivedDate).toLocaleString(),
-                    }}
-                    selected={selectedIds.includes(row.id)}
-                    onSelectRow={(e) => {
-                      handleSelectItem(row.id, e);
-                    }}
-                    onDeleteRow={() => handleDeleteRows([row.id])}
-                    onEditRow={() => handleEditRow(row.id)}
-                  />
-                ))}
+                {showData &&
+                  listStoreAdmin.map((row: IPrizeHistory) => (
+                    <PrizeHistoryTableRow
+                      key={row.id}
+                      row={{
+                        ...row,
+                        giftReceivedDate: new Date(row.giftReceivedDate).toLocaleString(),
+                      }}
+                      selected={selectedIds.includes(row.id)}
+                      onSelectRow={(e) => {
+                        handleSelectItem(row.id, e);
+                      }}
+                      onDeleteRow={() => handleDeleteRows([row.id])}
+                      onEditRow={() => handleEditRow(row.id)}
+                    />
+                  ))}
                 {Array.from(Array(rowsPerPage)).map((index) => {
                   return <TableSkeleton key={index} isNotFound={isLoading} />;
                 })}
