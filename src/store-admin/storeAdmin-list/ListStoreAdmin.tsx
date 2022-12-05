@@ -251,7 +251,6 @@ function StoreAdminListDashboard() {
                     key={row.code}
                     row={{
                       ...row,
-                      createdDate: new Date(row.createdDate).toLocaleString(),
                     }}
                     selected={selectedIds.includes(row.code)}
                     onSelectRow={(e) => {
