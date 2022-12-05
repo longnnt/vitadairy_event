@@ -4,10 +4,8 @@ import { Checkbox, TableCell, TableRow } from '@mui/material';
 // @types
 import { IResShopInvitation } from '../common/interfaces';
 // components
-import Iconify from 'src/common/components/Iconify';
-import _ from 'lodash';
 import dayjs from 'dayjs';
-import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
+import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
 // import { TableMoreMenu } from 'src/components/table';
 
 // ----------------------------------------------------------------------
@@ -61,13 +59,13 @@ export default function InvitationTableRow({
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(registrationDate).isValid()
-          ? dayjs(registrationDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
+          ? dayjs(registrationDate).format(FORMATE_DATE_NEW_REQ)
           : ''}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(firstScanDate).isValid()
-          ? dayjs(firstScanDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)
+          ? dayjs(firstScanDate).format(FORMATE_DATE_NEW_REQ)
           : ''}
       </TableCell>
 

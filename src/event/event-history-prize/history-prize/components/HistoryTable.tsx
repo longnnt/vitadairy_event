@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from '@mui/material';
 
 import dayjs from 'dayjs';
-import { FORMATE_CREATE_DATE_HISTORY_LIST } from 'src/store-admin/constants';
+import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
 import { IPropsPrizeHistoryTableRow } from '../../interfaces';
 
 // ----------------------------------------------------------------------
@@ -16,7 +16,7 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
       <TableCell align="left">{giftName}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(giftReceivedDate).format(FORMATE_CREATE_DATE_HISTORY_LIST)}
+        {dayjs(giftReceivedDate).format(FORMATE_DATE_NEW_REQ)}
       </TableCell>
 
       <TableCell align="left">{qr}</TableCell>
