@@ -21,6 +21,7 @@ import ListPrizeFilterBar from 'src/event/list-prize/list-prize-dashboard/compon
 import { useSelector } from 'react-redux';
 import { filterGiftSelector, setFilterGift } from '../editEventPrize.Slice';
 import { dispatch } from 'src/common/redux/store';
+import { TableNoData } from 'src/common/components/table';
 
 // --------------------------------------------------------------------------------------------
 export const GiftModal = ({
@@ -31,12 +32,14 @@ export const GiftModal = ({
   giftDta,
   page,
   totalRecords,
+  isLoading,
 }: {
   open: boolean;
   totalRecords: number;
   page: number;
   setPage: (value: number) => void;
   giftDta: IGiftDetail[];
+  isLoading: boolean,
   handleClose: () => void;
   setChoosenGift: (value: IGiftDetail) => void;
 }) => {
@@ -46,6 +49,8 @@ export const GiftModal = ({
     dispatch(setFilterGift(''));
     handleClose();
   };
+
+  const isNotFound = !giftDta.length && !isLoading
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -135,6 +140,7 @@ export const GiftModal = ({
                       </TableCell>
                     </TableRow>
                   ))}
+                  <TableNoData isNotFound={isNotFound}/>
                 </TableBody>
               </Table>
             </TableContainer>
