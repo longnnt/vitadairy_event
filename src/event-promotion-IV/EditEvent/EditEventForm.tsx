@@ -2,12 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
-  Card, FormHelperText, Stack,
+  Card, FormHelperText, InputAdornment, Stack,
   TextField,
   Typography
 } from '@mui/material';
 
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
@@ -22,11 +22,12 @@ import {
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
 import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
-import { BREADCUMBS } from 'src/common/constants/common.constants';
+import { BREADCUMBS, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
 import { ProductCodeModal } from '../components/ProductCodeModal';
 import { DEFAULT_EDIT_VALUE } from '../constant';
@@ -177,10 +178,17 @@ export const EditEventForm = () => {
                   control={control}
                   render={({ field }) => (
                     <Stack position="relative" width="100%">
-                      <DateTimePicker
+                      <MobileDateTimePicker
                         {...field}
                         label="Ngày bắt đầu"
-                        inputFormat="dd/MM/yyyy hh:mm a"
+                        inputFormat={FORMAT_DATE_NEWS}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -200,10 +208,17 @@ export const EditEventForm = () => {
                   control={control}
                   render={({ field }) => (
                     <Stack position={'relative'} width="100%">
-                      <DateTimePicker
+                      <MobileDateTimePicker
                         {...field}
                         label="Ngày kết thúc"
-                        inputFormat="dd/MM/yyyy hh:mm a"
+                        inputFormat={FORMAT_DATE_NEWS}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}

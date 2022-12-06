@@ -6,6 +6,7 @@ import { FormProvider } from 'src/common/components/hook-form';
 // components
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
+import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import { dispatch } from 'src/common/redux/store';
 import {
   setFirstScanEndDate,
@@ -13,7 +14,6 @@ import {
   setSearchText
 } from '../../event.slice';
 import { IFormFilter } from '../../interfaces';
-import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
 
 // ----------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) =
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={FORMATE_DATE_FILTER}
+                      inputFormat={FORMAT_DATE_NEWS}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -144,7 +144,7 @@ export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) =
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={FORMATE_DATE_FILTER}
+                    inputFormat={FORMAT_DATE_NEWS}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

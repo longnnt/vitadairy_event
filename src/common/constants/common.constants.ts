@@ -55,4 +55,6 @@ export const BREADCUMBS = {
 export const CACHE_TIME = 2 * 1000 * 60;
 
 
-export const FORMATE_DATE_FILTER = 'MM/dd/yyyy HH:mm:ss'
+export const FORMAT_DATE_FILTER = 'MM-DD-YYYY HH:mm:ss'
+
+export const FORMAT_DATE_NEWS = 'MM-dd-yyyy HH:mm:ss';
