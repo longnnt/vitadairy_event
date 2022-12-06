@@ -23,8 +23,3 @@ export const HEADERS_CSV = [
 
 export const LIST_USER = 'Danh sách khách hàng';
 
-export const FORMAT_DATE_FILTER = 'MM-DD-yyyy HH:mm:ss'
-
-export const FORMATE_DATE_NEW_REQ = 'MM/DD/YYYY HH:MM:ss'
-
-
