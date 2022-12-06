@@ -5,7 +5,7 @@ import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { IResShopInvitation } from '../common/interfaces';
 // components
 import dayjs from 'dayjs';
-import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 // import { TableMoreMenu } from 'src/components/table';
 
 // ----------------------------------------------------------------------
@@ -59,13 +59,13 @@ export default function InvitationTableRow({
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(registrationDate).isValid()
-          ? dayjs(registrationDate).format(FORMATE_DATE_NEW_REQ)
+          ? dayjs(registrationDate).format(FORMAT_DATE_FILTER)
           : ''}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(firstScanDate).isValid()
-          ? dayjs(firstScanDate).format(FORMATE_DATE_NEW_REQ)
+          ? dayjs(firstScanDate).format(FORMAT_DATE_FILTER)
           : ''}
       </TableCell>
 

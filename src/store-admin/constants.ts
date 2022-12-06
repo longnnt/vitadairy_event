@@ -21,3 +21,4 @@ export const LIST_STORE = 'Danh sách cửa hàng';
 
 export const SIZE = 10000;
 export const FORMAT_DATE_EXPORT_FILE= 'DD_MM_YYYY';
+

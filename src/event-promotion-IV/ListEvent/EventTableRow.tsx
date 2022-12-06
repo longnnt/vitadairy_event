@@ -4,10 +4,9 @@ import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import Can from 'src/common/lib/Can';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { fDate } from 'src/common/utils/formatTime';
-import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
 import { EventTableRowProps } from '../interface';
 
 export const EventTableRow = ({
@@ -53,10 +52,10 @@ export const EventTableRow = ({
         <Link underline="always">{name}</Link>
       </TableCell>
       <TableCell align="left">
-        {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMATE_DATE_NEW_REQ) : ''}
+        {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_FILTER) : ''}
       </TableCell>
       <TableCell align="left">
-        {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMATE_DATE_NEW_REQ) : ''}
+        {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_FILTER) : ''}
       </TableCell>
       <TableCell align="left">
         <TableMoreMenu

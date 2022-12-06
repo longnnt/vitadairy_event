@@ -241,6 +241,7 @@ function NotificationOverviewForm2() {
               onClose={() => {
                 handleClose();
                 dispatch(setFilterGift(''))
+                setPage(0)
               }}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
