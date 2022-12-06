@@ -411,6 +411,7 @@ export const EditEventPrizeForm = () => {
                     setPage={setPage}
                     giftDta={giftDta}
                     page={page}
+                    isLoading={isLoading}
                     totalRecords={data ? data?.data?.pagination?.totalRecords : 0}
                     // onFilterGift={handleFilterGift}
                   />

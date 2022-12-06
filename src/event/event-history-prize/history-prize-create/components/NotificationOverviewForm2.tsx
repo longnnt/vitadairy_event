@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import Scrollbar from 'src/common/components/Scrollbar';
-import { TableHeadCustom } from 'src/common/components/table';
+import { TableHeadCustom, TableNoData } from 'src/common/components/table';
 import useTable from 'src/common/hooks/useTable';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import ListPrizeFilterBar from 'src/event/list-prize/list-prize-dashboard/components/ListPrizeFilterBar';
@@ -82,18 +82,20 @@ function NotificationOverviewForm2() {
     dispatch(setPopUpCode(event.target.value));
   };
   const searchParams: IGiftParams = {
-    page: page + 1,
+    page: page,
     size: SIZE_PAGE,
     keySearch: '',
   };
   if(filterGift.length > 2) searchParams.keySearch = filterGift;
-  const { data: ListGift } = useGetGilf(searchParams);
+  const { data: ListGift, isLoading } = useGetGilf(searchParams);
   const dataGift = ListGift?.data?.response || [];
   const { totalRecords } = ListGift?.data?.pagination || {
     totalRecords: 0,
   };
+  const isNotFound = !dataGift.length && !isLoading
   const handleFilterGift = (filterGift: string) => {
     dispatch(setFilterGift(filterGift));
+    setPage(0)
   }
 
   useEffect(() => {
@@ -282,6 +284,7 @@ function NotificationOverviewForm2() {
                             handleClose={handleClose}
                           />
                         ))}
+                        <TableNoData isNotFound={isNotFound}/>
                       </TableBody>
                     </Table>
                   </TableContainer>
