@@ -1,20 +1,21 @@
 import { LoadingButton } from '@mui/lab';
-import { Stack, InputAdornment, TextField, Box, Grid, Card, Button } from '@mui/material';
+import { Box, Button, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
-import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 // components
 import Iconify from 'src/common/components/Iconify';
+import { dispatch } from 'src/common/redux/store';
+import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
+import { IParamsQuery } from '../common/interfaces';
 import {
   initialState,
   setFirstScanEndDate,
   setFirstScanStartDate,
   setSearchText,
-  setStatus,
+  setStatus
 } from '../invitationSlice';
-import { dispatch } from 'src/common/redux/store';
-import { IParamsQuery } from '../common/interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -109,7 +110,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat="dd/MM/yyyy hh:mm a"
+                      inputFormat={FORMATE_DATE_NEW_REQ}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -133,7 +134,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat="dd/MM/yyyy hh:mm a"
+                    inputFormat={FORMATE_DATE_NEW_REQ}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
