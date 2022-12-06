@@ -8,6 +8,13 @@ export interface IFormStore {
   createdDate: string;
 }
 
+export interface IFormStoreUpdate {
+  code: string;
+  name: string;
+  phoneNumber: string;
+  address: string;
+  isActive: boolean;
+}
 export interface IFormStoreAction {
   data:{
     response:{
