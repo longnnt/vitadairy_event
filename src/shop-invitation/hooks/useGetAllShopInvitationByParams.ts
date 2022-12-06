@@ -9,7 +9,7 @@ export const useGetAllShopInvitationByParams = (params: IParamsQuery) => {
       [QUERY_KEYS.SHOP_INVITATION_LIST, params],
       () => getAllShopInvitationByparams(params),
       {
-        select: (data) => data?.data?.response?.response,
+        select: (data) => data?.data?.response,
       }
     ),
   };
