@@ -43,6 +43,13 @@ export interface IResShopInvitationData {
         msg: string;
       },
       response: IResShopInvitation[];
+      pagination: {
+        totalPages: number;
+        totalRecords: number;
+        currentPage: number;
+        recordsPerPage: number;
+        last: boolean
+      }
     };
   };
 }

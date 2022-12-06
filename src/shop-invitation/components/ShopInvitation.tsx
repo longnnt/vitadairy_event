@@ -71,7 +71,11 @@ export default function ShopInvitation() {
   };
 
   const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);
-  const tableData = data || [];
+  const tableData = data?.response || [];
+
+  const { totalRecords } = data?.pagination || {
+    totalRecords: 0,
+  };
 
   const exportFile = () => {
     const response = getAllShopInvitationExport();
@@ -188,7 +192,7 @@ export default function ShopInvitation() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
-            count={tableData ? tableData.length : 1}
+            count={totalRecords}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onChangePage}
