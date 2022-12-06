@@ -1,19 +1,19 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, InputAdornment, TextField } from '@mui/material';
+import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 
-import {  MobileDateTimePicker } from '@mui/x-date-pickers';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { dispatch } from 'src/common/redux/store';
-import { FORMAT_DATE_NEWS } from '../../constants';
 import {
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText,
+  setSearchText
 } from '../../event.slice';
-import { IFormFilter, IHistoryListEventParams } from '../../interfaces';
-import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
+import { IFormFilter } from '../../interfaces';
+import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
 
 // ----------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) =
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={FORMAT_DATE_NEWS}
+                      inputFormat={FORMATE_DATE_FILTER}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -144,7 +144,7 @@ export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) =
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={FORMAT_DATE_NEWS}
+                    inputFormat={FORMATE_DATE_FILTER}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

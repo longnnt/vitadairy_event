@@ -16,6 +16,7 @@ import { timeout } from 'src/common/lib/common.lib';
 import { dispatch } from 'src/common/redux/store';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { setEndDate, setSearchText, setStartDate } from '../eventPromotionIV.slice';
+import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
 
 interface ISearchParamsProps {
   searchText: string;
@@ -88,7 +89,7 @@ export const EventTableToolbar = () => {
               {...field}
               label="Ngày bắt đầu"
               key={'firstScanStartDate'}
-              inputFormat={'dd/MM/yyyy hh:mm a'}
+              inputFormat={FORMATE_DATE_FILTER}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -109,7 +110,7 @@ export const EventTableToolbar = () => {
               {...field}
               key="firstScanEndDate"
               label="Ngày kết thúc"
-              inputFormat={'dd/MM/yyyy hh:mm a'}
+              inputFormat={FORMATE_DATE_FILTER}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
