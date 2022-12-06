@@ -37,8 +37,8 @@ import useMessage from '../hooks/useMessage';
 import { IFormStore, IStoreParams } from '../interfaces';
 import { exportStoreAdmin } from '../services';
 import {
-  firstScanEndSelector,
-  firstScanStartSelector,
+  endDateSelector,
+  startDateSelector,
   searchTextSelector,
   setShowDataStore,
 } from '../storeAdmin.slice';
@@ -70,8 +70,8 @@ function StoreAdminListDashboard() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const searchText = useSelector(searchTextSelector);
-  const firstScanStart = useSelector(firstScanStartSelector);
-  const firstScanEnd = useSelector(firstScanEndSelector);
+  const startDate = useSelector(startDateSelector);
+  const endDate = useSelector(endDateSelector);
 
   const mutationDetele = useDeleteStoreAdmin({
     onSuccess: () => {
@@ -94,12 +94,15 @@ function StoreAdminListDashboard() {
   const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
-    endDate: firstScanEnd,
-    startDate: firstScanStart,
+    endDate: endDate,
+    startDate: startDate,
     searchText: searchText,
   };
 
   if (searchText) searchParams.searchText = searchText;
+  if (!searchText) delete searchParams.searchText;
+  if (!endDate) delete searchParams.endDate;
+  if (!startDate) delete searchParams.startDate;
 
   const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
 

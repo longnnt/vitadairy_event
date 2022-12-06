@@ -6,8 +6,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
+import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
 import { dispatch } from 'src/common/redux/store';
-import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
 import { IParamsQuery } from '../common/interfaces';
 import {
   initialState,
@@ -27,8 +27,15 @@ export const InvitationTableToolbar = (handleSearch: any) => {
     control,
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
+
+  if (!watch().firstScanEndDate && !watch().searchText && !watch().firstScanStartDate) {
+    dispatch(setSearchText(''));
+    dispatch(setFirstScanStartDate(null));
+    dispatch(setFirstScanEndDate(null));
+  }
 
   const onSubmit = (data: IParamsQuery) => {
     if (data.searchText) dispatch(setSearchText(data.searchText));
@@ -37,7 +44,14 @@ export const InvitationTableToolbar = (handleSearch: any) => {
     dispatch(setFirstScanEndDate(data.firstScanEndDate));
   };
   const handleResetSearch = () => {
-    reset();
+    reset({
+      searchText: '',
+      firstScanStartDate: null,
+      firstScanEndDate: null,
+    });
+    dispatch(setSearchText(''));
+    dispatch(setFirstScanStartDate(null));
+    dispatch(setFirstScanEndDate(null));
   };
   return (
     <>
@@ -110,7 +124,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={FORMATE_DATE_NEW_REQ}
+                      inputFormat={FORMATE_DATE_FILTER}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -134,7 +148,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={FORMATE_DATE_NEW_REQ}
+                    inputFormat={FORMATE_DATE_FILTER}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

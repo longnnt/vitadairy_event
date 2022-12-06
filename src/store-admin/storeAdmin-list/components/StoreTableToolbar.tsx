@@ -6,14 +6,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
+import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
 import { useDispatch } from 'src/common/redux/store';
-import { FORMAT_DATE_NEWS } from 'src/store-admin/constants';
 import { IStoreParams } from '../../interfaces';
 import {
-  initialState,
-  setFirstScanEndDate,
-  setFirstScanStartDate,
-  setSearchText
+  initialState, setEndDate, setSearchText,
+  setStartDate
 } from '../../storeAdmin.slice';
 
 // ----------------------------------------------------------------------
@@ -36,14 +34,14 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
 
   if (!watch().endDate && !watch().searchText && !watch().startDate) {
     dispatch(setSearchText(''));
-    dispatch(setFirstScanStartDate(null));
-    dispatch(setFirstScanEndDate(null));
+    dispatch(setStartDate(null));
+    dispatch(setEndDate(null));
   }
 
   const onSubmit = (data: IStoreParams) => {
     dispatch(setSearchText(data.searchText as string));
-    dispatch(setFirstScanStartDate(data.startDate));
-    dispatch(setFirstScanEndDate(data.endDate));
+    dispatch(setStartDate(data.startDate as null));
+    dispatch(setEndDate(data.endDate as null));
   };
 
   const handleCancel = async () => {
@@ -53,8 +51,8 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
       endDate: null,
     });
     dispatch(setSearchText(''));
-    dispatch(setFirstScanStartDate(null));
-    dispatch(setFirstScanEndDate(null));
+    dispatch(setStartDate(null));
+    dispatch(setEndDate(null));
   };
 
   return (
@@ -118,7 +116,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
                       {...field}
                       label="Start date"
                       key={'startDate'}
-                      inputFormat={FORMAT_DATE_NEWS}
+                      inputFormat={FORMATE_DATE_FILTER}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -142,7 +140,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
                     {...field}
                     key="endDate"
                     label="End date"
-                    inputFormat={FORMAT_DATE_NEWS}
+                    inputFormat={FORMATE_DATE_FILTER}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

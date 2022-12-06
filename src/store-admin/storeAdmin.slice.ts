@@ -23,10 +23,10 @@ export const storeAdminSlice = createSlice({
     setSearchText: (state, action: IPayloadSearch) => {
       state.searchText = action.payload;
     },
-    setFirstScanStartDate: (state, action: IPayloadDate) => {
+    setStartDate: (state, action: IPayloadDate) => {
       state.startDate = action.payload;
     },
-    setFirstScanEndDate: (state, action: IPayloadDate) => {
+    setEndDate: (state, action: IPayloadDate) => {
       state.endDate = action.payload;
     },
    
@@ -37,14 +37,14 @@ export const storeAdminSlice = createSlice({
 });
 
 export const {
-  setFirstScanEndDate,
-  setFirstScanStartDate,
+  setEndDate,
+  setStartDate,
   setSearchText,
   setShowDataStore,
 } = storeAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.storeAdmin.searchText;
-export const firstScanStartSelector = (state: RootState) => state.storeAdmin.startDate;
-export const firstScanEndSelector = (state: RootState) => state.storeAdmin.endDate;
+export const startDateSelector = (state: RootState) => state.storeAdmin.startDate;
+export const endDateSelector = (state: RootState) => state.storeAdmin.endDate;
 export const showDataStoreSelector = (state: RootState) => state.storeAdmin.showDataStore;
 export default storeAdminSlice.reducer;
