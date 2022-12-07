@@ -16,20 +16,32 @@ export interface IFormStoreDetail {
   isActive: boolean;
 }
 export interface IResEditStoreAdmin {
+  meta: {
+    msg: string;
+    status: number;
+  };
   response: {
-    code: string;
-    name: string;
-    phoneNumber: string;
-    address: string;
-    isActive: boolean;
-  }
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: {
+      code: string;
+      name: string;
+      phoneNumber: string;
+      address: string;
+      qrLink: string;
+      isActive: boolean;
+      createdDate: string;
+    };
+  };
 }
 export interface IFormStoreAction {
-  data:{
-    response:{
-      response:IFormStore
-    }
-  }
+  data: {
+    response: {
+      response: IFormStore;
+    };
+  };
 }
 
 export interface IPayloadSearch {
@@ -51,7 +63,7 @@ export type IStoreAdminCallback = {
   onError: VoidFunction;
 };
 
-export interface IStories { 
+export interface IStories {
   data: Array<IFormStore>;
   total: number;
 }
@@ -84,7 +96,7 @@ export interface IDataStore {
       meta: {
         status: number;
         msg: string;
-      },
+      };
       pagination: {
         totalPages: number;
         totalRecords: number;

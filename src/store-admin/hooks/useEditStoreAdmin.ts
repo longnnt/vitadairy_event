@@ -7,8 +7,8 @@ export const useEditStoreAdmin = (callback: IStoreAdminCallback) => {
   const queryClient = useQueryClient();
   return {
     ...useMutation(editStoreAdmin, {
-      onSuccess: (_result, variables) => {
-        queryClient.invalidateQueries([QUERY_KEYS.STORE_ADMIN_EDIT, variables.id]);
+      onSuccess: (_result, _variables) => {
+        queryClient.invalidateQueries([QUERY_KEYS.STORE_ADMIN]);
 
         callback.onSuccess && callback.onSuccess();
       },

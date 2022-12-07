@@ -5,11 +5,22 @@ import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormProvider, RHFSelect, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
+import {
+  FormProvider,
+  RHFSelect,
+  RHFSwitch,
+  RHFTextField,
+} from 'src/common/components/hook-form';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { defaultValues } from '../../constants';
 import { useSelector } from 'react-redux';
-import { adminDetailSelector, confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/admin/admin.slice';
+import {
+  adminDetailSelector,
+  confirmEditSelector,
+  openEditModalSelector,
+  setConfirmEdit,
+  setOpeneditModal,
+} from 'src/admin/admin.slice';
 import { useEditAdmin } from 'src/admin/hooks/useEditAdmin';
 import { IFormAdmin } from 'src/admin/interfaces';
 import { NewAdminSchema } from 'src/admin/schema';
@@ -19,7 +30,7 @@ import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { EditStoreAdminSchema } from 'src/store-admin/storeAdmin.schema';
 import { useEditStoreAdmin } from 'src/store-admin/hooks/useEditStoreAdmin';
-import { IFormStoreDetail } from 'src/store-admin/interfaces';
+import { IFormStore, IFormStoreDetail } from 'src/store-admin/interfaces';
 import { setStoreAdminDetailSelector } from 'src/store-admin/storeAdmin.slice';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -29,10 +40,10 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 function EditStoreAdminForm() {
+  const navigate = useNavigate();
   const params = useParams();
   const id = params?.id;
-  const navigate = useNavigate();
-  const dataStoreAdmin = useSelector(setStoreAdminDetailSelector)
+  const dataStoreAdmin = useSelector(setStoreAdminDetailSelector);
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const { useDeepCompareEffect } = useDeepEffect();
@@ -41,9 +52,9 @@ function EditStoreAdminForm() {
   const openEditModal = useSelector(openEditModalSelector);
   const confirmEdit = useSelector(confirmEditSelector);
 
-  const { mutate, isSuccess,isLoading } = useEditStoreAdmin({
-    onSuccess: () => { 
-      showSuccessSnackbar('Chỉnh sửa cửa hàng thành công')
+  const { mutate, isSuccess, isLoading } = useEditStoreAdmin({
+    onSuccess: () => {
+      showSuccessSnackbar('Chỉnh sửa cửa hàng thành công');
     },
     onError: () => {
       showErrorSnackbar('Chỉnh sửa cửa hàng thất bại');
@@ -54,43 +65,45 @@ function EditStoreAdminForm() {
     if (isSuccess) navigate(PATH_DASHBOARD.storeAdmin.list);
   }, [isSuccess]);
 
-  const methods = useForm<IFormStoreDetail>({
+  const methods = useForm<IFormStore>({
     resolver: yupResolver(EditStoreAdminSchema),
     defaultValues,
   });
 
   const {
     reset,
-    control,
-    setValue,
     watch,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
-  const dataRes = dataStoreAdmin?.response;
+  const dataRes = dataStoreAdmin?.response?.response;
+
   useEffect(() => {
     if (dataRes) {
       dataRes;
       reset(dataRes);
     }
   }, [dataStoreAdmin]);
-  const onSubmit = async (data: IFormStoreDetail) => {
+  const onSubmit = (data: IFormStore) => {
     handleOpenEditModal();
   };
   useDeepCompareEffect(() => {
-    const data = watch();
+    const dataEditStore = watch();
     if (confirmEdit) {
-      const dataEdit:IFormStoreDetail={
-        name: data.name,
-        phoneNumber: data.phoneNumber,
-        address: data.address,
-        isActive: data.isActive,
-        code: data.code,
-      }
-      mutate({ data: dataEdit, id: parseInt(id as string) })
+      const dataEdit: IFormStore = {
+        name: dataEditStore.name,
+        phoneNumber: dataEditStore.phoneNumber,
+        address: dataEditStore.address,
+        isActive: dataEditStore.isActive,
+        code: dataEditStore.code,
+        qrLink: dataEditStore.qrLink,
+        createdDate: dataEditStore.createdDate
+      };
+      mutate({ data: dataEdit });
       dispatch(setConfirmEdit(false));
-
     }
+    console.log(dataEditStore)
+    console.log(watch())
   }, [confirmEdit]);
   const handleCancel = () => {
     reset();
@@ -104,30 +117,37 @@ function EditStoreAdminForm() {
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={2}>
-              {/* {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>} */}
-
               <RHFTextField
                 name="code"
+                key={'code'}
                 label="Mã định danh"
                 InputLabelProps={{ shrink: true }}
               />
 
               <RHFTextField
                 name="name"
+                key={'name'}
                 label="Tên"
                 InputLabelProps={{ shrink: true }}
               />
               <RHFTextField
                 name="phoneNumber"
+                key={'phoneNumber'}
                 label="Số điện thoại"
                 InputLabelProps={{ shrink: true }}
               />
+              <RHFTextField
+                name="address"
+                key={'address'}
+                label="Địa chỉ"
+                InputLabelProps={{ shrink: true }}
+              />
               <RHFSwitch
-                    name="isActive"
-                    label="Active"
-                    labelPlacement="start"
-                    sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-                  />
+                name="isActive"
+                key={'isActive'}
+                label="Active"
+                labelPlacement="start"
+              />
             </Stack>
           </Card>
         </Grid>
@@ -140,7 +160,6 @@ function EditStoreAdminForm() {
               type="submit"
               variant="contained"
               loading={isLoading}
-
             >
               Edit
             </LoadingButton>
@@ -156,13 +175,12 @@ function EditStoreAdminForm() {
           </Stack>
         </Grid>
         <ConfirmEditModal
-            open={openEditModal}
-            handleClose={handleCloseEditModal}
-            handleOnAgree={handleOnAgree}
-            type='Chỉnh sửa tài khoản'
-            colorType={true}
-            // setConfirmEdit={setConfirmEdit}
-          />
+          open={openEditModal}
+          handleClose={handleCloseEditModal}
+          handleOnAgree={handleOnAgree}
+          type="Chỉnh sửa cửa hàng"
+          colorType={true}
+        />
       </FormProvider>
     </>
   );

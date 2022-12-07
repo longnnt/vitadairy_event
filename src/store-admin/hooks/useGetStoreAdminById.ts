@@ -4,16 +4,18 @@ import { IStoreAdminCallback } from '../interfaces';
 import { getStoreAdminById } from '../services';
 
 export const useGetStoreAdminById = ({
-  id,
+  code,
   callback,
 }: {
-  id: number;
+  code: string;
   callback: IStoreAdminCallback;
 }) =>
-  useQuery([QUERY_KEYS.EDIT_ADMIN, id], () => getStoreAdminById(id), {
+  useQuery([QUERY_KEYS.STORE_ADMIN, code], () => getStoreAdminById(code), {
     onSuccess() {
+      callback.onSuccess && callback.onSuccess();
     },
     onError() {
       callback.onError && callback.onError();
     },
   });
+  

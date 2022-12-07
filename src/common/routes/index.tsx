@@ -71,7 +71,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/store" replace />, index: true },
             { path: 'stories', element: <ListStore /> },
-            {path: 'stories/:id', element: <EditStore />}
+            { path: 'stories/:id', element: <EditStore />}
           ],
         },
         {
