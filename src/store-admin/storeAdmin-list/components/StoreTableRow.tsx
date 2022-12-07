@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { setCode } from 'src/auth/login/login.slice';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { FORMATE_DATE_NEW_REQ } from 'src/store-admin/constants';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { IPropsStoreTableRow } from '../../interfaces';
@@ -62,7 +62,7 @@ function StoreTableRow({
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(createdDate).isValid()
-          ? dayjs(createdDate).format(FORMATE_DATE_NEW_REQ)
+          ? dayjs(createdDate).format(FORMAT_DATE_FILTER)
           : ''}
       </TableCell>
 

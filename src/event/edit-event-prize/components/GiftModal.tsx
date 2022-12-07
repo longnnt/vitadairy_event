@@ -67,6 +67,7 @@ export const GiftModal = ({
         onClose={() => {
           handleClose();
           dispatch(setFilterGift(''))
+          setPage(0)
         }}
         aria-labelledby="modal-dialog-title"
         aria-describedby="modal-dialog-description"

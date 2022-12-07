@@ -20,10 +20,11 @@ import * as React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import Iconify from 'src/common/components/Iconify';
+import { FORMAT_DATE_FILTER, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useShowSnackbar from 'src/store-admin/hooks/useMessage';
-import { COLUMNS_HEADERS, CSV, FORMAT_DATE_NEWS, PROVINCE, ScrollProvinceEnum } from '../../constants';
+import { COLUMNS_HEADERS, CSV, PROVINCE, ScrollProvinceEnum } from '../../constants';
 import {
   setFileCSV,
   setProvinceInFoSelector
@@ -201,8 +202,8 @@ export default function ProvinceTableForm() {
               provinceId: item.provinceId,
               quantity: item.quantity,
               extraquantity: item.extraquantity,
-              startDate: dayjs(item.startDate, FORMAT_DATE_NEWS),
-              endDate: dayjs(item.endDate, FORMAT_DATE_NEWS),
+              startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+              endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
               isNew: false,
             };
           });
@@ -295,7 +296,7 @@ export default function ProvinceTableForm() {
       flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
       renderEditCell(param) {
         return (
@@ -340,7 +341,7 @@ export default function ProvinceTableForm() {
       flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
 
       renderEditCell(param) {

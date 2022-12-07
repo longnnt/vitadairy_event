@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
-import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
+import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import { useDispatch } from 'src/common/redux/store';
 import { IStoreParams } from '../../interfaces';
 import {
@@ -116,7 +116,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
                       {...field}
                       label="Start date"
                       key={'startDate'}
-                      inputFormat={FORMATE_DATE_FILTER}
+                      inputFormat={FORMAT_DATE_NEWS}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -140,7 +140,7 @@ export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: bo
                     {...field}
                     key="endDate"
                     label="End date"
-                    inputFormat={FORMATE_DATE_FILTER}
+                    inputFormat={FORMAT_DATE_NEWS}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

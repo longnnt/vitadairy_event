@@ -18,6 +18,13 @@ export interface IResShopInvitation {
   isSuccess: boolean;
 }
 
+export type StateProps = {
+  firstScanStartDate: Date | null;
+  searchText: string;
+  firstScanEndDate: Date | null;
+  status: string | boolean;
+};
+
 export interface IPayloadSearch {
   payload: string;
   type: string;

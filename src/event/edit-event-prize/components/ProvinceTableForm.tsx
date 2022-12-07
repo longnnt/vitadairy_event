@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
 import Iconify from 'src/common/components/Iconify';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS, DATE_FORMAT } from '../common/constants';
+import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS } from '../common/constants';
 import {
   IEventDetailProvinces,
   IEventProvince,
@@ -39,6 +39,7 @@ import { Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
+import { FORMAT_DATE_FILTER, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 
 // --------------------------------------------------------------------------
 
@@ -196,8 +197,8 @@ export default function PovinceTableForm() {
               id: id,
               provinceId: item.provinceId,
               extraquantity: item.extraquantity,
-              startDate: dayjs(item.startDate, DATE_FORMAT),
-              endDate: dayjs(item.endDate, DATE_FORMAT),
+              startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+              endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
               isNew: false,
             };
           });
@@ -292,7 +293,7 @@ export default function PovinceTableForm() {
       flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
       renderEditCell(param) {
         return (
@@ -310,7 +311,7 @@ export default function PovinceTableForm() {
                   clearErrors(`eventDetailProvinces.${param.row.id}.startDate`);
                   setValue(`eventDetailProvinces.${param.row.id}.startDate`, value);
                 }}
-                inputFormat={'dd/MM/yyyy hh:mm a'}
+                inputFormat={FORMAT_DATE_NEWS}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -337,7 +338,7 @@ export default function PovinceTableForm() {
       flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
 
       renderEditCell(param) {
@@ -356,7 +357,7 @@ export default function PovinceTableForm() {
                   clearErrors(`eventDetailProvinces.${param.row.id}.endDate`);
                   setValue(`eventDetailProvinces.${param.row.id}.endDate`, value);
                 }}
-                inputFormat={'dd/MM/yyyy hh:mm a'}
+                inputFormat={FORMAT_DATE_NEWS}
                 renderInput={(params: any) => (
                   <TextField
                     {...params}

@@ -1,12 +1,12 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
-import { FORMATE_DATE_FILTER } from 'src/common/constants/common.constants';
+import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import { dispatch } from 'src/common/redux/store';
 import { IParamsQuery } from '../common/interfaces';
 import {
@@ -19,7 +19,8 @@ import {
 
 // ----------------------------------------------------------------------
 
-export const InvitationTableToolbar = (handleSearch: any) => {
+export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
+  const {handleSearch} = {...props}
   const methods = useForm({
     defaultValues: initialState,
   });
@@ -39,7 +40,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
 
   const onSubmit = (data: IParamsQuery) => {
     if (data.searchText) dispatch(setSearchText(data.searchText));
-    if (data.status) dispatch(setStatus(data.status));
+    if (data.status) dispatch(setStatus(data.status as boolean));
     dispatch(setFirstScanStartDate(data.firstScanStartDate));
     dispatch(setFirstScanEndDate(data.firstScanEndDate));
   };
@@ -120,11 +121,11 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <DateTimePicker
+                    <MobileDateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={FORMATE_DATE_FILTER}
+                      inputFormat={FORMAT_DATE_NEWS}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -144,11 +145,11 @@ export const InvitationTableToolbar = (handleSearch: any) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <DateTimePicker
+                  <MobileDateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={FORMATE_DATE_FILTER}
+                    inputFormat={FORMAT_DATE_NEWS}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

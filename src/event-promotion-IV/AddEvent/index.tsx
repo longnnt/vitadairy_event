@@ -10,18 +10,20 @@ import {
   RadioGroup,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
 
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
-import { BREADCUMBS } from 'src/common/constants/common.constants';
+import { BREADCUMBS, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
+import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { defaultValues, userTypeCons } from '../constant';
@@ -31,14 +33,12 @@ import {
   setButtonType,
   setProduct,
   setUserType,
-  userTypeState,
+  userTypeState
 } from '../eventPromotionIV.slice';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
-import { IEventFormData, IProCodeSelect, UserType } from '../interface';
+import { IEventFormData, IProCodeSelect } from '../interface';
 import { schemaAddEvent } from '../schema';
 import { getProductCode } from '../service';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
-import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
 
 export const AddEvent = () => {
   const navigate = useNavigate();
@@ -113,7 +113,7 @@ export const AddEvent = () => {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="DANH SÁCH SỰ KIỆN"
+        heading="TẠO MỚI SỰ KIỆN"
         links={[
           { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
           { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
@@ -143,7 +143,7 @@ export const AddEvent = () => {
                       <DateTimePicker
                         {...field}
                         label="Ngày bắt đầu"
-                        inputFormat="dd/MM/yyyy hh:mm a"
+                        inputFormat={FORMAT_DATE_NEWS}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -165,7 +165,7 @@ export const AddEvent = () => {
                       <DateTimePicker
                         {...field}
                         label="Ngày kết thúc"
-                        inputFormat="dd/MM/yyyy hh:mm a"
+                        inputFormat={FORMAT_DATE_NEWS}
                         renderInput={(params) => (
                           <TextField
                             {...params}
