@@ -15,7 +15,6 @@ import { EditStoreAdminForm } from './components/EditStoreAdminForm';
 export default function EditStoreAdminDashboard() {
   const params = useParams();
   const id = params?.id;
-  // console.log(id)
   const { useDeepCompareEffect } = useDeepEffect();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
@@ -26,7 +25,6 @@ export default function EditStoreAdminDashboard() {
       onError: () => showErrorSnackbar('Get store admin fail'),
     },
   });
-  // console.log(data)
   const storeAdminDetail: IResEditStoreAdmin = data?.data;
   useDeepCompareEffect(() => {
     dispatch(setStoreAdmintDetail(storeAdminDetail));

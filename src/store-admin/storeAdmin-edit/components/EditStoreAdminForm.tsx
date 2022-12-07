@@ -102,8 +102,6 @@ function EditStoreAdminForm() {
       mutate({ data: dataEdit });
       dispatch(setConfirmEdit(false));
     }
-    console.log(dataEditStore)
-    console.log(watch())
   }, [confirmEdit]);
   const handleCancel = () => {
     reset();
