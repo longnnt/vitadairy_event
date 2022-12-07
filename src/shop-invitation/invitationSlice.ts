@@ -5,14 +5,8 @@ import {
   IPayloadDate,
   IPayloadSearch,
   IPayloadStatus,
+  StateProps,
 } from './common/interfaces';
-
-type StateProps = {
-  firstScanStartDate: Date | null;
-  searchText: string;
-  firstScanEndDate: Date | null;
-  status: string | boolean;
-};
 
 export const initialState: StateProps = {
   searchText: '',
