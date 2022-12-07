@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import {
   IParamsQuery,
@@ -7,7 +7,14 @@ import {
   IPayloadStatus,
 } from './common/interfaces';
 
-export const initialState: IParamsQuery = {
+type StateProps = {
+  firstScanStartDate: Date | null;
+  searchText: string;
+  firstScanEndDate: Date | null;
+  status: string | boolean;
+};
+
+export const initialState: StateProps = {
   searchText: '',
   firstScanStartDate: null,
   firstScanEndDate: null,
@@ -27,7 +34,7 @@ export const invitationSlice = createSlice({
     setFirstScanEndDate: (state, action: IPayloadDate) => {
       state.firstScanEndDate = action.payload;
     },
-    setStatus: (state, action: IPayloadStatus) => {
+    setStatus: (state, action: PayloadAction<boolean>) => {
       state.status = action.payload;
     },
   },

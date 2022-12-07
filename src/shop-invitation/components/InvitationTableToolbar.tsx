@@ -19,7 +19,8 @@ import {
 
 // ----------------------------------------------------------------------
 
-export const InvitationTableToolbar = (handleSearch: any) => {
+export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
+  const {handleSearch} = {...props}
   const methods = useForm({
     defaultValues: initialState,
   });
@@ -39,7 +40,7 @@ export const InvitationTableToolbar = (handleSearch: any) => {
 
   const onSubmit = (data: IParamsQuery) => {
     if (data.searchText) dispatch(setSearchText(data.searchText));
-    if (data.status) dispatch(setStatus(data.status));
+    if (data.status) dispatch(setStatus(data.status as boolean));
     dispatch(setFirstScanStartDate(data.firstScanStartDate));
     dispatch(setFirstScanEndDate(data.firstScanEndDate));
   };
