@@ -296,7 +296,7 @@ export default function ProvinceTableForm() {
       flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
       renderEditCell(param) {
         return (
@@ -341,7 +341,7 @@ export default function ProvinceTableForm() {
       flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
 
       renderEditCell(param) {
