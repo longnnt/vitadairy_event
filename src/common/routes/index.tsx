@@ -71,6 +71,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/store" replace />, index: true },
             { path: 'stories', element: <ListStore /> },
+            {path: 'stories/:id', element: <EditStore />}
           ],
         },
         {
@@ -150,6 +151,7 @@ const ResetPassword = Loadable(
 const ListStore = Loadable(
   lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin'))
 );
+const EditStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/EditStoreAdmin')));
 
 // EVENT ADMIN
 const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));

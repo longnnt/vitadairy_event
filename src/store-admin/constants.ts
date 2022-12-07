@@ -9,10 +9,6 @@ export const TABLE_HEAD = [
 
 export const SUCCESS_UPLOAD_CODE = 1000;
 
-export const FORMATE_CREATE_DATE = 'MMMM D, YYYY h:mm A';
-
-export const FORMATE_CREATE_DATE_HISTORY_LIST = 'HH:mm:ss DD/MM/YYYY';
-
 export const FORMATE_DATE_NEW_REQ = 'MM/DD/YYYY HH:MM:ss'
 
 export const FORMAT_DATE_NEWS = 'dd-MM-yyyy hh:mm a';
@@ -21,3 +17,11 @@ export const LIST_STORE = 'Danh sách cửa hàng';
 
 export const SIZE = 10000;
 export const FORMAT_DATE_EXPORT_FILE= 'DD_MM_YYYY';
+
+export const defaultValues = {
+  address: '',
+  code: '',
+  isActive: true || false,
+  name: '',
+  phoneNumber: '',
+}
