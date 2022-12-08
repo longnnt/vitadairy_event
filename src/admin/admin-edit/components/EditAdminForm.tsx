@@ -92,7 +92,7 @@ function EditFormAdmin() {
     }
   }, [confirmEdit]);
   const handleCancel = () => {
-    reset();
+    navigate(PATH_DASHBOARD.admin.list)
   };
   const handleOnAgree = () => {
     dispatch(setConfirmEdit(true));
@@ -147,25 +147,24 @@ function EditFormAdmin() {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }} justifyContent='flex-end'>
             <LoadingButton
-              fullWidth
               size="large"
               type="submit"
               variant="contained"
               loading={isLoading}
-
+              sx={{ width: '20%', alignSelf: 'flex-end' }}
             >
-              Edit
+              Lưu
             </LoadingButton>
             <LoadingButton
-              fullWidth
               color="inherit"
               variant="contained"
               size="large"
               onClick={handleCancel}
+              sx={{ width: '20%', marginLeft: 2, alignSelf: 'flex-end' }}
             >
-              Cancel
+              Hủy chỉnh sửa
             </LoadingButton>
           </Stack>
         </Grid>
