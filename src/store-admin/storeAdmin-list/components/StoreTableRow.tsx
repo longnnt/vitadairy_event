@@ -1,8 +1,11 @@
-import { Link, Switch, TableCell, TableRow } from '@mui/material';
+import { Link, Switch, TableCell, TableRow, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setCode } from 'src/auth/login/login.slice';
+import Iconify from 'src/common/components/Iconify';
+import { TableMoreMenu } from 'src/common/components/table';
 import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
@@ -10,10 +13,26 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import { IPropsStoreTableRow } from '../../interfaces';
 // ----------------------------------------------------------------------
 
-function StoreTableRow({ row, selected }: IPropsStoreTableRow) {
+function StoreTableRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onDeleteRow,
+}: IPropsStoreTableRow) {
   const navigate = useNavigate();
 
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
+
+  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
+
+  const handleOpenMenu = (category: React.MouseEvent<HTMLElement>) => {
+    setOpenMenuActions(category.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpenMenuActions(null);
+  };
 
   const dispatch = useDispatch();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
@@ -64,9 +83,26 @@ function StoreTableRow({ row, selected }: IPropsStoreTableRow) {
           }}
         />
       </TableCell>
+      <TableCell align="right">
+        <TableMoreMenu
+          open={openMenu}
+          onOpen={handleOpenMenu}
+          onClose={handleCloseMenu}
+          actions={
+            <MenuItem
+              onClick={() => {
+                onEditRow();
+                handleCloseMenu();
+              }}
+            >
+              <Iconify icon={'eva:edit-fill'} />
+              Edit
+            </MenuItem>
+          }
+        />
+      </TableCell>
     </TableRow>
   );
 }
 
 export { StoreTableRow };
-

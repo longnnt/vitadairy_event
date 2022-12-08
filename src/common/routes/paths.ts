@@ -55,6 +55,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
     shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
+    edit_store: (editStoreId: string) => path(ROOTS_DASHBOARD, `/stories/${editStoreId}`),
     edit_shop: (shopID: string) =>
       path(ROOTS_DASHBOARD, `/shop-invitation/${shopID}`),
   },

@@ -29,7 +29,7 @@ export const FIELD = {
 };
 
 export const BREADCUMBS = {
-  DASHBOARD: 'Dashboard',
+  DASHBOARD: 'Trang chủ',
   LIST_EVENT: 'Sự kiện Promotion quý 4',
   CREATE_EVENT: 'Tạo mới sự kiện',
   VIEW_EVENT: 'Xem sự kiện',

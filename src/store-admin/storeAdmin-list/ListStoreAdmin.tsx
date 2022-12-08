@@ -28,7 +28,7 @@ import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { PATH_DASHBOARD, ROOTS_DASHBOARD } from 'src/common/routes/paths';
 import { SIZE, TABLE_HEAD,FORMAT_DATE_EXPORT_FILE } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
@@ -163,7 +163,9 @@ function StoreAdminListDashboard() {
       .catch((error) => console.log(error));
   };
 
-  const handleEditRow = (id: string) => {};
+  const handleEditRow = (code: string) => {
+    navigate(PATH_DASHBOARD.storeAdmin.edit_store(code))
+  };
 
   const { totalRecords } = data?.pagination || {
     totalRecords: 0,
