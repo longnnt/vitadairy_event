@@ -4,6 +4,7 @@ export type RowProps = {
   name: string;
   startDate: number;
   endDate: number;
+  isActive: boolean;
 };
 
 export interface EventTableRowProps {
