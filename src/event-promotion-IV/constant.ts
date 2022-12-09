@@ -5,21 +5,31 @@ export const TABLE_HEAD = [
     id: 'nameEvent',
     label: 'Tên sự kiện',
     align: 'left',
+    flex: 1,
   },
   {
     id: 'startDate',
     label: 'Ngày bắt đầu',
     align: 'left',
+    flex: 1,
   },
   {
     id: 'endDate',
     label: 'Ngày kết thúc',
     align: 'left',
+    flex: 1,
+  },
+  {
+    id: 'isActive',
+    label: 'Active',
+    align: 'left',
+    flex: 1,
   },
   {
     id: 'option',
     label: 'Tùy chọn',
     align: 'left',
+    flex: 1,
   },
 ];
 

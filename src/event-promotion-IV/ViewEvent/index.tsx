@@ -11,6 +11,7 @@ import {
   Stack,
   TextField,
   Typography,
+  Switch
 } from '@mui/material';
 import { DatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
@@ -180,6 +181,8 @@ export const ViewEvent = () => {
                     disabled
                     checked={userRegisterDate !== null}
                   />
+                  <Typography marginTop = {0.9} marginRight = {1} color="#919EAB">Trạng thái quà</Typography>
+                  <Switch disabled name="isActive" />
                 </RadioGroup>
               </FormControl>
 
