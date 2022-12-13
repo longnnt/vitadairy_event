@@ -1,4 +1,4 @@
-import { Checkbox, Link, MenuItem, TableCell, TableRow } from '@mui/material';
+import { Checkbox, Link, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
 import dayjs from 'dayjs';
 import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ export const EventTableRow = ({
   onViewRow,
 }: EventTableRowProps) => {
   const navigate = useNavigate();
-  const { name, startDate, endDate, id } = row;
+  const { name, startDate, endDate, isActive,id } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -56,6 +56,13 @@ export const EventTableRow = ({
       </TableCell>
       <TableCell align="left">
         {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_FILTER) : ''}
+      </TableCell>
+      <TableCell align="left" title={isActive === true ? 'actived' : 'unActivced'}>
+        <Switch
+          size="medium"
+          defaultChecked={isActive}
+          onChange={() => {}}
+        />
       </TableCell>
       <TableCell align="left">
         <TableMoreMenu

@@ -9,6 +9,7 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Switch,
   TextField,
   Typography
 } from '@mui/material';
@@ -21,7 +22,7 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
+import { FormProvider, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
@@ -227,6 +228,8 @@ export const AddEvent = () => {
                     control={<Radio />}
                     label="Người dùng mới"
                   />
+                  <Typography marginTop={0.9} marginRight={1}>Trạng thái quà</Typography>
+                  <RHFSwitch name="isActive" label="" />
                 </RadioGroup>
               </FormControl>
               <Controller
