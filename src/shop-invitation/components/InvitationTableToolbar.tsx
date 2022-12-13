@@ -8,6 +8,7 @@ import { FormProvider, RHFSelect } from 'src/common/components/hook-form';
 import Iconify from 'src/common/components/Iconify';
 import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import { dispatch } from 'src/common/redux/store';
+import { SEARCH_BY, STATUS } from '../common/constants';
 import { IParamsQuery } from '../common/interfaces';
 import {
   initialState,
@@ -71,9 +72,9 @@ export const InvitationTableToolbar = (props: { handleSearch: Function }) => {
               <Stack spacing={'20px'}>
                 <RHFSelect name={'searchBy'} key="searchBy" label={'Tìm kiếm theo...'}>
                   <option value="" />
-                  <option value={'STORE_CODE'}>Mã định danh</option>
-                  <option value={'USER_NAME'}>Tên khách hàng</option>
-                  <option value={'PHONE_NUMBER'}>Số điện thoại</option>
+                  <option value={SEARCH_BY.STORE_CODE}>Mã định danh</option>
+                  <option value={SEARCH_BY.USER_NAME}>Tên khách hàng</option>
+                  <option value={SEARCH_BY.PHONE_NUMBER}>Số điện thoại</option>
                 </RHFSelect>
                 <Controller
                   name="searchText"
@@ -100,8 +101,8 @@ export const InvitationTableToolbar = (props: { handleSearch: Function }) => {
 
                 <RHFSelect name={'status'} key="status" label={'Trạng thái'}>
                   <option value="" />
-                  <option value={'true'}>Success</option>
-                  <option value={'false'}>Not Success</option>
+                  <option value={STATUS.SUCCESS}>Success</option>
+                  <option value={STATUS.FAIL}>Not Success</option>
                 </RHFSelect>
 
                 <Box>

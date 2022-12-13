@@ -119,7 +119,7 @@ function EditStoreAdminForm() {
                 name="code"
                 key={'code'}
                 label="Mã định danh"
-                disabled={true}
+                disabled
                 InputLabelProps={{ shrink: true }}
               />
 
@@ -127,6 +127,7 @@ function EditStoreAdminForm() {
                 name="name"
                 key={'name'}
                 label="Tên"
+                disabled
                 InputLabelProps={{ shrink: true }}
               />
               <RHFTextField
