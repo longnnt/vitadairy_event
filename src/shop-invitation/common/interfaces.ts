@@ -5,7 +5,7 @@ export interface IParamsQuery {
   status: boolean | string;
   page?: number;
   size?: number;
-  storeId?: number | string;
+  storeCode?: number | string;
   searchBy: string | boolean;
 }
 
