@@ -13,14 +13,15 @@ import {
   initialState,
   setFirstScanEndDate,
   setFirstScanStartDate,
+  setSearchBy,
   setSearchText,
-  setStatus
+  setStatus,
 } from '../invitationSlice';
 
 // ----------------------------------------------------------------------
 
-export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
-  const {handleSearch} = {...props}
+export const InvitationTableToolbar = (props: { handleSearch: Function }) => {
+  const { handleSearch } = { ...props };
   const methods = useForm({
     defaultValues: initialState,
   });
@@ -32,15 +33,18 @@ export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
     formState: { isSubmitting, errors },
   } = methods;
 
-  if (!watch().firstScanEndDate && !watch().searchText && !watch().firstScanStartDate) {
+  if (!watch().firstScanEndDate && !watch().searchText && !watch().firstScanStartDate && !watch().searchBy && !watch().status) {
     dispatch(setSearchText(''));
     dispatch(setFirstScanStartDate(null));
     dispatch(setFirstScanEndDate(null));
+    dispatch(setSearchBy(''));
+    dispatch(setStatus(''));
   }
 
   const onSubmit = (data: IParamsQuery) => {
-    if (data.searchText) dispatch(setSearchText(data.searchText));
-    if (data.status) dispatch(setStatus(data.status as boolean));
+    if (data.searchText) dispatch(setSearchText(data.searchText as string));
+    if (data.status) dispatch(setStatus(data.status as string));
+    dispatch(setSearchBy(data.searchBy as string));
     dispatch(setFirstScanStartDate(data.firstScanStartDate));
     dispatch(setFirstScanEndDate(data.firstScanEndDate));
   };
@@ -49,10 +53,14 @@ export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
       searchText: '',
       firstScanStartDate: null,
       firstScanEndDate: null,
+      searchBy: '',
+      status: '',
     });
     dispatch(setSearchText(''));
     dispatch(setFirstScanStartDate(null));
     dispatch(setFirstScanEndDate(null));
+    dispatch(setSearchBy(''));
+    dispatch(setStatus(''));
   };
   return (
     <>
@@ -61,6 +69,12 @@ export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
           <Grid container spacing={5} py="30px">
             <Grid item xs={10} md={4} ml="20px">
               <Stack spacing={'20px'}>
+                <RHFSelect name={'searchBy'} key="searchBy" label={'Tìm kiếm theo...'}>
+                  <option value="" />
+                  <option value={'STORE_CODE'}>Mã định danh</option>
+                  <option value={'USER_NAME'}>Tên khách hàng</option>
+                  <option value={'PHONE_NUMBER'}>Số điện thoại</option>
+                </RHFSelect>
                 <Controller
                   name="searchText"
                   control={control}
@@ -84,7 +98,7 @@ export const InvitationTableToolbar = (props: {handleSearch: Function}) => {
                   )}
                 />
 
-                <RHFSelect name={'status'} key="status" label={'Status'}>
+                <RHFSelect name={'status'} key="status" label={'Trạng thái'}>
                   <option value="" />
                   <option value={'true'}>Success</option>
                   <option value={'false'}>Not Success</option>
