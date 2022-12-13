@@ -1,10 +1,12 @@
 export interface IParamsQuery {
-  searchText: string | null;
+  searchText: string;
   firstScanStartDate: Date | null;
   firstScanEndDate: Date | null;
   status: boolean | string;
   page?: number;
   size?: number;
+  storeId?: number | string;
+  searchBy: string | boolean;
 }
 
 export interface IResShopInvitation {
@@ -23,6 +25,7 @@ export type StateProps = {
   searchText: string;
   firstScanEndDate: Date | null;
   status: string | boolean;
+  searchBy: string | boolean;
 };
 
 export interface IPayloadSearch {

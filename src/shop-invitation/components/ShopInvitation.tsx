@@ -8,11 +8,10 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
-import { codeSelector } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import LoadingScreen from 'src/common/components/LoadingScreen';
@@ -20,7 +19,7 @@ import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
@@ -34,8 +33,9 @@ import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitatio
 import {
   firstScanEndSelector,
   firstScanStartSelector,
+  searchBySelector,
   searchTextSelector,
-  statusSelector,
+  statusSelector
 } from '../invitationSlice';
 import { getAllShopInvitationExport } from '../services';
 import InvitationTableRow from './InvitationTableRow';
@@ -59,15 +59,19 @@ export default function ShopInvitation() {
   const statusSuccess = useSelector(statusSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
-  const storeCode = useSelector(codeSelector);
+  const searchBy = useSelector(searchBySelector);
+  const params = useParams();
+  const id = params?.id;
 
   const searchParams: IParamsQuery = {
     page: page,
     size: rowsPerPage,
     firstScanEndDate: firstScanEnd,
     firstScanStartDate: firstScanStart,
-    searchText: storeCode,
+    searchText: searchText,
     status: statusSuccess,
+    storeId: id,
+    searchBy: searchBy,
   };
 
   const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);

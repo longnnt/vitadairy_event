@@ -23,3 +23,13 @@ export const HEADERS_CSV = [
 
 export const LIST_USER = 'Danh sách khách hàng';
 
+export const SEARCH_BY = {
+  STORE_CODE: 'STORE_CODE',
+  USER_NAME: 'USER_NAME',
+  PHONE_NUMBER: 'PHONE_NUMBER',
+}
+
+export const STATUS = {
+  SUCCESS: 'true',
+  FAIL: 'false',
+}

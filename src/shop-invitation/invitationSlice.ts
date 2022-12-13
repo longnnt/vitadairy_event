@@ -13,6 +13,7 @@ export const initialState: StateProps = {
   firstScanStartDate: null,
   firstScanEndDate: null,
   status: '',
+  searchBy: '',
 };
 
 export const invitationSlice = createSlice({
@@ -28,13 +29,16 @@ export const invitationSlice = createSlice({
     setFirstScanEndDate: (state, action: IPayloadDate) => {
       state.firstScanEndDate = action.payload;
     },
-    setStatus: (state, action: PayloadAction<boolean>) => {
+    setStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
     },
+    setSearchBy: (state, action: PayloadAction<string>) => {
+      state.searchBy = action.payload
+    }
   },
 });
 
-export const { setFirstScanEndDate, setFirstScanStartDate, setStatus, setSearchText } =
+export const { setFirstScanEndDate, setFirstScanStartDate, setStatus, setSearchText, setSearchBy } =
   invitationSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.shop_invitation.searchText;
@@ -43,5 +47,7 @@ export const firstScanStartSelector = (state: RootState) =>
   state.shop_invitation.firstScanStartDate;
 export const firstScanEndSelector = (state: RootState) =>
   state.shop_invitation.firstScanEndDate;
+export const searchBySelector = (state: RootState) =>
+  state.shop_invitation.searchBy;
 
 export default invitationSlice.reducer;
