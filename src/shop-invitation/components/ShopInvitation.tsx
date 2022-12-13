@@ -70,7 +70,7 @@ export default function ShopInvitation() {
     firstScanStartDate: firstScanStart,
     searchText: searchText,
     status: statusSuccess,
-    storeId: id,
+    storeCode: id,
     searchBy: searchBy,
   };
 
