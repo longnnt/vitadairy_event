@@ -11,7 +11,7 @@ import {
   Stack,
   TextField,
   Typography,
-  Switch
+  Switch,
 } from '@mui/material';
 import { DatePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
@@ -45,7 +45,7 @@ export const ViewEvent = () => {
     },
   });
 
-  const eventDetail = data?.data?.response ;
+  const eventDetail = data?.data?.response;
 
   const {
     name,
@@ -67,165 +67,170 @@ export const ViewEvent = () => {
   };
 
   return (
-    
     <>
-      {isLoading ? <LoadingSkeletonViewEventScreen/> : (
-      <>
-        <HeaderBreadcrumbs
-          heading="THÔNG TIN SỰ KIỆN"
-          links={[
-            { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
-            { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
-            { name: BREADCUMBS.VIEW_EVENT },
-          ]}
-        />
-        <Typography variant="body2" sx={{ fontWeight: 700 }}>
-          Thông tin tổng quát
-        </Typography>
-        <Scrollbar sx={{ marginTop: '20px' }}>
-          <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
-            <Stack spacing="26px">
-              <TextField value={name} label="Tên sự kiện*" fullWidth disabled />
-              <Stack
-                spacing={'10px'}
-                direction="row"
-                alignItems={'center'}
-                position="relative"
-              >
-                <MobileDateTimePicker
-                  label="Ngày bắt đầu"
-                  inputFormat="dd/MM/yyyy hh:mm a"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Calendar />
-                      </InputAdornment>
-                    ),
-                  }}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                  value={startDate}
-                  disabled
-                  onChange={() => 0}
-                />
-                <Box sx={{ mx: 2 }}>-</Box>
-
-                <MobileDateTimePicker
-                  label="Ngày kết thúc"
-                  inputFormat="dd/MM/yyyy hh:mm a"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Calendar />
-                      </InputAdornment>
-                    ),
-                  }}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                  onChange={() => 0}
-                  disabled
-                  value={endDate}
-                />
-              </Stack>
-
-              <FormControl>
-                <InputLabel>Mã sản phẩm*</InputLabel>
-                <Select
-                  multiple
-                  input={<OutlinedInput label="Mã sản phẩm" value={skus} />}
-                  fullWidth
-                  disabled
+      {isLoading ? (
+        <LoadingSkeletonViewEventScreen />
+      ) : (
+        <>
+          <HeaderBreadcrumbs
+            heading="THÔNG TIN SỰ KIỆN"
+            links={[
+              { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
+              { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
+              { name: BREADCUMBS.VIEW_EVENT },
+            ]}
+          />
+          <Typography variant="body2" sx={{ fontWeight: 700 }}>
+            Thông tin tổng quát
+          </Typography>
+          <Scrollbar sx={{ marginTop: '20px' }}>
+            <Card sx={{ p: '20px 40px 48px' }} variant="outlined">
+              <Stack spacing="26px">
+                <TextField value={name} label="Tên sự kiện*" fullWidth disabled />
+                <Stack
+                  spacing={'10px'}
+                  direction="row"
+                  alignItems={'center'}
+                  position="relative"
                 >
-                  {skus.map((item: string, index: number) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <TextField
-                fullWidth
-                label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
-                value={defaultWinRate}
-                disabled
-              />
-              <TextField
-                value={upRate}
-                fullWidth
-                label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
-                disabled
-              />
-              <TextField
-                value={downRate}
-                fullWidth
-                label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
-                disabled
-              />
-
-              <FormControl>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="radio-buttons-group"
-                  sx={{ flexDirection: 'row' }}
-                >
-                  <FormControlLabel
-                    value="allUser"
-                    control={<Radio />}
-                    label="Tất cả người dùng"
+                  <MobileDateTimePicker
+                    label="Ngày bắt đầu"
+                    inputFormat="dd/MM/yyyy hh:mm a"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
+                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    value={startDate}
                     disabled
-                    checked={userRegisterDate === null}
+                    onChange={() => 0}
                   />
-                  <FormControlLabel
-                    value="newUser"
-                    control={<Radio />}
-                    label="Người dùng mới"
-                    disabled
-                    checked={userRegisterDate !== null}
-                  />
-                  <Typography marginTop = {0.9} marginRight = {1} color="#919EAB">Trạng thái quà</Typography>
-                  <Switch disabled name="isActive" />
-                </RadioGroup>
-              </FormControl>
+                  <Box sx={{ mx: 2 }}>-</Box>
 
-              <DatePicker
-                label="Ngày tính người dùng mới"
-                inputFormat="dd/MM/yyyy"
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
+                  <MobileDateTimePicker
+                    label="Ngày kết thúc"
+                    inputFormat="dd/MM/yyyy hh:mm a"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
+                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    onChange={() => 0}
+                    disabled
+                    value={endDate}
+                  />
+                </Stack>
+
+                <FormControl>
+                  <InputLabel>Mã sản phẩm*</InputLabel>
+                  <Select
+                    multiple
+                    input={<OutlinedInput label="Mã sản phẩm" value={skus} />}
                     fullWidth
                     disabled
-                    sx={{ display: `${(userRegisterDate === null && 'none') || 'block'}` }}
-                  />
-                )}
-                onChange={() => 0}
-                value={userRegisterDate}
-                disabled
-              />
+                  >
+                    {skus.map((item: string, index: number) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-              <TextField
-                fullWidth
-                label="Số lần người dùng nhận quà tối đa*"
-                value={userLimit}
-                disabled
-              />
-            </Stack>
-          </Card>
-        </Scrollbar>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
-          <Button variant='contained' color='inherit' onClick={handleBackEventList}>
-            Trở về
-          </Button>
-          <Can do="update" on="all">
-          <Button
-            variant="contained"
-            sx={{ mx: '7px' }}
-            onClick={() => handleEditEventAction(Number(id))}
-          >
-            Chỉnh sửa
-          </Button>
-          </Can>
-        </Box>
-      </>  
+                <TextField
+                  fullWidth
+                  label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
+                  value={defaultWinRate}
+                  disabled
+                />
+                <TextField
+                  value={upRate}
+                  fullWidth
+                  label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
+                  disabled
+                />
+                <TextField
+                  value={downRate}
+                  fullWidth
+                  label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
+                  disabled
+                />
+
+                <FormControl>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="radio-buttons-group"
+                    sx={{ flexDirection: 'row' }}
+                  >
+                    <FormControlLabel
+                      value="allUser"
+                      control={<Radio />}
+                      label="Tất cả người dùng"
+                      disabled
+                      checked={userRegisterDate === null}
+                    />
+                    <FormControlLabel
+                      value="newUser"
+                      control={<Radio />}
+                      label="Người dùng mới"
+                      disabled
+                      checked={userRegisterDate !== null}
+                    />
+                  </RadioGroup>
+                </FormControl>
+
+                <DatePicker
+                  label="Ngày tính người dùng mới"
+                  inputFormat="dd/MM/yyyy"
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      disabled
+                      sx={{
+                        display: `${(userRegisterDate === null && 'none') || 'block'}`,
+                      }}
+                    />
+                  )}
+                  onChange={() => 0}
+                  value={userRegisterDate}
+                  disabled
+                />
+
+                <TextField
+                  fullWidth
+                  label="Số lần người dùng nhận quà tối đa*"
+                  value={userLimit}
+                  disabled
+                />
+                <Typography marginTop={0.9} marginRight={1} color="#919EAB">
+                  Trạng thái quà
+                </Typography>
+                <Switch disabled name="isActive" />
+              </Stack>
+            </Card>
+          </Scrollbar>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
+            <Button variant="contained" color="inherit" onClick={handleBackEventList}>
+              Trở về
+            </Button>
+            <Can do="update" on="all">
+              <Button
+                variant="contained"
+                sx={{ mx: '7px' }}
+                onClick={() => handleEditEventAction(Number(id))}
+              >
+                Chỉnh sửa
+              </Button>
+            </Can>
+          </Box>
+        </>
       )}
     </>
   );

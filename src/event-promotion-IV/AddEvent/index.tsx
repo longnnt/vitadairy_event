@@ -11,7 +11,7 @@ import {
   Stack,
   Switch,
   TextField,
-  Typography
+  Typography,
 } from '@mui/material';
 
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
@@ -34,7 +34,7 @@ import {
   setButtonType,
   setProduct,
   setUserType,
-  userTypeState
+  userTypeState,
 } from '../eventPromotionIV.slice';
 import { useAddNewEvent } from '../hooks/useAddNewEvent';
 import { IEventFormData, IProCodeSelect } from '../interface';
@@ -96,9 +96,9 @@ export const AddEvent = () => {
   }, [isSuccess]);
 
   const handleStatusUserType = (userType: userTypeCons) => {
-    dispatch(setUserType(userType ));
-    setValue('typeUser',userType )
-    if(userType === userTypeCons.ALLUSER ){
+    dispatch(setUserType(userType));
+    setValue('typeUser', userType);
+    if (userType === userTypeCons.ALLUSER) {
       reset({
         userRegisterDate: null,
       });
@@ -129,7 +129,7 @@ export const AddEvent = () => {
         <Card sx={{ padding: 2 }}>
           <Scrollbar>
             <Stack spacing="26px">
-              <RHFTextField name="name" label="Tên sự kiện*" fullWidth sx={{ mt:2 }}/>
+              <RHFTextField name="name" label="Tên sự kiện*" fullWidth sx={{ mt: 2 }} />
               <Stack
                 spacing={'10px'}
                 direction="row"
@@ -181,7 +181,7 @@ export const AddEvent = () => {
                 />
               </Stack>
 
-              <Box sx={{ zIndex: 1001 }} minHeight='65px'>
+              <Box sx={{ zIndex: 1001 }} minHeight="65px">
                 <RHFSelectPagitnationMultiple
                   name={'skus'}
                   getAsyncData={getProductCode}
@@ -216,7 +216,7 @@ export const AddEvent = () => {
                   defaultValue="allUser"
                   name="radio-buttons-group"
                   sx={{ flexDirection: 'row', paddingLeft: 2 }}
-                  onChange={(e) => handleStatusUserType(e.target.value as  userTypeCons )}
+                  onChange={(e) => handleStatusUserType(e.target.value as userTypeCons)}
                 >
                   <FormControlLabel
                     value="allUser"
@@ -228,8 +228,6 @@ export const AddEvent = () => {
                     control={<Radio />}
                     label="Người dùng mới"
                   />
-                  <Typography marginTop={0.9} marginRight={1}>Trạng thái quà</Typography>
-                  <RHFSwitch name="isActive" label="" />
                 </RadioGroup>
               </FormControl>
               <Controller
@@ -267,6 +265,10 @@ export const AddEvent = () => {
                 label="Số lần người dùng nhận quà tối đa*"
                 type="number"
               />
+              <Typography marginTop={0.9} marginRight={1}>
+                Trạng thái quà
+              </Typography>
+              <RHFSwitch name="isActive" label="" />
             </Stack>
           </Scrollbar>
         </Card>

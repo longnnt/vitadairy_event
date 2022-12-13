@@ -281,10 +281,6 @@ export const EditEventForm = () => {
                           { label: 'Người dùng mới', value: 'newUser' },
                         ]}
                       />
-                      <Typography marginTop={0.9} marginRight={1}>
-                        Trạng thái quà
-                      </Typography>
-                      <RHFSwitch name="isActive" label="" />
                     </FormControl>
 
                     <Controller
@@ -323,6 +319,10 @@ export const EditEventForm = () => {
                       label="Số lần người dùng nhận quà tối đa*"
                       type="number"
                     />
+                    <Typography marginTop={0.9} marginRight={1}>
+                      Trạng thái quà
+                    </Typography>
+                    <RHFSwitch name="isActive" label="" />
                   </Stack>
                 </Card>
               </Scrollbar>
