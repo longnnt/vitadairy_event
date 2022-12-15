@@ -1,11 +1,12 @@
 export const TABLE_HEAD = [
-  { id: 'code', label: 'Code', align: 'left' },
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'phone', label: 'phoneNumber', align: 'left' },
-  { id: 'registrationDate', label: 'registrationDate', align: 'left' },
-  { id: 'firstDate', label: 'firstScanDate', align: 'left' },
-  { id: 'qrCode', label: 'qrCode', align: 'left' },
-  { id: 'success', label: 'isSuccess', align: 'left' },
+  { id: 'storeCode', label: 'Mã cửa hàng', align: 'left', flex: 1},
+  { id: 'userName', label: 'Tên khách hàng', align: 'left' ,flex: 1},
+  { id: 'phoneNumber', label: 'Số điện thoại', align: 'left', flex: 1},
+  { id: 'registrationDate', label: 'Ngày tạo', align: 'left', flex: 1},
+  { id: 'firstScanDate', label: 'Ngày quét mã', align: 'left', flex: 1},
+  { id: 'qrCode', label: 'Mã QR', align: 'left', flex: 1},
+  { id: 'spoonCode', label: 'Mã muỗng', align: 'left', flex: 1},
+  { id: 'isSuccess', label: 'Thao tác', align: 'left', flex: 1},
 ];
 
 export const DEFAULT_PICK_DATE = new Date(2000, 1, 1);
@@ -19,3 +20,16 @@ export const HEADERS_CSV = [
   { label: 'QrCode', key: 'QrCode' },
   { label: 'Success', key: 'Success' },
 ];
+
+export const LIST_USER = 'Danh sách khách hàng';
+
+export const SEARCH_BY = {
+  STORE_CODE: 'STORE_CODE',
+  USER_NAME: 'USER_NAME',
+  PHONE_NUMBER: 'PHONE_NUMBER',
+}
+
+export const STATUS = {
+  SUCCESS: 'true',
+  FAIL: 'false',
+}

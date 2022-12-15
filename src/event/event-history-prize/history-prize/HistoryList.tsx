@@ -15,6 +15,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { reset } from 'numeral';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
@@ -35,6 +36,8 @@ import {
   firstScanEndSelector,
   firstScanStartSelector,
   searchTextSelector,
+  setShowData,
+  showDataSelector,
 } from '../event.slice';
 import { useDeletePrizeHistoryAdmin } from '../hooks/useDeletePrizeHistory';
 
@@ -43,6 +46,7 @@ import { IPrizeHistory, IPrizeHistoryParams } from '../interfaces';
 import { exportPrizeHistory } from '../services';
 import { FilterBar } from './components/FilterBar';
 import { PrizeHistoryTableRow } from './components/HistoryTable';
+import TableSkeleton from './components/TableSkeleton';
 
 function EventPrizeHistoryDashboard() {
   const navigate = useNavigate();
@@ -63,11 +67,13 @@ function EventPrizeHistoryDashboard() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-  const { enqueueSnackbar } = useSnackbar();
 
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const searchText = useSelector(searchTextSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
+  const showData = useSelector(showDataSelector);
   const searchParams: IPrizeHistoryParams = {
     page: page,
     size: rowsPerPage,
@@ -79,7 +85,7 @@ function EventPrizeHistoryDashboard() {
   if (!firstScanEnd) delete searchParams.endDate;
   if (!firstScanStart) delete searchParams.startDate;
 
-  const { data, refetch } = useGetPrizeHistory(searchParams);
+  const { data, refetch, isLoading } = useGetPrizeHistory(searchParams);
   const listStoreAdmin = data?.data?.response || [];
 
   const {
@@ -94,12 +100,17 @@ function EventPrizeHistoryDashboard() {
   );
 
   const handleSearch = () => {
+    dispatch(setShowData(true));
     refetch();
     setPage(0);
   };
 
   const handleDeleteRows = (ids: string[]) => {};
-
+  useEffect(() => {
+    return () => {
+      dispatch(setShowData(false));
+    };
+  }, []);
   const handleEditRow = (id: string) => {};
 
   const { totalRecords } = data?.data?.pagination || {
@@ -109,6 +120,8 @@ function EventPrizeHistoryDashboard() {
     const response = exportPrizeHistory(searchParams);
     response
       .then((data) => {
+        console.log(data);
+
         const fileLink = document.createElement('a');
 
         const blob = new Blob([data?.data], {
@@ -123,7 +136,7 @@ function EventPrizeHistoryDashboard() {
       })
       .catch((err) => console.log(err));
   };
-  const isNotFound = !listStoreAdmin.length;
+  const isNotFound = !listStoreAdmin.length && !isLoading;
   return (
     <>
       <HeaderBreadcrumbs
@@ -150,7 +163,7 @@ function EventPrizeHistoryDashboard() {
       />
       <Card>
         <Divider />
-        <FilterBar handleSearch={handleSearch} />
+        <FilterBar handleSearch={handleSearch} isLoading={isLoading} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -187,22 +200,25 @@ function EventPrizeHistoryDashboard() {
               />
 
               <TableBody>
-                {listStoreAdmin.map((row: IPrizeHistory) => (
-                  <PrizeHistoryTableRow
-                    key={row.id}
-                    row={{
-                      ...row,
-                      giftReceivedDate: new Date(row.giftReceivedDate).toLocaleString(),
-                    }}
-                    selected={selectedIds.includes(row.id)}
-                    onSelectRow={(e) => {
-                      handleSelectItem(row.id, e);
-                    }}
-                    onDeleteRow={() => handleDeleteRows([row.id])}
-                    onEditRow={() => handleEditRow(row.id)}
-                  />
-                ))}
-
+                {showData &&
+                  listStoreAdmin.map((row: IPrizeHistory) => (
+                    <PrizeHistoryTableRow
+                      key={row.id}
+                      row={{
+                        ...row,
+                        giftReceivedDate: new Date(row.giftReceivedDate).toLocaleString(),
+                      }}
+                      selected={selectedIds.includes(row.id)}
+                      onSelectRow={(e) => {
+                        handleSelectItem(row.id, e);
+                      }}
+                      onDeleteRow={() => handleDeleteRows([row.id])}
+                      onEditRow={() => handleEditRow(row.id)}
+                    />
+                  ))}
+                {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <TableSkeleton key={index} isNotFound={isLoading} />;
+                })}
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
             </Table>

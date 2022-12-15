@@ -1,18 +1,19 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, TextField } from '@mui/material';
+import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 
-import { DatePicker } from '@mui/x-date-pickers';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
+import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import { dispatch } from 'src/common/redux/store';
-import { formatDateNews } from '../../constants';
 import {
   setFirstScanEndDate,
   setFirstScanStartDate,
-  setSearchText,
+  setSearchText
 } from '../../event.slice';
-import { IFormFilter, IHistoryListEventParams } from '../../interfaces';
+import { IFormFilter } from '../../interfaces';
 
 // ----------------------------------------------------------------------
 
@@ -22,8 +23,8 @@ type Props = {
   onFilterName: (value: string) => void;
 };
 
-export const FilterBar = (props: { handleSearch: Function }) => {
-  const { handleSearch } = { ...props };
+export const FilterBar = (props: { handleSearch: Function,isLoading:boolean }) => {
+  const { handleSearch, isLoading } = { ...props };
   const methods = useForm<IFormFilter>({
     defaultValues: {
       searchText: '',
@@ -33,20 +34,28 @@ export const FilterBar = (props: { handleSearch: Function }) => {
   });
 
   const {
+    watch,
     control,
     handleSubmit,
     register,
     reset,
     formState: { isSubmitting, errors },
   } = methods;
-
+  if(!watch().endDate && !watch().searchText && !watch().startDate){
+    dispatch(setSearchText(''));
+    dispatch(setFirstScanStartDate(null));
+    dispatch(setFirstScanEndDate(null));
+  }
   const onSubmit = (data: IFormFilter) => {
     dispatch(setSearchText(data.searchText));
     dispatch(setFirstScanStartDate(data.startDate));
     dispatch(setFirstScanEndDate(data.endDate));
   };
 
-  const handleCancel = () => {
+  function timeout(ms:any) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+  const handleCancel =() => {
     reset({
       searchText: '',
       startDate: null,
@@ -81,6 +90,7 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                     type="submit"
                     variant="contained"
                     size="medium"
+                    loading={isLoading}
                     onClick={() => handleSearch()}
                   >
                     Tìm kiếm
@@ -105,11 +115,18 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                   key={'firstScanStartDate'}
                   control={control}
                   render={({ field }) => (
-                    <DatePicker
+                    <MobileDateTimePicker
                       {...field}
                       label="Start date"
                       key={'firstScanStartDate'}
-                      inputFormat={formatDateNews}
+                      inputFormat={FORMAT_DATE_NEWS}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -123,11 +140,18 @@ export const FilterBar = (props: { handleSearch: Function }) => {
                 key="firstScanEndDate"
                 control={control}
                 render={({ field }: { field: any }) => (
-                  <DatePicker
+                  <MobileDateTimePicker
                     {...field}
                     key="firstScanEndDate"
                     label="End date"
-                    inputFormat={formatDateNews}
+                    inputFormat={FORMAT_DATE_NEWS}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}

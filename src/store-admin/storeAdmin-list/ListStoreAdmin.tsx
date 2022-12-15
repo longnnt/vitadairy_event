@@ -12,7 +12,10 @@ import {
   TablePagination,
   Tooltip,
 } from '@mui/material';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import { useGetAdmin } from 'src/admin/hooks/useGetAdmin';
+import { emailSelector, setPermission } from 'src/auth/login/login.slice';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
@@ -24,9 +27,9 @@ import {
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
-import { useSelector } from 'src/common/redux/store';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { TABLE_HEAD } from '../constants';
+import { dispatch, useSelector } from 'src/common/redux/store';
+import { PATH_DASHBOARD, ROOTS_DASHBOARD } from 'src/common/routes/paths';
+import { SIZE, TABLE_HEAD,FORMAT_DATE_EXPORT_FILE } from '../constants';
 import { useDeleteStoreAdmin } from '../hooks/useDeleteStoreAdmin';
 import { useGetStoreAdmin } from '../hooks/useGetStoreAdmin';
 import { useImportFile } from '../hooks/useImportFile';
@@ -34,12 +37,14 @@ import useMessage from '../hooks/useMessage';
 import { IFormStore, IStoreParams } from '../interfaces';
 import { exportStoreAdmin } from '../services';
 import {
-  firstScanEndSelector,
-  firstScanStartSelector,
+  endDateSelector,
+  startDateSelector,
   searchTextSelector,
+  setShowDataStore,
 } from '../storeAdmin.slice';
 import { StoreTableRow } from './components/StoreTableRow';
 import { StoreTableToolbar } from './components/StoreTableToolbar';
+import TableSkeleton from './components/TableSkeleton';
 
 function StoreAdminListDashboard() {
   const navigate = useNavigate();
@@ -65,8 +70,8 @@ function StoreAdminListDashboard() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const searchText = useSelector(searchTextSelector);
-  const firstScanStart = useSelector(firstScanStartSelector);
-  const firstScanEnd = useSelector(firstScanEndSelector);
+  const startDate = useSelector(startDateSelector);
+  const endDate = useSelector(endDateSelector);
 
   const mutationDetele = useDeleteStoreAdmin({
     onSuccess: () => {
@@ -89,16 +94,25 @@ function StoreAdminListDashboard() {
   const searchParams: IStoreParams = {
     page: page,
     size: rowsPerPage,
-    endDate: firstScanEnd,
-    startDate: firstScanStart,
+    endDate: endDate,
+    startDate: startDate,
     searchText: searchText,
   };
 
   if (searchText) searchParams.searchText = searchText;
+  if (!searchText) delete searchParams.searchText;
+  if (!endDate) delete searchParams.endDate;
+  if (!startDate) delete searchParams.startDate;
 
-  const { data, refetch } = useGetStoreAdmin(searchParams);
+  const { data, refetch, isLoading } = useGetStoreAdmin(searchParams);
 
-  const listStoreAdmin = data?.data?.response?.response || [];
+  // =========GET PERMISSION==================
+  const { data: admin } = useGetAdmin({size:SIZE});
+  const mail = useSelector(emailSelector);
+  const getPermission = admin?.response.find((item) => item.email === mail);
+  dispatch(setPermission(getPermission?.permission));
+
+  const listStoreAdmin = data?.response || [];
 
   const {
     isCheckedAll,
@@ -129,12 +143,7 @@ function StoreAdminListDashboard() {
   };
 
   const exportFile = () => {
-    const expData: IStoreParams = {
-      page: page,
-      size: totalRecords,
-    };
-
-    const response = exportStoreAdmin(expData);
+    const response = exportStoreAdmin();
     response
       .then((data) => {
         const fileLink = document.createElement('a');
@@ -143,26 +152,29 @@ function StoreAdminListDashboard() {
           type: 'text/csv; charset=utf-8',
         });
 
-        const fileName = `export_store_admin_${Date.now()}.csv`;
+        const fileName = `export_store_admin_${dayjs().format(
+          FORMAT_DATE_EXPORT_FILE
+        )}.csv`;
 
         fileLink.href = window.URL.createObjectURL(blob);
         fileLink.download = fileName;
         fileLink.click();
       })
-      .catch((err) => console.log(err));
+      .catch((error) => console.log(error));
   };
 
-  const handleEditRow = (id: string) => {
-    // navigate(PATH_DASHBOARD.policy.editCategory(id));
+  const handleEditRow = (code: string) => {
+    navigate(PATH_DASHBOARD.storeAdmin.edit_store(code))
   };
 
-  const { totalRecords } = data?.data?.response?.pagination || {
+  const { totalRecords } = data?.pagination || {
     totalRecords: 0,
   };
 
   const isNotFound = !listStoreAdmin.length;
 
   const handleSearch = () => {
+    dispatch(setShowDataStore(true));
     refetch();
     setPage(0);
   };
@@ -170,10 +182,10 @@ function StoreAdminListDashboard() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading="DANH SÁCH CỬA HÀNG"
+        heading="Danh sách cửa hàng"
         links={[
           { name: BREADCUMBS.STORE_ADMIN, href: PATH_DASHBOARD.storeAdmin.root },
-          { name: 'Danh sách' },
+          { name: 'Danh sách cửa hàng' },
         ]}
         action={
           <>
@@ -189,10 +201,9 @@ function StoreAdminListDashboard() {
             </Box>
             <Button
               variant="contained"
-              startIcon={<Iconify icon={'mdi:file-export'} />}
+              startIcon={<Iconify icon={'akar-icons:file'} />}
               onClick={() => {
                 exportFile();
-                navigate(PATH_DASHBOARD.storeAdmin.list);
               }}
             >
               Export
@@ -203,7 +214,7 @@ function StoreAdminListDashboard() {
       <Card>
         <Divider />
 
-        <StoreTableToolbar handleSearch={handleSearch} />
+        <StoreTableToolbar handleSearch={handleSearch} isLoading={isLoading} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -245,7 +256,6 @@ function StoreAdminListDashboard() {
                     key={row.code}
                     row={{
                       ...row,
-                      createdDate: new Date(row.createdDate).toLocaleString(),
                     }}
                     selected={selectedIds.includes(row.code)}
                     onSelectRow={(e) => {
@@ -255,6 +265,9 @@ function StoreAdminListDashboard() {
                     onEditRow={() => handleEditRow(row.code)}
                   />
                 ))}
+                {Array.from(Array(rowsPerPage)).map((index) => {
+                  return <TableSkeleton key={index} isNotFound={isLoading} />;
+                })}
 
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>

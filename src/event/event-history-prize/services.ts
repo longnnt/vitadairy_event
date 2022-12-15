@@ -1,5 +1,6 @@
 import {
   API_CREATE_EVENT,
+  API_CREATE_TRANSACTION_TYPE,
   API_GIFT,
   API_PRIZE_EDIT,
   API_PRIZE_HISTORY,
@@ -12,6 +13,7 @@ import axiosInstance from 'src/common/utils/axios';
 import {
   IDataPrizeHistory,
   IFormCreateEvent,
+  IFormSubmitCreate,
   IGiftParams,
   IPrizeHistoryActive,
   IPrizeHistoryParams,
@@ -20,6 +22,7 @@ import {
   IResGift,
   IResProvince,
   IResTransaction,
+  ITransactionParams,
 } from './interfaces';
 
 export const getPrizeHistoryAdmin = (params: IPrizeHistoryParams) => {
@@ -45,19 +48,21 @@ export const exportPrizeHistory = (params: IPrizeHistoryParams) => {
   });
 };
 
-export const getTransactionTypeId = async () => {
-  return axiosInstance.get<unknown, IResTransaction>(`${API_TRANSACTION_TYPE}`);
+export const getTransactionTypeId = (params: ITransactionParams) => {
+  return axiosInstance.get<unknown, IResTransaction>(`${API_CREATE_TRANSACTION_TYPE}`, {
+    params,
+  });
 };
 
 export const getProvince = (params: IProvinceParams) => {
   return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_SEARCH_BY_FILTER}`, {params});
 };
 
-export const addEvent = (data: IFormCreateEvent) => {
+export const addEvent = (data: IFormSubmitCreate) => {
   return axiosInstance.post(`${API_CREATE_EVENT}`, data);
 };
 
-export const getGift = async (params: IGiftParams) => {
+export const getGift = (params: IGiftParams) => {
   return axiosInstance.get<unknown, IResGift>(`${API_GIFT}`, { params });
 };
 

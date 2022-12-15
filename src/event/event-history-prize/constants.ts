@@ -1,3 +1,5 @@
+import { ISelectPopup } from './interfaces';
+
 // event table filter definition
 export const ROLE_OPTIONS = ['ALL', 'FEATURE', 'NOT_FEATURE', 'WOOD'];
 
@@ -63,15 +65,40 @@ export enum LANG {
   VI = 'vi',
   EN = 'en',
 }
-export const defaultValues = {
-  eventDetailProvinces: [
-    {
-      endDate: new Date(),
-      provinceId: 0,
-      quantity: 0,
-      startDate: new Date(),
-    },
-  ],
+
+export const DEDAULT_PROVINCE = {
+  id: 0,
+  provinceId: 0,
+  quantity: 0,
+  startDate: new Date(),
+  endDate: new Date(),
+  extraquantity: 0,
+  isNew: false,
+};
+
+export const DEFAULT_FORM_VALUE = {
+  eventDetailProvinces: {
+    0: DEDAULT_PROVINCE,
+  },
+  eventId: 0,
+  giftId: 0,
+  notificationContent: '',
+  notificationDescription: '',
+  notificationTitle: '',
+  ordinal: null,
+  popupCode: '',
+  popupImageLink: '',
+  popupLink: '',
+  popupType: '',
+  popupTitle: '',
+  popupContent: '',
+  popupText: '',
+  probability: null,
+  quantity: null,
+};
+
+export const DEFAULT_FORM_VALUE_SUBMIT = {
+  eventDetailProvinces: [DEDAULT_PROVINCE],
   eventId: 0,
   giftId: 0,
   notificationContent: '',
@@ -98,18 +125,47 @@ export const TABLE_HISTORY_PRIZE_EVENT = [
 ];
 
 export const TABLE_HEAD_GIFT = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'type', label: 'Type', align: 'center' },
-  { id: 'money', label: 'Money', align: 'right' },
+  { id: 'image', label: 'Image', align: 'left', flex: 1 },
+  { id: 'name', label: 'Name', align: 'left', flex: 1 },
+  { id: 'type', label: 'Type', align: 'left', flex: 1 },
+  { id: 'point', label: 'Point', align: 'left', flex: 1 },
+  { id: 'total', label: 'Total', align: 'left', flex: 1 },
+  { id: 'money', label: 'Money', align: 'left', flex: 1 },
+  { id: 'active', label: 'Active', align: 'right', flex: 1 },
 ];
 
-export const formatDateNews = 'dd-MM-yyyy hh:mm a';
+export const TABLE_HEAD_TRANSACTION_TYPE = [
+  { id: 'id', label: 'Id', align: 'left' },
+  { id: 'code', label: 'Code', align: 'left' },
+  { id: 'name', label: 'Name', align: 'left' },
+  { id: 'description', label: 'Description', align: 'left' },
+  { id: 'mainCode', label: 'MainCode', align: 'left' },
+];
+
+export const FORMAT_DATE_NEWS = 'dd/MM/yyyy hh:mm a';
 
 export const POPUP_TYPE = {
   DEEP_LINK: 'DEEP_LINK',
   HTML_LINK: 'HTML_LINK',
   NULL: 'NULL',
 };
+
+export const POPUP_CODE = {
+  PUZZLE_PIECE: 'PUZZLE_PIECE',
+  OGGI: 'OGGI',
+  FULL_SCREEN: 'FULL_SCREEN',
+};
+
+export const popupCodeOption = [
+  {
+    value: POPUP_CODE.PUZZLE_PIECE,
+    label: POPUP_CODE.PUZZLE_PIECE,
+  },
+  {
+    value: POPUP_CODE.OGGI,
+    label: POPUP_CODE.OGGI,
+  },
+];
 
 export const popupTypeOption = [
   {
@@ -134,11 +190,23 @@ export const COLUMNS_HEADERS: Array<string> = [
   'endDate',
 ];
 
+export enum ScrollProvinceEnum {
+  SIZE_PROVINCE = 1000,
+  PAGE_PROVINCE = 0,
+}
+
+export const PROVINCE = 'PROVINCE';
+
+export enum ButtonType {
+  SAVE_SUBMIT = 'saveSubmit',
+  SAVE_CREATE_SUBMIT = 'saveCreateSubmit',
+}
+
 export const SuccessUploadCode = 1000;
 
-export const FormatDate = 'DD/MM/YYYY';
+export const FORMAT_DATE = 'DD/MM/YYYY';
 
-export const StyleGift = {
+export const STYLE_GIFT = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -150,9 +218,7 @@ export const StyleGift = {
   p: 4,
 };
 
-export enum ScrollProvinceEnum {
-  SIZE_PROVINCE = 100,
-  PAGE_PROVINCE = 0,
-};
+export const CSV = 'csv';
+export const DEFAULT_LOADING_SIZE = 5;
 
-export const PROVINCE = 'PROVINCE';
+export const SIZE_PAGE = 10;

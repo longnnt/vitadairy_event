@@ -2,6 +2,7 @@ import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
 import { useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import Can from 'src/common/lib/Can';
 import { IPropsAdminTableRow } from '../../interfaces';
 
 function AdminTableRow({
@@ -25,9 +26,11 @@ function AdminTableRow({
 
   return (
     <TableRow hover selected={selected}>
+      <Can do="update" on="all">
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
       </TableCell>
+      </Can>
       <TableCell align="left">{email}</TableCell>
 
       <TableCell align="left">{firstName}</TableCell>
@@ -35,8 +38,9 @@ function AdminTableRow({
       <TableCell align="left">{lastName}</TableCell>
 
       <TableCell align="left">{status}</TableCell>
-
+      
       <TableCell align="right">
+      <Can do="update" on="all">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -55,7 +59,6 @@ function AdminTableRow({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  console.log(id);
                   onEditRow();
                   handleCloseMenu();
                 }}
@@ -66,7 +69,9 @@ function AdminTableRow({
             </>
           }
         />
+        </Can>
       </TableCell>
+      
     </TableRow>
   );
 }

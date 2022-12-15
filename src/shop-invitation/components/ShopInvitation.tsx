@@ -4,40 +4,42 @@ import {
   Card,
   Divider,
   IconButton,
+  Table,
   TableBody,
   TableContainer,
   TablePagination,
-  Tooltip,
-  Table,
+  Tooltip
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { useNavigate, useParams } from 'react-router-dom';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
+import LoadingScreen from 'src/common/components/LoadingScreen';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
-  TableSelectedActions,
+  TableSelectedActions
 } from 'src/common/components/table';
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
+import { useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { FORMAT_DATE_EXPORT_FILE } from 'src/store-admin/constants';
 import { TABLE_HEAD } from '../common/constants';
 import { IParamsQuery, IResShopInvitation } from '../common/interfaces';
+import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
 import {
   firstScanEndSelector,
   firstScanStartSelector,
+  searchBySelector,
   searchTextSelector,
-  statusSelector,
+  statusSelector
 } from '../invitationSlice';
+import { getAllShopInvitationExport } from '../services';
 import InvitationTableRow from './InvitationTableRow';
-import { useSelector } from 'src/common/redux/store';
 import { InvitationTableToolbar } from './InvitationTableToolbar';
-import { useGetAllShopInvitationByParams } from '../hooks/useGetAllShopInvitationByParams';
-import { getQueryObj } from 'src/shop-invitation/common/ultils/getQueryObj';
-import { CSVLink } from 'react-csv';
-import { useGetAllShopInvitationExportCsv } from '../hooks/useGetAllShopInvitationExportCsv';
 export default function ShopInvitation() {
   const navigate = useNavigate();
   const {
@@ -47,7 +49,6 @@ export default function ShopInvitation() {
     orderBy,
     rowsPerPage,
     setPage,
-    setSelected,
     selected: selectedRows,
     onSort,
     onChangePage,
@@ -58,25 +59,53 @@ export default function ShopInvitation() {
   const statusSuccess = useSelector(statusSelector);
   const firstScanStart = useSelector(firstScanStartSelector);
   const firstScanEnd = useSelector(firstScanEndSelector);
+  const searchBy = useSelector(searchBySelector);
+  const params = useParams();
+  const id = params?.id;
 
-  const params: IParamsQuery = {
-    page: page + 1,
+  const searchParams: IParamsQuery = {
+    page: page,
     size: rowsPerPage,
     firstScanEndDate: firstScanEnd,
     firstScanStartDate: firstScanStart,
     searchText: searchText,
     status: statusSuccess,
+    storeCode: id,
+    searchBy: searchBy,
   };
-  const searchParams = getQueryObj(params);
 
-  const { data, refetch } = useGetAllShopInvitationByParams(searchParams);
-  const tableData: IResShopInvitation[] = data ? data?.data?.response?.response : [];
-  const { data: csvData } = useGetAllShopInvitationExportCsv();
+  const { data, refetch, isLoading } = useGetAllShopInvitationByParams(searchParams);
+  const tableData = data?.response || [];
+
+  const { totalRecords } = data?.pagination || {
+    totalRecords: 0,
+  };
+
+  const exportFile = () => {
+    const response = getAllShopInvitationExport();
+    response
+      .then((data) => {
+        const fileLink = document.createElement('a');
+
+        const blob = new Blob([data?.data], {
+          type: 'text/csv; charset=utf-8',
+        });
+
+        const fileName = `export_store_invitation_${dayjs().format(
+          FORMAT_DATE_EXPORT_FILE
+        )}.csv`;
+
+        fileLink.href = window.URL.createObjectURL(blob);
+        fileLink.download = fileName;
+        fileLink.click();
+      })
+      .catch((error) => console.log(error));
+  };
 
   const { isCheckedAll, selectedIds, handleSelectItem, handleCheckAll } =
     useSelectMultiple(
       tableData?.map((item) => item.spoonCode),
-      page + 1
+      page
     );
 
   const handleSearch = () => {
@@ -86,26 +115,27 @@ export default function ShopInvitation() {
 
   return (
     <>
+      {isLoading && <LoadingScreen />}
       <HeaderBreadcrumbs
-        heading="Danh Sách Khách Hàng "
+        heading="Danh Sách Khách Hàng Nhập Mã Giới Thiệu Của Chủ Cửa Hàng"
         links={[
           { name: BREADCUMBS.DASHBOARD, href: PATH_DASHBOARD.root },
           {
             name: BREADCUMBS.SHOP_INVITATION,
-            href: PATH_DASHBOARD.general.shop_invitation,
+            href: PATH_DASHBOARD.storeAdmin.shop_invitation,
           },
           { name: BREADCUMBS.SHOP_INVITATION_lIST },
         ]}
         action={
-          <CSVLink data={csvData ? csvData.data : ''}>
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
-              onClick={() => navigate(PATH_DASHBOARD.general.shop_invitation)}
-            >
-              Export
-            </Button>
-          </CSVLink>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon={'akar-icons:file'} />}
+            onClick={() => {
+              exportFile();
+            }}
+          >
+            Export
+          </Button>
         }
       />
       <Card>
@@ -135,7 +165,6 @@ export default function ShopInvitation() {
               <TableHeadCustom
                 order={order}
                 orderBy={orderBy}
-                isSelectAll={isCheckedAll}
                 headLabel={TABLE_HEAD}
                 rowCount={
                   tableData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -143,20 +172,17 @@ export default function ShopInvitation() {
                 }
                 numSelected={selectedIds.length}
                 onSort={onSort}
-                onSelectAllRows={handleCheckAll}
               />
 
               <TableBody>
                 {tableData?.map((row: IResShopInvitation) => (
                   <InvitationTableRow
-                    key={row.qrCode}
-                    row={row}
-                    selected={selectedIds.includes(row.spoonCode)}
+                    key={row.storeCode}
+                    row={{ ...row }}
+                    selected={selectedIds.includes(row.storeCode)}
                     onSelectRow={(e) => {
-                      handleSelectItem(row.spoonCode, e);
+                      handleSelectItem(row.storeCode, e);
                     }}
-                    // onDeleteRow={() => handleDeleteRows([row.storeCode])}
-                    // onEditRow={() => handleEditRow(row.storeCode.toString())}
                   />
                 ))}
 
@@ -170,7 +196,7 @@ export default function ShopInvitation() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
-            count={data ? data?.data?.response?.response.length : 1}
+            count={totalRecords}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onChangePage}

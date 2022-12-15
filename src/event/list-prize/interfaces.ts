@@ -6,7 +6,7 @@ export interface IListPrizeEventParams {
 }
 
 export interface IListPrize {
-  id: string;
+  id: number;
   giftName: string;
   ordinal: number;
   probability: number;
@@ -50,8 +50,8 @@ export type IPropsListPrizeTableRow = {
   onEditRow: VoidFunction;
   onSelectRow: (checked: boolean) => void;
   onDeleteRow: VoidFunction;
-};
 
+};
 export enum MessageType {
   ERROR = 'error',
   SUCCESS = 'success',
@@ -60,4 +60,9 @@ export enum MessageType {
 export interface IShowMessage {
   type: MessageType;
   message: string;
+}
+
+export interface ITablePayload{
+  alertStatus?: boolean;
+  itemId?: string[];
 }

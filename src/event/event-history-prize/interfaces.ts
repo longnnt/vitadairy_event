@@ -1,5 +1,5 @@
 import { Dayjs } from 'dayjs';
-
+import { GridRowsProp, GridRowModesModel } from '@mui/x-data-grid-pro';
 export interface IHistoryListEventParams {
   endDate?: Date | null;
   page?: number;
@@ -79,21 +79,34 @@ export interface IResEventById {
 }
 
 export interface IFormCreateEvent {
-  eventDetailProvinces: IEventDetail[];
+  [id: number | string]: IEventDetail;
+}
+interface IForm {
   eventId: number;
   giftId: number;
   notificationContent: string;
   notificationDescription: string;
   notificationTitle: string;
-  ordinal: number;
-  popupCode: string;
+  ordinal: number | null;
+  popupCode: boolean | string;
   popupImageLink: string;
   popupLink: string;
-  popupType: string;
-  probability: number;
-  quantity: number;
-  transactionTypeId: number;
+  popupType: boolean | string;
+  probability: number | null;
+  quantity: number | null;
+  transactionTypeId: ISelectPopup;
   id?: number;
+  popupText: string;
+  popupTitile: string;
+  popupContent: string;
+}
+
+export interface IFormCreate extends IForm {
+  eventDetailProvinces: IFormCreateEvent;
+}
+
+export interface IFormSubmitCreate extends IForm {
+  eventDetailProvinces: IEventDetail[];
 }
 
 export interface ITransactionType {
@@ -101,6 +114,7 @@ export interface ITransactionType {
   code: string;
   name: string;
   description: string;
+  mainCode: string;
 }
 
 export interface IProvinceType {
@@ -113,12 +127,14 @@ export interface IProvinceType {
 }
 
 export interface IEventDetail {
+  id?: number | string;
   provinceId: number;
   quantity: number;
-  endDate: Dayjs | null | string;
-  startDate: Dayjs | null | string;
+  endDate: Dayjs | Date | string;
+  startDate: Dayjs | Date | string;
   name?: string;
   extraquantity?: number;
+  isNew?: boolean;
 }
 
 export interface IResTransaction {
@@ -128,6 +144,32 @@ export interface IResTransaction {
       msg: string;
     };
     response: ITranSacTion[];
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
+    };
+  };
+}
+export interface IGift {
+  id: number;
+  type: string;
+  money: string;
+  name: string;
+}
+
+export interface IResGift {
+  data: {
+    pagination: {
+      totalPages: number;
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      last: boolean;
+    };
+    response: IGift[];
   };
 }
 
@@ -182,15 +224,19 @@ export interface IFormFilter {
 }
 
 export interface ISelectPopup {
-  value: string;
+  value: number | string;
   label: string;
 }
 
 export interface IGift {
+  image: string;
   id: number;
   type: string;
   money: string;
   name: string;
+  point: number;
+  total: number;
+  active: boolean;
 }
 
 export interface IResGift {
@@ -211,7 +257,45 @@ export type IPropsGiftTableRow = {
   handleClose: Function;
 };
 
+export type IPropsTransactionTableRow = {
+  row: ITranSacTion;
+  handleClose: Function;
+};
+
 export type IGiftParams = {
   page?: number;
   size?: number;
+  keySearch: string;
 };
+
+export type ITransactionParams = {
+  page?: number;
+  size?: number;
+};
+
+export interface ISelect {
+  value: number;
+  label: string;
+}
+
+export interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  importFile: any;
+  setRowModesModel: (
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void;
+}
+
+export interface PaginationProps {
+  totalPages?: number;
+  totalRecords?: number;
+  currentPage?: number;
+  recordsPerPage?: number;
+  last?: boolean;
+}
+
+export interface IProvinceParams {
+  page?: number;
+  size?: number;
+  type: string;
+}

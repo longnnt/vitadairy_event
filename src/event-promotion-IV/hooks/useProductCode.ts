@@ -1,18 +1,28 @@
 import { useGetProductCode } from './useGetProductCode';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { IProductCode } from '../interface';
 
-export const useProductCode = (searchParams: any) => {
+export const useProductCode = (searchParams?: any) => {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { data: productCode } = useGetProductCode({
+  const { data: productData, isLoading } = useGetProductCode({
     params: searchParams,
     callback: {
-      onSuccess: () => showSuccessSnackbar('Tải mã sản phẩm thành công'),
-      onError: () => showErrorSnackbar('Tải mã sản phẩm thất bại'),
+      onSuccess: () => {
+        // showSuccessSnackbar('Tải mã sản phẩm thành công')
+      },
+      onError: () => {
+        showErrorSnackbar('Tải mã sản phẩm thất bại');
+      },
     },
   });
 
-  const productData = productCode?.data.response.response || [];
+  const productCode = productData?.data.response.response || [];
+  const pagination = productData?.data.response.pagination || [];
 
-  const skusListData = productData.map((item: any) => item.code);
-  return skusListData;
+  const skusListData = productCode.map((item: IProductCode) => ({
+    code: item.code,
+    id: item.id,
+  }));
+
+  return { skusListData, pagination, isLoading };
 };

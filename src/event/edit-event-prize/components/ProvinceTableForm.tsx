@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
 import Iconify from 'src/common/components/Iconify';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import useShowSnackbar from 'src/common/hooks/useMessage';
-import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS, DATE_FORMAT } from '../common/constants';
+import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS } from '../common/constants';
 import {
   IEventDetailProvinces,
   IEventProvince,
@@ -31,7 +31,7 @@ import {
   IProvinceParams,
   ISelect,
 } from '../common/interface';
-import { StyledBox } from '../common/ultils';
+import { StyledBox } from '../common/utils';
 import { provinceInforSelector } from '../editEventPrize.Slice';
 import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 // @mui
@@ -39,6 +39,10 @@ import { Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
+import {
+  FORMAT_DATE_FILTER,
+  FORMAT_DATE_NEWS,
+} from 'src/common/constants/common.constants';
 
 // --------------------------------------------------------------------------
 
@@ -61,7 +65,7 @@ function EditToolbar(props: EditToolbarProps) {
           id,
           provinceId: '',
           quantity: '',
-          extraquantity: '',
+          extraquantity: 0,
           isNew: true,
         },
       };
@@ -100,7 +104,6 @@ function EditToolbar(props: EditToolbarProps) {
 export default function PovinceTableForm() {
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-
   const [rows, setRows] = React.useState<IEventDetailProvinces>({});
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
@@ -116,13 +119,13 @@ export default function PovinceTableForm() {
     formState: { errors },
   } = methods;
 
-  const searchParamsProvince: IProvinceParams = {
+  const searchProvince: IProvinceParams = {
     page: ScrollProvinceEnum.PAGE_PROVINCE,
     size: ScrollProvinceEnum.SIZE_PROVINCE,
-    type: PROVINCE
-  }
+    type: PROVINCE,
+  };
 
-  const { data: provincesData } = useGetAllProvinceVN(searchParamsProvince);
+  const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const provinceOptions = provincesData?.map((item: IProvince) => ({
     value: item?.id,
     label: item?.name,
@@ -197,15 +200,14 @@ export default function PovinceTableForm() {
               id: id,
               provinceId: item.provinceId,
               extraquantity: item.extraquantity,
-              startDate: dayjs(item.startDate, DATE_FORMAT),
-              endDate: dayjs(item.endDate, DATE_FORMAT),
+              startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+              endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
               isNew: false,
             };
           });
 
           setRows({ ...rows, ...data });
           setValue('eventDetailProvinces', { ...rows, ...data });
-          // event.target.value = '';
         },
       });
     } catch (e) {
@@ -219,7 +221,7 @@ export default function PovinceTableForm() {
     {
       field: 'provinceId',
       headerName: 'Tên tỉnh ',
-      width: 180,
+      flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
         const option = provinceOptions?.find((item: ISelect) => {
@@ -263,14 +265,14 @@ export default function PovinceTableForm() {
       headerName: 'Tổng Số lượng giải theo tỉnh',
       type: 'number',
       editable: false,
-      width: 150,
+      flex: 1,
     },
     {
       field: 'extraquantity',
       headerName: 'Số giải phân bổ',
       type: 'number',
       editable: true,
-      width: 150,
+      flex: 1,
       renderEditCell(params) {
         return (
           <RHFTextField
@@ -290,10 +292,10 @@ export default function PovinceTableForm() {
     {
       field: 'startDate',
       headerName: 'Ngày bắt đầu',
-      width: 200,
+      flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
       renderEditCell(param) {
         return (
@@ -311,7 +313,7 @@ export default function PovinceTableForm() {
                   clearErrors(`eventDetailProvinces.${param.row.id}.startDate`);
                   setValue(`eventDetailProvinces.${param.row.id}.startDate`, value);
                 }}
-                inputFormat={'dd/MM/yyyy hh:mm a'}
+                inputFormat={FORMAT_DATE_NEWS}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -335,10 +337,10 @@ export default function PovinceTableForm() {
     {
       field: 'endDate',
       headerName: 'Ngày kết thúc',
-      width: 220,
+      flex: 1,
       editable: true,
       valueFormatter: ({ value }) => {
-        return new Date(value).toLocaleString();
+        return dayjs(value).format(FORMAT_DATE_FILTER);
       },
 
       renderEditCell(param) {
@@ -357,7 +359,7 @@ export default function PovinceTableForm() {
                   clearErrors(`eventDetailProvinces.${param.row.id}.endDate`);
                   setValue(`eventDetailProvinces.${param.row.id}.endDate`, value);
                 }}
-                inputFormat={'dd/MM/yyyy hh:mm a'}
+                inputFormat={FORMAT_DATE_NEWS}
                 renderInput={(params: any) => (
                   <TextField
                     {...params}
@@ -382,29 +384,9 @@ export default function PovinceTableForm() {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 80,
+      flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        // if (isInEditMode) {
-        //   return [
-        //     // <GridActionsCellItem
-        //     //   key={id}
-        //     //   icon={<SaveIcon />}
-        //     //   label="Save"
-        //     //   onClick={handleSaveClick(id)}
-        //     // />,
-        //     <GridActionsCellItem
-        //       key={id}
-        //       icon={<DeleteIcon />}
-        //       label="Delete"
-        //       onClick={handleDeleteClick(id)}
-        //       color="inherit"
-        //     />,
-        //   ];
-        // }
-
         return [
           <GridActionsCellItem
             key={id}

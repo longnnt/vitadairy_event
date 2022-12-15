@@ -45,6 +45,10 @@ export default function Router() {
           path: 'forgot-password',
           element: <ForgotPassword />,
         },
+        {
+          path: 'reset-password',
+          element: <ResetPassword />,
+        },
       ],
     },
 
@@ -58,7 +62,7 @@ export default function Router() {
       ),
       children: [
         {
-          path: 'shop-invitation',
+          path: 'shop-invitation/:id',
           element: <ShopInvitation />,
         },
         // STORE
@@ -67,12 +71,13 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/store" replace />, index: true },
             { path: 'stories', element: <ListStore /> },
+            { path: 'stories/:id', element: <EditStore />}
           ],
         },
         {
           path: '',
           children: [
-            { element: <Navigate to="/stories" replace />, index: true },
+            { element: <Navigate to="/" replace />, index: true },
             { path: 'admins', element: <AdminList /> },
             { path: 'admins/create', element: <AddNewAdmin /> },
             { path: 'admins/:id', element: <EditAdmin /> },
@@ -119,11 +124,16 @@ export default function Router() {
     },
     {
       path: '/',
-      element: (
-        <AuthGuard>
-          <DashboardLayout />
-        </AuthGuard>
-      ),
+      
+      children: [
+        {
+          path: '',
+          children: [
+            { element: <Navigate to="/dashboard/stories" replace />, index: true },
+            { path: 'stories', element: <ListStore /> },
+          ],
+        },
+      ]
     },
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
@@ -131,13 +141,17 @@ export default function Router() {
 // login
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 const ForgotPassword = Loadable(
-  lazy(() => import('../../auth/forgot-password/ResetPassword'))
+  lazy(() => import('../../auth/forgot-password/ForgotPassword'))
+);
+const ResetPassword = Loadable(
+  lazy(() => import('../../auth/reset-password/ResetPassword'))
 );
 
 // STORE ADMIN
 const ListStore = Loadable(
   lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin'))
 );
+const EditStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/EditStoreAdmin')));
 
 // EVENT ADMIN
 const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));

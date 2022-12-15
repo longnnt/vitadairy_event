@@ -1,6 +1,8 @@
-import { API_STORE_ADMIN } from 'src/common/constants/apis';
+import {
+  API_STORE_ADMIN, API_STORE_ADMIN_EXPORT
+} from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
-import { IDataStore, IStoreActive, IStoreParams } from './interfaces';
+import { IDataStore, IFormStore, IFormStoreDetail, IStoreActive, IStoreParams } from './interfaces';
 
 export const getStoreAdmin = (params: IStoreParams) => {
   return axiosInstance.get<unknown, IDataStore>(`${API_STORE_ADMIN}`, { params });
@@ -26,9 +28,15 @@ export const importStoreAdmin = (formData: FormData) => {
   });
 };
 
-export const exportStoreAdmin = (params: IStoreParams) => {
-  return axiosInstance.get(`${API_STORE_ADMIN}/export/csv`, {
-    params,
+export const exportStoreAdmin = () => {
+  return axiosInstance.get(API_STORE_ADMIN_EXPORT, {
     headers: { responseType: 'blob' },
   });
 };
+
+export const getStoreAdminById = (code: string) => {
+  return axiosInstance.get(`${API_STORE_ADMIN}/${code}`);
+}
+export const editStoreAdmin = (data: {data: IFormStore}) => {
+  return axiosInstance.patch(`${API_STORE_ADMIN}`, data?.data)
+}

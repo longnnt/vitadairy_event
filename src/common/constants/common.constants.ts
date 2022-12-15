@@ -29,7 +29,7 @@ export const FIELD = {
 };
 
 export const BREADCUMBS = {
-  DASHBOARD: 'Dashboard',
+  DASHBOARD: 'Trang chủ',
   LIST_EVENT: 'Sự kiện Promotion quý 4',
   CREATE_EVENT: 'Tạo mới sự kiện',
   VIEW_EVENT: 'Xem sự kiện',
@@ -43,7 +43,7 @@ export const BREADCUMBS = {
   SHOP_INVITATION: 'shop invitation',
   SHOP_INVITATION_lIST: 'shop invitation list',
   ADMIN_LIST: 'List admin',
-  STORE_ADMIN: 'Cửa hàng',
+  STORE_ADMIN: 'Cửa hàng định danh',
 
   EVENT_PROMOTION_Q4: 'Sự kiện Promotion Quý 4',
 
@@ -51,3 +51,10 @@ export const BREADCUMBS = {
   EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
   LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
 };
+
+export const CACHE_TIME = 2 * 1000 * 60;
+
+
+export const FORMAT_DATE_FILTER = 'MM-DD-YYYY HH:mm:ss'
+
+export const FORMAT_DATE_NEWS = 'MM-dd-yyyy HH:mm:ss';

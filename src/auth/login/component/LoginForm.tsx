@@ -23,6 +23,8 @@ import { IFormLoginValuesProps } from '../interface/interface';
 import { setShowPassword, showPasswordSelector, setEmail } from '../login.slice';
 import { LoginSchema } from '../schema/login.schema';
 import { Link } from 'react-router-dom';
+import useMessage from 'src/store-admin/hooks/useMessage';
+import RHFTextFieldLogin from 'src/common/components/hook-form/RHFTextFieldLogin';
 
 // ----------------------------------------------------------------------
 
@@ -39,21 +41,13 @@ export default function LoginForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  const { enqueueSnackbar } = useSnackbar();
-  const onSuccess = () => {
-    enqueueSnackbar('Đăng nhập thành công', {
-      variant: 'success',
-      autoHideDuration: 1000,
-    });
-  };
+  const { showErrorSnackbar } = useMessage();
   const onError = () => {
-    enqueueSnackbar('Đăng nhập thất bại ! xin kiểm tra lại thông tin', {
-      variant: 'error',
-    });
+    showErrorSnackbar('Đăng nhập thất bại ! xin kiểm tra lại thông tin');
   };
-  const { mutate, isSuccess } = useAuthlogin({ onSuccess, onError });
+  const { mutate, isSuccess } = useAuthlogin({ onError });
   useEffect(() => {
-    if (isSuccess) navigate(PATH_DASHBOARD.root);
+    if (isSuccess) window.location.href = PATH_DASHBOARD.root;
   }, [isSuccess]);
   const onSubmit = (data: IFormLoginValuesProps) => {
     dispatch(setEmail(data.email));
@@ -63,8 +57,8 @@ export default function LoginForm() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        <RHFTextField name="email" label="Email address" />
-        <RHFTextField
+        <RHFTextFieldLogin name="email" label="Email address" />
+        <RHFTextFieldLogin
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}

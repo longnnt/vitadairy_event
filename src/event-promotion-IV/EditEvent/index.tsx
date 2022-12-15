@@ -13,16 +13,9 @@ import { IEventFormData } from '../interface';
 import dayjs from 'dayjs';
 
 export const EditEvent = () => {
+
   return (
     <>
-      <HeaderBreadcrumbs
-        heading="DANH SÁCH SỰ KIỆN"
-        links={[
-          { name: BREADCUMBS.LIST_EVENT, href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Danh sách sự kiện', href: PATH_DASHBOARD.eventPromotionIV.root },
-          { name: 'Sửa sự kiện' },
-        ]}
-      />
       <EditEventForm />
     </>
   );

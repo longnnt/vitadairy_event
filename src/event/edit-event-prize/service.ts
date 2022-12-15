@@ -5,7 +5,6 @@ import {
   API_PRIZE_EDIT,
   API_PROVINCE_SEARCH_BY_FILTER,
   API_PROVINCE_VN,
-  API_TRANSACTION_TYPE,
   API_TRANSACTION_TYPE_UNUSE,
 } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
@@ -26,17 +25,16 @@ export const getEventPrizeById = (id: number) => {
   return axiosInstance.get<unknown, IResEventPrizeById>(API_PRIZE_EDIT + `/${id}`);
 };
 
-// export const getAllTransactionType = (params: IQuery) => {
-//   return axiosInstance.get<unknown, IResTransactionType>(API_TRANSACTION_TYPE_UNUSE, {
-//     params,
-//   });
-// };
-export const getAllTransactionType = () => {
-  return axiosInstance.get<unknown, IResTransactionType>(API_TRANSACTION_TYPE);
+export const getAllTransactionType = (params: IQuery) => {
+  return axiosInstance.get<unknown, IResTransactionType>(API_TRANSACTION_TYPE_UNUSE, {
+    params,
+  });
 };
 
 export const getAllProvinceVN = (params: IProvinceParams) => {
-  return axiosInstance.get<unknown, IResProvince>(API_PROVINCE_SEARCH_BY_FILTER, {params});
+  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_SEARCH_BY_FILTER}`, {
+    params,
+  });
 };
 
 export const eidtEventPrize = (newData: IFormSubmitEdit) => {

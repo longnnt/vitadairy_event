@@ -9,11 +9,14 @@ import { FormProvider, RHFSelect, RHFTextField } from 'src/common/components/hoo
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { defaultValues, permission, status } from '../../constants';
 import { useSelector } from 'react-redux';
-import { adminDetailSelector } from 'src/admin/admin.slice';
+import { adminDetailSelector, confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/admin/admin.slice';
 import { useEditAdmin } from 'src/admin/hooks/useEditAdmin';
 import { IFormAdmin } from 'src/admin/interfaces';
 import { NewAdminSchema } from 'src/admin/schema';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { dispatch } from 'src/common/redux/store';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -28,12 +31,19 @@ function EditFormAdmin() {
   const id = params?.id;
   const navigate = useNavigate();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  const { mutate, isSuccess } = useEditAdmin({
-    onSuccess: () => {
-      showSuccessSnackbar('Get Admin successfully');
+
+  const { useDeepCompareEffect } = useDeepEffect();
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const openEditModal = useSelector(openEditModalSelector);
+  const confirmEdit = useSelector(confirmEditSelector);
+
+  const { mutate, isSuccess,isLoading } = useEditAdmin({
+    onSuccess: () => { 
+      showSuccessSnackbar('Chỉnh sửa tài khoản thành công')
     },
     onError: () => {
-      showErrorSnackbar('Get admin fail');
+      showErrorSnackbar('Chỉnh sửa tài khoản thất bại');
     },
   });
 
@@ -50,6 +60,7 @@ function EditFormAdmin() {
     reset,
     control,
     setValue,
+    watch,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
@@ -61,20 +72,31 @@ function EditFormAdmin() {
     }
   }, [dataAdmin]);
   const onSubmit = async (data: IFormAdmin) => {
-    const dataEdit = {
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      status: data.status,
-      permission: data.permission,
-      id: data.id,
-    };
-    mutate({ data: dataEdit, id: parseInt(id as string) });
+    handleOpenEditModal();
+   
   };
-  const handleCancel = () => {
-    reset();
-  };
+  useDeepCompareEffect(() => {
+    const data = watch();
+    if (confirmEdit) {
+      const dataEdit:IFormAdmin={
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        status: data.status,
+        permission: data.permission,
+        id: data.id,
+      }
+      mutate({ data: dataEdit, id: parseInt(id as string) })
+      dispatch(setConfirmEdit(false));
 
+    }
+  }, [confirmEdit]);
+  const handleCancel = () => {
+    navigate(PATH_DASHBOARD.admin.list)
+  };
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -125,27 +147,35 @@ function EditFormAdmin() {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }} justifyContent='flex-end'>
             <LoadingButton
-              fullWidth
               size="large"
               type="submit"
               variant="contained"
-              loading={isSubmitting}
+              loading={isLoading}
+              sx={{ width: '20%', alignSelf: 'flex-end' }}
             >
-              Edit
+              Lưu
             </LoadingButton>
             <LoadingButton
-              fullWidth
               color="inherit"
               variant="contained"
               size="large"
               onClick={handleCancel}
+              sx={{ width: '20%', marginLeft: 2, alignSelf: 'flex-end' }}
             >
-              Cancel
+              Hủy chỉnh sửa
             </LoadingButton>
           </Stack>
         </Grid>
+        <ConfirmEditModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type='Chỉnh sửa tài khoản'
+            colorType={true}
+            // setConfirmEdit={setConfirmEdit}
+          />
       </FormProvider>
     </>
   );

@@ -1,23 +1,23 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, InputAdornment, Stack, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
 // components
 import Iconify from 'src/common/components/Iconify';
-import { dispatch } from 'src/common/redux/store';
-import { formatDateNews } from 'src/store-admin/constants';
+import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
+import { useDispatch } from 'src/common/redux/store';
 import { IStoreParams } from '../../interfaces';
 import {
-  initialState,
-  setFirstScanEndDate,
-  setFirstScanStartDate,
-  setSearchText,
+  initialState, setEndDate, setSearchText,
+  setStartDate
 } from '../../storeAdmin.slice';
 
 // ----------------------------------------------------------------------
 
-export const StoreTableToolbar = (props: { handleSearch: Function }) => {
+export const StoreTableToolbar = (props: { handleSearch: Function, isLoading: boolean }) => {
+  const dispatch = useDispatch();
   const { handleSearch } = { ...props };
   const methods = useForm({
     defaultValues: initialState,
@@ -27,13 +27,32 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
     control,
     handleSubmit,
     reset,
+    register,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
 
+  if (!watch().endDate && !watch().searchText && !watch().startDate) {
+    dispatch(setSearchText(''));
+    dispatch(setStartDate(null));
+    dispatch(setEndDate(null));
+  }
+
   const onSubmit = (data: IStoreParams) => {
     dispatch(setSearchText(data.searchText as string));
-    dispatch(setFirstScanStartDate(data.startDate as string));
-    dispatch(setFirstScanEndDate(data.endDate as string));
+    dispatch(setStartDate(data.startDate as null));
+    dispatch(setEndDate(data.endDate as null));
+  };
+
+  const handleCancel = async () => {
+    reset({
+      searchText: '',
+      startDate: null,
+      endDate: null,
+    });
+    dispatch(setSearchText(''));
+    dispatch(setStartDate(null));
+    dispatch(setEndDate(null));
   };
 
   return (
@@ -44,13 +63,12 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={4} ml="20px">
               <Stack spacing={'20px'}>
                 <Controller
-                  name="searchText"
                   control={control}
+                  {...register('searchText')}
                   render={({ field: { onChange } }) => (
                     <TextField
                       fullWidth
-                      onChange={onChange}
-                      name="searchText"
+                      {...register('searchText')}
                       placeholder="Search..."
                       InputProps={{
                         startAdornment: (
@@ -75,6 +93,15 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
                   >
                     Tìm kiếm
                   </LoadingButton>
+                  <LoadingButton
+                    sx={{ size: '30px', margin: 2 }}
+                    color="inherit"
+                    variant="contained"
+                    size="medium"
+                    onClick={handleCancel}
+                  >
+                    Xóa
+                  </LoadingButton>
                 </Box>
               </Stack>
             </Grid>
@@ -82,14 +109,21 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
               <Stack spacing={'20px'}>
                 <Controller
                   name="startDate"
-                  key={'firstScanStartDate'}
+                  key={'startDate'}
                   control={control}
                   render={({ field }) => (
                     <MobileDateTimePicker
                       {...field}
                       label="Start date"
-                      key={'firstScanStartDate'}
-                      inputFormat={formatDateNews}
+                      key={'startDate'}
+                      inputFormat={FORMAT_DATE_NEWS}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   )}
@@ -99,14 +133,21 @@ export const StoreTableToolbar = (props: { handleSearch: Function }) => {
             <Grid item xs={10} md={3}>
               <Controller
                 name="endDate"
-                key="firstScanEndDate"
+                key="endDate"
                 control={control}
                 render={({ field }: { field: any }) => (
                   <MobileDateTimePicker
                     {...field}
-                    key="firstScanEndDate"
+                    key="endDate"
                     label="End date"
-                    inputFormat={formatDateNews}
+                    inputFormat={FORMAT_DATE_NEWS}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
                     renderInput={(params: any) => <TextField {...params} fullWidth />}
                   />
                 )}

@@ -1,17 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import {
   IParamsQuery,
   IPayloadDate,
   IPayloadSearch,
   IPayloadStatus,
+  StateProps,
 } from './common/interfaces';
 
-export const initialState: IParamsQuery = {
+export const initialState: StateProps = {
   searchText: '',
-  firstScanStartDate: new Date(2000, 1, 1),
-  firstScanEndDate: new Date(2000, 1, 1),
+  firstScanStartDate: null,
+  firstScanEndDate: null,
   status: '',
+  searchBy: '',
 };
 
 export const invitationSlice = createSlice({
@@ -27,13 +29,16 @@ export const invitationSlice = createSlice({
     setFirstScanEndDate: (state, action: IPayloadDate) => {
       state.firstScanEndDate = action.payload;
     },
-    setStatus: (state, action: IPayloadStatus) => {
+    setStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
     },
+    setSearchBy: (state, action: PayloadAction<string>) => {
+      state.searchBy = action.payload
+    }
   },
 });
 
-export const { setFirstScanEndDate, setFirstScanStartDate, setStatus, setSearchText } =
+export const { setFirstScanEndDate, setFirstScanStartDate, setStatus, setSearchText, setSearchBy } =
   invitationSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.shop_invitation.searchText;
@@ -42,5 +47,7 @@ export const firstScanStartSelector = (state: RootState) =>
   state.shop_invitation.firstScanStartDate;
 export const firstScanEndSelector = (state: RootState) =>
   state.shop_invitation.firstScanEndDate;
+export const searchBySelector = (state: RootState) =>
+  state.shop_invitation.searchBy;
 
 export default invitationSlice.reducer;

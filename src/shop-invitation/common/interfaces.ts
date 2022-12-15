@@ -1,29 +1,39 @@
 export interface IParamsQuery {
-  searchText?: string;
-  firstScanStartDate?: Date | string;
-  firstScanEndDate?: Date | string;
-  status?: boolean | string;
+  searchText: string;
+  firstScanStartDate: Date | null;
+  firstScanEndDate: Date | null;
+  status: boolean | string;
   page?: number;
   size?: number;
+  storeCode?: number | string;
+  searchBy: string | boolean;
 }
 
 export interface IResShopInvitation {
   userName: string;
   storeCode: string;
   phoneNumber: string;
-  registrationDate: number;
-  firstScanDate: number;
+  registrationDate: string;
+  firstScanDate: string;
   qrCode: string;
   spoonCode: string;
   isSuccess: boolean;
 }
+
+export type StateProps = {
+  firstScanStartDate: Date | null;
+  searchText: string;
+  firstScanEndDate: Date | null;
+  status: string | boolean;
+  searchBy: string | boolean;
+};
 
 export interface IPayloadSearch {
   payload: string;
   type: string;
 }
 export interface IPayloadDate {
-  payload: Date | string;
+  payload: Date | null;
   type: string;
 }
 export interface IPayloadStatus {
@@ -33,8 +43,23 @@ export interface IPayloadStatus {
 
 export interface IResShopInvitationData {
   data: {
+    meta: {
+      status: number;
+      msg: string;
+    },
     response: {
+      meta: {
+        status: number;
+        msg: string;
+      },
       response: IResShopInvitation[];
+      pagination: {
+        totalPages: number;
+        totalRecords: number;
+        currentPage: number;
+        recordsPerPage: number;
+        last: boolean
+      }
     };
   };
 }

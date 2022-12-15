@@ -1,17 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-import { IPayloadDate, IPayloadSearch } from './interfaces';
+import { IPayloadDate, IPayloadSearch, IResEditStoreAdmin } from './interfaces';
 
 type StateProps = {
+  startDate: Date | null;
   searchText: string;
-  startDate: Date | string;
-  endDate: Date | string;
+  endDate: Date | null;
+  showDataStore: boolean;
+  storeAdminDetail: Partial<IResEditStoreAdmin>
 };
 
 export const initialState: StateProps = {
   searchText: '',
-  startDate: new Date(1, 1, 2000),
-  endDate: new Date().toISOString(),
+  startDate: null,
+  endDate: null,
+  showDataStore: false,
+  storeAdminDetail: {}
 };
 
 export const storeAdminSlice = createSlice({
@@ -21,20 +25,34 @@ export const storeAdminSlice = createSlice({
     setSearchText: (state, action: IPayloadSearch) => {
       state.searchText = action.payload;
     },
-    setFirstScanStartDate: (state, action: IPayloadDate) => {
+    setStartDate: (state, action: IPayloadDate) => {
       state.startDate = action.payload;
     },
-    setFirstScanEndDate: (state, action: IPayloadDate) => {
+    setEndDate: (state, action: IPayloadDate) => {
       state.endDate = action.payload;
+    },
+   
+    setShowDataStore: (state, action: PayloadAction<boolean>) => {
+      state.showDataStore = action.payload;
+    },
+    setStoreAdmintDetail: (state, action: PayloadAction<IResEditStoreAdmin>) => {
+      state.storeAdminDetail = action.payload;
     },
   },
 });
 
-export const { setFirstScanEndDate, setFirstScanStartDate, setSearchText } =
-  storeAdminSlice.actions;
+export const {
+  setEndDate,
+  setStartDate,
+  setSearchText,
+  setShowDataStore,
+  setStoreAdmintDetail,
+} = storeAdminSlice.actions;
 
 export const searchTextSelector = (state: RootState) => state.storeAdmin.searchText;
-export const firstScanStartSelector = (state: RootState) => state.storeAdmin.startDate;
-export const firstScanEndSelector = (state: RootState) => state.storeAdmin.endDate;
+export const startDateSelector = (state: RootState) => state.storeAdmin.startDate;
+export const endDateSelector = (state: RootState) => state.storeAdmin.endDate;
+export const showDataStoreSelector = (state: RootState) => state.storeAdmin.showDataStore;
+export const setStoreAdminDetailSelector = (state: RootState) => state.storeAdmin.storeAdminDetail;
 
 export default storeAdminSlice.reducer;

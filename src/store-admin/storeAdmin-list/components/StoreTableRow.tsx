@@ -1,10 +1,16 @@
-import { Switch, TableCell, TableRow } from '@mui/material';
+import { Link, Switch, TableCell, TableRow, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { formatCreateDate } from 'src/store-admin/constants';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setCode } from 'src/auth/login/login.slice';
+import Iconify from 'src/common/components/Iconify';
+import { TableMoreMenu } from 'src/common/components/table';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
+import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { useGetStoreActive } from 'src/store-admin/hooks/useGetStoreActive';
+import useMessage from 'src/store-admin/hooks/useMessage';
 import { IPropsStoreTableRow } from '../../interfaces';
-
 // ----------------------------------------------------------------------
 
 function StoreTableRow({
@@ -14,84 +20,87 @@ function StoreTableRow({
   onSelectRow,
   onDeleteRow,
 }: IPropsStoreTableRow) {
+  const navigate = useNavigate();
+
   const { code, phoneNumber, address, qrLink, isActive, createdDate } = row;
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
-  const { mutate } = useGetStoreActive();
-
-  const handleOpenMenu = (store: React.MouseEvent<HTMLElement>) => {
-    setOpenMenuActions(store.currentTarget);
+  const handleOpenMenu = (category: React.MouseEvent<HTMLElement>) => {
+    setOpenMenuActions(category.currentTarget);
   };
 
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
   };
 
+  const dispatch = useDispatch();
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+
+  // useMutateStoreActive
+  const { mutate } = useGetStoreActive({
+    onSuccess: () => {
+      showSuccessSnackbar('Cập nhật thành công');
+    },
+    onError: () => showErrorSnackbar('Cập nhật thất bại'),
+  });
   const handleOnChange = (active: boolean) => {
     mutate({ code, isActive: active });
   };
 
+  const handleShopInvitation = (id: string) => {
+    navigate(PATH_DASHBOARD.storeAdmin.edit_shop(id));
+    dispatch(setCode(code));
+  };
   return (
     <TableRow hover selected={selected}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell> */}
-      <TableCell align="left">{code}</TableCell>
+      <TableCell align="left" onClick={() => handleShopInvitation(code)}>
+        <Link underline="always">{code}</Link>
+      </TableCell>
 
       <TableCell align="left">{phoneNumber}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(createdDate).format(formatCreateDate)}
+        {dayjs(createdDate).isValid()
+          ? dayjs(createdDate).format(FORMAT_DATE_FILTER)
+          : ''}
       </TableCell>
 
       <TableCell align="left">{address}</TableCell>
 
-      <TableCell align="left">
+      <TableCell align="right">
         <a target="_blank" rel="noopener noreferrer" href={qrLink}>
           Tải QR
         </a>
       </TableCell>
 
-      <TableCell align="left" title={isActive === true ? 'actived' : 'unAtivced'}>
+      <TableCell align="right" title={isActive === true ? 'actived' : 'unActivced'}>
         <Switch
-          checked={isActive ? true : false}
+          size="medium"
+          checked={isActive}
           onChange={(e) => {
             handleOnChange(e.target.checked);
           }}
         />
       </TableCell>
-
-      {/* <TableCell align="right">
+      <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
           onClose={handleCloseMenu}
           actions={
-            <>
-              <MenuItem
-                onClick={() => {
-                  onDeleteRow();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'eva:edit-fill'} />
-                Edit
-              </MenuItem>
-            </>
+            <MenuItem
+              onClick={() => {
+                onEditRow();
+                handleCloseMenu();
+              }}
+            >
+              <Iconify icon={'eva:edit-fill'} />
+              Edit
+            </MenuItem>
           }
         />
-      </TableCell> */}
+      </TableCell>
     </TableRow>
   );
 }

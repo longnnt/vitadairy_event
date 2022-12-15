@@ -12,7 +12,7 @@ import {
 import { Container } from '@mui/system';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   FormProvider,
   RHFRadioGroup,
@@ -20,12 +20,16 @@ import {
   RHFSwitch,
   RHFTextField,
 } from 'src/common/components/hook-form';
-import LoadingScreen from 'src/common/components/LoadingScreen';
+import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import useShowSnackbar from 'src/common/hooks/useMessage';
 import { dispatch, useSelector } from 'src/common/redux/store';
+import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
 import {
+  ButtonType,
   DEFAULT_FORM_VALUE,
+  DEFAULT_SIZE_GIFT,
   GIFT_POINT,
   NO_ID,
   popupTypeOption,
@@ -41,20 +45,26 @@ import {
   ISelectPopup,
   ITransactionType,
 } from '../common/interface';
-import { fomatFormData, formatDataProvinces, tranferData } from '../common/ultils';
+import { fomatFormData, formatDataProvinces, tranferData } from '../common/utils';
 import { eidtEventPrizevalidate } from '../editEvent.Schema';
 import {
+  buttonTypeSelector,
   choosenGiftPointSelector,
   confirmEditSelector,
   editDataSelector,
+  filterGiftSelector,
   giftByIdSelector,
+  leftGiftSelector,
   openEditModalSelector,
   popUpTypeSelector,
   setChoosenGiftPoint,
   setConfirmEdit,
   setEditData,
+  setFilterGift,
   setGiftById,
+  setLeftGift,
   setOpeneditModal,
+  setPopUpCode,
   setPopUpType,
   setProvinceInfor,
 } from '../editEventPrize.Slice';
@@ -64,30 +74,28 @@ import { useGetAllProvinceVN } from '../hooks/useGetAllProvinceVN';
 import { useGetAllTransactionType } from '../hooks/useGetAllTransactionType';
 import { useGetEventPrizeById } from '../hooks/useGetEventPrizeById';
 import { useGetGiftById } from '../hooks/useGetGiftById';
+import { getAllTransactionType } from '../service';
+import { ConfirmEditModal } from './ConfirmEditModal';
 import { GiftModal } from './GiftModal';
 import PovinceTableForm from './ProvinceTableForm';
-import { ConfirmEditModal } from './ConfirmEditModal';
-import { getAllTransactionType } from '../service';
-import { RHFSelectPagitnation } from './RHFSelectPagination';
-import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
 
 // -----------------------------------------------------------------------------
 
 export const EditEventPrizeForm = () => {
+  const navigate = useNavigate();
+  const buttonType = useSelector(buttonTypeSelector);
   const { useDeepCompareEffect } = useDeepEffect();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
 
   const params = useParams();
   const idParams = params?.id;
   const idEventPrize = parseInt(idParams as string);
-
-  const searchParamsProvince: IProvinceParams = {
+  const searchProvince: IProvinceParams = {
     page: ScrollProvinceEnum.PAGE_PROVINCE,
     size: ScrollProvinceEnum.SIZE_PROVINCE,
-    type: PROVINCE
-  }
-
-  const { data: provincesData } = useGetAllProvinceVN(searchParamsProvince);
+    type: PROVINCE,
+  };
+  const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
 
   const provinceOptions = provincesData?.map((item: IProvince) => ({
@@ -104,6 +112,25 @@ export const EditEventPrizeForm = () => {
   const openEditModal = useSelector(openEditModalSelector);
   const confirmEdit = useSelector(confirmEditSelector);
   const editData = useSelector(editDataSelector);
+  const leftGift = useSelector(leftGiftSelector);
+
+  const changePopUpType = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue('popupType', event.target.value, { shouldValidate: true });
+    dispatch(setPopUpType(event.target.value));
+  };
+
+  const changePopUpCode = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue('popupCode', event.target.value, { shouldValidate: true });
+    dispatch(setPopUpCode(event.target.value));
+  };
+
+  const handleRedirectToList = () => {
+    navigate(PATH_DASHBOARD.eventPromotionIV.list);
+  };
 
   useDeepCompareEffect(() => {
     if (eventPrizeById) {
@@ -118,7 +145,7 @@ export const EditEventPrizeForm = () => {
     if (popUpTypedata) setValue('popupType', popUpTypedata);
   }, [popUpTypedata]);
 
-  const { data: transactionType } = useGetAllTransactionType();
+  const { data: transactionType } = useGetAllTransactionType({ except: idEventPrize });
   const transactionTypeOptions = transactionType?.map((item: ITransactionType) => ({
     value: item.id,
     label: item.description,
@@ -136,11 +163,10 @@ export const EditEventPrizeForm = () => {
       );
     }
   }, [dataEventPrizeById, defaultTransactionType]);
-  // const searchParams = { except: idEventPrize };
-  const searchParams = {};
+  const searchParams = { except: idEventPrize };
 
   const methods = useForm<IFormEdit>({
-    resolver: yupResolver(eidtEventPrizevalidate(provinceId)),
+    resolver: yupResolver(eidtEventPrizevalidate(provinceId, leftGift)),
     defaultValues: DEFAULT_FORM_VALUE,
   });
   const {
@@ -151,6 +177,19 @@ export const EditEventPrizeForm = () => {
     formState: { isSubmitting, errors },
   } = methods;
   const watchPopupCode = watch('popupCode');
+  const watchQuantity = watch('quantity');
+  const watchEventDetailProvinces = Object.values(watch('eventDetailProvinces'));
+  let usedGift = 0;
+  if (watchEventDetailProvinces) {
+    watchEventDetailProvinces.map((item: IEventProvince) => {
+      if (item.quantity) usedGift = usedGift + item?.quantity;
+      if (item.extraquantity) usedGift = usedGift + Number(item?.extraquantity);
+    });
+  }
+
+  useDeepCompareEffect(() => {
+    dispatch(setLeftGift(watchQuantity - usedGift));
+  }, [usedGift, watchQuantity]);
 
   const { data: giftDetail } = useGetGiftById(
     dataEventPrizeById ? dataEventPrizeById?.giftId : NO_ID
@@ -191,17 +230,20 @@ export const EditEventPrizeForm = () => {
   const [choosenGift, setChoosenGift] = useState<IGiftDetail>();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const SIZE = 10;
-  const paramsGift = { page: page, size: SIZE };
+
+  const filterGift = useSelector(filterGiftSelector);
+  const paramsGift = { page: page, size: DEFAULT_SIZE_GIFT, keySearch: '' };
+  if (filterGift.length > 2) paramsGift.keySearch = filterGift;
+
   const { data } = useGetAllGift(paramsGift);
   const giftDta = data?.data?.response ? data?.data?.response : [];
+
   useDeepCompareEffect(() => {
     if (choosenGift) {
       setValue('giftId', choosenGift.id);
     }
   }, [choosenGift]);
 
-  const loadingScreen: boolean = isLoading || isSubmitting;
   const handleOnAgree = () => {
     dispatch(setConfirmEdit(true));
   };
@@ -211,40 +253,34 @@ export const EditEventPrizeForm = () => {
         {loadingScreen && <LoadingScreen />}
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Typography fontWeight={'bold'}>Thông tin tổng quan </Typography>
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
-                  <RHFTextField
-                    required
-                    name="ordinal"
-                    key={'ordinal'}
-                    label="Thứ tự ưu tiên"
-                  />
+                  <RHFTextField name="ordinal" key={'ordinal'} label="Thứ tự ưu tiên*" />
                   <RHFTextField
                     required
                     name="probability"
                     key={'probability'}
-                    label="Tỷ lệ trúng quà của sự kiện (%)"
+                    label="Tỷ lệ trúng quà của sự kiện (%)*"
                   />
                   <RHFTextField
                     required
                     name="quantity"
                     key={'quantity'}
-                    label="Tổng số lượng quà"
+                    label="Tổng số lượng quà*"
                   />
                   <Box sx={{ zIndex: 1001 }}>
-                    <RHFSelectPagitnation
+                    <RHFSelectPaginationSingle
                       name={'transactionTypeId'}
                       placeholder="Transaction type"
                       getAsyncData={getAllTransactionType}
                       searchParams={searchParams}
+                      error={errors}
                     />
-                    {errors && (
-                      <FormHelperText error>
-                        {errors?.transactionTypeId?.message}
-                      </FormHelperText>
-                    )}
+                    <FormHelperText error sx={{ marginLeft: '10px' }}>
+                      {errors?.transactionTypeId?.message}
+                    </FormHelperText>
                   </Box>
                   <RHFTextField
                     disabled
@@ -252,41 +288,29 @@ export const EditEventPrizeForm = () => {
                     key={'winnerAmount'}
                     label="Số lượng user đã trúng"
                   />
-                  {/* <RHFSelect
-                    name={'transactionTypeId'}
-                    key="transactionTypeId"
-                    label={'Transaction Type'}
-                  >
-                    <option value="" />
-                    {transactionTypeOptions?.map((item: ISelect) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </RHFSelect> */}
 
-                  <Typography>Trạng thái quà</Typography>
+                  <Typography color="#919EAB">Trạng thái quà</Typography>
                   <RHFSwitch name="giftStatus" key={'giftStatus'} label="" />
                 </Stack>
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>
               <Card sx={{ p: 3 }}>
-                <Stack spacing={3}>
+                <Stack spacing={2}>
                   <RHFTextField
                     required
                     name="popupImageLink"
                     key={'popupImageLink'}
-                    label="Link hình ảnh popup"
+                    label="Link hình ảnh popup*"
                   />
                   <RHFSelect
                     required
                     name={'popupType'}
                     key="popupType"
-                    label={'Popup type'}
+                    value={popUpTypedata}
+                    label={'Pop up type'}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      dispatch(setPopUpType(val));
+                      changePopUpType(e);
                     }}
                   >
                     <option value="" />
@@ -301,7 +325,7 @@ export const EditEventPrizeForm = () => {
                       required
                       name="popupLink"
                       key={'PopupHtmllink'}
-                      label="Popup html link"
+                      label="Popup html link*"
                     />
                   )}
                   {popUpTypedata === POPUP_TYPE.DEEP_LINK && (
@@ -309,7 +333,7 @@ export const EditEventPrizeForm = () => {
                       required
                       name="popupLink"
                       key={'popupDeepLink'}
-                      label="Popup deep link"
+                      label="Popup deep link*"
                     />
                   )}
 
@@ -320,8 +344,7 @@ export const EditEventPrizeForm = () => {
                     placeholder="Pop up Code"
                     margin="dense"
                     onChange={(e) => {
-                      const val = e.target.value;
-                      setValue('popupCode', val);
+                      changePopUpCode(e);
                     }}
                   >
                     <option value=""></option>
@@ -333,25 +356,18 @@ export const EditEventPrizeForm = () => {
                     watchPopupCode === POPUP_CODE.PUZZLE_PIECE) && (
                     <>
                       <RHFTextField
-                        name="popUpCodeTitle"
-                        key={'popUpCodeTitle'}
-                        label="Tiêu đề Pop up"
-                        required
+                        name="popupTitle"
+                        key={'popupTitle'}
+                        label="Tiêu đề Pop up*"
                       />
                       <RHFTextField
                         multiline
                         rows={5}
-                        name="popUpCodeContent"
-                        key={'popUpCodeContent'}
-                        label="Nội dung Pop up"
-                        required
+                        name="popupContent"
+                        key={'popupContent'}
+                        label="Nội dung Pop up*"
                       />
-                      <RHFTextField
-                        name="popUpCodeCTA"
-                        key={'popUpCodeCTA'}
-                        label="CTA"
-                        required
-                      />
+                      <RHFTextField name="popupText" key={'popupText'} label="CTA*" />
                     </>
                   )}
                   <RHFRadioGroup
@@ -397,7 +413,9 @@ export const EditEventPrizeForm = () => {
                     setPage={setPage}
                     giftDta={giftDta}
                     page={page}
+                    isLoading={isLoading}
                     totalRecords={data ? data?.data?.pagination?.totalRecords : 0}
+                    // onFilterGift={handleFilterGift}
                   />
                 </Stack>
               </Card>
@@ -407,23 +425,23 @@ export const EditEventPrizeForm = () => {
           <Box py={'15px'}>
             <Typography fontWeight={'bold'}>Thông báo</Typography>
             <Card sx={{ p: 3 }}>
-              <Stack spacing={3}>
+              <Stack spacing={2}>
                 <RHFTextField
                   name="notificationTitle"
                   key={'notificationTitle'}
-                  label="Tiêu đề thông báo"
+                  label="Tiêu đề thông báo*"
                 />
                 <RHFTextField
                   name={'notificationDescription'}
                   key={'notificationDescription'}
-                  label="Nội dung thông báo"
+                  label="Nội dung thông báo*"
                 />
 
                 <RHFTextField
                   // simple
                   name="notificationContent"
                   key={'notificationContent'}
-                  label="Nội dung"
+                  label="Mô tả thông báo*"
                   multiline
                   rows={7}
                 />
@@ -440,16 +458,30 @@ export const EditEventPrizeForm = () => {
               </Stack>
             </Card>
           </Box>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            size="large"
-            sx={{ width: '20%', alignSelf: 'flex-end' }}
-            loading={isSubmitting}
-          >
-            Lưu
-          </LoadingButton>
-          <ConfirmEditModal open={openEditModal} handleClose={handleCloseEditModal} />
+          <Grid direction="row" justifyContent="flex-end" container mt={2}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{ width: '20%', alignSelf: 'flex-end' }}
+              loading={buttonType === ButtonType.SAVE_SUBMIT && isLoading}
+            >
+              Lưu
+            </LoadingButton>
+            {buttonType === ButtonType.SAVE_SUBMIT && (
+              <ConfirmEditModal open={openEditModal} handleClose={handleCloseEditModal} />
+            )}
+            <LoadingButton
+              variant="contained"
+              size="large"
+              sx={{ width: '20%', marginLeft: 2, alignSelf: 'flex-end' }}
+              color="inherit"
+              loading={buttonType === ButtonType.UNSAVE_EDIT_SUBMIT && isLoading}
+              onClick={handleRedirectToList}
+            >
+              Hủy chỉnh sửa
+            </LoadingButton>
+          </Grid>
         </FormProvider>
       </Container>
     </>

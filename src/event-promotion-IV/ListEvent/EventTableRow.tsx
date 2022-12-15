@@ -1,12 +1,12 @@
-import { TableCell, Checkbox, TableRow, MenuItem } from '@mui/material';
+import { Checkbox, Link, MenuItem, Switch, TableCell, TableRow } from '@mui/material';
+import dayjs from 'dayjs';
 import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
-import { useDispatch, useSelector } from 'src/common/redux/store';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
+import Can from 'src/common/lib/Can';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import { fDate } from 'src/common/utils/formatTime';
-import { openMenuState, udpateStatusMenu } from '../eventPromotionIV.slice';
 import { EventTableRowProps } from '../interface';
 
 export const EventTableRow = ({
@@ -17,10 +17,8 @@ export const EventTableRow = ({
   onViewRow,
 }: EventTableRowProps) => {
   const navigate = useNavigate();
-  const { name, startDate, endDate, id } = row;
+  const { name, startDate, endDate, isActive,id } = row;
 
-  const dispatch = useDispatch();
-  // const openMenu = useSelector(openMenuState);
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (e: MouseEvent<HTMLElement>) => {
@@ -45,14 +43,27 @@ export const EventTableRow = ({
 
   return (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell>
+      <Can do="update" on="all">
+        <TableCell padding="checkbox">
+          <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
+        </TableCell>
+      </Can>
       <TableCell align="left" onClick={() => handleViewListPrize(id.toString())}>
-        {name}
+        <Link underline="always">{name}</Link>
       </TableCell>
-      <TableCell align="left">{fDate(startDate)}</TableCell>
-      <TableCell align="left">{fDate(endDate)}</TableCell>
+      <TableCell align="left">
+        {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_FILTER) : ''}
+      </TableCell>
+      <TableCell align="left">
+        {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_FILTER) : ''}
+      </TableCell>
+      <TableCell align="left" title={isActive === true ? 'actived' : 'unActivced'}>
+        <Switch
+          size="medium"
+          defaultChecked={isActive}
+          onChange={() => {}}
+        />
+      </TableCell>
       <TableCell align="left">
         <TableMoreMenu
           open={openMenu}
@@ -60,24 +71,30 @@ export const EventTableRow = ({
           onClose={handleCloseMenu}
           actions={
             <>
+              <MenuItem onClick={() => handleViewListPrize(id.toString())}>
+                <Iconify icon={'fa6-solid:gift'} />
+                View Gift
+              </MenuItem>
               <MenuItem onClick={handleClickView}>
                 <Iconify icon={'akar-icons:eye'} />
-                View
+                View Event
               </MenuItem>
-              <MenuItem onClick={() => handleEditEventAction(id)}>
-                <Iconify icon={'eva:edit-fill'} />
-                Edit
-              </MenuItem>
-              <MenuItem
-                sx={{ color: 'error.main' }}
-                onClick={() => {
-                  onDeleteRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-              </MenuItem>
+              <Can do="update" on="all">
+                <MenuItem onClick={() => handleEditEventAction(id)}>
+                  <Iconify icon={'eva:edit-fill'} />
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  sx={{ color: 'error.main' }}
+                  onClick={() => {
+                    onDeleteRow();
+                    handleCloseMenu();
+                  }}
+                >
+                  <Iconify icon={'eva:trash-2-outline'} />
+                  Delete
+                </MenuItem>
+              </Can>
             </>
           }
         />

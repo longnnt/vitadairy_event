@@ -1,10 +1,11 @@
 import { useState } from 'react';
 // @mui
-import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableRow } from '@mui/material';
 // @types
 import { IResShopInvitation } from '../common/interfaces';
 // components
-import Iconify from 'src/common/components/Iconify';
+import dayjs from 'dayjs';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 // import { TableMoreMenu } from 'src/components/table';
 
 // ----------------------------------------------------------------------
@@ -31,6 +32,7 @@ export default function InvitationTableRow({
     isSuccess,
     firstScanDate,
     registrationDate,
+    spoonCode,
     qrCode,
   } = row;
 
@@ -46,10 +48,6 @@ export default function InvitationTableRow({
 
   return (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-      </TableCell>
-
       <TableCell align="left">{storeCode}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
@@ -60,27 +58,27 @@ export default function InvitationTableRow({
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {new Date(firstScanDate).toUTCString()}
+        {dayjs(registrationDate).isValid()
+          ? dayjs(registrationDate).format(FORMAT_DATE_FILTER)
+          : ''}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {new Date(registrationDate).toUTCString()}
+        {dayjs(firstScanDate).isValid()
+          ? dayjs(firstScanDate).format(FORMAT_DATE_FILTER)
+          : ''}
       </TableCell>
+
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {qrCode}
       </TableCell>
 
-      <TableCell align="left" title={isSuccess ? 'featured' : 'unFeatured'}>
-        <Iconify
-          icon={isSuccess ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-          sx={{
-            width: 20,
-            height: 20,
-            color: 'success.main',
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {spoonCode}
+      </TableCell>
 
-            ...(!isSuccess && { color: 'warning.main' }),
-          }}
-        />
+      <TableCell padding="checkbox" align="left">
+        <Checkbox checked={isSuccess} disabled />
       </TableCell>
     </TableRow>
   );

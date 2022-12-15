@@ -1,11 +1,47 @@
 export interface IFormStore {
   code: string;
   name: string;
-  phoneNumber: number;
+  phoneNumber: string;
   address: string;
   qrLink: string;
   isActive: boolean;
   createdDate: string;
+}
+
+export interface IFormStoreDetail {
+  code: string;
+  name: string;
+  phoneNumber: string;
+  address: string;
+  isActive: boolean;
+}
+export interface IResEditStoreAdmin {
+  meta: {
+    msg: string;
+    status: number;
+  };
+  response: {
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: {
+      code: string;
+      name: string;
+      phoneNumber: string;
+      address: string;
+      qrLink: string;
+      isActive: boolean;
+      createdDate: string;
+    };
+  };
+}
+export interface IFormStoreAction {
+  data: {
+    response: {
+      response: IFormStore;
+    };
+  };
 }
 
 export interface IPayloadSearch {
@@ -13,7 +49,7 @@ export interface IPayloadSearch {
   type: string;
 }
 export interface IPayloadDate {
-  payload: Date | string;
+  payload: Date | null;
   type: string;
 }
 
@@ -27,14 +63,17 @@ export type IStoreAdminCallback = {
   onError: VoidFunction;
 };
 
-export type IStories = Array<IFormStore>;
+export interface IStories {
+  data: Array<IFormStore>;
+  total: number;
+}
 
 export interface IStoreParams {
-  endDate?: Date | string;
+  startDate?: Date | null;
   page?: number;
   searchText?: string;
   size?: number;
-  startDate?: Date | string;
+  endDate?: Date | null;
 }
 
 export enum MessageType {
@@ -65,7 +104,7 @@ export interface IDataStore {
         recordsPerPage: number;
         last: boolean;
       };
-      response: IStories;
+      response: IFormStore[];
     };
   };
 }

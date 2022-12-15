@@ -101,11 +101,6 @@ export const DEFAULT_FORM_VALUE = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  // transactionTypeId: 0,
-  transactionTypeId: {
-    value: 0,
-    lable: '',
-  },
   winnerAmount: 0,
 };
 export const DEFAULT_FORM_VALUE_SUBMIT = {
@@ -123,7 +118,9 @@ export const DEFAULT_FORM_VALUE_SUBMIT = {
   popupType: '',
   probability: 0,
   quantity: 0,
-  // transactionTypeId: 0,
+  popupTitle: '',
+  popupContent: '',
+  popupText: '',
   transactionTypeId: { value: 0, label: '' },
   winnerAmount: 0,
 };
@@ -145,3 +142,10 @@ export const GIFT_POINT = {
   POINT: 'point',
   GIFT_POINT: 'gift_point',
 };
+
+export enum ButtonType {
+  SAVE_SUBMIT = 'saveSubmit',
+  UNSAVE_EDIT_SUBMIT = 'unsaveEditSubmit',
+}
+
+export const DEFAULT_SIZE_GIFT = 10;

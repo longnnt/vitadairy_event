@@ -36,14 +36,13 @@ export const PATH_PAGE = {
 };
 
 export const PATH_DASHBOARD = {
-  root: '/',
+  root: '/dashboard/stories',
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
-    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
   },
   admin: {
     root: path(ROOTS_DASHBOARD, '/admins'),
@@ -55,6 +54,10 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/stories'),
     list: path(ROOTS_DASHBOARD, '/stories'),
     new: path(ROOTS_DASHBOARD, '/store/new'),
+    shop_invitation: path(ROOTS_DASHBOARD, '/shop-invitation'),
+    edit_store: (editStoreId: string) => path(ROOTS_DASHBOARD, `/stories/${editStoreId}`),
+    edit_shop: (shopID: string) =>
+      path(ROOTS_DASHBOARD, `/shop-invitation/${shopID}`),
   },
   eventPromotionIV: {
     root: path(ROOTS_DASHBOARD, '/event-promotion-IV'),

@@ -8,12 +8,15 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Controller, useForm } from 'react-hook-form';
 import { FormProvider } from 'src/common/components/hook-form';
+import { timeout } from 'src/common/lib/common.lib';
 
 import { dispatch } from 'src/common/redux/store';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { setEndDate, setSearchText, setStartDate } from '../eventPromotionIV.slice';
+import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 
 interface ISearchParamsProps {
   searchText: string;
@@ -45,7 +48,8 @@ export const EventTableToolbar = () => {
     dispatch(setEndDate(data.endDate));
   };
 
-  const handleResetForm = () => {
+  const handleResetForm = async () => {
+    await timeout(3000);
     reset({
       endDate: null,
       startDate: null,
@@ -57,35 +61,7 @@ export const EventTableToolbar = () => {
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={'20px'} direction="row">
-        <Controller
-          name="startDate"
-          key={'firstScanStartDate'}
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              label="Ngày bắt đầu"
-              key={'firstScanStartDate'}
-              inputFormat={'dd/mm/yyyy hh:mm a'}
-              renderInput={(params) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
-        <Controller
-          name="endDate"
-          key="firstScanEndDate"
-          control={control}
-          render={({ field }: { field: any }) => (
-            <MobileDateTimePicker
-              {...field}
-              key="firstScanEndDate"
-              label="Ngày kết thúc"
-              inputFormat={'dd/mm/yyyy hh:mm a'}
-              renderInput={(params: any) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
+      <Stack spacing={'20px'} direction="row" paddingTop={2} px={1}>
         <Controller
           name="searchText"
           control={control}
@@ -104,12 +80,54 @@ export const EventTableToolbar = () => {
             </FormControl>
           )}
         />
+        <Controller
+          name="startDate"
+          key={'firstScanStartDate'}
+          control={control}
+          render={({ field }) => (
+            <MobileDateTimePicker
+              {...field}
+              label="Ngày bắt đầu"
+              key={'firstScanStartDate'}
+              inputFormat={FORMAT_DATE_NEWS}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Calendar />
+                  </InputAdornment>
+                ),
+              }}
+              renderInput={(params) => <TextField {...params} fullWidth />}
+            />
+          )}
+        />
+        <Controller
+          name="endDate"
+          key="firstScanEndDate"
+          control={control}
+          render={({ field }: { field: any }) => (
+            <MobileDateTimePicker 
+              {...field}
+              key="firstScanEndDate"
+              label="Ngày kết thúc"
+              inputFormat={FORMAT_DATE_NEWS}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Calendar />
+                  </InputAdornment>
+                ),
+              }}
+              renderInput={(params: any) => <TextField {...params} fullWidth />}
+            />
+          )}
+        />
       </Stack>
-      <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }}>
-        <Button variant="contained" color="info" type="submit">
+      <Stack direction={'row'} spacing="10px" sx={{ mt: '12px' }} padding={1}>
+        <Button variant="contained" color="primary" type="submit">
           Lọc
         </Button>
-        <Button variant="contained" color="primary" onClick={handleResetForm}>
+        <Button variant="contained" color="error" onClick={handleResetForm}>
           Xóa
         </Button>
       </Stack>

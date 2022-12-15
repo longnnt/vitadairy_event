@@ -1,76 +1,54 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-// import { } from 'fs';
-// import { readFileSync } from 'fs';
-import {
-  Button,
-  Card,
-  FormControlLabel,
-  Grid,
-  Modal,
-  Paper,
-  Radio,
-  RadioGroup,
-  Table,
-  TableBody,
-  TableContainer,
-  TablePagination,
-  Typography,
-} from '@mui/material';
+import { Card, Container, Grid, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
-import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
-import { parse, ParseResult } from 'papaparse';
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import {
-  FormProvider,
-  RHFEditor,
-  RHFSelect,
-  RHFTextField,
-} from 'src/common/components/hook-form';
-import Iconify from 'src/common/components/Iconify';
-import Scrollbar from 'src/common/components/Scrollbar';
-import { TableHeadCustom } from 'src/common/components/table';
-import useTable from 'src/common/hooks/useTable';
+import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import {
-  COLUMNS_HEADERS,
-  defaultValues,
-  FormatDate,
-  popupTypeOption,
-  POPUP_TYPE,
+  ButtonType,
+  DEFAULT_FORM_VALUE,
+  POPUP_CODE,
   PROVINCE,
   ScrollProvinceEnum,
-  StyleGift,
-  TABLE_HEAD_GIFT,
 } from '../../constants';
-import { eventPrizeSchema } from '../../event.schema';
+import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
-  giftSelecttor,
+  confirmEditSelector,
+  editDataSelector,
+  openEditModalSelector,
+  popUpCodeSelector,
+  popUpTypeSelector,
   setButtonType,
-  setGift,
+  setConfirmEdit,
+  setEditData,
+  setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { useGetAllProvince } from '../../hooks/useGetAllProvince';
-import { useGetAllTranSacTion } from '../../hooks/useGetAllTranSacTion';
-import { useGetGilf } from '../../hooks/useGetGilf';
 import {
-  IEventDetail,
-  IFormCreateEvent,
-  IGiftParams,
+  IFormCreate,
+  IFormSubmitCreate,
   IProvinceParams,
+  ISelect,
   ISelectPopup,
 } from '../../interfaces';
-import { GiftTableRow } from './GiftTableRow';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import useShowSnackbar from 'src/common/hooks/useMessage';
+import { useEffect } from 'react';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { useGetAllProvince } from '../../hooks/useGetAllProvince';
+import { fomatFormData } from '../utils';
+import NotificationForm from './NotificationForm';
+import NotificationOverviewForm from './NotificationOverviewForm';
+import NotificationOverviewForm2 from './NotificationOverviewForm2';
+import useMessage from 'src/store-admin/hooks/useMessage';
+import ProvinceTableForm from './ProvinceTableRow';
 
 dayjs.extend(customParseFormat);
 
@@ -81,80 +59,34 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function HistoryNewForm() {
-  const navigate = useNavigate();
-  const [valueChoice, setValueChoice] = React.useState('all');
-  const handleChangeChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValueChoice((event.target as HTMLInputElement).value);
-  };
-
+  const { useDeepCompareEffect } = useDeepEffect();
   const dispatch = useDispatch();
-  const {
-    dense,
-    page,
-    order,
-    orderBy,
-    rowsPerPage,
-    selected: selectedRows,
-    onChangePage,
-    onChangeRowsPerPage,
-  } = useTable();
+  const popUpType = useSelector(popUpTypeSelector);
+  const popUpCode = useSelector(popUpCodeSelector);
+  const buttonType = useSelector(buttonTypeState);
+  const confirmEdit = useSelector(confirmEditSelector);
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const openEditModal = useSelector(openEditModalSelector);
+  const editData = useSelector(editDataSelector);
+  const { showErrorSnackbar } = useMessage();
 
-  const [popUpType, setPopUpType] = useState<string>('');
-  const [popUpCode, setPopUpCode] = React.useState<string | null>('');
-  const [redirect, setRedirect] = React.useState<boolean>(true);
-  const [_, setfilesCsv] = React.useState<Array<unknown>>([]);
-  const [dataCities, setDataCities] = React.useState<IEventDetail[]>([]);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const buttonTypeValue = useSelector(buttonTypeState);
-  const gift = useSelector(giftSelecttor);
-  const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-
-  const removeCount = (provinceId: number) => {
-    setDataCities([...dataCities].filter((item) => item.provinceId !== provinceId));
+  const searchParams: IProvinceParams = {
+    page: ScrollProvinceEnum.PAGE_PROVINCE,
+    size: ScrollProvinceEnum.SIZE_PROVINCE,
+    type: PROVINCE,
   };
 
-  const handleChangeCity = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    province: IEventDetail
-  ) => {
-    const newData: IEventDetail[] = [...dataCities];
-    let itemEdit: IEventDetail = { ...province };
+  const { data: addProvince } = useGetAllProvince(searchParams);
+  const dataProvince = addProvince?.data?.response || [];
+  const addProvinceVN = dataProvince.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
 
-    // find edit index and item edit in array
-    let provinceIdx = 0;
-    newData.forEach((item, index) => {
-      if (item.provinceId === province.provinceId) {
-        itemEdit = item;
-        provinceIdx = index;
-      }
-    });
-
-    // get key edit
-    const keyEdit = e.target.name.split('.')[2];
-    //
-
-    // edit detail data & update element in array
-    newData[provinceIdx] = { ...itemEdit, [keyEdit]: e.target.value };
-
-    // update data array
-    setDataCities(newData);
-    setValue('eventDetailProvinces', newData);
-  };
-
-  const changePopUpType = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setPopUpType(event.target.value);
-    setValue('popupType', event.target.value);
-  };
-  const changePopUpCode = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setPopUpCode(event.target.value);
-    setValue('popupCode', event.target.value);
-  };
+  const provinceId = addProvinceVN
+    ? addProvinceVN.map((item: ISelect) => item.value)
+    : [];
 
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = () => {
@@ -169,567 +101,142 @@ export default function HistoryNewForm() {
     });
   };
 
-  const { mutate } = useAddEvent({ onSuccess, onError });
-
-  useEffect(() => {
-    dispatch(
-      setGift({
-        id: 0,
-        name: '',
-        type: '',
-        money: '',
-      })
-    );
-  }, []);
-
+  const { mutate, isLoading } = useAddEvent({ onSuccess, onError });
   const params = useParams();
   const id = params?.id;
   const idEventPrize = parseInt(id as string);
 
-  const { data: addTransaction } = useGetAllTranSacTion();
-  const dataTransaction = addTransaction?.data?.response || [];
-  const addNewOption1 = dataTransaction.map((item) => ({
-    key: item.id,
-    name: item.description,
-  }));
-
-  const searchParamsProvince: IProvinceParams = {
-    page: ScrollProvinceEnum.PAGE_PROVINCE,
-    size: ScrollProvinceEnum.SIZE_PROVINCE,
-    type: PROVINCE
-  }
-
-  const { data: addProvince } = useGetAllProvince(searchParamsProvince);
-  const dataProvince = addProvince?.data?.response || [];
-  const addNewOption2 = dataProvince.map((item) => ({
-    key: item.id,
-    name: item.name,
-  }));
-
-  const searchParams: IGiftParams = {
-    page: page,
-    size: 10,
-  };
-  const { data: ListGift } = useGetGilf(searchParams);
-  const dataGift = ListGift?.data?.response || [];
-  const { totalRecords } = ListGift?.data?.pagination || {
-    totalRecords: 0,
-  };
-
-  const importFile = async (event: any) => {
-    try {
-      const allowedExtensions = ['csv'];
-      if (event.target.files.length) {
-        const inputFile = event.target.files[0];
-
-        const fileExtension = inputFile?.type.split('/')[1];
-        FormatDate;
-        if (!allowedExtensions.includes(fileExtension)) {
-          showErrorSnackbar('Không phải file csv');
-          return;
-        }
-        setfilesCsv(inputFile);
-        showSuccessSnackbar('Import file thành công');
-      }
-      if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
-
-      parse(event.target.files[0], {
-        header: true,
-        download: true,
-        skipEmptyLines: true,
-        delimiter: ',',
-        fastMode: true,
-        encoding: 'utf-8',
-        transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
-        complete: async (results: ParseResult<IEventDetail>) => {
-          const data: IEventDetail[] = results.data.map((item: IEventDetail) => ({
-            name: item.name,
-            provinceId: item.provinceId,
-            quantity: item.quantity,
-            startDate: dayjs(item.startDate, FormatDate),
-            endDate: dayjs(item.endDate, FormatDate),
-          }));
-
-          setDataCities(data);
-          setValue('eventDetailProvinces', data);
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const methods = useForm<IFormCreateEvent>({
-    resolver: yupResolver(eventPrizeSchema),
-    defaultValues,
+  const methods = useForm<IFormCreate>({
+    resolver: yupResolver(createEventPrizeValidate(provinceId)),
+    defaultValues: DEFAULT_FORM_VALUE,
   });
 
   const {
     reset,
+    setError,
     setValue,
     control,
     getValues,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
-  const onSubmit = async (data: IFormCreateEvent) => {
-    const eventDetailProvinces: Array<IEventDetail> = data.eventDetailProvinces.map(
-      (item) => {
-        let startDate = new Date().toISOString();
-        let endDate = new Date().toISOString();
-
-        if (item.endDate || item.startDate) {
-          startDate = item.startDate
-            ? item.startDate instanceof Date
-              ? item.startDate.toISOString()
-              : startDate
-            : startDate;
-          endDate = item.endDate
-            ? item.endDate instanceof Date
-              ? item.endDate.toISOString()
-              : endDate
-            : endDate;
-        }
-        if (item.extraquantity) {
-          item.quantity =
-            parseInt(item.quantity.toString()) + parseInt(item.extraquantity.toString());
-          delete item.extraquantity;
-        }
-        return { ...item, startDate: startDate, endDate: endDate };
-      }
+  useEffect(() => {
+    if (idEventPrize) {
+      setValue('eventId', idEventPrize);
+    }
+  }, [idEventPrize]);
+  const onSubmit = async (data: IFormCreate) => {
+    const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map(
+      (key) => data.eventDetailProvinces[key]
     );
-    if (data.popupType === 'NULL') {
+    const sum = [...eventDetailProvincesArray].reduce(
+      (sum, item) =>
+        (sum += item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0),
+      0
+    );
+    if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
-    const dataEvent: IFormCreateEvent = {
-      eventDetailProvinces,
-      eventId: idEventPrize,
-      giftId: gift.id,
-      notificationContent: data.notificationContent,
-      notificationDescription: data.notificationDescription,
-      notificationTitle: data.notificationTitle,
-      ordinal: data.ordinal,
-      popupCode: data.popupCode,
-      popupImageLink: data.popupImageLink,
-      popupLink: data.popupLink,
-      popupType: data.popupType,
-      probability: data.probability,
-      quantity: data.quantity,
-      transactionTypeId: data.transactionTypeId,
-    };
-    mutate(dataEvent);
+    data.popupCode = popUpCode;
+    data.popupType = popUpType;
+    if (sum === data.quantity) {
+      handleOpenEditModal();
+      const tempEditData = fomatFormData(data);
+      dispatch(setEditData(tempEditData));
+    } else if (sum > (data.quantity as number)) {
+      showErrorSnackbar('Tổng số giải theo tỉnh lớn hơn');
+    } else {
+      showErrorSnackbar('Tổng số lượng quà lớn hơn');
+    }
   };
+  useDeepCompareEffect(() => {
+    if (confirmEdit) {
+      const newData = {
+        ...editData,
+        transactionTypeId: editData.transactionTypeId.value,
+      } as unknown as IFormSubmitCreate;
+      mutate(newData);
+      dispatch(setConfirmEdit(false));
+    }
+  }, [confirmEdit, editData]);
+
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
+  };
+
   return (
     <>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Grid spacing={3} container>
-              <Grid item xs={6}>
-                <LabelStyle>Thông báo tổng quan</LabelStyle>
-                <Card sx={{ p: 3, width: '100%' }}>
-                  <RHFTextField
-                    name={'ordinal'}
-                    key={'ordinal'}
-                    label="Thứ tự ưu tiên"
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name="probability"
-                    key={'probability'}
-                    label="Tỉ lệ trúng quà của sự kiện(%)"
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name="quantity"
-                    key={'quantity'}
-                    label="Tổng số lượng quà..."
-                    margin="dense"
-                  />
-                  <RHFTextField
-                    name="id"
-                    key={'id'}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    label="Số lượng quà user đã trúng"
-                    margin="dense"
-                  />
-                  <RHFSelect
-                    name={'transactionTypeId'}
-                    key="transactionTypeId"
-                    label={'Transaction type'}
-                    placeholder="Transaction type"
-                    margin="dense"
-                  >
-                    <option value="" />
-                    {addNewOption1.map((option) => (
-                      <option key={option.key} value={option.key}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </RHFSelect>
-                </Card>
+      <Container>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Grid spacing={3} container>
+                <NotificationOverviewForm />
+                <NotificationOverviewForm2 />
               </Grid>
-              <Grid item xs={6}>
-                <Card sx={{ p: 3, width: '100%' }}>
-                  <RHFTextField
-                    name="popupImageLink"
-                    key={'popupImageLink'}
-                    label="Link hình ảnh Pop up..."
-                    margin="dense"
-                  />
-                  <RHFSelect
-                    name={'popupType'}
-                    key="popupType"
-                    label="Pop up Type"
-                    placeholder="Pop up Type"
-                    margin="dense"
-                    value={popUpType}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setPopUpType(val);
-                      setValue('popupType', val);
-                    }}
-                  >
-                    <option value="" />
-                    {popupTypeOption.map((item: ISelectPopup) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </RHFSelect>
-                  {popUpType === POPUP_TYPE.HTML_LINK && (
-                    <RHFTextField
-                      name="popupLink"
-                      key={'popupHtmlLink'}
-                      label="Popup html link"
-                    />
-                  )}
-                  {popUpType === POPUP_TYPE.DEEP_LINK && (
-                    <RHFTextField
-                      name="popupLink"
-                      key={'popupDeepLink'}
-                      label="Popup deep link"
-                    />
-                  )}
-                  <RHFSelect
-                    name="popupCode"
-                    key={'popupCode'}
-                    label="Pop up Code"
-                    placeholder="Pop up Code"
-                    margin="dense"
-                    onChange={(e) => changePopUpCode(e)}
-                    value={popUpCode}
-                  >
-                    <option value=""></option>
-                    <option value="PUZZLE PIECE">PUZZLE PIECE</option>
-                    <option value="OGGI">OGGI</option>
-                    <option value="FULL_SCREEN">FULL_SCREEN</option>
-                  </RHFSelect>
-                  <RadioGroup
-                    row
-                    name={'giftId'}
-                    key="giftId"
-                    value={valueChoice}
-                    onChange={handleChangeChoice}
-                  >
-                    <FormControlLabel value="gift" control={<Radio />} label="Tặng Quà" />
-                    {/* <FormControlLabel
-                      name={'giftId'}
-                      value="point"
-                      control={<Radio />}
-                      label="Tặng Điểm"
-                    />
-                    <FormControlLabel
-                      name={'giftId'}
-                      value="all"
-                      control={<Radio />}
-                      label="Tặng Quà và Điểm"
-                    /> */}
-                  </RadioGroup>
-                  <Grid container spacing={3}>
-                    <Grid item xs>
-                      <Button
-                        fullWidth
-                        sx={{ display: valueChoice !== 'point' ? 'block' : 'none' }}
-                        variant="contained"
-                        color="info"
-                        size="large"
-                        onClick={handleOpen}
-                      >
-                        Chọn quà
-                      </Button>
-                      <Box
-                        sx={{
-                          color: 'black',
-                          marginTop: '5px',
-                          display: valueChoice !== 'point' ? 'block' : 'none',
-                        }}
-                      >
-                        {gift.name}
-                      </Box>
-                      <Modal
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                      >
-                        <Box sx={StyleGift}>
-                          <Scrollbar>
-                            <TableContainer
-                              sx={{
-                                minWidth: 800,
-                                maxHeight: 500,
-                                position: 'relative',
-                                overflowY: 'scroll',
-                                overflowX: 'auto',
-                              }}
-                              component={Paper}
-                            >
-                              <Table>
-                                <TableHeadCustom headLabel={TABLE_HEAD_GIFT} />
-                                <TableBody>
-                                  {dataGift.map((row) => (
-                                    <GiftTableRow
-                                      key={row.id}
-                                      row={row}
-                                      handleClose={handleClose}
-                                    />
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                          </Scrollbar>
-                          {!!ListGift?.data?.pagination?.totalPages && (
-                            <TablePagination
-                              rowsPerPageOptions={[10]}
-                              component="div"
-                              count={totalRecords}
-                              rowsPerPage={10}
-                              page={page}
-                              onPageChange={onChangePage}
-                              onRowsPerPageChange={onChangeRowsPerPage}
-                            />
-                          )}
-                        </Box>
-                      </Modal>
-                    </Grid>
-                    {/* <Grid item xs>
-                      <RHFTextField
-                        type="number"
-                        name={'point'}
-                        label="Nhập điểm."
-                        margin="dense"
-                        sx={{ display: valueChoice !== 'gift' ? 'block' : 'none' }}
-                      />
-                    </Grid> */}
-                  </Grid>
-                </Card>
-              </Grid>
-            </Grid>
-            <LabelStyle>Thông báo</LabelStyle>
-            <Card sx={{ p: 3, width: '100%', my: 3 }}>
-              <Grid>
-                <RHFTextField
-                  name="notificationTitle"
-                  key={'notificationTitle'}
-                  label="Tiêu đề thông báo"
-                  margin="dense"
-                />
-                <RHFTextField
-                  name="notificationContent"
-                  key={'notificationContent'}
-                  label="Nội dung thông báo"
-                  margin="dense"
-                />
-                <div>
-                  <LabelStyle>Mô tả thông báo</LabelStyle>
-                  <RHFEditor
-                    className="category__text-editor"
-                    simple
-                    name={'notificationDescription'}
-                    key={'notificationDescription'}
-                  />
-                </div>
-              </Grid>
-            </Card>
-            <LabelStyle>Tỉnh thành</LabelStyle>
-            <Card sx={{ p: 3, width: '100%' }}>
-              <Grid sx={{ maxHeight: 370 }}>
-                <Grid direction="row" justifyContent="flex-end" container>
-                  <Box sx={{ paddingRight: 2 }}>
-                    <Button
-                      variant="contained"
-                      startIcon={<Iconify icon={'mdi:file-import'} />}
-                      component="label"
-                    >
-                      Nhập
-                      <input hidden multiple type="file" onChange={importFile} />
-                    </Button>
-                  </Box>
+              <LabelStyle marginTop={2}>Thông báo</LabelStyle>
+              <Card sx={{ p: 2, width: '100%', my: 1 }}>
+                <NotificationForm />
+              </Card>
+              <LabelStyle marginTop={2}>Tỉnh thành</LabelStyle>
+              <Card sx={{ p: 2 }}>
+                <Stack direction={'column'} spacing="15px">
                   <Box>
-                    <Button
-                      color="inherit"
-                      onClick={() => {
-                        setDataCities([
-                          ...dataCities,
-                          {
-                            provinceId: dataCities.length,
-                            startDate: dayjs(),
-                            endDate: dayjs(),
-                            quantity: 0,
-                          },
-                        ]);
-                      }}
-                      variant="outlined"
-                      size="large"
-                    >
-                      +
-                    </Button>
+                    <ProvinceTableForm />
                   </Box>
-                </Grid>
-                <Grid sx={{ maxHeight: 450, overflow: 'auto' }}>
-                  {dataCities &&
-                    dataCities.map((item, index) => {
-                      return (
-                        <Grid key={index} container spacing={3} sx={{ mt: 0.5 }}>
-                          <Grid item xs={2.75}>
-                            <RHFSelect
-                              name={`eventDetailProvinces.${index}.provinceId`}
-                              key={`eventDetailProvinces.${index}.provinceId`}
-                              label="Tỉnh thành"
-                              placeholder="Tỉnh thành"
-                              value={item.provinceId}
-                              onChange={(e) => handleChangeCity(e, item)}
-                            >
-                              <option value="" />
-                              {addNewOption2.map((option) => (
-                                <option key={option.key} value={option.key}>
-                                  {option.name}
-                                </option>
-                              ))}
-                            </RHFSelect>
-                          </Grid>
-                          <Grid item xs>
-                            <RHFTextField
-                              name={`eventDetailProvinces.${index}.quantity`}
-                              key={`eventDetailProvinces.${index}.quantity`}
-                              InputProps={{
-                                readOnly: true,
-                              }}
-                              label="Tổng số lượng giải theo tỉnh"
-                              value={item.quantity}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <RHFTextField
-                              name={`eventDetailProvinces.${index}.extraquantity`}
-                              key={`eventDetailProvinces.${index}.extraquantity`}
-                              label="Số giải nhập thêm"
-                              onChange={(e) => handleChangeCity(e, item)}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Controller
-                              name={`eventDetailProvinces.${index}.startDate`}
-                              key={`eventDetailProvinces.${index}}.startDate`}
-                              control={control}
-                              render={({ field }: { field: any }) => (
-                                <DatePicker
-                                  {...field}
-                                  key="startDate"
-                                  label="Ngày bắt đầu"
-                                  inputFormat="dd/MM/yyyy"
-                                  renderInput={(params: any) => (
-                                    <TextField
-                                      {...params}
-                                      fullWidth
-                                      defaultValue={dayjs(
-                                        item.startDate || null,
-                                        FormatDate
-                                      )}
-                                      onChange={(e) => handleChangeCity(e, item)}
-                                    />
-                                  )}
-                                />
-                              )}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Controller
-                              name={`eventDetailProvinces.${index}.endDate`}
-                              key={`eventDetailProvinces.${index}.endDate`}
-                              control={control}
-                              render={({ field }: { field: any }) => (
-                                <DatePicker
-                                  {...field}
-                                  key="endDate"
-                                  label="Ngày kết thúc"
-                                  inputFormat="dd/MM/yyyy"
-                                  renderInput={(params: any) => (
-                                    <TextField
-                                      {...params}
-                                      fullWidth
-                                      defaultValue={dayjs(
-                                        item.endDate || null,
-                                        FormatDate
-                                      )}
-                                      onChange={(e) => handleChangeCity(e, item)}
-                                    />
-                                  )}
-                                />
-                              )}
-                            />
-                          </Grid>
-                          <Grid item xs={1}>
-                            <Button
-                              color="inherit"
-                              onClick={() => removeCount(item?.provinceId)}
-                              variant="contained"
-                              size="large"
-                            >
-                              -
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      );
-                    })}
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
+                </Stack>
+              </Card>
+            </Grid>
 
-          <Grid direction="row" justifyContent="flex-end" container mt={2}>
-            <Box sx={{ paddingRight: 2 }}>
-              <LoadingButton
-                color="inherit"
-                variant="outlined"
-                size="large"
-                type="submit"
-                onClick={() => dispatch(setButtonType('saveSubmit'))}
-              >
-                Lưu
-              </LoadingButton>
-            </Box>
-            <Box>
-              <LoadingButton
-                color="inherit"
-                variant="outlined"
-                size="large"
-                type="submit"
-                // onClick={(e) => {
-                //   setRedirect(false);
-                // }}
-                onClick={() => dispatch(setButtonType('saveCreateSubmit'))}
-              >
-                Lưu & Chỉnh sửa
-              </LoadingButton>
-            </Box>
+            <Grid direction="row" justifyContent="flex-end" container mt={2}>
+              <Box sx={{ paddingRight: 2 }}>
+                <LoadingButton
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  type="submit"
+                  loading={buttonType === ButtonType.SAVE_SUBMIT && isLoading}
+                  onClick={() => dispatch(setButtonType(ButtonType.SAVE_SUBMIT))}
+                >
+                  Lưu
+                </LoadingButton>
+                {buttonType === ButtonType.SAVE_SUBMIT && (
+                  <ConfirmEditModal
+                    open={openEditModal}
+                    handleClose={handleCloseEditModal}
+                    handleOnAgree={handleOnAgree}
+                    type="Lưu sự kiện"
+                    colorType={true}
+                  />
+                )}
+              </Box>
+
+              <Box>
+                <LoadingButton
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  type="submit"
+                  loading={buttonType === ButtonType.SAVE_CREATE_SUBMIT && isLoading}
+                  onClick={() => dispatch(setButtonType(ButtonType.SAVE_CREATE_SUBMIT))}
+                >
+                  Lưu & Chỉnh sửa
+                </LoadingButton>
+              </Box>
+              {buttonType === ButtonType.SAVE_CREATE_SUBMIT && (
+                <ConfirmEditModal
+                  open={openEditModal}
+                  handleClose={handleCloseEditModal}
+                  handleOnAgree={handleOnAgree}
+                  type="Lưu và Chỉnh sửa sự kiện"
+                  colorType={true}
+                />
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </FormProvider>
+        </FormProvider>
+      </Container>
     </>
   );
 }

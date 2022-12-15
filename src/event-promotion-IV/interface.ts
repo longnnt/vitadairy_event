@@ -4,6 +4,7 @@ export type RowProps = {
   name: string;
   startDate: number;
   endDate: number;
+  isActive: boolean;
 };
 
 export interface EventTableRowProps {
@@ -14,6 +15,8 @@ export interface EventTableRowProps {
   onViewRow: (r: RowProps) => void;
 }
 
+export type UserType = 'allUser' | 'newUser';
+
 export interface initialValueProps {
   startDate: Date | null;
   endDate: Date | null;
@@ -21,9 +24,16 @@ export interface initialValueProps {
   buttonType: string;
   isOpenMenu: HTMLElement | null;
   eventDetail: IEventFormData;
-  userType: 'allUser' | 'newUser';
+  userType: UserType;
   selectedIds: number[];
   isResetSelect: boolean;
+  isOpenModal: boolean;
+  product: string[];
+  confirmPopup: boolean;
+
+  openEditModal: boolean;
+  confirmEdit: boolean;
+  filterProductCode: string;
 }
 
 export type TimeProps = Date | null;
@@ -34,8 +44,8 @@ export interface IResEvents {
 }
 
 export interface IEventCallback {
-  onSuccess: VoidFunction;
-  onError: VoidFunction;
+  onSuccess?: VoidFunction;
+  onError?: VoidFunction;
   onSuccessSend?: VoidFunction;
 }
 
@@ -95,4 +105,36 @@ export interface PaginationProps {
   currentPage?: number;
   recordsPerPage?: number;
   last?: boolean;
+}
+
+export interface IProductCode {
+  code: string;
+  id: number;
+}
+
+export interface IProCodeSelect {
+  value: string;
+  label: string;
+}
+export interface IResEventByID {
+  data: {
+    meta: {
+      msg: string;
+      status: number;
+    };
+    response: IEventEditFormData;
+  };
+}
+
+export interface IEventEditFormData {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
+  userRegisterDate: Date | null;
+  userLimit: number;
+  skus: any[];
+  typeUser:string;
 }
