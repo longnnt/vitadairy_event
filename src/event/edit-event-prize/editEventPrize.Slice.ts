@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
-<<<<<<< HEAD
-import { DEFAULT_FORM_VALUE_SUBMIT, GIFT_POINT } from './common/constants';
-=======
 import { ButtonType, DEFAULT_FORM_VALUE_SUBMIT, GIFT_POINT } from './common/constants';
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
 import { IEventDetailProvinces, IFormSubmitEdit } from './common/interface';
 
 interface stateType {
@@ -13,20 +9,14 @@ interface stateType {
   provinceForm: IEventDetailProvinces;
   choosenGiftPoint: string;
   popUpType: string;
-<<<<<<< HEAD
-=======
   popUpCode: string;
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
   openEditModal: boolean;
   confirmEdit: boolean;
   editData: IFormSubmitEdit;
   rows: IEventDetailProvinces;
-<<<<<<< HEAD
-=======
   leftGift: number;
   buttonType: ButtonType;
   filterGift: string;
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
 }
 
 const initialState: stateType = {
@@ -35,20 +25,14 @@ const initialState: stateType = {
   provinceForm: {},
   choosenGiftPoint: GIFT_POINT.GIFT,
   popUpType: '',
-<<<<<<< HEAD
-=======
   popUpCode: '',
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
   openEditModal: false,
   confirmEdit: false,
   editData: {} as IFormSubmitEdit,
   rows: {},
-<<<<<<< HEAD
-=======
   leftGift: 0,
   buttonType: ButtonType.SAVE_SUBMIT,
   filterGift: '',
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
 };
 
 export const editEventPrizeSlice = createSlice({
@@ -70,12 +54,9 @@ export const editEventPrizeSlice = createSlice({
     setPopUpType: (state, action: PayloadAction<string>) => {
       state.popUpType = action.payload;
     },
-<<<<<<< HEAD
-=======
     setPopUpCode: (state, action: PayloadAction<string>) => {
       state.popUpCode = action.payload;
     },
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
     setOpeneditModal: (state, action: PayloadAction<boolean>) => {
       state.openEditModal = action.payload;
     },
@@ -88,8 +69,6 @@ export const editEventPrizeSlice = createSlice({
     setRows: (state, action: PayloadAction<IEventDetailProvinces>) => {
       state.rows = action.payload;
     },
-<<<<<<< HEAD
-=======
     setLeftGift: (state, action: PayloadAction<number>) => {
       state.leftGift = action.payload;
     },
@@ -98,8 +77,7 @@ export const editEventPrizeSlice = createSlice({
     },
     setFilterGift: (state, action: PayloadAction<string>) => {
       state.filterGift = action.payload;
-    }
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
+    },
   },
 });
 
@@ -109,20 +87,14 @@ export const {
   setProvinceForm,
   setChoosenGiftPoint,
   setPopUpType,
-<<<<<<< HEAD
-=======
   setPopUpCode,
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
   setOpeneditModal,
   setConfirmEdit,
   setEditData,
   setRows,
-<<<<<<< HEAD
-=======
   setLeftGift,
   setButtonType,
   setFilterGift,
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
 } = editEventPrizeSlice.actions;
 
 export const giftByIdSelector = (state: RootState) => state.edit_event_prize.dataGiftById;
@@ -133,10 +105,7 @@ export const provinceFormSelector = (state: RootState) =>
 export const choosenGiftPointSelector = (state: RootState) =>
   state.edit_event_prize.choosenGiftPoint;
 export const popUpTypeSelector = (state: RootState) => state.edit_event_prize.popUpType;
-<<<<<<< HEAD
-=======
 export const popUpCodeSelector = (state: RootState) => state.edit_event_prize.popUpCode;
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
 export const openEditModalSelector = (state: RootState) =>
   state.edit_event_prize.openEditModal;
 export const confirmEditSelector = (state: RootState) =>
@@ -144,12 +113,9 @@ export const confirmEditSelector = (state: RootState) =>
 export const editDataSelector = (state: RootState) => state.edit_event_prize.editData;
 
 export const rowsSelector = (state: RootState) => state.edit_event_prize.rows;
-<<<<<<< HEAD
-=======
 export const leftGiftSelector = (state: RootState) => state.edit_event_prize.leftGift;
 export const buttonTypeSelector = (state: RootState) => state.edit_event_prize.buttonType;
 
 export const filterGiftSelector = (state: RootState) => state.edit_event_prize.filterGift;
->>>>>>> 25395dea551ae6721e3fb83d59e1b983a719ad6a
 
 export default editEventPrizeSlice.reducer;

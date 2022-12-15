@@ -37,6 +37,7 @@ import {
   POPUP_TYPE,
 } from '../common/constants';
 import {
+  IEventProvince,
   IFormEdit,
   IGiftDetail,
   IProvince,
@@ -250,7 +251,6 @@ export const EditEventPrizeForm = () => {
   return (
     <>
       <Container>
-        {loadingScreen && <LoadingScreen />}
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Typography fontWeight={'bold'}>Thông tin tổng quan </Typography>
           <Grid container spacing={2}>
@@ -259,13 +259,11 @@ export const EditEventPrizeForm = () => {
                 <Stack spacing={3}>
                   <RHFTextField name="ordinal" key={'ordinal'} label="Thứ tự ưu tiên*" />
                   <RHFTextField
-                    required
                     name="probability"
                     key={'probability'}
                     label="Tỷ lệ trúng quà của sự kiện (%)*"
                   />
                   <RHFTextField
-                    required
                     name="quantity"
                     key={'quantity'}
                     label="Tổng số lượng quà*"
@@ -298,13 +296,11 @@ export const EditEventPrizeForm = () => {
               <Card sx={{ p: 3 }}>
                 <Stack spacing={2}>
                   <RHFTextField
-                    required
                     name="popupImageLink"
                     key={'popupImageLink'}
                     label="Link hình ảnh popup*"
                   />
                   <RHFSelect
-                    required
                     name={'popupType'}
                     key="popupType"
                     value={popUpTypedata}
@@ -322,7 +318,6 @@ export const EditEventPrizeForm = () => {
                   </RHFSelect>
                   {popUpTypedata === POPUP_TYPE.HTML_LINK && (
                     <RHFTextField
-                      required
                       name="popupLink"
                       key={'PopupHtmllink'}
                       label="Popup html link*"
@@ -330,7 +325,6 @@ export const EditEventPrizeForm = () => {
                   )}
                   {popUpTypedata === POPUP_TYPE.DEEP_LINK && (
                     <RHFTextField
-                      required
                       name="popupLink"
                       key={'popupDeepLink'}
                       label="Popup deep link*"
