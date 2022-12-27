@@ -82,7 +82,6 @@ export const EventTable = () => {
   });
 
   const dataListEvent = data?.data?.response || [];
-  // console.log(dataListEvent)
   const {
     isCheckedAll,
     selectedIds,

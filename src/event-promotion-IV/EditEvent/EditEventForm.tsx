@@ -104,12 +104,10 @@ export const EditEventForm = () => {
 
   useDeepCompareEffect(() => {
     if (dataEventDetail) {
-      // console.log(dataEventDetail)
       reset(dataEventDetail);
       dispatch(setProduct(dataEventDetail.skus));
       const isActive: any = dataEventDetail.eventStatus;
       setValue('eventStatus', isActive === 'ACTIVE');
-      // console.log(isActive);
       if (dataEventDetail.userRegisterDate === null) setValue('typeUser', 'allUser');
       else setValue('typeUser', 'newUser');
     }
