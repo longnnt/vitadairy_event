@@ -52,6 +52,7 @@ import { getProductCode } from '../service';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
+ 
 
   const methods = useForm<IEventEditFormData>({
     resolver: yupResolver(schemaEditEvent),
@@ -68,7 +69,6 @@ export const EditEventForm = () => {
     },
   });
   const dataEventDetail = data?.data?.response;
-
   const {
     control,
     handleSubmit,
@@ -104,8 +104,12 @@ export const EditEventForm = () => {
 
   useDeepCompareEffect(() => {
     if (dataEventDetail) {
+      // console.log(dataEventDetail)
       reset(dataEventDetail);
       dispatch(setProduct(dataEventDetail.skus));
+      const isActive: any = dataEventDetail.eventStatus;
+      setValue('eventStatus', isActive === 'ACTIVE');
+      // console.log(isActive);
       if (dataEventDetail.userRegisterDate === null) setValue('typeUser', 'allUser');
       else setValue('typeUser', 'newUser');
     }
@@ -140,6 +144,7 @@ export const EditEventForm = () => {
         downRate: data.downRate,
         userRegisterDate: data.userRegisterDate,
         userLimit: data.userLimit,
+        eventStatus: data.eventStatus ? "ACTIVE" : "IN_ACTIVE",
         id: Number(id),
       };
       mutate({ id: parseInt(id as string), formEditData: dataEdit });
@@ -322,7 +327,7 @@ export const EditEventForm = () => {
                     <Typography marginTop={0.9} marginRight={1}>
                       Trạng thái quà
                     </Typography>
-                    <RHFSwitch name="isActive" label="" />
+                    <RHFSwitch name={'eventStatus'} label="" />
                   </Stack>
                 </Card>
               </Scrollbar>

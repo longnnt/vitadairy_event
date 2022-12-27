@@ -68,6 +68,7 @@ export const DEFAULT_EDIT_VALUE = {
   userRegisterDate: undefined,
   userLimit: 0,
   typeUser: '',
+  eventStatus: true,
 };
 
 

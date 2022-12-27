@@ -78,6 +78,7 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
+      status: data.status ? 'ACTIVE' : 'IN_ACTIVE',
       id: 1,
     };
     mutate(formDataAddNewEvent);
@@ -268,7 +269,7 @@ export const AddEvent = () => {
               <Typography marginTop={0.9} marginRight={1}>
                 Trạng thái quà
               </Typography>
-              <RHFSwitch name="isActive" label="" />
+              <RHFSwitch name={'status'} label="" />
             </Stack>
           </Scrollbar>
         </Card>
