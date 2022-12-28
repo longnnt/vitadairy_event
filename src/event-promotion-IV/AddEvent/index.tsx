@@ -109,9 +109,6 @@ export const AddEvent = () => {
 
   const product = useSelector(productState);
 
-  useDeepCompareEffect(() => {
-    if (product.length > 0) setValue('skus', product);
-  }, [product?.length]);
   return (
     <>
       <HeaderBreadcrumbs
