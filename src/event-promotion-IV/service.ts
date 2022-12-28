@@ -1,6 +1,6 @@
-import { EventSearchParams, IEventFormData, IResEventByID, RowProps } from './interface';
+import { EventSearchParams, IEventFormData, IResEventByID, RowProps, IUpdateEventStatus } from './interface';
 import axiosInstance from 'src/common/utils/axios';
-import { API_EVENT_ADMIN, API_PRODUCT } from './../common/constants/apis';
+import { API_EVENT_ADMIN, API_PRODUCT, API_UPDATE_EVENT_STATUS } from './../common/constants/apis';
 import { AxiosResponse } from 'axios';
 
 interface A {
@@ -32,6 +32,11 @@ export const getEventById = (id: number) => {
 
 export const getProductCode = (params: EventSearchParams) => {
   return axiosInstance.get(`${API_PRODUCT}`, { params });
+};
+
+export const updateEventStatus = (data: IUpdateEventStatus) => {
+  const {id, ...body} = data;
+  return axiosInstance.patch(`${API_UPDATE_EVENT_STATUS}/${id}/status`, body);
 };
 
 export const editEventService = async ({
