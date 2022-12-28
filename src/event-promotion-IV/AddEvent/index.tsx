@@ -58,7 +58,6 @@ export const AddEvent = () => {
     reset,
     formState: { errors },
   } = methods;
-  console.log(watch())
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
