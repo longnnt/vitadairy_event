@@ -58,6 +58,7 @@ export const AddEvent = () => {
     reset,
     formState: { errors },
   } = methods;
+  console.log(watch())
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
@@ -109,9 +110,6 @@ export const AddEvent = () => {
 
   const product = useSelector(productState);
 
-  useDeepCompareEffect(() => {
-    if (product.length > 0) setValue('skus', product);
-  }, [product?.length]);
   return (
     <>
       <HeaderBreadcrumbs
