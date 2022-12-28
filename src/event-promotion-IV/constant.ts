@@ -73,3 +73,8 @@ export const DEFAULT_EDIT_VALUE = {
 
 
 export const DEFAULT_LOADING_SIZE = 5;
+
+export const STATUS = {
+  ACTIVE : 'ACTIVE',
+  IN_ACTIVE: 'IN_ACTIVE',
+}

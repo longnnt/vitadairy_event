@@ -27,7 +27,7 @@ import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RH
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { defaultValues, userTypeCons } from '../constant';
+import { defaultValues, STATUS, userTypeCons } from '../constant';
 import {
   buttonTypeState,
   productState,
@@ -78,7 +78,7 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
-      status: data.status ? 'ACTIVE' : 'IN_ACTIVE',
+      status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
       id: 1,
     };
     mutate(formDataAddNewEvent);

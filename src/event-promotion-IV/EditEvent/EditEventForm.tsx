@@ -35,7 +35,7 @@ import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { BREADCUMBS, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
 import { ProductCodeModal } from '../components/ProductCodeModal';
-import { DEFAULT_EDIT_VALUE } from '../constant';
+import { DEFAULT_EDIT_VALUE, STATUS } from '../constant';
 import {
   confirmEditSelector,
   openEditModalSelector,
@@ -107,7 +107,7 @@ export const EditEventForm = () => {
       reset(dataEventDetail);
       dispatch(setProduct(dataEventDetail.skus));
       const isActive: any = dataEventDetail.eventStatus;
-      setValue('eventStatus', isActive === 'ACTIVE');
+      setValue('eventStatus', isActive === STATUS.ACTIVE);
       if (dataEventDetail.userRegisterDate === null) setValue('typeUser', 'allUser');
       else setValue('typeUser', 'newUser');
     }
@@ -142,7 +142,7 @@ export const EditEventForm = () => {
         downRate: data.downRate,
         userRegisterDate: data.userRegisterDate,
         userLimit: data.userLimit,
-        eventStatus: data.eventStatus ? "ACTIVE" : "IN_ACTIVE",
+        status: data.eventStatus ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
         id: Number(id),
       };
       mutate({ id: parseInt(id as string), formEditData: dataEdit });

@@ -10,6 +10,7 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { useUpdateEventStatus } from '../hooks/useUpdateEventStatus';
 import { EventTableRowProps } from '../interface';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import { STATUS } from '../constant';
 
 export const EventTableRow = ({
   row,
@@ -22,7 +23,7 @@ export const EventTableRow = ({
   const { name, startDate, endDate, status, id } = row;
 
   const checkStatus: any = status;
-  const isChecked = checkStatus === 'ACTIVE';
+  const isChecked = checkStatus === STATUS.ACTIVE;
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
@@ -55,7 +56,7 @@ export const EventTableRow = ({
   });
   const handleOnChange = (active: boolean) => {
 
-    mutate({ id, status: active ? "ACTIVE" : "IN_ACTIVE" });
+    mutate({ id, status: active ? STATUS.ACTIVE : STATUS.IN_ACTIVE });
   };
 
   return (
