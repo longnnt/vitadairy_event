@@ -5,21 +5,22 @@ import AddIcon from '@mui/icons-material/Add';
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import { Link as RouterLink } from 'react-router-dom';
 import ListPrizeTable from "./ListPrizeTable";
+import { BREADCUMBS } from "src/common/constants/common.constants";
 
 export default function ListPrizeContainer() {
     return (
         <>
             <HeaderBreadcrumbs
-                heading="Danh sách giải"
+                heading={BREADCUMBS.EVENT_PRIZE_LIST}
                 links={[
                     {
-                        name: 'Quản lý event'
+                        name: BREADCUMBS.MANAGE_EVENT
                     },
                     {
-                        name: 'Quản lý giải'
+                        name: BREADCUMBS.EVENT_PRIZE_LIST
                     },
                     {
-                        name: 'Danh sách giải'
+                        name: BREADCUMBS.EVENT_PRIZE_LIST
                     }
                 ]}
                 action={

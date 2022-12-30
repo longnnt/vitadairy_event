@@ -1,6 +1,7 @@
 import { Container, Paper } from "@mui/material";
 import HeaderBreadcrumbs from "src/common/components/HeaderBreadcrumbs";
 import Page from "src/common/components/Page";
+import { BREADCUMBS } from "src/common/constants/common.constants";
 import useSettings from "src/common/hooks/useSettings";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import CreatePrizeContainer from "./components/CreatePrizeContainer";
@@ -10,22 +11,22 @@ export default function CreateEventPrizeQ1() {
 
     return (
         <>
-            <Page title="Event Quý 1">
+            <Page title={BREADCUMBS.EVENT_Q1}>
                 <Container 
                     maxWidth={themeStretch ?  'sm': 'xl'}
                 >
                     <HeaderBreadcrumbs 
-                        heading="Tạo giải"
+                        heading={BREADCUMBS.EVENT_PRIZE_CREATE}
                         links={[
                             {
-                                name: 'Quản lý event'
+                                name: BREADCUMBS.MANAGE_EVENT
                             },
                             {
-                                name: 'Quản lý giải',
+                                name: BREADCUMBS.EVENT_PRIZE_LIST,
                                 href: PATH_DASHBOARD.eventPrizeQ1.list
                             },
                             {
-                                name: 'Tạo giải'
+                                name:  BREADCUMBS.EVENT_PRIZE_CREATE
                             }
                         ]}
                     />
