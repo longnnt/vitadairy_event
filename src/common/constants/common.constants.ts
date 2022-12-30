@@ -61,6 +61,11 @@ export const BREADCUMBS = {
   EVENT_PRIZE_CREATE: 'Tạo giải',
   EVENT_PRIZE_EDIT: 'Chỉnh sửa giải',
 
+  MANAGE_GROUP_EVENT: 'Quản lý Group Event',
+  LIST_GROUP_EVENT: 'Danh sách Group Event',
+  CREATE_GROUP_EVENT: 'Tạo Group Event',
+  EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',
+
 };
 
 export const CACHE_TIME = 2 * 1000 * 60;

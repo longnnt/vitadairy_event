@@ -127,8 +127,21 @@ export default function Router() {
                       { path: 'event-quarter-one', element: <ManageListEvent /> },
                     ]
                   },
+                  {
+                    path: '',
+                    children: [
+                      {
+                        element: <Navigate to="/dashboard/event-q1-groupEvent" replace />,
+                        index: true,
+                      },
+                      { path: 'event-q1-groupEvent/list', element: <ListGroupEvent /> },
+                      { path: 'event-q1-groupEvent/add', element: <AddGroupEvent /> },
+                      { path: 'event-q1-groupEvent/edit', element: <EditGroupEvent /> },
+                    ],
+                  },
             ],
         },
+        
 
         // Main Routes
         {
@@ -208,6 +221,17 @@ const EditEventPromotion = Loadable(
 );
 const AddEventPromotion = Loadable(
     lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))
+);
+
+
+const ListGroupEvent = Loadable(
+  lazy(() => import('../../event-q1-groupEvent/list-group-event/index'))
+);
+const AddGroupEvent = Loadable(
+  lazy(() => import('../../event-q1-groupEvent/add-group-event/index'))
+);
+const EditGroupEvent = Loadable(
+  lazy(() => import('../../event-q1-groupEvent/edit-group-event/index'))
 );
 
 // ADMIN
