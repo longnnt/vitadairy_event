@@ -80,10 +80,17 @@ export const PATH_DASHBOARD = {
       path(ROOTS_DASHBOARD, `/event/event-prize-edit/${idEvent}`),
   },
 
+  manageEventQuarterOne: {
+    root: path(ROOTS_DASHBOARD, '/event-quarter-one'),
+    list: path(ROOTS_DASHBOARD, '/event-quarter-one'),
+    new: path(ROOTS_DASHBOARD, '/event-quarter-one/add-new-event'),
+  },
+
   eventPrizeQ1: {
     root: path(ROOTS_DASHBOARD, '/event-q1-prize'),
     list: path(ROOTS_DASHBOARD, '/event-q1-prize/list'),
     create: path(ROOTS_DASHBOARD, '/event-q1-prize/create'),
     edit: path(ROOTS_DASHBOARD, '/event-q1-prize/edit'),
-  }
+  },
+  
 };
