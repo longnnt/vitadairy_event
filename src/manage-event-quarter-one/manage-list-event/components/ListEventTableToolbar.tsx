@@ -76,7 +76,7 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
         <Card>
           <Grid container spacing={5} py="30px">
             <Grid item xs={10} md={4} ml="20px">
-              <Stack spacing={'20px'}>
+              <Stack direction="row" spacing={3} width={1000}>
                 <RHFSelect name={'searchBy'} key="searchBy" label={'Tìm kiếm theo...'}>
                   <option value={SEARCH_BY.ALL}>Tất cả</option>
                   <option value={SEARCH_BY.EVENT}>Sự kiện</option>
@@ -112,7 +112,7 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                 </RHFSelect>
 
                 <Box>
-                  <Stack direction={'row'} spacing="10px">
+                  <Stack direction={'row'} spacing={2} width={50}>
                     <LoadingButton
                       sx={{ size: '30px' }}
                       type="submit"
@@ -135,9 +135,8 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                   </Stack>
                 </Box>
               </Stack>
-            </Grid>
-            <Grid item xs={10} md={3}>
-              <Stack spacing={'20px'}>
+              <Stack direction={'row'} width={700} spacing={3} marginTop={2}>
+              <Stack>
                 <Controller
                   name="startDate"
                   key={'startDate'}
@@ -160,8 +159,7 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                   )}
                 />
               </Stack>
-            </Grid>
-            <Grid item xs={10} md={3}>
+              <Stack>
               <Controller
                 name="endDate"
                 key="endDate"
@@ -183,7 +181,58 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                   />
                 )}
               />
+              </Stack>
+              </Stack>
+                
             </Grid>
+            <Grid item xs={10} md={3}>
+              {/* <Stack spacing={'20px'}>
+                <Controller
+                  name="startDate"
+                  key={'startDate'}
+                  control={control}
+                  render={({ field }) => (
+                    <MobileDateTimePicker
+                      {...field}
+                      label="Ngày bắt đầu"
+                      key={'startDate'}
+                      inputFormat={FORMAT_DATE_NEWS}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Calendar />
+                          </InputAdornment>
+                        ),
+                      }}
+                      renderInput={(params) => <TextField {...params} fullWidth />}
+                    />
+                  )}
+                />
+              </Stack> */}
+            </Grid>
+            {/* <Grid item xs={10} md={3}>
+              <Controller
+                name="endDate"
+                key="endDate"
+                control={control}
+                render={({ field }: { field: any }) => (
+                  <MobileDateTimePicker
+                    {...field}
+                    key="endDate"
+                    label="Ngày kết thúc"
+                    inputFormat={FORMAT_DATE_NEWS}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Calendar />
+                        </InputAdornment>
+                      ),
+                    }}
+                    renderInput={(params: any) => <TextField {...params} fullWidth />}
+                  />
+                )}
+              />
+            </Grid> */}
           </Grid>
         </Card>
       </FormProvider>
