@@ -99,6 +99,16 @@ export default function Router() {
         {
           path: '',
           children: [
+            {
+              element: <Navigate to="/dashboard/event-quarter-one"/>,
+              index: true,
+            },
+            { path: 'event-quarter-one', element: <ManageListEvent /> },
+          ]
+        },
+        {
+          path: '',
+          children: [
             { element: <Navigate to="/dashboard/event" replace />, index: true },
             { path: 'event-history', element: <History /> },
             { path: 'event-list-prize', element: <ListPrize /> },
@@ -190,3 +200,6 @@ const AddEventPromotion = Loadable(
 const AdminList = Loadable(lazy(() => import('../../admin/admin-pages/AdminList')));
 const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
 const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
+
+// MANAGE_EVENT_QUARTER_ONE
+const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event')));
