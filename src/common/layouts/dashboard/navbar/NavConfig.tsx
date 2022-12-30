@@ -98,6 +98,25 @@ const navConfig = [
       //     },
       //   ],
       // },
+      {
+        title: 'Group Event',
+        path: PATH_DASHBOARD.eventQ1GroupEvent.root,
+        icon: ICONS.policy,
+        children: [
+          {
+            title: 'Danh sách Group Event',
+            path: PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent,
+          },
+          {
+            title: 'Tạo Group Event',
+            path: PATH_DASHBOARD.eventQ1GroupEvent.addGroupEvent,
+          },
+          {
+            title: 'Chỉnh sửa Group Event',
+            path: PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent,
+          },
+        ],
+      },
     ],
   },
 ];

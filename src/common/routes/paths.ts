@@ -79,4 +79,12 @@ export const PATH_DASHBOARD = {
     editFileEvent: (idEvent: number) =>
       path(ROOTS_DASHBOARD, `/event/event-prize-edit/${idEvent}`),
   },
+
+  eventQ1GroupEvent: {
+    root: path(ROOTS_DASHBOARD, '/event-q1-groupEvent'),
+    listGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/list'), 
+    addGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/add'), 
+    editGroupEvent: path (ROOTS_DASHBOARD, '/event-q1-groupEvent/edit')
+  },
+
 };

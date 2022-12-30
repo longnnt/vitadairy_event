@@ -50,6 +50,11 @@ export const BREADCUMBS = {
   NEW_ADMIN: 'create admin',
   EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
   LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
+  MANAGE_GROUP_EVENT: 'Quản lí Group Event',
+  LIST_GROUP_EVENT: 'Danh sách Group Event',
+  CREATE_GROUP_EVENT: 'Tạo Group Event',
+  EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',
+
 };
 
 export const CACHE_TIME = 2 * 1000 * 60;
