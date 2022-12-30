@@ -29,12 +29,12 @@ import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD, ROOTS_DASHBOARD } from 'src/common/routes/paths';
-import { TABLE_HEAD } from '../common/constants';
-import { ListEventTableRow } from './components/ListEventTableRow';
-import { ListEventTableToolbar } from './components/ListEventTableToolbar';
-import { ListEventTableSkeleton } from './components/ListEventTableSkeleton';
-import { setEndDateSelector, setSearchBySelector, setSearchTextSelector, setStartDateSelector, setStatusSelector } from '../manageEvent.slice';
-import { IManageEventParams } from '../common/interface';
+import { TABLE_HEAD } from '../../common/constants';
+import { ListEventTableRow } from './ListEventTableRow';
+import { ListEventTableToolbar } from './ListEventTableToolbar';
+import { ListEventTableSkeleton } from './ListEventTableSkeleton';
+import { setEndDateSelector, setSearchBySelector, setSearchTextSelector, setStartDateSelector, setStatusSelector } from '../../manageEvent.slice';
+import { IManageEventParams } from '../../common/interface';
 
 function ListEventDashboard() {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { Container } from '@mui/material';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
-import { ListEventDashboard } from '../manage-list-event/ManageListEvent'
+import { ListEventDashboard } from './components/ManageListEvent'
 // --------------------------------------------
 
-export default function StoreAdminList() {
+export default function ManageListEvent() {
   const { themeStretch } = useSettings();
 
   return (

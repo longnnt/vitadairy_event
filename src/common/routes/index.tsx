@@ -202,4 +202,4 @@ const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAd
 const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
 
 // MANAGE_EVENT_QUARTER_ONE
-const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-page-event/ManageListEvent')));
+const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event')));
