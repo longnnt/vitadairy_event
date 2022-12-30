@@ -172,27 +172,6 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
             />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
-              {/* {!!selectedIds.length && (
-                <TableSelectedActions
-                  dense={dense}
-                  isSelectAll={isCheckedAll}
-                  numSelected={selectedIds.length}
-                  rowCount={listGroupEvent.length}
-                  onSelectAllRows={handleCheckAll}
-                  actions={
-                    <></>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        color="primary"
-                        onClick={() => handleDeleteRows(selectedIds)}
-                      >
-                        <Iconify icon={'eva:trash-2-outline'} />
-                      </IconButton>
-                    </Tooltip>
-                  }
-                />
-              )} */}
-  
               <Table size={dense ? 'small' : 'medium'}>
                 <TableHeadGroupEvent
                   isSelectAll={isCheckedAll}

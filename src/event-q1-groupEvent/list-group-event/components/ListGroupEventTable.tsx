@@ -31,11 +31,6 @@ function ListGroupEventTableRow({
   
   return (
     <TableRow hover selected={selected} sx={{ overflow: 'hidden' }}>
-      <Can do="update" on="all">
-        {/* <TableCell padding="checkbox">
-          <Checkbox checked={selected} onChange={(e) => onSelectRow(e.target.checked)} />
-        </TableCell> */}
-      </Can>
       <TableCell align="left">{id}</TableCell>
       <TableCell align="left">{groupEvent}</TableCell>
       <TableCell align="right">

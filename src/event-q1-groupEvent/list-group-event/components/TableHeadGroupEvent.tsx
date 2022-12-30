@@ -55,20 +55,6 @@ export default function TableHeadGroupEvent({
   return (
     <TableHead sx={sx}>
       <TableRow>
-        {/* {onSelectAllRows && (
-          <Can do="update" on="all">
-            <TableCell padding="checkbox">
-              <Checkbox
-                indeterminate={numSelected > 0 && numSelected < rowCount}
-                checked={isPassSelectAllProp ? isSelectAll : isSelectedByRow}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  onSelectAllRows(event.target.checked)
-                }
-              />
-            </TableCell>
-          </Can>
-        )} */}
-
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
