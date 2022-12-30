@@ -15,151 +15,160 @@ import LoadingScreen from '../components/LoadingScreen';
 // ----------------------------------------------------------------------
 
 const Loadable = (Component: ElementType) => (props: any) => {
-  const { pathname } = useLocation();
+    const { pathname } = useLocation();
 
-  const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
 
-  const isDashboard = pathname.includes('/dashboard') && isAuthenticated;
+    const isDashboard = pathname.includes('/dashboard') && isAuthenticated;
 
-  return (
-    <Suspense fallback={<LoadingScreen isDashboard={isDashboard} />}>
-      <Component {...props} />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<LoadingScreen isDashboard={isDashboard} />}>
+            <Component {...props} />
+        </Suspense>
+    );
 };
 
 export default function Router() {
-  return useRoutes([
-    {
-      path: 'auth',
-      children: [
+    return useRoutes([
         {
-          path: 'login',
-          element: (
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          ),
+            path: 'auth',
+            children: [
+                {
+                    path: 'login',
+                    element: (
+                        <GuestGuard>
+                            <Login />
+                        </GuestGuard>
+                    ),
+                },
+                {
+                    path: 'forgot-password',
+                    element: <ForgotPassword />,
+                },
+                {
+                    path: 'reset-password',
+                    element: <ResetPassword />,
+                },
+            ],
         },
-        {
-          path: 'forgot-password',
-          element: <ForgotPassword />,
-        },
-        {
-          path: 'reset-password',
-          element: <ResetPassword />,
-        },
-      ],
-    },
 
-    // Dashboard Routes
-    {
-      path: 'dashboard',
-      element: (
-        <AuthGuard>
-          <DashboardLayout />
-        </AuthGuard>
-      ),
-      children: [
+        // Dashboard Routes
         {
-          path: 'shop-invitation/:id',
-          element: <ShopInvitation />,
+            path: 'dashboard',
+            element: (
+                <AuthGuard>
+                    <DashboardLayout />
+                </AuthGuard>
+            ),
+            children: [
+                {
+                    path: 'shop-invitation/:id',
+                    element: <ShopInvitation />,
+                },
+                // STORE
+                {
+                    path: '',
+                    children: [
+                        { element: <Navigate to="/dashboard/store" replace />, index: true },
+                        { path: 'stories', element: <ListStore /> },
+                        { path: 'stories/:id', element: <EditStore /> }
+                    ],
+                },
+                {
+                    path: '',
+                    children: [
+                        { element: <Navigate to="/" replace />, index: true },
+                        { path: 'admins', element: <AdminList /> },
+                        { path: 'admins/create', element: <AddNewAdmin /> },
+                        { path: 'admins/:id', element: <EditAdmin /> },
+                    ],
+                },
+                {
+                    path: '',
+                    children: [
+                        {
+                            element: <Navigate to="/dashboard/event-promotion-IV" replace />,
+                            index: true,
+                        },
+                        { path: 'event-promotion-IV', element: <ListEventPromotion /> },
+                        { path: 'event-promotion-IV/:id', element: <ViewEventPromotion /> },
+                        { path: 'event-promotion-IV/edit/:id', element: <EditEventPromotion /> },
+                        { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
+                    ],
+                },
+                {
+                    path: '',
+                    children: [
+                        { element: <Navigate to="/dashboard/event" replace />, index: true },
+                        { path: 'event-history', element: <History /> },
+                        { path: 'event-list-prize', element: <ListPrize /> },
+                        { path: 'event-create-prize/:id', element: <CreatePrize /> },
+                        // { path: 'event-list-prize', element: <ListPrize /> },
+                        { path: 'event/event-prize-edit/:id', element: <EditEventPrize /> },
+                        { path: 'event-list-prize/event-:id', element: <ListPrize /> },
+                    ],
+                },
+                {
+                    path: '',
+                    children: [
+                        { element: <Navigate to="/dashboard/event-q1-prize" replace />, index: true },
+                        { path: 'event-q1-prize/list', element: <ListEventQ1Prize /> },
+                        { path: 'event-q1-prize/edit', element: <EditEventPrizeQ1 /> },
+                        { path: 'event-q1-prize/create', element: <EditEventPrizeQ1 /> },
+                    ]
+                },
+                {
+                    path: '',
+                    children: [
+                      {
+                        element: <Navigate to="/dashboard/event-quarter-one"/>,
+                        index: true,
+                      },
+                      { path: 'event-quarter-one', element: <ManageListEvent /> },
+                    ]
+                  },
+            ],
         },
-        // STORE
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/dashboard/store" replace />, index: true },
-            { path: 'stories', element: <ListStore /> },
-            { path: 'stories/:id', element: <EditStore />}
-          ],
-        },
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/" replace />, index: true },
-            { path: 'admins', element: <AdminList /> },
-            { path: 'admins/create', element: <AddNewAdmin /> },
-            { path: 'admins/:id', element: <EditAdmin /> },
-          ],
-        },
-        {
-          path: '',
-          children: [
-            {
-              element: <Navigate to="/dashboard/event-promotion-IV" replace />,
-              index: true,
-            },
-            { path: 'event-promotion-IV', element: <ListEventPromotion /> },
-            { path: 'event-promotion-IV/:id', element: <ViewEventPromotion /> },
-            { path: 'event-promotion-IV/edit/:id', element: <EditEventPromotion /> },
-            { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
-          ],
-        },
-        {
-          path: '',
-          children: [
-            {
-              element: <Navigate to="/dashboard/event-quarter-one"/>,
-              index: true,
-            },
-            { path: 'event-quarter-one', element: <ManageListEvent /> },
-          ]
-        },
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/dashboard/event" replace />, index: true },
-            { path: 'event-history', element: <History /> },
-            { path: 'event-list-prize', element: <ListPrize /> },
-            { path: 'event-create-prize/:id', element: <CreatePrize /> },
-            // { path: 'event-list-prize', element: <ListPrize /> },
-            { path: 'event/event-prize-edit/:id', element: <EditEventPrize /> },
-            { path: 'event-list-prize/event-:id', element: <ListPrize /> },
-          ],
-        },
-      ],
-    },
 
-    // Main Routes
-    {
-      path: '*',
-      element: <LogoOnlyLayout />,
-      children: [
-        { path: '500', element: <Page500 /> },
-        { path: '404', element: <Page404 /> },
-        { path: '403', element: <Page403 /> },
+        // Main Routes
+        {
+            path: '*',
+            element: <LogoOnlyLayout />,
+            children: [
+                { path: '500', element: <Page500 /> },
+                { path: '404', element: <Page404 /> },
+                { path: '403', element: <Page403 /> },
+                { path: '*', element: <Navigate to="/404" replace /> },
+            ],
+        },
+        {
+            path: '/',
+
+            children: [
+                {
+                    path: '',
+                    children: [
+                        { element: <Navigate to="/dashboard/stories" replace />, index: true },
+                        { path: 'stories', element: <ListStore /> },
+                    ],
+                },
+            ]
+        },
         { path: '*', element: <Navigate to="/404" replace /> },
-      ],
-    },
-    {
-      path: '/',
-      
-      children: [
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/dashboard/stories" replace />, index: true },
-            { path: 'stories', element: <ListStore /> },
-          ],
-        },
-      ]
-    },
-    { path: '*', element: <Navigate to="/404" replace /> },
-  ]);
+    ]);
 }
 // login
 const Login = Loadable(lazy(() => import('../../auth/login/Login')));
 const ForgotPassword = Loadable(
-  lazy(() => import('../../auth/forgot-password/ForgotPassword'))
+    lazy(() => import('../../auth/forgot-password/ForgotPassword'))
 );
 const ResetPassword = Loadable(
-  lazy(() => import('../../auth/reset-password/ResetPassword'))
+    lazy(() => import('../../auth/reset-password/ResetPassword'))
 );
 
 // STORE ADMIN
 const ListStore = Loadable(
-  lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin'))
+    lazy(() => import('../../store-admin/storeAdmin-page/ListStoreAdmin'))
 );
 const EditStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/EditStoreAdmin')));
 
@@ -167,9 +176,13 @@ const EditStore = Loadable(lazy(() => import('../../store-admin/storeAdmin-page/
 const History = Loadable(lazy(() => import('../../event/event-history-prize/index')));
 const ListPrize = Loadable(lazy(() => import('../../event/list-prize/index')));
 const CreatePrize = Loadable(
-  lazy(() => import('../../event/event-history-prize/history-prize-create/create'))
+    lazy(() => import('../../event/event-history-prize/history-prize-create/create'))
 );
 const EditEventPrize = Loadable(lazy(() => import('../../event/edit-event-prize/index')));
+
+// EVENT Q1 PRIZE
+const ListEventQ1Prize = Loadable(lazy(() => import('../../event-prize-q1/list')));
+const EditEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/edit')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
@@ -177,23 +190,23 @@ const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 
 // shop invitation
 const ShopInvitation = Loadable(
-  lazy(() => import('src/shop-invitation/components/ShopInvitation'))
+    lazy(() => import('src/shop-invitation/components/ShopInvitation'))
 );
 
 // EVENT_PROMOTION_IV
 
 const ListEventPromotion = Loadable(
-  lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
+    lazy(() => import('../pages/event-promotion-IV/listEventPromotion'))
 );
 
 const ViewEventPromotion = Loadable(
-  lazy(() => import('../pages/event-promotion-IV/viewEventPromotion'))
+    lazy(() => import('../pages/event-promotion-IV/viewEventPromotion'))
 );
 const EditEventPromotion = Loadable(
-  lazy(() => import('../pages/event-promotion-IV/editEventPromotion'))
+    lazy(() => import('../pages/event-promotion-IV/editEventPromotion'))
 );
 const AddEventPromotion = Loadable(
-  lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))
+    lazy(() => import('../pages/event-promotion-IV/addEventPromotion'))
 );
 
 // ADMIN
