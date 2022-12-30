@@ -50,7 +50,18 @@ export const BREADCUMBS = {
   NEW_ADMIN: 'create admin',
   EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
   LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
-  MANAGE_GROUP_EVENT: 'Quản lí Group Event',
+
+  MANAGE_EVENT: 'Quản lý sự kiện',
+  MANAGE_LIST_EVENT: 'Danh sách sự kiện',
+  MANAGE_CREATE_EVENT: 'Tạo mới sự kiện',
+
+  EVENT_Q1: 'Sự kiện quý 1',
+  EVENT_PRIZE: 'Giải thưởng sự kiện',
+  EVENT_PRIZE_LIST: 'Quản lý giải',
+  EVENT_PRIZE_CREATE: 'Tạo giải',
+  EVENT_PRIZE_EDIT: 'Chỉnh sửa giải',
+
+  MANAGE_GROUP_EVENT: 'Quản lý Group Event',
   LIST_GROUP_EVENT: 'Danh sách Group Event',
   CREATE_GROUP_EVENT: 'Tạo Group Event',
   EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',

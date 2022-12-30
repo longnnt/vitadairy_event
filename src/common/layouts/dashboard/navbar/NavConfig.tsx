@@ -87,32 +87,36 @@ const navConfig = [
         icon: ICONS.policy,
         children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
       },
-      // {
-      //   title: 'Event Promotion Quý 4',
-      //   path: PATH_DASHBOARD.eventPromotionIV.root,
-      //   icon: ICONS.policy,
-      //   children: [
-      //     {
-      //       title: 'Danh sách Event',
-      //       path: PATH_DASHBOARD.eventPromotionIV.list,
-      //     },
-      //   ],
-      // },
       {
-        title: 'Group Event',
+        title: BREADCUMBS.MANAGE_EVENT,
+        path: PATH_DASHBOARD.manageEventQuarterOne.root,
+        icon: ICONS.cart,
+        children: [
+          {
+            title: BREADCUMBS.MANAGE_LIST_EVENT,
+            path: PATH_DASHBOARD.manageEventQuarterOne.list,
+          },
+          {
+            title: BREADCUMBS.MANAGE_CREATE_EVENT,
+            path: PATH_DASHBOARD.manageEventQuarterOne.new,
+          },
+        ]
+      },
+      {
+        title: BREADCUMBS.MANAGE_GROUP_EVENT,
         path: PATH_DASHBOARD.eventQ1GroupEvent.root,
         icon: ICONS.policy,
         children: [
           {
-            title: 'Danh sách Group Event',
+            title: BREADCUMBS.LIST_GROUP_EVENT,
             path: PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent,
           },
           {
-            title: 'Tạo Group Event',
+            title: BREADCUMBS.CREATE_GROUP_EVENT,
             path: PATH_DASHBOARD.eventQ1GroupEvent.addGroupEvent,
           },
           {
-            title: 'Chỉnh sửa Group Event',
+            title: BREADCUMBS.EDIT_GROUP_EVENT,
             path: PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent,
           },
         ],
