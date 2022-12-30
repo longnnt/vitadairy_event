@@ -136,103 +136,54 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                 </Box>
               </Stack>
               <Stack direction={'row'} width={700} spacing={3} marginTop={2}>
-              <Stack>
-                <Controller
-                  name="startDate"
-                  key={'startDate'}
-                  control={control}
-                  render={({ field }) => (
-                    <MobileDateTimePicker
-                      {...field}
-                      label="Ngày bắt đầu"
-                      key={'startDate'}
-                      inputFormat={FORMAT_DATE_NEWS}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Calendar />
-                          </InputAdornment>
-                        ),
-                      }}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
-                    />
-                  )}
-                />
-              </Stack>
-              <Stack>
-              <Controller
-                name="endDate"
-                key="endDate"
-                control={control}
-                render={({ field }: { field: any }) => (
-                  <MobileDateTimePicker
-                    {...field}
-                    key="endDate"
-                    label="Ngày kết thúc"
-                    inputFormat={FORMAT_DATE_NEWS}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Calendar />
-                        </InputAdornment>
-                      ),
-                    }}
-                    renderInput={(params: any) => <TextField {...params} fullWidth />}
+                <Stack>
+                  <Controller
+                    name="startDate"
+                    key={'startDate'}
+                    control={control}
+                    render={({ field }) => (
+                      <MobileDateTimePicker
+                        {...field}
+                        label="Ngày bắt đầu"
+                        key={'startDate'}
+                        inputFormat={FORMAT_DATE_NEWS}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
+                        renderInput={(params) => <TextField {...params} fullWidth />}
+                      />
+                    )}
                   />
-                )}
-              />
-              </Stack>
-              </Stack>
-                
-            </Grid>
-            <Grid item xs={10} md={3}>
-              {/* <Stack spacing={'20px'}>
-                <Controller
-                  name="startDate"
-                  key={'startDate'}
-                  control={control}
-                  render={({ field }) => (
-                    <MobileDateTimePicker
-                      {...field}
-                      label="Ngày bắt đầu"
-                      key={'startDate'}
-                      inputFormat={FORMAT_DATE_NEWS}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Calendar />
-                          </InputAdornment>
-                        ),
-                      }}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
-                    />
-                  )}
-                />
-              </Stack> */}
-            </Grid>
-            {/* <Grid item xs={10} md={3}>
-              <Controller
-                name="endDate"
-                key="endDate"
-                control={control}
-                render={({ field }: { field: any }) => (
-                  <MobileDateTimePicker
-                    {...field}
+                </Stack>
+                <Stack>
+                  <Controller
+                    name="endDate"
                     key="endDate"
-                    label="Ngày kết thúc"
-                    inputFormat={FORMAT_DATE_NEWS}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Calendar />
-                        </InputAdornment>
-                      ),
-                    }}
-                    renderInput={(params: any) => <TextField {...params} fullWidth />}
+                    control={control}
+                    render={({ field }: { field: any }) => (
+                      <MobileDateTimePicker
+                        {...field}
+                        key="endDate"
+                        label="Ngày kết thúc"
+                        inputFormat={FORMAT_DATE_NEWS}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
+                        renderInput={(params: any) => <TextField {...params} fullWidth />}
+                      />
+                    )}
                   />
-                )}
-              />
-            </Grid> */}
+                </Stack>
+              </Stack>
+            </Grid>
           </Grid>
         </Card>
       </FormProvider>
