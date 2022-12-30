@@ -102,6 +102,25 @@ const navConfig = [
           },
         ]
       },
+      {
+        title: BREADCUMBS.MANAGE_GROUP_EVENT,
+        path: PATH_DASHBOARD.eventQ1GroupEvent.root,
+        icon: ICONS.policy,
+        children: [
+          {
+            title: BREADCUMBS.LIST_GROUP_EVENT,
+            path: PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent,
+          },
+          {
+            title: BREADCUMBS.CREATE_GROUP_EVENT,
+            path: PATH_DASHBOARD.eventQ1GroupEvent.addGroupEvent,
+          },
+          {
+            title: BREADCUMBS.EDIT_GROUP_EVENT,
+            path: PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent,
+          },
+        ],
+      },
     ],
   },
 ];

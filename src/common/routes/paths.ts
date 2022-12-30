@@ -93,4 +93,12 @@ export const PATH_DASHBOARD = {
     edit: path(ROOTS_DASHBOARD, '/event-q1-prize/edit'),
   },
   
+
+  eventQ1GroupEvent: {
+    root: path(ROOTS_DASHBOARD, '/event-q1-groupEvent'),
+    listGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/list'), 
+    addGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/add'), 
+    editGroupEvent: path (ROOTS_DASHBOARD, '/event-q1-groupEvent/edit')
+  },
+
 };
