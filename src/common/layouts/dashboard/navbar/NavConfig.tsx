@@ -100,6 +100,10 @@ const navConfig = [
             title: BREADCUMBS.MANAGE_CREATE_EVENT,
             path: PATH_DASHBOARD.manageEventQuarterOne.new,
           },
+          {
+            title: BREADCUMBS.EVENT_PRIZE,
+            path: PATH_DASHBOARD.eventPrizeQ1.list
+          }
         ]
       },
     ],

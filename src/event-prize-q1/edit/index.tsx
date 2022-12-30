@@ -4,6 +4,7 @@ import Page from "src/common/components/Page";
 import { BREADCUMBS } from "src/common/constants/common.constants";
 import useSettings from "src/common/hooks/useSettings";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
+import EditPrizeContainer from "./components/EditPrizeContainer";
 
 export default function EditEventPrizeQ1() {
     const { themeStretch } = useSettings();
@@ -30,9 +31,7 @@ export default function EditEventPrizeQ1() {
                         ]}
                     />
 
-                    <Paper elevation={3}>
-                        đáasa
-                    </Paper>
+                    <EditPrizeContainer />
                 </Container>
             </Page>
         </>
