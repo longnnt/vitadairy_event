@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { defaultValues } from 'src/manage-event-quarter-one/common/constants';
 import { schemaAddManageEvent } from 'src/manage-event-quarter-one/manageEvent.schema';
-import { IFormManageEvent, IProCodeSelect } from 'src/manage-event-quarter-one/common/interface';
+import { IFormCreateEvent, IProCodeSelect } from 'src/manage-event-quarter-one/common/interface';
 
 function CreateEventDashboard() {
   const navigate = useNavigate();
@@ -52,19 +52,18 @@ function CreateEventDashboard() {
   const { useDeepCompareEffect } = useDeepEffect();
 
   const onSubmit = (data: any) => {
-    const formDataAddNewEvent: IFormManageEvent = {
-      nameEvent: data.nameEvent,
-      nameGroupEvent: data.nameGroupEvent,
+    const formDataAddNewEvent: IFormCreateEvent = {
+      name: data.name,
+      eventGroupId: data.eventGroupId,
       startDate: data.startDate,
       endDate: data.endDate,
-      prizeWinningUser: data.prizeWinningUser,
-      prizeWinningShop: data.prizeWinningShop,
+      eventCustomerLimit: data.eventCustomerLimit,
+      eventStoreLimit: data.eventStoreLimit,
       skus: data.skus.map((item: IProCodeSelect) => item.value),
       defaultWinRate: data.defaultWinRate,
       upRate: data.upRate,
       downRate: data.downRate,
       status: data.status,
-      id: 1,
     };
   };
 
@@ -81,7 +80,7 @@ function CreateEventDashboard() {
         <Card sx={{ padding: 2 }}>
           <Scrollbar>
             <Stack spacing="26px">
-              <Stack direction={'row'} spacing={2}>
+              <Stack direction={'row'} spacing={2} marginTop={1}>
 
               <RHFTextField name="nameEvent" label="Tên sự kiện*"  />
               <RHFTextField name="nameGroupEvent" label="Tên nhóm sự kiện*"  />
@@ -163,31 +162,25 @@ function CreateEventDashboard() {
                 name="downRate"
                 type="number"
               />
-              <Stack direction={'row'}>
-
-              <RHFSwitch name={'deexCludeUserFile'} label="Giải loại trừ trên tệp người dùng" labelPlacement='start' />
-              <RHFSwitch name={'deexCludeShopFile'} label="Giải loại trừ trên tệp cửa hàng" labelPlacement='start' />
-              </Stack>
 
             </Stack>
           </Scrollbar>
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
+          <Button
+              variant="contained"
+              type="submit"
+              onClick={() => {}}
+            >
+              Lưu
+            </Button>
             <Button
               variant="contained"
               color="inherit"
               onClick={() => navigate(PATH_DASHBOARD.manageEventQuarterOne.list)}
             >
-              Hủy bỏ
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              type="submit"
-              onClick={() => {}}
-            >
-              Thêm mới
+              Hủy
             </Button>
           </Stack>
         </Box>

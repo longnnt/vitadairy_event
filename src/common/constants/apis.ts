@@ -37,3 +37,4 @@ export const API_GIFT = 'admin/gift';
 export const API_EVENT_Q1_ADMIN = '/loyalty/v1/admin/event';
 export const API_EVENT_GROUP_ADMIN = '/loyalty/v1/admin/event-group';
 
+export const API_MANAGE_EVENT = 'admin/event';

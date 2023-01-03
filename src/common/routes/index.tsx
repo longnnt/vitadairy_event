@@ -144,60 +144,6 @@ export default function Router() {
                   },
             ],
         },
-        // STORE
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/dashboard/store" replace />, index: true },
-            { path: 'stories', element: <ListStore /> },
-            { path: 'stories/:id', element: <EditStore />}
-          ],
-        },
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/" replace />, index: true },
-            { path: 'admins', element: <AdminList /> },
-            { path: 'admins/create', element: <AddNewAdmin /> },
-            { path: 'admins/:id', element: <EditAdmin /> },
-          ],
-        },
-        {
-          path: '',
-          children: [
-            {
-              element: <Navigate to="/dashboard/event-promotion-IV" replace />,
-              index: true,
-            },
-            { path: 'event-promotion-IV', element: <ListEventPromotion /> },
-            { path: 'event-promotion-IV/:id', element: <ViewEventPromotion /> },
-            { path: 'event-promotion-IV/edit/:id', element: <EditEventPromotion /> },
-            { path: 'event-promotion-IV/new', element: <AddEventPromotion /> },
-          ],
-        },
-        // {
-        //   path: '',
-        //   children: [
-        //     {
-        //       element: <Navigate to="/dashboard/event-quarter-one"/>,
-        //       index: true,
-        //     },
-        //     { path: 'event-quarter-one', element: <ManageListEvent /> },
-        //     { path: 'add-new-event', element: <ManageCreateEvent /> },
-        //   ]
-        // },
-        {
-          path: '',
-          children: [
-            { element: <Navigate to="/dashboard/event" replace />, index: true },
-            { path: 'event-history', element: <History /> },
-            { path: 'event-list-prize', element: <ListPrize /> },
-            { path: 'event-create-prize/:id', element: <CreatePrize /> },
-            // { path: 'event-list-prize', element: <ListPrize /> },
-            { path: 'event/event-prize-edit/:id', element: <EditEventPrize /> },
-            { path: 'event-list-prize/event-:id', element: <ListPrize /> },
-          ],
-        },
 
         // Main Routes
         {
