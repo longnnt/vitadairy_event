@@ -83,6 +83,6 @@ export const PATH_DASHBOARD = {
   manageEventQuarterOne: {
     root: path(ROOTS_DASHBOARD, '/event-quarter-one'),
     list: path(ROOTS_DASHBOARD, '/event-quarter-one'),
-    new: path(ROOTS_DASHBOARD, '/event-quarter-one/add-new-event'),
+    new: path(ROOTS_DASHBOARD, '/add-new-event'),
   },
 };

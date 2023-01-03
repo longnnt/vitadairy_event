@@ -46,7 +46,7 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
     dispatch(setStartDate(null));
     dispatch(setEndDate(null));
     dispatch(setSearchBy(''));
-    dispatch(setStatus(STATUS.ALL));
+    dispatch(setStatus(''));
   }
 
   const onSubmit = (data: IManageEventParams) => {
@@ -61,14 +61,14 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
       searchText: '',
       startDate: null,
       endDate: null,
-      searchBy: SEARCH_BY.ALL,
-      status: STATUS.ALL,
+      searchBy: '',
+      status: '',
     });
     dispatch(setSearchText(''));
     dispatch(setStartDate(null));
     dispatch(setEndDate(null));
-    dispatch(setSearchBy(SEARCH_BY.ALL));
-    dispatch(setStatus(STATUS.ALL));
+    dispatch(setSearchBy(''));
+    dispatch(setStatus(''));
   };
   return (
     <>
@@ -76,11 +76,11 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
         <Card>
           <Grid container spacing={5} py="30px">
             <Grid item xs={10} md={4} ml="20px">
-              <Stack direction="row" spacing={3} width={1000}>
+              <Stack direction="row" spacing={3} width={850}>
                 <RHFSelect name={'searchBy'} key="searchBy" label={'Tìm kiếm theo...'}>
-                  <option value={SEARCH_BY.ALL}>Tất cả</option>
-                  <option value={SEARCH_BY.EVENT}>Sự kiện</option>
-                  <option value={SEARCH_BY.GROUP_EVENT}>Nhóm sự kiện</option>
+                  <option value=""></option>
+                  <option value={SEARCH_BY.EVENT_NAME}>Sự kiện</option>
+                  <option value={SEARCH_BY.EVENT_GROUP_NAME}>Nhóm sự kiện</option>
                 </RHFSelect>
                 <Controller
                   name="searchText"
@@ -106,7 +106,7 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                 />
 
                 <RHFSelect name={'status'} key="status" label={'Trạng thái'}>
-                  <option value={STATUS.ALL}>Tất cả</option>
+                  <option value=""></option>
                   <option value={STATUS.ACTIVE}>Hiệu lực</option>
                   <option value={STATUS.IN_ACTIVE}>Không hiệu lực</option>
                 </RHFSelect>
