@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Paper, Stack, TextField, Typography, Button } from "@mui/material";
+import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { FormProvider, RHFSwitch, RHFTextField } from "src/common/components/hook-form";
 import { IPrizeCreateData } from "src/event-prize-q1/interface";
@@ -12,7 +12,7 @@ import { setFormEndDate, setFormStartDate } from "src/event-prize-q1/eventPrizeQ
 import { useNavigate } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 
-export default function CreatePrizeContainer() {
+export default function EditPrizeContainer() {
     const { formStartDate, formEndDate } = useSelector(state => state.eventPrizeQ1);
     const navigate = useNavigate()
 
@@ -38,6 +38,12 @@ export default function CreatePrizeContainer() {
             <Paper elevation={3} sx={{ p: 3 }}>
                 <Stack spacing={3}>
                     <Stack direction={'row'} spacing={3}>
+                        <TextField
+                            name="id"
+                            label="ID"
+                            value="0456"
+                            disabled
+                        />
                         <RHFTextField
                             name="name"
                             label="Tên giải*"
