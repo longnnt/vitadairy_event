@@ -33,13 +33,13 @@ export const SEARCH_BY = {
 };
 
 export const defaultValues = {
-  nameEvent: '',
-  nameGroupEvent: '',
+  name: '',
+  eventGroupId: 0,
   startDate: null,
   endDate: null,
-  prizeWinningUser: null,
-  prizeWinningShop: null,
-  status: false,
+  eventStoreLimit: 0,
+  eventCustomerLimit: 0,
+  status: '',
   skus: [] as string[],
   defaultWinRate: null,
   downRate: null,

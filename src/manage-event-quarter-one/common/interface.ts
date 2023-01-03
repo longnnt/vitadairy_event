@@ -12,7 +12,20 @@ export interface IFormManageEvent {
   upRate: number;
   downRate: number;
 }
-
+export interface IFormEditManageEvent {
+  name: string;
+  eventGroupId: number;
+  startDate: string | null;
+  endDate: string | null;
+  eventCustomerLimit: number;
+  eventStoreLimit: number;
+  status: string;
+  skus: string[];
+  defaultWinRate: number;
+  upRate: number | null;
+  downRate: number;
+  id:number
+}
 export interface IManageEventParams {
   startDate: Date | null;
   page?: number;
@@ -20,9 +33,17 @@ export interface IManageEventParams {
   size?: number;
   endDate: Date | null;
   searchBy: string | boolean;
-  status: string | boolean;
+  status?: string | boolean;
+
+
+ 
 }
 
+export interface IEventGroup {
+  page:number;
+  searchText?: string;
+
+}
 export interface IPayloadDate {
   payload: Date | null;
   type: string;
@@ -48,3 +69,8 @@ export interface IProCodeSelect {
   value: string;
   label: string;
 }
+
+
+export type IUpdateEventOneCallback = {
+  onError: VoidFunction;
+};
