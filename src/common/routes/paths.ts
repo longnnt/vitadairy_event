@@ -85,4 +85,20 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/event-quarter-one'),
     new: path(ROOTS_DASHBOARD, '/add-new-event'),
   },
+
+  eventPrizeQ1: {
+    root: path(ROOTS_DASHBOARD, '/event-q1-prize'),
+    list: path(ROOTS_DASHBOARD, '/event-q1-prize/list'),
+    create: path(ROOTS_DASHBOARD, '/event-q1-prize/create'),
+    edit: path(ROOTS_DASHBOARD, '/event-q1-prize/edit'),
+  },
+  
+
+  eventQ1GroupEvent: {
+    root: path(ROOTS_DASHBOARD, '/event-q1-groupEvent'),
+    listGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/list'), 
+    addGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/add'), 
+    editGroupEvent: path (ROOTS_DASHBOARD, '/event-q1-groupEvent/edit')
+  },
+
 };
