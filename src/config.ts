@@ -10,7 +10,7 @@ import { PATH_DASHBOARD } from './common/routes/paths';
 // This for call http API from https client. You can check here: https://stackoverflow.com/questions/60938091/make-api-request-to-http-endpoint-from-aws-amplify-deployed-https-ssl-client
 export const HOST_API =
 // process.env.REACT_APP_BASE_URL || 'https://api-stg.vitadairyvietnam.vn/api';
-process.env.REACT_APP_BASE_URL || 'https://api-sandbox.vitadairyvietnam.vn/api';
+  process.env.REACT_APP_BASE_URL || 'https://api-sandbox.vitadairyvietnam.vn/api';
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
