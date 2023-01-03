@@ -36,9 +36,9 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
   } = methods;
 
   if (
-    !watch().endDate &&
     !watch().searchText &&
     !watch().startDate &&
+    !watch().endDate &&
     !watch().searchBy &&
     !watch().status
   ) {
