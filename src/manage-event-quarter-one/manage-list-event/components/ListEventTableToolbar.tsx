@@ -36,9 +36,9 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
   } = methods;
 
   if (
-    !watch().endDate &&
     !watch().searchText &&
     !watch().startDate &&
+    !watch().endDate &&
     !watch().searchBy &&
     !watch().status
   ) {
@@ -50,6 +50,8 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
   }
 
   const onSubmit = (data: IManageEventParams) => {
+    console.log('searchText',data.searchText)
+    console.log('status',data.status)
     if (data.searchText) dispatch(setSearchText(data.searchText as string));
     if (data.status) dispatch(setStatus(data.status as string));
     dispatch(setSearchBy(data.searchBy as string));
