@@ -29,8 +29,8 @@ export interface IFormCreateEvent {
 }
 
 export type IManageEventAdminCallback = {
-  onSuccess: VoidFunction;
-  onError: VoidFunction;
+  onSuccess?: VoidFunction;
+  onError?: VoidFunction;
 };
 
 export interface IDataListEvent {
@@ -53,11 +53,11 @@ export interface IDataListEvent {
 export interface IManageEventParams {
   startDate: Date | null;
   page?: number;
-  searchText: string;
+  searchText?: string;
   limit?: number;
   endDate: Date | null;
-  searchBy: string | boolean;
-  status: string | boolean;
+  searchBy?: string | boolean;
+  status?: string | boolean;
 }
 
 export interface IPayloadDate {
@@ -83,9 +83,18 @@ export type StateProps = {
   isResetSelect: boolean;
   openEditModal: boolean;
   confirmEdit: boolean;
+  product: string[];
 };
 
 export interface IProCodeSelect {
   value: string;
   label: string;
+}
+
+export interface EventSearchParams {
+  startDate?: Date | null;
+  page?: number;
+  endDate?: Date | null;
+  searchText?: string;
+  size?: number;
 }

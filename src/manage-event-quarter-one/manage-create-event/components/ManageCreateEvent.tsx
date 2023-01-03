@@ -30,6 +30,10 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import { defaultValues } from 'src/manage-event-quarter-one/common/constants';
 import { schemaAddManageEvent } from 'src/manage-event-quarter-one/manageEvent.schema';
 import { IFormCreateEvent, IProCodeSelect } from 'src/manage-event-quarter-one/common/interface';
+import { getProductCode } from 'src/manage-event-quarter-one/services';
+import { usePostCreateEventAdmin } from 'src/manage-event-quarter-one/hooks/usePostCreateEventAdmin';
+import { setProduct } from 'src/manage-event-quarter-one/manageEvent.slice';
+import { STATUS } from 'src/event-promotion-IV/constant';
 
 function CreateEventDashboard() {
   const navigate = useNavigate();
@@ -51,8 +55,14 @@ function CreateEventDashboard() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
 
+  const { mutate, isSuccess, data } = usePostCreateEventAdmin({
+    onError: () => {
+      showErrorSnackbar('Tạo mới sự kiện thất bại');
+    },
+  });
+
   const onSubmit = (data: any) => {
-    const formDataAddNewEvent: IFormCreateEvent = {
+    const formDataCreateEvent: IFormCreateEvent = {
       name: data.name,
       eventGroupId: data.eventGroupId,
       startDate: data.startDate,
@@ -63,8 +73,10 @@ function CreateEventDashboard() {
       defaultWinRate: data.defaultWinRate,
       upRate: data.upRate,
       downRate: data.downRate,
-      status: data.status,
+      status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
     };
+    mutate(formDataCreateEvent);
+    dispatch(setProduct([]));
   };
 
   return (
@@ -82,8 +94,9 @@ function CreateEventDashboard() {
             <Stack spacing="26px">
               <Stack direction={'row'} spacing={2} marginTop={1}>
 
-              <RHFTextField name="nameEvent" label="Tên sự kiện*"  />
-              <RHFTextField name="nameGroupEvent" label="Tên nhóm sự kiện*"  />
+              <RHFTextField name="name" label="Tên sự kiện*"  />
+              <RHFSelect name="eventGroupId" label="Tên nhóm sự kiện*">
+              </RHFSelect>
               </Stack>
               <Stack
                 spacing={2}
@@ -135,14 +148,24 @@ function CreateEventDashboard() {
                 />
               </Stack>
               <Stack direction={'row'} spacing={2}>
-
-              <RHFTextField sx={{width: '300px'}} name="prizeWinningUser" label="Giới hạn trúng giải trên tệp người dùng*" />
-              <RHFTextField sx={{width: '300px'}} name="prizeWinningShop" label="Giới hạn trúng giải trên tệp cửa hàng*" />
+                <RHFTextField sx={{width: '300px'}} name="eventCustomerLimit" label="Giới hạn trúng giải trên tệp người dùng*" />
+                <RHFTextField sx={{width: '300px'}} name="eventStoreLimit" label="Giới hạn trúng giải trên tệp cửa hàng*" />
                 <RHFSwitch name={'status'} label="Trạng thái" labelPlacement='start' />
               </Stack>
 
-              <RHFSelect name='skus' label="Mã sản phẩm*">
-              </RHFSelect>
+              {/* <RHFSelect name='skus' label="Mã sản phẩm*">
+              </RHFSelect> */}
+              <Box sx={{ zIndex: 1001 }} minHeight="65px">
+                <RHFSelectPagitnationMultiple
+                  name={'skus'}
+                  getAsyncData={getProductCode}
+                  placeholder="Mã sản phẩm*"
+                  error={errors}
+                />
+                <FormHelperText error sx={{ marginLeft: '10px' }}>
+                  {errors?.skus?.message}
+                </FormHelperText>
+              </Box>
 
               <RHFTextField
                 fullWidth
@@ -171,7 +194,6 @@ function CreateEventDashboard() {
           <Button
               variant="contained"
               type="submit"
-              onClick={() => {}}
             >
               Lưu
             </Button>
