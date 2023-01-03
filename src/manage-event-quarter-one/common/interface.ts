@@ -1,12 +1,16 @@
 export interface IFormManageEvent {
   id: number;
-  event: string;
-  groupEvent: string;
+  nameEvent: string;
+  nameGroupEvent: string;
   startDate: string | null;
   endDate: string | null;
   prizeWinningUser: number;
   prizeWinningShop: number;
   status: string;
+  skus: string[];
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
 }
 
 export interface IManageEventParams {
@@ -39,3 +43,8 @@ export type StateProps = {
   startDate: Date | null;
   endDate: Date | null;
 };
+
+export interface IProCodeSelect {
+  value: string;
+  label: string;
+}

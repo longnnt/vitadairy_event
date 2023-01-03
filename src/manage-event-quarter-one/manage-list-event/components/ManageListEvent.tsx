@@ -87,7 +87,7 @@ function ListEventDashboard() {
           <Button
             variant="contained"
             startIcon={<Iconify icon={'eva:plus-fill'} />}
-            onClick={() => {}}
+            onClick={() => {navigate(PATH_DASHBOARD.manageEventQuarterOne.new)}}
           >
             Tạo mới
           </Button>
