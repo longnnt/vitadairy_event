@@ -80,7 +80,7 @@ export const EditGroupEventForm = () => {
                     error={errors}
                   />
                   <FormHelperText error sx={{ marginLeft: '10px' }}>
-                    {errors?.skus?.message}
+                    {errors?.eventIds?.message}
                   </FormHelperText>
                 </Box>
             </Stack>

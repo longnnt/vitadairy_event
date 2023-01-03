@@ -33,3 +33,6 @@ export const API_PROVINCE_VN = 'province/vn';
 export const API_PROVINCE_SEARCH_BY_FILTER = '/province/search_by_filter';
 export const API_GET_ALL_GIFTS = 'admin/gift';
 export const API_GIFT = 'admin/gift';
+
+export const API_Q1_GET_ALL_GROUP_EVENT= '/admin/event-group'
+export const API_Q1_GET_ALL_EVENT_NOT_IN_GROUP= '/admin/event/not-in-group'

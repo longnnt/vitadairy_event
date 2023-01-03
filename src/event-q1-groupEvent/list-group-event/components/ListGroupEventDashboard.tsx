@@ -38,10 +38,12 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import { LIST_GROUP_EVENT, TABLE_HEAD_GROUP_EVENT } from 'src/event-q1-groupEvent/contants';
   import { confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/event/edit-event-prize/editEventPrize.Slice';
 import ListGroupEventFilterBar from './GroupEventFilterBar';
-import { IListGroupEvent } from 'src/event-q1-groupEvent/interfaces';
+import { IListGroupEvent, IListGroupEventParams } from 'src/event-q1-groupEvent/interfaces';
 import { ListGroupEventTableRow } from './ListGroupEventTable';
 import TableHeadGroupEvent from './TableHeadGroupEvent';
 import ListGroupEventTableNoData from './ListGroupEventTableNoData';
+import { filterNameGroupEventSelector, setFilterName } from 'src/event-q1-groupEvent/groupEvent.slice';
+import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
   
   function ListGroupEventDashboard() {
     const {
@@ -73,13 +75,13 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
   
     const params = useParams();
     const id = params?.id;
-    // const searchParams: IListPrizeParams = {
-    //   eventId: id,
-    //   page: page,
-    //   size: rowsPerPage,
-    // };
-    // const filterName = useSelector(filterNameSelector);
-    const filterName = '';
+    const searchParams: IListGroupEventParams = {
+      page: page + 1,
+      limit: rowsPerPage,
+    };
+
+    const filterName = useSelector(filterNameGroupEventSelector);
+    // const filterName = '';
     
     const { useDeepCompareEffect } = useDeepEffect();
     const openEditModal = useSelector(openEditModalSelector);
@@ -87,12 +89,13 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
     const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
     // const selectedIdsValue = useSelector(selectedIdsState);
     
-    // if (filterName.length >2) searchParams.searchText = filterName;
+    if (filterName.length >2) searchParams.searchText = filterName;
+    console.log('this is filtername----', filterName);
+    
   
-    // const { data, isLoading } = useGetListPrize(searchParams);
-    // const listGroupEvent = data?.data?.response || [];
-    const listGroupEvent = LIST_GROUP_EVENT || [];
-  
+    const { data, isLoading } = useGetListGroupEvents(searchParams);
+    const listGroupEvent = data?.data?.response || [];
+    
     const {
       isCheckedAll,
       reset: resetSelect,
@@ -107,12 +110,11 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
     // const alertStatus = useSelector(alertStatusSelector)
     // const itemRow= useSelector(itemRowsSelector)
     const handleFilterName = (filterName: string) => {
-    //   dispatch(setFilterName(filterName));
-    //   setPage(0);
+      dispatch(setFilterName(filterName));
+      setPage(0);
     };
     const handleDeleteRows = (ids: number[]) => {
-    //   handleOpenEditModal();
-    //   dispatch(setSelectedIds(ids));
+      
     };
     // const confirmEdit = useSelector(confirmEditSelector);
   
@@ -126,10 +128,10 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
     //   }
     // }, [confirmEdit, selectedIdsValue]);
     const handleEditRow = (id: number) => {
-      navigate(PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent);
+      navigate(PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent(id));
     };
   
-    const totalRecords =  0;
+    const totalRecords = data?.data?.pagination?.totalRecords || 0;
     const isNotFound = !listGroupEvent.length;
     const tableHeight =400*rowsPerPage/5
     const handleOnAgree = () => {
