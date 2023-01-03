@@ -62,9 +62,7 @@ function ListEventDashboard() {
   const startDate = useSelector(setStartDateSelector);
   const endDate = useSelector(setEndDateSelector);
   const searchBy = useSelector(setSearchBySelector);
-  console.log('testSear',searchText)
-  console.log('testSta',status)
-
+  
   const searchParams: IManageEventParams = {
     page: page + 1,
     limit: rowsPerPage,
