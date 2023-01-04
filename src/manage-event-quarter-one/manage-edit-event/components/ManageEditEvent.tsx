@@ -306,7 +306,7 @@ function EditEventDashboard() {
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
-          <Button variant="contained" color="secondary" type="submit">
+          <Button variant="contained"  type="submit">
               Lưu thay đổi
             </Button>
             <Button
