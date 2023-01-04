@@ -38,10 +38,13 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 import { LIST_GROUP_EVENT, TABLE_HEAD_GROUP_EVENT } from 'src/event-q1-groupEvent/contants';
   import { confirmEditSelector, openEditModalSelector, setConfirmEdit, setOpeneditModal } from 'src/event/edit-event-prize/editEventPrize.Slice';
 import ListGroupEventFilterBar from './GroupEventFilterBar';
-import { IListGroupEvent } from 'src/event-q1-groupEvent/interfaces';
+import { IListGroupEvent, IListGroupEventParams } from 'src/event-q1-groupEvent/interfaces';
 import { ListGroupEventTableRow } from './ListGroupEventTable';
 import TableHeadGroupEvent from './TableHeadGroupEvent';
 import ListGroupEventTableNoData from './ListGroupEventTableNoData';
+import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, itemIdGroupEventSelector, setAlert, setFilterName, setIsConfirmDelete } from 'src/event-q1-groupEvent/groupEvent.slice';
+import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
+import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGroupEvent';
   
   function ListGroupEventDashboard() {
     const {
@@ -62,37 +65,25 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
     } = useTable();
     const navigate = useNavigate();
     const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
-    // const {mutate} = useDeleteListPrizeAdmin({
-    //   onSuccess: () => {
-    //     showSuccessSnackbar('Delete prize successfully');
-    //   },
-    //   onError: () => {
-    //     showErrorSnackbar('Delete prize fail');
-    //   },
-    // });
   
     const params = useParams();
     const id = params?.id;
-    // const searchParams: IListPrizeParams = {
-    //   eventId: id,
-    //   page: page,
-    //   size: rowsPerPage,
-    // };
-    // const filterName = useSelector(filterNameSelector);
-    const filterName = '';
-    
+    const searchParams: IListGroupEventParams = {
+      page: page + 1,
+      limit: rowsPerPage,
+    };
+
+    const filterName = useSelector(filterNameGroupEventSelector);
     const { useDeepCompareEffect } = useDeepEffect();
     const openEditModal = useSelector(openEditModalSelector);
     const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
     const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
-    // const selectedIdsValue = useSelector(selectedIdsState);
     
-    // if (filterName.length >2) searchParams.searchText = filterName;
-  
-    // const { data, isLoading } = useGetListPrize(searchParams);
-    // const listGroupEvent = data?.data?.response || [];
-    const listGroupEvent = LIST_GROUP_EVENT || [];
-  
+    if (filterName.length >2) searchParams.searchText = filterName;
+    
+    const { data, isLoading } = useGetListGroupEvents(searchParams);
+    const listGroupEvent = data?.data?.response || [];
+    
     const {
       isCheckedAll,
       reset: resetSelect,
@@ -103,38 +94,48 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
       listGroupEvent.map((item) => item.id),
       page + 1
     );
-  
+    const {mutate} = useDeleteGroupEvent({
+      onSuccess: () => {
+        showSuccessSnackbar('Delete group successfully');
+      },
+      onError: () => {
+        showErrorSnackbar('Delete group fail');
+      },
+    });
+
     // const alertStatus = useSelector(alertStatusSelector)
     // const itemRow= useSelector(itemRowsSelector)
     const handleFilterName = (filterName: string) => {
-    //   dispatch(setFilterName(filterName));
-    //   setPage(0);
+      dispatch(setFilterName(filterName));
+      setPage(0);
     };
-    const handleDeleteRows = (ids: number[]) => {
-    //   handleOpenEditModal();
-    //   dispatch(setSelectedIds(ids));
+    const handleDeleteRows = (ids: number) => {
+      mutate(ids);
+      // dispatch(setAlert({alert: true, itemRowId: ids}))
     };
-    // const confirmEdit = useSelector(confirmEditSelector);
-  
+
+    const confirmDelete = useSelector(isConfirmDeleteGroupEventSelector);
+    const idRowDelete = useSelector(itemIdGroupEventSelector) 
+    // console.log('id =', idRowDelete);
+    // console.log('confirmDel =', confirmDelete);
     // useDeepCompareEffect(() => {
-    //   if (confirmEdit) {
-    //     for (let i = 0; i < selectedIdsValue.length; i++) {
-    //       mutate(selectedIdsValue[i]);
-    //     }
-    //     dispatch(setConfirmEdit(false));
+    //   if (confirmDelete ==true) {
+    //     console.log("this is delete= ", idRowDelete);
+        
+    //     mutate(idRowDelete);
+    //     dispatch(setIsConfirmDelete(false));
+    //     // dispatch(setAlert({alert: false, itemRowId: 0}))
     //     resetSelect();
     //   }
-    // }, [confirmEdit, selectedIdsValue]);
+    // }, [confirmDelete]);
     const handleEditRow = (id: number) => {
-      navigate(PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent);
+      navigate(PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent(id));
     };
   
-    const totalRecords =  0;
+    const totalRecords = data?.data?.pagination?.totalRecords || 0;
     const isNotFound = !listGroupEvent.length;
     const tableHeight =400*rowsPerPage/5
-    const handleOnAgree = () => {
-      dispatch(setConfirmEdit(true));
-    };
+
     return (
       <>
         <HeaderBreadcrumbs
@@ -163,13 +164,6 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
         <Card sx={{overflow: 'hidden'}}>
           {/* <Divider /> */}
           <ListGroupEventFilterBar filterName={filterName} onFilterName={handleFilterName} placeholder={'Nhập từ khóa tìm kiếm...'}/>
-          <ConfirmEditModal
-              open={openEditModal}
-              handleClose={handleCloseEditModal}
-              handleOnAgree={handleOnAgree}
-              type='Xóa giải thưởng sự kiện'
-              colorType={false}
-            />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
               <Table size={dense ? 'small' : 'medium'}>
@@ -191,7 +185,7 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
                       onSelectRow={(e) => {
                         handleSelectItem(row.id, e);
                       }}
-                      onDeleteRow={() =>{handleDeleteRows([row.id])} }
+                      onDeleteRow={() =>{handleDeleteRows(row.id)} }
                       onEditRow={() => handleEditRow(row.id)}
                     />
                   ))}
