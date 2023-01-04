@@ -6,6 +6,6 @@ import { getEventNotInGroup, getListGroupEvents } from '../services';
 
 export function useGetEventNotInGroup() {
   return {
-    ...useQuery([QUERY_KEYS.EVENT_LIST_GROUP_EVENT], () => getEventNotInGroup()),
+    ...useQuery([QUERY_KEYS.EVENT_NOT_IN_GROUP], () => getEventNotInGroup()),
   };
 }

@@ -73,3 +73,48 @@ export interface ITableGroupEventPayload{
   alert: boolean;
   itemRowId?: number;
 }
+export interface IDataResponseEventSelect {
+  data:{
+    response:[
+      {
+        id: number,
+        name: string,
+        userRegisterDate: null,
+        startDate: Date,
+        endDate: Date,
+        userLimit: number,
+        winRateDefault: number,
+        upRate: number,
+        downRate: number,
+        status: string,
+        eventGroupId: number
+      },
+    ]
+    meta:{
+      status: number;
+      msg: string;
+    }
+  }
+}
+
+
+export interface IEventSelect {
+  id: number,
+  name: string,
+  userRegisterDate: null,
+  startDate: Date,
+  endDate: Date,
+  userLimit: number,
+  winRateDefault: number,
+  upRate: number,
+  downRate: number,
+  status: string,
+  eventGroupId: number
+}
+
+export type IArrayEvenSelect = Array<IEventSelect>;
+
+export interface IEventSelectProps {
+  value: string;
+  label: string;
+}
