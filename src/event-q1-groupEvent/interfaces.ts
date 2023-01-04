@@ -3,6 +3,11 @@ export interface IListGroupEvent {
   name: string;
 }
 
+export interface IListGroupEventById extends IListGroupEvent {
+  events: number[];
+
+}
+
 export interface IPropsListGroupEventTableRow {
   row: IListGroupEvent;
   selected: boolean;
@@ -29,7 +34,7 @@ export interface IDataListGroupEvents {
     response:IListGroupEventArray;
     meta:{
       msg: string;
-      status: string;
+      status: number;
     }
     pagination:{
       totalRecords: number;
@@ -39,8 +44,19 @@ export interface IDataListGroupEvents {
       last: boolean;
     }
   }
-
 }
+
+export interface IDataListGroupEventById {
+  data:{
+
+    response:IListGroupEventById;
+    meta:{
+      msg: string;
+      status: number;
+    }
+  }
+}
+
 
 export type IListGroupEventCallback = {
   onSuccess: VoidFunction;
@@ -48,6 +64,12 @@ export type IListGroupEventCallback = {
 };
 
 export interface IFormDataGroupEvent {
+  id?: number;
   name: string;
   eventIds: number[];
+}
+
+export interface ITableGroupEventPayload{
+  alert: boolean;
+  itemRowId?: number;
 }

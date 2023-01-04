@@ -6,6 +6,8 @@ import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { TableMoreMenu } from 'src/common/components/table';
 import Can from 'src/common/lib/Can';
 import { dispatch, useSelector } from 'src/common/redux/store';
+import { setConfirmEdit } from 'src/event-promotion-IV/eventPromotionIV.slice';
+import { alertStatusGroupEventSelector, setAlert, setIsConfirmDelete } from 'src/event-q1-groupEvent/groupEvent.slice';
 import { IPropsListGroupEventTableRow } from 'src/event-q1-groupEvent/interfaces';
 
 // ----------------------------------------------------------------------
@@ -23,23 +25,26 @@ function ListGroupEventTableRow({
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(event.currentTarget);
   };
-  const [status, setStatus] = useState<boolean>(false); 
-  
+
+
+  const alertStatus= useSelector(alertStatusGroupEventSelector);
 
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
-    // setStatus(false)
   };
-  const handleOpenModal=() =>{
-    setStatus(true);
-  }
   const handleCloseModal = () => {
-    setOpenMenuActions(null);
-    setStatus(false)
+    dispatch(setAlert({alert: false}))
   };
+  const handleOpenModal = () => {
+    dispatch(setAlert({alert: true, itemRowId: id}))
 
-  // const itemRow = useSelector(itemRowsSelector);
-  // const alert = useSelector(alertStatusSelector);
+  };
+  
+  const handleOnAgree= () =>{
+    dispatch(setAlert({alert: false, itemRowId: id}))
+    dispatch(setIsConfirmDelete(true));
+  }
+
   return (
     <>
     <TableRow hover selected={selected} sx={{ overflow: 'hidden' }}>
@@ -66,8 +71,8 @@ function ListGroupEventTableRow({
                   <MenuItem
                     onClick={() => {
                       onDeleteRow();
+                      // handleOpenModal()
                       handleCloseMenu();
-                      handleOpenModal();
                     }}
                     sx={{ color: 'error.main' }}
                   >
@@ -85,11 +90,11 @@ function ListGroupEventTableRow({
       </TableCell>
     </TableRow>
     <ConfirmEditModal
-     open={status}
+     open={alertStatus}
      handleClose={handleCloseModal}
      type='xóa group event này'
      colorType={false}
-     handleOnAgree={handleCloseModal}
+     handleOnAgree={handleOnAgree}
     />
     </>
   );

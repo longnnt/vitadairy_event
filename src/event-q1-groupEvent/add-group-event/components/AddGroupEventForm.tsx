@@ -36,6 +36,7 @@ import { useGetListEvent } from 'src/event-promotion-IV/hooks/useGetListEvent';
 import { useGetEventNotInGroup } from 'src/event-q1-groupEvent/hooks/useGetEventNotInGroup';
 import { useAddNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useAddNewGroupEvent';
 import { IFormDataGroupEvent } from 'src/event-q1-groupEvent/interfaces';
+import useShowSnackbar from 'src/common/hooks/useMessage';
 
 export const AddGroupEventForm = () => {
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ export const AddGroupEventForm = () => {
     console.log('this is form Data', formDataAddNewGroupEvent);
     
     // dispatch(setProduct([]));
+    showSuccessSnackbar('Tạo mới thành công');
     navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
   };
 
@@ -104,13 +106,13 @@ export const AddGroupEventForm = () => {
               </Stack>
               <Box sx={{ zIndex: 1001 }} minHeight="65px">
                 <RHFSelectPagitnationMultiple
-                  name={'eventIds'}
+                  name={'events'}
                   getAsyncData={listEventNotInGroup}
                   placeholder="Danh sách Event"
                   error={errors}
                 />
                 <FormHelperText error sx={{ marginLeft: '10px' }}>
-                  {errors?.eventIds?.message}
+                  {errors?.events?.message}
                 </FormHelperText>
               </Box>
             </Stack>

@@ -42,8 +42,9 @@ import { IListGroupEvent, IListGroupEventParams } from 'src/event-q1-groupEvent/
 import { ListGroupEventTableRow } from './ListGroupEventTable';
 import TableHeadGroupEvent from './TableHeadGroupEvent';
 import ListGroupEventTableNoData from './ListGroupEventTableNoData';
-import { filterNameGroupEventSelector, setFilterName } from 'src/event-q1-groupEvent/groupEvent.slice';
+import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, itemIdGroupEventSelector, setAlert, setFilterName, setIsConfirmDelete } from 'src/event-q1-groupEvent/groupEvent.slice';
 import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
+import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGroupEvent';
   
   function ListGroupEventDashboard() {
     const {
@@ -90,9 +91,7 @@ import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListG
     // const selectedIdsValue = useSelector(selectedIdsState);
     
     if (filterName.length >2) searchParams.searchText = filterName;
-    console.log('this is filtername----', filterName);
     
-  
     const { data, isLoading } = useGetListGroupEvents(searchParams);
     const listGroupEvent = data?.data?.response || [];
     
@@ -106,6 +105,15 @@ import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListG
       listGroupEvent.map((item) => item.id),
       page + 1
     );
+    const {mutate} = useDeleteGroupEvent({
+      onSuccess: () => {
+        showSuccessSnackbar('Delete group successfully');
+      },
+      onError: () => {
+        showErrorSnackbar('Delete group fail');
+      },
+    });
+  
   
     // const alertStatus = useSelector(alertStatusSelector)
     // const itemRow= useSelector(itemRowsSelector)
@@ -113,20 +121,25 @@ import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListG
       dispatch(setFilterName(filterName));
       setPage(0);
     };
-    const handleDeleteRows = (ids: number[]) => {
-      
+    const handleDeleteRows = (ids: number) => {
+      mutate(ids);
+      // dispatch(setAlert({alert: true, itemRowId: ids}))
     };
-    // const confirmEdit = useSelector(confirmEditSelector);
-  
+
+    const confirmDelete = useSelector(isConfirmDeleteGroupEventSelector);
+    const idRowDelete = useSelector(itemIdGroupEventSelector) 
+    // console.log('id =', idRowDelete);
+    // console.log('confirmDel =', confirmDelete);
     // useDeepCompareEffect(() => {
-    //   if (confirmEdit) {
-    //     for (let i = 0; i < selectedIdsValue.length; i++) {
-    //       mutate(selectedIdsValue[i]);
-    //     }
-    //     dispatch(setConfirmEdit(false));
+    //   if (confirmDelete ==true) {
+    //     console.log("this is delete= ", idRowDelete);
+        
+    //     mutate(idRowDelete);
+    //     dispatch(setIsConfirmDelete(false));
+    //     // dispatch(setAlert({alert: false, itemRowId: 0}))
     //     resetSelect();
     //   }
-    // }, [confirmEdit, selectedIdsValue]);
+    // }, [confirmDelete]);
     const handleEditRow = (id: number) => {
       navigate(PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent(id));
     };
@@ -134,9 +147,7 @@ import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListG
     const totalRecords = data?.data?.pagination?.totalRecords || 0;
     const isNotFound = !listGroupEvent.length;
     const tableHeight =400*rowsPerPage/5
-    const handleOnAgree = () => {
-      dispatch(setConfirmEdit(true));
-    };
+
     return (
       <>
         <HeaderBreadcrumbs
@@ -165,13 +176,6 @@ import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListG
         <Card sx={{overflow: 'hidden'}}>
           {/* <Divider /> */}
           <ListGroupEventFilterBar filterName={filterName} onFilterName={handleFilterName} placeholder={'Nhập từ khóa tìm kiếm...'}/>
-          <ConfirmEditModal
-              open={openEditModal}
-              handleClose={handleCloseEditModal}
-              handleOnAgree={handleOnAgree}
-              type='Xóa giải thưởng sự kiện'
-              colorType={false}
-            />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800, position: 'relative', minHeight: tableHeight }}>
               <Table size={dense ? 'small' : 'medium'}>
@@ -193,7 +197,7 @@ import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListG
                       onSelectRow={(e) => {
                         handleSelectItem(row.id, e);
                       }}
-                      onDeleteRow={() =>{handleDeleteRows([row.id])} }
+                      onDeleteRow={() =>{handleDeleteRows(row.id)} }
                       onEditRow={() => handleEditRow(row.id)}
                     />
                   ))}

@@ -21,7 +21,7 @@ import { BREADCUMBS, FORMAT_DATE_NEWS } from 'src/common/constants/common.consta
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FormProvider, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
 import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
@@ -30,12 +30,18 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import { schemaAddEvent } from 'src/event-promotion-IV/schema';
 import { DEFAULT_EDIT_VALUE, LIST_GROUP_EVENT } from 'src/event-q1-groupEvent/contants';
 import { schemaAddEditGroupEvent } from 'src/event-q1-groupEvent/schema';
+import { IDataListGroupEventById, IFormDataGroupEvent, IListGroupEventById } from 'src/event-q1-groupEvent/interfaces';
+import { useAddNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useAddNewGroupEvent';
+import { useGetEventNotInGroup } from 'src/event-q1-groupEvent/hooks/useGetEventNotInGroup';
+import { useGetGroupEventById } from 'src/event-q1-groupEvent/hooks/useGetGroupEventById';
+import { getGroupEventById } from 'src/event-q1-groupEvent/services';
+import { useEditNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useEditGroupEvent';
 
 export const EditGroupEventForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const methods = useForm({
+  const methods = useForm<IListGroupEventById>({
     resolver: yupResolver(schemaAddEditGroupEvent),
     defaultValues: DEFAULT_EDIT_VALUE,
   });
@@ -49,9 +55,52 @@ export const EditGroupEventForm = () => {
     formState: { errors },
   } = methods;
   
+  const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
+
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { useDeepCompareEffect } = useDeepEffect();
+
+  const { mutate } = useEditNewGroupEvent({
+    onError: () => {
+      showErrorSnackbar('Tạo mới thất bại');
+    },
+    onSuccess:() => {
+      showSuccessSnackbar('Tạo mới thành công');
+      navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
+    }
+  });
+
   const onSubmit = (data: any) => {
-    console.log('Submit OK');
+    const formDataAddNewGroupEvent: IFormDataGroupEvent = {
+      id: parseInt(id as string),
+      name: data.name,
+      eventIds: [],
+    };
+    mutate(formDataAddNewGroupEvent);
+    console.log('this is form Data', formDataAddNewGroupEvent);
+    
+    // dispatch(setProduct([]));
+    navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
+    showSuccessSnackbar('Tạo mới thành công');
   };
+  const params = useParams();
+  const id = params?.id;
+  // const {data:dataForm, isLoading} = useGetGroupEventById(3)
+  const { data, isLoading } = useGetGroupEventById({
+    id: parseInt(id as string)
+  });
+  console.log('this is Data', data);
+
+
+  const dataGroupEventDetail = data?.data?.response;
+  console.log('this is DataResponse', dataGroupEventDetail);
+  
+  useDeepCompareEffect(() => {
+    if (dataGroupEventDetail) {
+      reset(dataGroupEventDetail);
+    }
+  }, [dataGroupEventDetail]);
+  
   return (
     <>
       <HeaderBreadcrumbs
@@ -69,18 +118,18 @@ export const EditGroupEventForm = () => {
           <Box sx={{ pt: 3}}>
             <Stack spacing="26px" >
               <Stack direction={'row'} spacing='26px'>
-                <RHFTextField name="id" label="ID" required disabled/>
+                <RHFTextField name="id" label="ID" disabled/>
                 <RHFTextField name="name" label="Tên Group Event*" />
               </Stack>
                 <Box sx={{ zIndex: 1001 }} minHeight="65px">
                   <RHFSelectPagitnationMultiple
-                    name={'skus'}
-                    getAsyncData={LIST_GROUP_EVENT}
-                    placeholder="Mã sản phẩm*"
+                    name={'events'}
+                    getAsyncData={listEventNotInGroup}
+                    placeholder="Danh sách Event*"
                     error={errors}
                   />
                   <FormHelperText error sx={{ marginLeft: '10px' }}>
-                    {errors?.eventIds?.message}
+                    {errors?.events?.message}
                   </FormHelperText>
                 </Box>
             </Stack>

@@ -20,8 +20,8 @@ export const LIST_GROUP_EVENT = [
 ];
 
 export const DEFAULT_EDIT_VALUE = {
-    id: '',
+    id: 0,
     name: '',
-    eventIds:[] as string[],
+    events:[] as number[],
   };
   
