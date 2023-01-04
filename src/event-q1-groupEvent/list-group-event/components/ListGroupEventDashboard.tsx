@@ -148,6 +148,7 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
                     variant="contained"
                     to={PATH_DASHBOARD.eventQ1GroupEvent.addGroupEvent}
                     component={RouterLink}
+                    startIcon={<Iconify icon={'akar-icons:file'} />}
                 >
                     Tạo mới
                 </Button>

@@ -10,5 +10,7 @@ export const schemaAddEditGroupEvent = yup
     events: yup
       .array()
       .of(yup.mixed())
+      .required('Vui lòng nhập thông tin vào ô trống')
+      .min(1, 'Vui lòng chọn ít nhất một mã sản phẩm'),
   })
   .required();
