@@ -14,10 +14,12 @@ export const useUpdateEventPrize = (callback: IStoreAdminCallback) => {
                 const idEvent = res?.data?.response?.eventId;
                 callback.onSuccess && callback.onSuccess()
             } else {
+                console.log(res)
                 showErrorSnackbar(res.data?.meta?.msg)
             }
         },
         onError: (error) => {
+            console.log(error)
             callback.onError && callback.onError();
         }
     })

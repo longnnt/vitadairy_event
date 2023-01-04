@@ -38,12 +38,14 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
         crmTransactionTypeId: Yup.mixed().required('Vui lòng chọn CRM Transaction Type'),
         eventDetailProvinces: Yup.lazy((value: IFormCreateProvince) => {
             const validationObject: any = {};
-            Object.keys(value).map((item) => {
-                validationObject[item] = eventDetailProvincesSchema;
-            });
+            if(value !== undefined && value !== null){
+                Object.keys(value).map((item) => {
+                    validationObject[item] = eventDetailProvincesSchema;
+                });
+            }
             return Yup.object()
                 .shape({ ...validationObject })
-                .required();
+                // .required();
         }),
     });
     return createEventPrizeSchema;
@@ -75,7 +77,7 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
             .typeError('Phải là một chuỗi'),
     });
 
-    const eidtEventPrizeSchema = Yup.object().shape({
+    const edittEventPrizeSchema = Yup.object().shape({
         ordinal: Yup.number()
             .required('Vui lòng nhập thứ tự trúng giải')
             .typeError('Giá trị nhập phải là số'),
@@ -85,14 +87,15 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
         crmTransactionTypeId: Yup.mixed().required('Vui lòng chọn CRM Transaction Type'),
         eventDetailProvinces: Yup.lazy((value: IFormCreateProvince) => {
             const validationObject: any = {};
-            Object.keys(value).map((item) => {
-                validationObject[item] = eventDetailProvincesSchema;
-            });
-
+            if(value !== undefined && value !== null){
+                Object.keys(value).map((item) => {
+                    validationObject[item] = eventDetailProvincesSchema;
+                });
+            }
             return Yup.object()
                 .shape({ ...validationObject })
-                .required();
+                // .required();
         }),
     });
-    return eidtEventPrizeSchema;
+    return edittEventPrizeSchema;
 };

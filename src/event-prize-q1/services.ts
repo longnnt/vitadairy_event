@@ -1,5 +1,4 @@
-import { API_EVENT_Q1_PRIZE } from './../common/constants/apis';
-import { API_GIFT, API_PROVINCE_SEARCH_BY_FILTER, API_TRANSACTION_TYPE_UNUSE } from 'src/common/constants/apis';
+import { API_GIFT, API_PROVINCE_SEARCH_BY_FILTER, API_TRANSACTION_TYPE_UNUSE, API_EVENT_Q1_PRIZE } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import axiosInstanceV2 from 'src/common/utils/axiosV2';
 import { IResCrmTransaction, IResGift, IResProvince, IProvinceParams, IGiftParams, IFormSubmitCreate, IGiftById } from './interface';
@@ -36,3 +35,7 @@ export const getGiftById = (id: number) => {
     return axiosInstance.get<unknown, IGiftById>(API_GIFT + `/${id}`);
   };
   
+
+  export const deleteSinglePrize = (id: number) => {
+    return axiosInstanceV2.delete(`${API_EVENT_Q1_PRIZE}/${id}`)
+  }

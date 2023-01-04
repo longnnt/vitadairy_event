@@ -96,10 +96,6 @@ const navConfig = [
             title: BREADCUMBS.MANAGE_LIST_EVENT,
             path: PATH_DASHBOARD.manageEventQuarterOne.list,
           },
-          {
-            title: BREADCUMBS.EVENT_PRIZE,
-            path: PATH_DASHBOARD.eventPrizeQ1.list
-          }
         ]
       },
       {

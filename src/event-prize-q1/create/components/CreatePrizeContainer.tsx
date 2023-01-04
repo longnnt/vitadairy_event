@@ -79,6 +79,14 @@ export default function CreatePrizeContainer() {
 
     const onSuccess = () => {
         showSuccessSnackbar('Tạo giải thành công');
+
+        dispatch(setFormStartDate(null));
+        dispatch(setFormEndDate(null));
+        dispatch(setIsStoreExclusion(false))
+        dispatch(setIsStoreGroupExclusion(false))
+        dispatch(setIsCustomerExclusion(false))
+        dispatch(setIsCustomerGroupExclusion(false))
+
         navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
     };
 
@@ -120,7 +128,6 @@ export default function CreatePrizeContainer() {
             })
             dataSend = { ...dataSend, eventDetailProvinces: array }
         }
-
         mutate(dataSend)
     }
 
@@ -274,7 +281,7 @@ export default function CreatePrizeContainer() {
             )}
 
             <Stack spacing={3} direction='row' alignItems='center' justifyContent='flex-end' sx={{ width: '100%', mt: 5 }} >
-                <Button variant="contained" type="submit">Lưu thay đổi</Button>
+                <Button variant="contained" type="submit">Lưu</Button>
                 <Button variant="contained" color="inherit" onClick={() => {
                     navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
                 }}>Hủy</Button>
