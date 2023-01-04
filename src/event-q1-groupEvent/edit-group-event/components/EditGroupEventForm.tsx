@@ -37,10 +37,22 @@ import { useGetGroupEventById } from 'src/event-q1-groupEvent/hooks/useGetGroupE
 import { getEventNotInGroup, getGroupEventById } from 'src/event-q1-groupEvent/services';
 import { useEditNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useEditGroupEvent';
 import { RHFSelectPaginationGroupEvent } from 'src/event-q1-groupEvent/common/components/RHFSelectPaginationMutiple';
+import { useEffect } from 'react';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
+import { alertStatusGroupEventSelector, isConfirmEditGroupEventSelector, modalStatusGroupEventSelector, setAlert, setIsConfirmEdit, setModalStatus } from 'src/event-q1-groupEvent/groupEvent.slice';
 
 export const EditGroupEventForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const handleOpenEditModal = () => dispatch(setModalStatus(true));
+  const handleCloseEditModal = () => dispatch(setModalStatus(false));
+  const openEditModal = useSelector(modalStatusGroupEventSelector);
+  const confirmEdit = useSelector(isConfirmEditGroupEventSelector);
+  
+  const handleOnAgree = () => {
+    dispatch(setIsConfirmEdit(true));
+  };
 
   const methods = useForm<IListGroupEventById>({
     resolver: yupResolver(schemaAddEditGroupEvent),
@@ -72,15 +84,8 @@ export const EditGroupEventForm = () => {
   });
 
   const onSubmit = (data: any) => {
-    const formDataAddNewGroupEvent: IFormDataGroupEvent = {
-      id: parseInt(id as string),
-      name: data.name,
-      eventIds: data.events.map((item: IEventSelectProps) => item.value),
-    };
-    mutate(formDataAddNewGroupEvent);
-    navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
-    showSuccessSnackbar('Tạo mới thành công');
-  };
+    handleOpenEditModal();
+  };  
   const params = useParams();
   const id = params?.id;
   const { data, isLoading } = useGetGroupEventById({
@@ -94,6 +99,29 @@ export const EditGroupEventForm = () => {
       reset(dataGroupEventDetail);
     }
   }, [dataGroupEventDetail]);
+
+  useEffect(() => {
+    if (dataGroupEventDetail)
+      setValue(
+        'events',
+        dataGroupEventDetail.events.map((item) => ({ value: item?.id, label: item?.name }))
+      );
+  }, [dataGroupEventDetail]);
+
+  useDeepCompareEffect(() => {
+    const dataForm = watch();
+    if(confirmEdit){
+      const formDataEditGroupEvent: IFormDataGroupEvent = {
+        id: parseInt(id as string),
+        name: dataForm.name,
+        eventIds: dataForm.events.map((item: IEventSelectProps) => item.value),
+      };
+      mutate(formDataEditGroupEvent);
+      dispatch(setIsConfirmEdit(false));
+      navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
+      showSuccessSnackbar('Chỉnh sửa thành công');
+    }
+  },[confirmEdit])
   
   return (
     <>
@@ -135,17 +163,25 @@ export const EditGroupEventForm = () => {
               type="submit"
               // onClick={() => dispatch(setButtonType('saveSubmit'))}
             >
-              Lưu
+              Lưu thay đổi
             </Button>
             <Button
               variant="contained"
               color="inherit"
               onClick={() => navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent)}
             >
-              Hủy
+              Hủy chỉnh sửa
             </Button>
           </Stack>
+          
         </Box>
+        <ConfirmEditModal
+          open={openEditModal}
+          handleClose={handleCloseEditModal}
+          handleOnAgree={handleOnAgree}
+          type="Chỉnh sửa group event"
+          colorType={true}
+          />
       </FormProvider>
     </>
   );

@@ -9,17 +9,19 @@ type StateProps = {
   isResetSelect: boolean;
   isConfirmDelete: boolean;
   rowID: number;
+  isConfirmEdit: boolean;
+  modalStatus: boolean;
 };
 
 const initialState: StateProps = {
   filterName: '',
-  
   alertStatus: false,
-  
   selectedIds: [],
   isResetSelect:false,
   isConfirmDelete: false,
   rowID: 0,
+  isConfirmEdit: false,
+  modalStatus: false,
 };
 
 export const groupEventSlice = createSlice({
@@ -43,7 +45,13 @@ export const groupEventSlice = createSlice({
     },
     setRowID: (state, action: PayloadAction<number>) =>{
       state.rowID = action.payload;
-    }
+    },
+    setIsConfirmEdit:(state, action: PayloadAction<boolean>) =>{
+      state.isConfirmEdit = action.payload;
+    },
+    setModalStatus:(state, action: PayloadAction<boolean>) =>{
+      state.modalStatus = action.payload;
+    },
   },
 })
 
@@ -54,7 +62,8 @@ export const {
   setIsResetSelect,
   setIsConfirmDelete,
   setRowID,
-
+  setIsConfirmEdit,
+  setModalStatus,
 
 
 } = groupEventSlice.actions;
@@ -66,6 +75,9 @@ export const selectedIdsGroupEventState = (state: RootState) => state.groupEvent
 export const isResetSelectGroupEventSelector = (state: RootState) => state.groupEvent.isResetSelect;
 export const isConfirmDeleteGroupEventSelector = (state: RootState) => state.groupEvent.isConfirmDelete;
 export const rowIdGroupEventSelector = (state: RootState) => state.groupEvent.rowID;
+export const isConfirmEditGroupEventSelector = (state: RootState) => state.groupEvent.isConfirmEdit;
+export const modalStatusGroupEventSelector = (state: RootState) => state.groupEvent.modalStatus;
+
 
 
 
