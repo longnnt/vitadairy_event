@@ -122,15 +122,15 @@ const colourStyles = (isFocus: boolean, error: any) => {
     container: (provided, state) => ({
       ...provided,
     }),
-    input: (styles, state) => ({
-      ...styles,
-      padding: 10,
-    }),
+    // input: (styles, state) => ({
+    //   ...styles,
+    //   padding: 10,
+    // }),
 
     valueContainer: (provided, state) => ({
       ...provided,
       overflow: 'visible',
-      padding: '10px',
+      padding: 10,
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
     }),
 
@@ -154,9 +154,11 @@ const colourStyles = (isFocus: boolean, error: any) => {
           ? 'white'
           : 'primary',
       top:
-         state.hasValue || state.selectProps.inputValue || (isFocus as unknown as ControlProps<boolean>)
-          ? '-20px'
-          : '10px',
+        state.hasValue || state.selectProps.inputValue
+        ? '-10px'
+        : (isFocus as unknown as ControlProps<boolean>)
+        ? '-22px'
+        : '10%',
 
       transition: 'top 0.2s, font-size 0.2s',
       fontSize:
