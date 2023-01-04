@@ -114,7 +114,7 @@ export default function Router() {
                         { element: <Navigate to="/dashboard/event-q1-prize" replace />, index: true },
                         { path: 'event-q1-prize/list', element: <ListEventQ1Prize /> },
                         { path: 'event-q1-prize/edit', element: <EditEventPrizeQ1 /> },
-                        { path: 'event-q1-prize/create', element: <EditEventPrizeQ1 /> },
+                        { path: 'event-q1-prize/create', element: <CreateEventPrizeQ1 /> },
                     ]
                 },
                 {
@@ -125,6 +125,7 @@ export default function Router() {
                         index: true,
                       },
                       { path: 'event-quarter-one', element: <ManageListEvent /> },
+                      { path: 'add-new-event', element: <ManageCreateEvent /> },
                     ]
                   },
                   {
@@ -141,7 +142,6 @@ export default function Router() {
                   },
             ],
         },
-        
 
         // Main Routes
         {
@@ -196,6 +196,7 @@ const EditEventPrize = Loadable(lazy(() => import('../../event/edit-event-prize/
 // EVENT Q1 PRIZE
 const ListEventQ1Prize = Loadable(lazy(() => import('../../event-prize-q1/list')));
 const EditEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/edit')));
+const CreateEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/create')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
@@ -239,4 +240,5 @@ const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAd
 const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin')));
 
 // MANAGE_EVENT_QUARTER_ONE
-const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event')));
+const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event/index')));
+const ManageCreateEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-create-event/index')))

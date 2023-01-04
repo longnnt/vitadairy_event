@@ -27,14 +27,18 @@ import {
 import { BREADCUMBS } from 'src/common/constants/common.constants';
 import { useSelectMultiple } from 'src/common/hooks/useSelectMultiple';
 import useTable from 'src/common/hooks/useTable';
-import { dispatch, useSelector } from 'src/common/redux/store';
+import { dispatch, useDispatch, useSelector } from 'src/common/redux/store';
 import { PATH_DASHBOARD, ROOTS_DASHBOARD } from 'src/common/routes/paths';
 import { TABLE_HEAD } from '../../common/constants';
 import { ListEventTableRow } from './ListEventTableRow';
 import { ListEventTableToolbar } from './ListEventTableToolbar';
 import { ListEventTableSkeleton } from './ListEventTableSkeleton';
-import { setEndDateSelector, setSearchBySelector, setSearchTextSelector, setStartDateSelector, setStatusSelector } from '../../manageEvent.slice';
-import { IManageEventParams } from '../../common/interface';
+import { confirmEditSelector, selectedIdsState, setConfirmEdit, setEndDateSelector, setOpeneditModal, setSearchBySelector, setSearchTextSelector, setSelectedIds, setStartDateSelector, setStatusSelector } from '../../manageEvent.slice';
+import { IFormListEvent, IManageEventParams } from '../../common/interface';
+import { useGetListEventAdmin } from 'src/manage-event-quarter-one/hooks/useGetListEventAdmin';
+import { useDeleteEventId } from 'src/manage-event-quarter-one/hooks/useDeleteEventId';
+import useMessage from 'src/store-admin/hooks/useMessage';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 
 function ListEventDashboard() {
   const navigate = useNavigate();
@@ -51,27 +55,64 @@ function ListEventDashboard() {
     onChangeRowsPerPage,
   } = useTable();
 
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const dispatch = useDispatch();
   const searchText = useSelector(setSearchTextSelector);
-  const statusSuccess = useSelector(setStatusSelector);
+  const status = useSelector(setStatusSelector);
   const startDate = useSelector(setStartDateSelector);
   const endDate = useSelector(setEndDateSelector);
   const searchBy = useSelector(setSearchBySelector);
-
+  
   const searchParams: IManageEventParams = {
-    page: page,
-    size: rowsPerPage,
+    page: page + 1,
+    limit: rowsPerPage,
+    searchText: searchText,
+    searchBy: searchBy,
     startDate: startDate,
     endDate: endDate,
-    searchText: searchText,
-    status: statusSuccess,
-    searchBy: searchBy,
+    status: status,
   };
 
-  const { totalRecords } = {
+  const { data, isLoading, refetch } = useGetListEventAdmin(searchParams);
+
+  const listEventAdmin = data?.response  || []
+
+  const {
+    isCheckedAll,
+    reset: resetSelect,
+    selectedIds,
+    handleSelectItem,
+    handleCheckAll,
+  } = useSelectMultiple(
+    listEventAdmin.map((item) => item.id),
+    page + 1
+  );
+
+  const mutationDetele = useDeleteEventId({
+    onSuccess: () => {showSuccessSnackbar('Xóa sự kiện thành công')},
+    onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
+  })
+
+  const handleDeleteRows = (ids: number[]) => {
+    for (let i = 0; i < ids.length; i++) {
+      mutationDetele.mutate(ids[i]);
+      resetSelect();
+    }
+  };
+
+  const handleEditRow = (id: number) => {
+    // navigate(PATH_DASHBOARD.admin.edit(id));
+  };
+  
+
+  const { totalRecords } = data?.pagination || {
     totalRecords: 0,
   };
 
+  const isNotFound = !listEventAdmin.length && !isLoading;
+
   const handleSearch = () => {
+    refetch();
     setPage(0);
   };
 
@@ -87,7 +128,7 @@ function ListEventDashboard() {
           <Button
             variant="contained"
             startIcon={<Iconify icon={'eva:plus-fill'} />}
-            onClick={() => {}}
+            onClick={() => {navigate(PATH_DASHBOARD.manageEventQuarterOne.new)}}
           >
             Tạo mới
           </Button>
@@ -105,27 +146,28 @@ function ListEventDashboard() {
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                // rowCount={
-                //   tableData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                //     .length
-                // }
-                // numSelected={selectedIds.length}
+                rowCount={listEventAdmin.length}
+                numSelected={selectedIds.length}
                 onSort={onSort}
               />
 
               <TableBody>
-                {/* {tableData?.map((row: IResShopInvitation) => (
-                  <InvitationTableRow
-                    key={row.storeCode}
+                {listEventAdmin?.map((row: IFormListEvent) => (
+                  <ListEventTableRow
+                    key={row.id}
                     row={{ ...row }}
-                    selected={selectedIds.includes(row.storeCode)}
+                    selected={selectedIds.includes(row.id)}
                     onSelectRow={(e) => {
-                      handleSelectItem(row.storeCode, e);
+                      handleSelectItem(row.id, e);
+                    }}
+                    onDeleteRow={() => handleDeleteRows([row.id])}
+                    onEditRow={() => {
+                      handleEditRow(row.id);
                     }}
                   />
                 ))}
 
-                <TableNoData isNotFound={!tableData?.length} /> */}
+                <TableNoData isNotFound={!listEventAdmin?.length} />
               </TableBody>
             </Table>
           </TableContainer>

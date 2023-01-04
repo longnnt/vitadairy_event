@@ -18,7 +18,7 @@ export const HEAD_LABELS = [
         id: 'start_time',
         label: 'Ngày bắt đầu',
         align: 'center'
-    }, 
+    },
     {
         id: 'end_date',
         label: 'Ngày kết thúc',
@@ -28,9 +28,9 @@ export const HEAD_LABELS = [
         id: 'time_win_prize',
         label: 'Thứ tự trúng giải',
         align: 'center'
-    }, 
+    },
     {
-        id:  'actions',
+        id: 'actions',
         label: '',
         align: 'right'
     }
@@ -61,4 +61,8 @@ export const dataTest = [
         end_time: '11/11/2022',
         win_prize: 70
     }
+]
+
+export const dataCountry = [
+    'Tỉnh Hà Giang' , 'Tỉnh Hưng Yên'
 ]

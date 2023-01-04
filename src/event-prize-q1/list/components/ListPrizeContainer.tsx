@@ -29,7 +29,7 @@ export default function ListPrizeContainer() {
                             <Button
                                 startIcon={<AddIcon />}
                                 variant="contained"
-                                to={PATH_DASHBOARD.eventPrizeQ1.list}
+                                to={PATH_DASHBOARD.eventPrizeQ1.create}
                                 component={RouterLink}
                             >
                                 Tạo mới
