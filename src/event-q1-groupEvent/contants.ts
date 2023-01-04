@@ -7,21 +7,21 @@ export const TABLE_HEAD_GROUP_EVENT= [
 export const LIST_GROUP_EVENT = [
   {
     id: 1,
-    groupEvent: 'Người 1',
+    name: 'Người 1',
   },
   {
     id: 2,
-    groupEvent: 'Người 2',
+    name: 'Người 2',
   },
   {
     id: 3,
-    groupEvent: 'Người 3',
+    name: 'Người 3',
   },
 ];
 
 export const DEFAULT_EDIT_VALUE = {
-    id: '',
+    id: 0,
     name: '',
-    skus:[] as string[],
+    events:[] as number[],
   };
   

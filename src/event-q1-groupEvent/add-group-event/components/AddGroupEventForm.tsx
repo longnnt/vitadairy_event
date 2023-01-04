@@ -31,6 +31,12 @@ import { schemaAddEvent } from 'src/event-promotion-IV/schema';
 import { DEFAULT_EDIT_VALUE, LIST_GROUP_EVENT } from 'src/event-q1-groupEvent/contants';
 import { schemaAddEditGroupEvent } from 'src/event-q1-groupEvent/schema';
 import { getProductCode } from 'src/event-promotion-IV/service';
+import { getEventNotInGroup } from 'src/event-q1-groupEvent/services';
+import { useGetListEvent } from 'src/event-promotion-IV/hooks/useGetListEvent';
+import { useGetEventNotInGroup } from 'src/event-q1-groupEvent/hooks/useGetEventNotInGroup';
+import { useAddNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useAddNewGroupEvent';
+import { IFormDataGroupEvent } from 'src/event-q1-groupEvent/interfaces';
+import useShowSnackbar from 'src/common/hooks/useMessage';
 
 export const AddGroupEventForm = () => {
   const navigate = useNavigate();
@@ -49,10 +55,31 @@ export const AddGroupEventForm = () => {
     reset,
     formState: { errors },
   } = methods;
+
+  const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
+
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   
+  const { mutate, isSuccess, data } = useAddNewGroupEvent({
+    onError: () => {
+      showErrorSnackbar('Tạo mới thất bại');
+    },
+    onSuccess:() => {
+      showSuccessSnackbar('Tạo mới thành công');
+      navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
+    }
+  });
   const onSubmit = (data: any) => {
-    console.log('Submit OK');
+    const formDataAddNewGroupEvent: IFormDataGroupEvent = {
+      name: data.name,
+      eventIds: [],
+    };
+    mutate(formDataAddNewGroupEvent);
+    
+    showSuccessSnackbar('Tạo mới thành công');
+    navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
   };
+
   return (
     <>
       <HeaderBreadcrumbs
@@ -74,13 +101,13 @@ export const AddGroupEventForm = () => {
               </Stack>
               <Box sx={{ zIndex: 1001 }} minHeight="65px">
                 <RHFSelectPagitnationMultiple
-                  name={'skus'}
-                  getAsyncData={getProductCode}
-                  placeholder="  Mã sản phẩm*  "
+                  name={'events'}
+                  getAsyncData={listEventNotInGroup}
+                  placeholder="Danh sách Event"
                   error={errors}
                 />
                 <FormHelperText error sx={{ marginLeft: '10px' }}>
-                  {errors?.skus?.message}
+                  {errors?.events?.message}
                 </FormHelperText>
               </Box>
             </Stack>

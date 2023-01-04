@@ -139,7 +139,7 @@ export default function Router() {
                       },
                       { path: 'event-q1-groupEvent/list', element: <ListGroupEvent /> },
                       { path: 'event-q1-groupEvent/add', element: <AddGroupEvent /> },
-                      { path: 'event-q1-groupEvent/edit', element: <EditGroupEvent /> },
+                      { path: 'event-q1-groupEvent/:id', element: <EditGroupEvent /> },
                     ],
                   },
             ],
