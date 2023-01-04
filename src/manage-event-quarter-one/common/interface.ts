@@ -133,6 +133,7 @@ export type IPropsListEventTableRow = {
   onEditRow: VoidFunction;
   onSelectRow: (checked: boolean) => void;
   onDeleteRow: VoidFunction;
+  handleGotoPrize: VoidFunction
 };
 
 export type StateProps = {

@@ -123,12 +123,12 @@ function EditEventDashboard() {
       );
     setValue(
       'eventGroupId',
-      defaultTransactionType
+      defaultTransactionType 
     );
     }
 
-
-  }, [data, defaultTransactionType]);
+  
+  }, [data,defaultTransactionType]);
   useDeepCompareEffect(() => {
     const data = watch();
     if (confirmEdit) {
@@ -174,7 +174,8 @@ function EditEventDashboard() {
             <Stack spacing="26px">
               <Stack direction={'row'} spacing={2} paddingTop="20px">
                 <Stack width="50%">
-                <RHFTextField name="name" label="Tên sự kiện*" />
+                
+                <RHFTextField name="name" InputLabelProps={{ shrink: true }}  label="Tên sự kiện*" />
                 </Stack>
 
 
@@ -187,6 +188,11 @@ function EditEventDashboard() {
                       searchParams={searchParamsPaginate}
                       error={errors}
                     />
+                    {errors && (
+                  <FormHelperText error sx={{ marginLeft: '10px' }}>
+                    {errors?.eventGroupId?.message}
+                  </FormHelperText>
+                )}
                   </Box>
                   </Stack>
               </Stack>
@@ -244,6 +250,7 @@ function EditEventDashboard() {
                   sx={{ width: '300px' }}
                   name="eventCustomerLimit"
                 type="number"
+                InputLabelProps={{ shrink: true }}
 
                   label="Giới hạn trúng giải trên tệp người dùng*"
                 />
@@ -251,6 +258,8 @@ function EditEventDashboard() {
                   sx={{ width: '300px' }}
                   name="eventStoreLimit"
                 type="number"
+                InputLabelProps={{ shrink: true }}
+
                   label="Giới hạn trúng giải trên tệp cửa hàng*"
                 />
                 <RHFSwitch name={'eventStatus'} label="Trạng thái" />
@@ -274,24 +283,33 @@ function EditEventDashboard() {
                 label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
                 name="defaultWinRate"
                 type="number"
+                InputLabelProps={{ shrink: true }}
+
               />
               <RHFTextField
                 fullWidth
                 label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
                 name="upRate"
                 type="number"
+                InputLabelProps={{ shrink: true }}
+
               />
               <RHFTextField
                 fullWidth
                 label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
                 name="downRate"
                 type="number"
+                InputLabelProps={{ shrink: true }}
+
               />
             </Stack>
           </Scrollbar>
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
+          <Button variant="contained"  type="submit">
+              Lưu thay đổi
+            </Button>
             <Button
               variant="contained"
               color="inherit"
@@ -299,9 +317,7 @@ function EditEventDashboard() {
             >
               Hủy bỏ
             </Button>
-            <Button variant="contained" color="secondary" type="submit">
-              Chỉnh sửa
-            </Button>
+           
           </Stack>
         </Box>
         <ConfirmEditModal

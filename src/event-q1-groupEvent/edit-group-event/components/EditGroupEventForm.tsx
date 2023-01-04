@@ -30,12 +30,13 @@ import useMessage from 'src/store-admin/hooks/useMessage';
 import { schemaAddEvent } from 'src/event-promotion-IV/schema';
 import { DEFAULT_EDIT_VALUE, LIST_GROUP_EVENT } from 'src/event-q1-groupEvent/contants';
 import { schemaAddEditGroupEvent } from 'src/event-q1-groupEvent/schema';
-import { IDataListGroupEventById, IFormDataGroupEvent, IListGroupEventById } from 'src/event-q1-groupEvent/interfaces';
+import { IDataListGroupEventById, IEventSelectProps, IFormDataGroupEvent, IListGroupEventById } from 'src/event-q1-groupEvent/interfaces';
 import { useAddNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useAddNewGroupEvent';
 import { useGetEventNotInGroup } from 'src/event-q1-groupEvent/hooks/useGetEventNotInGroup';
 import { useGetGroupEventById } from 'src/event-q1-groupEvent/hooks/useGetGroupEventById';
-import { getGroupEventById } from 'src/event-q1-groupEvent/services';
+import { getEventNotInGroup, getGroupEventById } from 'src/event-q1-groupEvent/services';
 import { useEditNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useEditGroupEvent';
+import { RHFSelectPaginationGroupEvent } from 'src/event-q1-groupEvent/common/components/RHFSelectPaginationMutiple';
 
 export const EditGroupEventForm = () => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ export const EditGroupEventForm = () => {
     formState: { errors },
   } = methods;
   
-  const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
+  const {data:dataEventNotInGroup} = useGetEventNotInGroup();
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
@@ -74,7 +75,7 @@ export const EditGroupEventForm = () => {
     const formDataAddNewGroupEvent: IFormDataGroupEvent = {
       id: parseInt(id as string),
       name: data.name,
-      eventIds: [],
+      eventIds: data.events.map((item: IEventSelectProps) => item.value),
     };
     mutate(formDataAddNewGroupEvent);
     navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
@@ -115,10 +116,10 @@ export const EditGroupEventForm = () => {
                 <RHFTextField name="name" label="Tên Group Event*" />
               </Stack>
                 <Box sx={{ zIndex: 1001 }} minHeight="65px">
-                  <RHFSelectPagitnationMultiple
+                  <RHFSelectPaginationGroupEvent
                     name={'events'}
-                    getAsyncData={listEventNotInGroup}
-                    placeholder="Danh sách Event*"
+                    getAsyncData={dataEventNotInGroup}
+                    placeholder="Danh sách Event"
                     error={errors}
                   />
                   <FormHelperText error sx={{ marginLeft: '10px' }}>
