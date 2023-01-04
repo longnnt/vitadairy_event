@@ -151,7 +151,6 @@ function EditEventDashboard() {
   const handleOnAgree = () => {
     dispatch(setConfirmEdit(true));
   };
-  console.log(watch())
   const onSubmit = () => {
     handleOpenEditModal();
   };
