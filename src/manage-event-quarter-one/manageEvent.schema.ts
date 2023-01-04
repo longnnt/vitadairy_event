@@ -38,12 +38,18 @@ export const schemaAddManageEvent = yup
 export const schemaEditManageEvent = yup
   .object()
   .shape({
-    nameEvent: yup.string().required('Vui lòng nhập tên sự kiện'),
-    nameGroupEvent: yup.string().required('Vui lòng nhập tên nhóm sự kiện'),
-    startDate: yup.mixed().required('Vui lòng chọn ngày bắt đầu'),
-    endDate: yup.mixed().required('Vui lòng chọn ngày kết thúc'),
-    prizeWinningUser: yup.number().required('Vui lòng nhập số giải'),
-    prizeWinningShop: yup.number().required('Vui lòng nhập số giải'),
+    name: yup.string().required('Vui lòng nhập tên sự kiện'),
+    eventGroupId: yup.object().shape({
+      value: yup.number().required(),
+      label:yup.string().required()
+    }),
+    endDate: yup.date().typeError('Vui lòng chọn ngày kết thúc').min(
+      yup.ref('startDate'),
+      "Ngày kết thúc sau ngày bắt đầu"
+    ),
+    startDate: yup.date().typeError('Vui lòng chọn ngày bắt đầu'),
+    eventCustomerLimit: yup.number().required().typeError('Vui lòng chọn giới hạn trúng giải người dùng').min(1, 'Vui lòng nhập số giải'),
+    eventStoreLimit: yup.number().required().typeError('Vui lòng chọn giới hạn trúng giải cửa hàng').min(1, 'Vui lòng nhập số giải'),
     skus: yup
       .array()
       .of(yup.mixed())

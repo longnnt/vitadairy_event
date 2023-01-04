@@ -101,7 +101,7 @@ function ListEventDashboard() {
   };
 
   const handleEditRow = (id: number) => {
-    // navigate(PATH_DASHBOARD.admin.edit(id));
+    navigate(PATH_DASHBOARD.manageEventQuarterOne.edit(id));
   };
   
 

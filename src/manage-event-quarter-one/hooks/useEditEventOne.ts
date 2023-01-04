@@ -8,9 +8,8 @@ export const useEditEventOne = (callback: IUpdateEventOneCallback) => {
     return {
       ...useMutation(editEventOne, {
         onSuccess: (_result, variables) => {
-        //   queryClient.invalidateQueries([QUERY_KEYS.EVENT_DETAIL]);
   
-        //   callback.onSuccess && callback.onSuccess();
+          callback.onSuccess && callback.onSuccess();
         },
         onError: () => {
           callback.onError && callback.onError();

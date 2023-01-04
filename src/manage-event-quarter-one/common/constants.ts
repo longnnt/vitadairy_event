@@ -34,15 +34,18 @@ export const SEARCH_BY = {
 
 export const defaultValues = {
   name: '',
-  eventGroupId: null,
+  eventGroupId: {
+    value:"",
+    label:""
+  },
   startDate: null,
   endDate: null,
-  eventCustomerLimit: null,
-  eventStoreLimit: null,
-  status: false,
+  eventCustomerLimit: 0,
+  eventStoreLimit: 0,
+  status: '',
   skus: [] as string[],
-  defaultWinRate: null,
-  downRate: null,
-  upRate: null,
+  defaultWinRate: 0,
+  downRate: 0,
+  upRate: 0,
 };
 

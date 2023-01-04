@@ -49,19 +49,29 @@ export interface IDataListEvent {
     };
   }
 }
-export interface IFormEditManageEvent {
+
+
+export interface IFormEditManageEvents {
   name: string;
-  eventGroupId: number;
-  startDate: string | null;
-  endDate: string | null;
-  eventCustomerLimit: number;
-  eventStoreLimit: number;
+  eventGroupId: string;
+  startDate: string ;
+  endDate: string ;
+  eventCustomerLimit: number ;
+  eventStoreLimit: number ;
   status: string;
-  skus: string[];
+  skus: any[];
   defaultWinRate: number;
-  upRate: number | null;
+  upRate: number;
   downRate: number;
   id:number
+}
+
+export interface IResEditManageEvent {
+  data:{
+     response:
+      IFormEditManageEvents
+     
+  }
 }
 export interface IManageEventParams {
   startDate: Date | null;
@@ -75,10 +85,15 @@ export interface IManageEventParams {
 
  
 }
-
+export interface IEventGroupParams{
+  page?: number;
+  searchText: string;
+  
+}
 export interface IEventGroup {
-  page:number;
+  page?:number;
   searchText?: string;
+  limit?: number;
 
 }
 export interface IPayloadDate {
@@ -114,4 +129,6 @@ export interface IProCodeSelect {
 
 export type IUpdateEventOneCallback = {
   onError: VoidFunction;
+  onSuccess?: VoidFunction;
+
 };

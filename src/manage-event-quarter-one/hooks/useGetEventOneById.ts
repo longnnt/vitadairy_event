@@ -12,9 +12,7 @@ export const useGetEventOneById= ({
   }) =>
     useQuery([QUERY_KEYS.EDIT_EVENT_Q1_ADMIN, id], () => getEventOneById(id), {
         select: (data) => data?.data?.response,
-      onSuccess() {
-        // callback.onSuccess && callback.onSuccess();
-      },
+     
       onError() {
         callback.onError && callback.onError();
       },
