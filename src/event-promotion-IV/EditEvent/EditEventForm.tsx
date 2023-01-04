@@ -35,7 +35,7 @@ import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { BREADCUMBS, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import LoadingSkeletonViewEventScreen from '../components/LoadingViewEventPage';
 import { ProductCodeModal } from '../components/ProductCodeModal';
-import { DEFAULT_EDIT_VALUE } from '../constant';
+import { DEFAULT_EDIT_VALUE, STATUS } from '../constant';
 import {
   confirmEditSelector,
   openEditModalSelector,
@@ -52,6 +52,7 @@ import { getProductCode } from '../service';
 
 export const EditEventForm = () => {
   const navigate = useNavigate();
+ 
 
   const methods = useForm<IEventEditFormData>({
     resolver: yupResolver(schemaEditEvent),
@@ -68,7 +69,6 @@ export const EditEventForm = () => {
     },
   });
   const dataEventDetail = data?.data?.response;
-
   const {
     control,
     handleSubmit,
@@ -106,6 +106,8 @@ export const EditEventForm = () => {
     if (dataEventDetail) {
       reset(dataEventDetail);
       dispatch(setProduct(dataEventDetail.skus));
+      const isActive: any = dataEventDetail.eventStatus;
+      setValue('eventStatus', isActive === STATUS.ACTIVE);
       if (dataEventDetail.userRegisterDate === null) setValue('typeUser', 'allUser');
       else setValue('typeUser', 'newUser');
     }
@@ -140,6 +142,7 @@ export const EditEventForm = () => {
         downRate: data.downRate,
         userRegisterDate: data.userRegisterDate,
         userLimit: data.userLimit,
+        status: data.eventStatus ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
         id: Number(id),
       };
       mutate({ id: parseInt(id as string), formEditData: dataEdit });
@@ -322,7 +325,7 @@ export const EditEventForm = () => {
                     <Typography marginTop={0.9} marginRight={1}>
                       Trạng thái quà
                     </Typography>
-                    <RHFSwitch name="isActive" label="" />
+                    <RHFSwitch name={'eventStatus'} label="" />
                   </Stack>
                 </Card>
               </Scrollbar>

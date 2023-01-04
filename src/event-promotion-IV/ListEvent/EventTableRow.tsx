@@ -7,7 +7,10 @@ import { TableMoreMenu } from 'src/common/components/table';
 import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import Can from 'src/common/lib/Can';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
+import { useUpdateEventStatus } from '../hooks/useUpdateEventStatus';
 import { EventTableRowProps } from '../interface';
+import useMessage from 'src/store-admin/hooks/useMessage';
+import { STATUS } from '../constant';
 
 export const EventTableRow = ({
   row,
@@ -17,7 +20,11 @@ export const EventTableRow = ({
   onViewRow,
 }: EventTableRowProps) => {
   const navigate = useNavigate();
-  const { name, startDate, endDate, isActive,id } = row;
+  const { name, startDate, endDate, status, id } = row;
+
+  const checkStatus: any = status;
+  const isChecked = checkStatus === STATUS.ACTIVE;
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
 
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -41,6 +48,17 @@ export const EventTableRow = ({
     navigate(PATH_DASHBOARD.eventAdmin.listPrize(id));
   };
 
+  const { mutate } = useUpdateEventStatus({
+    onSuccess: () => {
+      showSuccessSnackbar('Cập nhật thành công');
+    },
+    onError: () => showErrorSnackbar('Cập nhật thất bại'),
+  });
+  const handleOnChange = (active: boolean) => {
+
+    mutate({ id, status: active ? STATUS.ACTIVE : STATUS.IN_ACTIVE });
+  };
+
   return (
     <TableRow hover selected={selected}>
       <Can do="update" on="all">
@@ -57,11 +75,13 @@ export const EventTableRow = ({
       <TableCell align="left">
         {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_FILTER) : ''}
       </TableCell>
-      <TableCell align="left" title={isActive === true ? 'actived' : 'unActivced'}>
+      <TableCell align="left" title={checkStatus}>
         <Switch
           size="medium"
-          defaultChecked={isActive}
-          onChange={() => {}}
+          checked={isChecked}
+          onChange={(e) => {
+            handleOnChange(e.target.checked);
+          }}
         />
       </TableCell>
       <TableCell align="left">

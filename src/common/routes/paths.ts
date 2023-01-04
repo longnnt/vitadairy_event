@@ -79,4 +79,33 @@ export const PATH_DASHBOARD = {
     editFileEvent: (idEvent: number) =>
       path(ROOTS_DASHBOARD, `/event/event-prize-edit/${idEvent}`),
   },
+
+  manageEventQuarterOne: {
+    root: path(ROOTS_DASHBOARD, '/event-quarter-one'),
+    list: path(ROOTS_DASHBOARD, '/event-quarter-one'),
+    new: path(ROOTS_DASHBOARD, '/add-new-event'),
+    edit: (idEventOne: number) =>
+    path(ROOTS_DASHBOARD, `/event-quarter-one/${idEventOne}`),
+  },
+
+  eventPrizeQ1: {
+    root: path(ROOTS_DASHBOARD, '/event-q1-prize'),
+    list: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId'),
+    create: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/create'),
+    edit: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/:prizeId'),
+  },
+  
+
+  eventQ1GroupEvent: {
+    root: path(ROOTS_DASHBOARD, '/event-q1-groupEvent'),
+    listGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/list'), 
+    addGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/add'), 
+    editGroupEvent: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-q1-groupEvent/${idEvent}`),
+    // editGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/edit'),
+  },
+
+  eventHistoryPrize: {
+    listHistoryPrize: path(ROOTS_DASHBOARD, '/event-history-prize/list'),
+  }
+
 };

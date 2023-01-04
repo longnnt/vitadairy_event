@@ -4,7 +4,7 @@ export type RowProps = {
   name: string;
   startDate: number;
   endDate: number;
-  isActive: boolean;
+  status: boolean;
 };
 
 export interface EventTableRowProps {
@@ -74,6 +74,7 @@ export interface IEventFormData {
   userLimit: number;
   id: number;
   skus: string[];
+  status: string;
 }
 
 export interface IEventDetailFormData {
@@ -137,4 +138,14 @@ export interface IEventEditFormData {
   userLimit: number;
   skus: any[];
   typeUser:string;
+  eventStatus: boolean;
+}
+
+export type IUpdateEventCallback = {
+  onSuccess: VoidFunction;
+  onError: VoidFunction;
+};
+export interface IUpdateEventStatus {
+  id: number;
+  status: string;
 }

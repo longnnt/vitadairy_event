@@ -68,7 +68,13 @@ export const DEFAULT_EDIT_VALUE = {
   userRegisterDate: undefined,
   userLimit: 0,
   typeUser: '',
+  eventStatus: true,
 };
 
 
 export const DEFAULT_LOADING_SIZE = 5;
+
+export const STATUS = {
+  ACTIVE : 'ACTIVE',
+  IN_ACTIVE: 'IN_ACTIVE',
+}

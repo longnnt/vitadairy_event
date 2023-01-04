@@ -27,7 +27,7 @@ import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RH
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
-import { defaultValues, userTypeCons } from '../constant';
+import { defaultValues, STATUS, userTypeCons } from '../constant';
 import {
   buttonTypeState,
   productState,
@@ -78,6 +78,7 @@ export const AddEvent = () => {
       downRate: data.downRate,
       userRegisterDate: data.userRegisterDate,
       userLimit: data.userLimit,
+      status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
       id: 1,
     };
     mutate(formDataAddNewEvent);
@@ -108,9 +109,6 @@ export const AddEvent = () => {
 
   const product = useSelector(productState);
 
-  useDeepCompareEffect(() => {
-    if (product.length > 0) setValue('skus', product);
-  }, [product?.length]);
   return (
     <>
       <HeaderBreadcrumbs
@@ -268,7 +266,7 @@ export const AddEvent = () => {
               <Typography marginTop={0.9} marginRight={1}>
                 Trạng thái quà
               </Typography>
-              <RHFSwitch name="isActive" label="" />
+              <RHFSwitch name={'status'} label="" />
             </Stack>
           </Scrollbar>
         </Card>

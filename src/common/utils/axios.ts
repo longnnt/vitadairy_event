@@ -10,7 +10,12 @@ import Snackbar from '@mui/material/Snackbar';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  baseURL: HOST_API,
+  baseURL:  HOST_API,
+
+});
+
+export const axiosInstanceTemp = axios.create({
+  baseURL:  'https://api-sandbox.vitadairyvietnam.vn/api-v3',
 });
 
 axiosInstance.interceptors.response.use(

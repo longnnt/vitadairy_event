@@ -122,7 +122,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
     container: (provided, state) => ({
       ...provided,
     }),
-
+    
     valueContainer: (provided, state) => ({
       ...provided,
       overflow: 'visible',
@@ -151,10 +151,10 @@ const colourStyles = (isFocus: boolean, error: any) => {
           : 'primary',
       top:
         state.hasValue || state.selectProps.inputValue
-          ? '-10px'
-          : (isFocus as unknown as ControlProps<boolean>)
-          ? '-22px'
-          : '10%',
+        ? '-10px'
+        : (isFocus as unknown as ControlProps<boolean>)
+        ? '-22px'
+        : '10%',
 
       transition: 'top 0.2s, font-size 0.2s',
       fontSize:

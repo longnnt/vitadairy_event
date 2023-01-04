@@ -50,6 +50,25 @@ export const BREADCUMBS = {
   NEW_ADMIN: 'create admin',
   EDIT_EVENT_PRIZE: 'Chỉnh sửa quà tặng sự kiện',
   LIST_EVENT_PRIZE: 'Danh sách quà tặng sự kiện',
+
+  MANAGE_EVENT: 'Quản lý sự kiện',
+  MANAGE_LIST_EVENT: 'Danh sách sự kiện',
+  MANAGE_CREATE_EVENT: 'Tạo mới sự kiện',
+  MANAGE_EDIT_EVENT: 'Chỉnh sửa sự kiện Q1',
+
+  EVENT_Q1: 'Sự kiện quý 1',
+  EVENT_PRIZE: 'Giải thưởng sự kiện',
+  EVENT_PRIZE_LIST: 'Quản lý giải',
+  EVENT_PRIZE_CREATE: 'Tạo giải',
+  EVENT_PRIZE_EDIT: 'Chỉnh sửa giải',
+
+  MANAGE_GROUP_EVENT: 'Quản lý Group Event',
+  LIST_GROUP_EVENT: 'Danh sách Group Event',
+  CREATE_GROUP_EVENT: 'Tạo Group Event',
+  EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',
+
+  EVENT_HISTORY_PRIZE : 'Lịch sử trúng giải',
+
 };
 
 export const CACHE_TIME = 2 * 1000 * 60;
@@ -58,3 +77,5 @@ export const CACHE_TIME = 2 * 1000 * 60;
 export const FORMAT_DATE_FILTER = 'MM-DD-YYYY HH:mm:ss'
 
 export const FORMAT_DATE_NEWS = 'MM-dd-yyyy HH:mm:ss';
+export const FORMAT_DATE = 'dd-MM-yyyy HH:mm:ss';
+
