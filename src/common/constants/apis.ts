@@ -39,6 +39,8 @@ export const API_EVENT_Q1_PRIZE='/admin/event-detail';
 //  EVENT Q1
 export const API_EVENT_Q1_ADMIN = '/loyalty/v1/admin/event';
 export const API_EVENT_GROUP_ADMIN = '/loyalty/v1/admin/event-group';
+export const API_PRIZE_HISTORY_Q1 = '/loyalty/v1/admin/event-point-history';
+
 
 export const API_MANAGE_EVENT = 'admin/event';
 export const API_EVENT_GROUP = 'admin/event-group'
