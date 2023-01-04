@@ -1,5 +1,5 @@
 import axiosInstanceQ1 from 'src/common/utils/axios-q1';
-import { IDataListGroupEventById, IDataListGroupEvents, IListGroupEventParams } from './interfaces';
+import { IDataListGroupEventById, IDataListGroupEvents, IDataResponseEventSelect, IListGroupEventParams } from './interfaces';
 import {
   API_Q1_GET_ALL_EVENT_NOT_IN_GROUP,
   API_Q1_GET_ALL_GROUP_EVENT,
@@ -13,7 +13,7 @@ export const getListGroupEvents = (params: IListGroupEventParams) => {
 };
 
 export const getEventNotInGroup = () => {
-  return axiosInstanceQ1.get<unknown, IDataListGroupEvents>(
+  return axiosInstanceQ1.get<unknown, IDataResponseEventSelect>(
     `${API_Q1_GET_ALL_EVENT_NOT_IN_GROUP}`
   );
 };

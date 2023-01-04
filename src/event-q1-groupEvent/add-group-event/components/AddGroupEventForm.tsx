@@ -35,8 +35,9 @@ import { getEventNotInGroup } from 'src/event-q1-groupEvent/services';
 import { useGetListEvent } from 'src/event-promotion-IV/hooks/useGetListEvent';
 import { useGetEventNotInGroup } from 'src/event-q1-groupEvent/hooks/useGetEventNotInGroup';
 import { useAddNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useAddNewGroupEvent';
-import { IFormDataGroupEvent } from 'src/event-q1-groupEvent/interfaces';
+import { IEventSelectProps, IFormDataGroupEvent } from 'src/event-q1-groupEvent/interfaces';
 import useShowSnackbar from 'src/common/hooks/useMessage';
+import { RHFSelectPaginationGroupEvent } from 'src/event-q1-groupEvent/common/components/RHFSelectPaginationMutiple';
 
 export const AddGroupEventForm = () => {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export const AddGroupEventForm = () => {
     formState: { errors },
   } = methods;
 
-  const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
+  // const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   
@@ -72,7 +73,7 @@ export const AddGroupEventForm = () => {
   const onSubmit = (data: any) => {
     const formDataAddNewGroupEvent: IFormDataGroupEvent = {
       name: data.name,
-      eventIds: [],
+      eventIds: data.events.map((item: IEventSelectProps) => item.value),
     };
     mutate(formDataAddNewGroupEvent);
     
@@ -100,9 +101,9 @@ export const AddGroupEventForm = () => {
                 <RHFTextField name="name" label="Tên Group Event*" />
               </Stack>
               <Box sx={{ zIndex: 1001 }} minHeight="65px">
-                <RHFSelectPagitnationMultiple
+                <RHFSelectPaginationGroupEvent
                   name={'events'}
-                  getAsyncData={listEventNotInGroup}
+                  getAsyncData={getEventNotInGroup()}
                   placeholder="Danh sách Event"
                   error={errors}
                 />

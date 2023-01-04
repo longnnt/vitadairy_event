@@ -25,26 +25,18 @@ function ListGroupEventTableRow({
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setOpenMenuActions(event.currentTarget);
   };
-
-
   const alertStatus= useSelector(alertStatusGroupEventSelector);
-
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
   };
   const handleCloseModal = () => {
-    dispatch(setAlert({alert: false}))
+    dispatch(setAlert(false))
   };
-  const handleOpenModal = () => {
-    dispatch(setAlert({alert: true, itemRowId: id}))
-
-  };
-  
   const handleOnAgree= () =>{
-    dispatch(setAlert({alert: false, itemRowId: id}))
+    dispatch(setAlert(false))
     dispatch(setIsConfirmDelete(true));
   }
-
+  
   return (
     <>
     <TableRow hover selected={selected} sx={{ overflow: 'hidden' }}>
