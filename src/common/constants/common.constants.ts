@@ -66,6 +66,8 @@ export const BREADCUMBS = {
   CREATE_GROUP_EVENT: 'Tạo Group Event',
   EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',
 
+  EVENT_HISTORY_PRIZE : 'Lịch sử trúng giải',
+
 };
 
 export const CACHE_TIME = 2 * 1000 * 60;

@@ -140,6 +140,9 @@ export default function Router() {
                       { path: 'event-q1-groupEvent/:id', element: <EditGroupEvent /> },
                     ],
                   },
+                  {
+                    path: 'event-history-prize/list', element: <ListHistoryPrize />
+                  },
             ],
         },
 
@@ -242,3 +245,6 @@ const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin'
 // MANAGE_EVENT_QUARTER_ONE
 const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event/index')));
 const ManageCreateEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-create-event/index')))
+
+// EVENT_HISTORY_PRIZE_Q1
+const ListHistoryPrize = Loadable(lazy(() => import('../../event-history-prize/list-event-history-prize/index')))

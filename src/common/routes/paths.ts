@@ -102,4 +102,8 @@ export const PATH_DASHBOARD = {
     // editGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/edit'),
   },
 
+  eventHistoryPrize: {
+    listHistoryPrize: path(ROOTS_DASHBOARD, '/event-history-prize/list'),
+  }
+
 };

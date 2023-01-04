@@ -12,6 +12,7 @@ import editEventPrizeSlice from 'src/event/edit-event-prize/editEventPrize.Slice
 import manageEventReducer from 'src/manage-event-quarter-one/manageEvent.slice';
 import eventPrizeQ1Reducer from 'src/event-prize-q1/eventPrizeQ1.slice';
 import groupEventReducer from 'src/event-q1-groupEvent/groupEvent.slice';
+import eventHistoryPrizeReducer from 'src/event-history-prize/eventHistory.slice';
 // slices
 
 // ----------------------------------------------------------------------
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   manageEvent: manageEventReducer,
   eventPrizeQ1: eventPrizeQ1Reducer,
   groupEvent: groupEventReducer,
+  eventHistoryPrize: eventHistoryPrizeReducer,
 });
 
 export { rootPersistConfig, rootReducer };
