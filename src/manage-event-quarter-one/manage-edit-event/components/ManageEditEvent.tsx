@@ -17,7 +17,11 @@ import {
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
-import { BREADCUMBS, FORMAT_DATE, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
+import {
+  BREADCUMBS,
+  FORMAT_DATE,
+  FORMAT_DATE_NEWS,
+} from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -88,8 +92,7 @@ function EditEventDashboard() {
       onError: () => showErrorSnackbar('Lấy thông tin sự kiện thất bại'),
     },
   });
-  
- 
+
   const { mutate, isSuccess } = useEditEventOne({
     onError: () => {
       showErrorSnackbar('Chỉnh sửa sự kiện thất bại');
@@ -99,17 +102,18 @@ function EditEventDashboard() {
     },
   });
   const { data: transactionType } = useEventGroup({});
-  const transactionTypeOptions = transactionType?.map((item: {id:number,name:string}) => ({
-    value: item.id,
-    label: item.name,
-  }));
-  const defaultTransactionType = transactionTypeOptions?.filter(
+  const transactionTypeOptions = transactionType?.map(
+    (item: { id: number; name: string }) => ({
+      value: item.id,
+      label: item.name,
+    })
+  );
+  const defaultTransactionType = transactionTypeOptions?.find(
     (item: any) => item.value === data?.eventGroupId
   );
   useEffect(() => {
     if (isSuccess) navigate(PATH_DASHBOARD.manageEventQuarterOne.list);
   }, [isSuccess]);
-
 
   useDeepCompareEffect(() => {
     if (data) {
@@ -119,27 +123,22 @@ function EditEventDashboard() {
         data.skus.map((item: string) => ({ value: item, label: item }))
       );
 
-    setValue(
-      'eventGroupId',
-      defaultTransactionType ? defaultTransactionType[0] : ({} as {value:number,label:string})
-    );
+      setValue('eventGroupId', defaultTransactionType);
     }
-
-  
-  }, [data]);
+  }, [data, defaultTransactionType]);
   useDeepCompareEffect(() => {
     const data = watch();
     if (confirmEdit) {
       const dataEdit: IFormEditManageEvents = {
         name: data?.name,
-        eventGroupId:data?.eventGroupId ,
+        eventGroupId: data?.eventGroupId,
         startDate: data.startDate,
         endDate: data.endDate,
         defaultWinRate: data.defaultWinRate,
         upRate: data.upRate,
         downRate: data.downRate,
         eventCustomerLimit: Number(data.eventCustomerLimit),
-        eventStoreLimit:Number( data.eventStoreLimit),
+        eventStoreLimit: Number(data.eventStoreLimit),
         skus: data.skus.map((item: any) => item.value),
         status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
         id: Number(id),
@@ -172,12 +171,15 @@ function EditEventDashboard() {
             <Stack spacing="26px">
               <Stack direction={'row'} spacing={2} paddingTop="20px">
                 <Stack width="50%">
-                <RHFTextField name="name" label="Tên sự kiện*" InputLabelProps={{ shrink: true }}/>
+                  <RHFTextField
+                    name="name"
+                    InputLabelProps={{ shrink: true }}
+                    label="Tên sự kiện*"
+                  />
                 </Stack>
-               
 
-<Stack width="50%">
-                <Box sx={{ zIndex: 1006 }}>
+                <Stack width="50%">
+                  <Box sx={{ zIndex: 1006 }}>
                     <SelectSingleEvent
                       name={'eventGroupId'}
                       placeholder="Tên nhóm sự kiện*"
@@ -185,8 +187,13 @@ function EditEventDashboard() {
                       searchParams={searchParamsPaginate}
                       error={errors}
                     />
+                    {errors && (
+                      <FormHelperText error sx={{ marginLeft: '10px' }}>
+                        {errors?.eventGroupId?.message}
+                      </FormHelperText>
+                    )}
                   </Box>
-                  </Stack>
+                </Stack>
               </Stack>
               <Stack
                 spacing={2}
@@ -241,17 +248,16 @@ function EditEventDashboard() {
                 <RHFTextField
                   sx={{ width: '300px' }}
                   name="eventCustomerLimit"
-                type="number"
-
+                  type="number"
                   label="Giới hạn trúng giải trên tệp người dùng*"
                   InputLabelProps={{ shrink: true }}
                 />
                 <RHFTextField
                   sx={{ width: '300px' }}
                   name="eventStoreLimit"
-                type="number"
-                  label="Giới hạn trúng giải trên tệp cửa hàng*"
+                  type="number"
                   InputLabelProps={{ shrink: true }}
+                  label="Giới hạn trúng giải trên tệp cửa hàng*"
                 />
                 <RHFSwitch name={'status'} label="Trạng thái" />
               </Stack>
@@ -295,15 +301,15 @@ function EditEventDashboard() {
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
+            <Button variant="contained" type="submit">
+              Lưu thay đổi
+            </Button>
             <Button
               variant="contained"
               color="inherit"
               onClick={() => navigate(PATH_DASHBOARD.manageEventQuarterOne.list)}
             >
               Hủy bỏ
-            </Button>
-            <Button variant="contained" color="secondary" type="submit">
-              Chỉnh sửa
             </Button>
           </Stack>
         </Box>
@@ -313,7 +319,6 @@ function EditEventDashboard() {
           handleOnAgree={handleOnAgree}
           type="Chỉnh sửa sự kiện Q1"
           colorType={true}
-
         />
       </FormProvider>
     </>

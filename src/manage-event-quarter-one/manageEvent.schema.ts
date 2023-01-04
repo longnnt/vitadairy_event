@@ -41,10 +41,7 @@ export const schemaEditManageEvent = yup
   .object()
   .shape({
     name: yup.string().required('Vui lòng nhập tên sự kiện'),
-    eventGroupId: yup.object().shape({
-      value: yup.number().required(),
-      label:yup.string().required()
-    }),
+    eventGroupId: yup.mixed().required("Vui lòng chọn giá trị"),
     endDate: yup.date().typeError('Vui lòng chọn ngày kết thúc').min(
       yup.ref('startDate'),
       "Ngày kết thúc sau ngày bắt đầu"
