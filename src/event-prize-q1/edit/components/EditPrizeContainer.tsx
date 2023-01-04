@@ -31,12 +31,11 @@ export default function EditPrizeContainer() {
     const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
     const { useDeepCompareEffect } = useDeepEffect();
 
-    const params = useParams();
-    const eventId = params?.eventId || '';
+    const { eventId, prizeId } = useParams();
 
-    const { data: prizeDetail } = useGetDetailPrize(611);
+    const { data: prizeDetail } = useGetDetailPrize(parseInt(prizeId || ''));
     const prizeDataDetail: IEventPrize = prizeDetail?.data?.response || {};
-    // const {data: prizeDetail} = useGetDetailPrize(parseInt(eventId));
+    console.log('prizeDataDetail', prizeDataDetail)
 
     const { data: giftSelected } = useGetGiftById(prizeDataDetail.giftId)
     const giftSelectedDetail = giftSelected?.data?.response || null;
@@ -86,8 +85,16 @@ export default function EditPrizeContainer() {
 
     const onSuccess = () => {
         dispatch(setCrmTypeIdEdit(0))
+        dispatch(setCrmTypeIdEdit(0))
+        dispatch(setFormStartDate(null));
+        dispatch(setFormEndDate(null));
+        dispatch(setIsStoreExclusion(false))
+        dispatch(setIsStoreGroupExclusion(false))
+        dispatch(setIsCustomerExclusion(false))
+        dispatch(setIsCustomerGroupExclusion(false))
+        
         showSuccessSnackbar('Sửa thông tin giải thành công');
-        navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, {eventId: eventId}));
+        navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
 
     };
 
@@ -98,10 +105,12 @@ export default function EditPrizeContainer() {
     const { mutate, isLoading } = useUpdateEventPrize({ onSuccess, onError })
 
     const onSubmit = (data: any) => {
+        console.log('dataSubmit', data)
         let dataSend: IFormSubmitCreate = {
+            id: prizeDataDetail?.id,
             quantity: data.quantity,
-            eventId: parseInt(eventId),
-            giftId: data.giftId.value,
+            eventId: parseInt(eventId || ''),
+            giftId: prizeDataDetail?.giftId,
             startDate: data.startDate || null,
             endDate: data.startDate || null,
             ordinal: data.ordinal,
@@ -127,7 +136,9 @@ export default function EditPrizeContainer() {
             dataSend = { ...dataSend, eventDetailProvinces: array }
         }
 
-        mutate(dataSend)
+        console.log('dataSend',dataSend)
+        // mutate(dataSend)
+
     }
 
     useDeepCompareEffect(() => {

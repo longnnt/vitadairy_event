@@ -6,7 +6,7 @@ export const useGetListPrize = (eventId: number) => {
     return {
         ...useQuery(
             [QUERY_KEYS.EVENT_LIST_PRIZE_Q1, { eventId }],
-            () => getListPrize(eventId)
+            () => getListPrize(eventId), {cacheTime: 0}
         )
     }
 }
