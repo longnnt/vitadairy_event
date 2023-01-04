@@ -112,7 +112,7 @@ function CreateEventDashboard() {
                 <SelectSingleEvent
                   name={'eventGroupId'}
                   getAsyncData={getEventGroup}
-                  placeholder="Mã nhóm sự kiện"
+                  placeholder="Tên nhóm sự kiện"
                   error={errors}
                 />
               </Box>
