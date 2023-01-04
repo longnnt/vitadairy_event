@@ -4,13 +4,11 @@ import {
 import Page from 'src/common/components/Page';
 import { BREADCUMBS } from "src/common/constants/common.constants";
 import useSettings from 'src/common/hooks/useSettings';
-import useTable from 'src/common/hooks/useTable';
+import { getCrmTransaction, getGift, getProvince } from "../services";
 import ListPrizeContainer from "./components/ListPrizeContainer";
 
 export default function ListEventPrizeQ1() {
     const { themeStretch } = useSettings();
-
-    
 
     return (
         <>
