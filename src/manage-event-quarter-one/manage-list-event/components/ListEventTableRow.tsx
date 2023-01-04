@@ -21,12 +21,12 @@ function ListEventTableRow({
 
   const {
     id,
-    event,
-    groupEvent,
+    name,
+    groupName,
     startDate,
     endDate,
-    prizeWinningUser,
-    prizeWinningShop,
+    eventCustomerLimit,
+    eventStoreLimit,
     status,
   } = row;
 
@@ -46,9 +46,9 @@ function ListEventTableRow({
     <TableRow hover selected={selected}>
       <TableCell align="left">{id}</TableCell>
 
-      <TableCell align="left">{event}</TableCell>
+      <TableCell align="left">{name}</TableCell>
 
-      <TableCell align="left">{groupEvent}</TableCell>
+      <TableCell align="left">{groupName}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_EVENT) : ''}
@@ -58,9 +58,9 @@ function ListEventTableRow({
         {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_EVENT) : ''}
       </TableCell>
 
-      <TableCell align="left">{prizeWinningUser}</TableCell>
+      <TableCell align="left">{eventCustomerLimit}</TableCell>
 
-      <TableCell align="left">{prizeWinningShop}</TableCell>
+      <TableCell align="left">{eventStoreLimit}</TableCell>
 
       <TableCell align="left">{status}</TableCell>
       <TableCell align="left">

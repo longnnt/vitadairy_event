@@ -8,9 +8,14 @@ export const initialState: StateProps = {
   status: '',
   startDate: null,
   endDate: null,
+  selectedIds: [],
+  openEditModal: false,
+  confirmEdit: false,
+  isResetSelect: false,
+  product: [] as string[],
 };
 
-export const storeAdminSlice = createSlice({
+export const manageEventSlice = createSlice({
   name: 'manage-event-quarter-one',
   initialState,
   reducers: {
@@ -21,7 +26,7 @@ export const storeAdminSlice = createSlice({
       state.searchText = action.payload;
     },
     setStatus: (state, action: PayloadAction<string>) => {
-      state.searchText = action.payload;
+      state.status = action.payload;
     },
     setStartDate: (state, action: IPayloadDate) => {
       state.startDate = action.payload;
@@ -29,16 +34,48 @@ export const storeAdminSlice = createSlice({
     setEndDate: (state, action: IPayloadDate) => {
       state.endDate = action.payload;
     },
+    setSelectedIds: (state, action: PayloadAction<number[]>) => {
+      state.selectedIds = action.payload;
+    },
+    setIsResetSelect: (state, action: PayloadAction<boolean>) => {
+      state.isResetSelect = action.payload;
+    },
+    setOpeneditModal: (state, action: PayloadAction<boolean>) => {
+      state.openEditModal = action.payload;
+    },
+    setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+      state.confirmEdit = action.payload;
+    },
+    setProduct: (state, action: PayloadAction<string[]>) => {
+      state.product = action.payload;
+    },
   },
 });
 
-export const { setEndDate, setStartDate, setSearchText, setSearchBy, setStatus } =
-  storeAdminSlice.actions;
+export const {
+  setEndDate,
+  setStartDate,
+  setSearchText,
+  setSearchBy,
+  setStatus,
+  setSelectedIds,
+  setIsResetSelect,
+  setOpeneditModal,
+  setConfirmEdit,
+  setProduct
+} = manageEventSlice.actions;
 
 export const setSearchTextSelector = (state: RootState) => state.manageEvent.searchText;
 export const setStartDateSelector = (state: RootState) => state.manageEvent.startDate;
 export const setEndDateSelector = (state: RootState) => state.manageEvent.endDate;
 export const setSearchBySelector = (state: RootState) => state.manageEvent.searchBy;
 export const setStatusSelector = (state: RootState) => state.manageEvent.status;
+export const selectedIdsState = (state: RootState) => state.manageEvent.selectedIds;
+export const isResetSelectState = (state: RootState) => state.manageEvent.isResetSelect;
+export const openEditModalSelector = (state: RootState) =>
+  state.manageEvent.openEditModal;
+export const confirmEditSelector = (state: RootState) =>
+  state.manageEvent.confirmEdit;
+export const productState = (state: RootState) => state.manageEvent.product;
 
-export default storeAdminSlice.reducer;
+export default manageEventSlice.reducer;

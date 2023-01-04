@@ -17,42 +17,10 @@ export default function ListGroupEventFilterBar({
 }: Props) {
 
   return (
-    <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2, px: 1 }} alignItems='center' width='100%'>
-      <TextField
-        select
-        label="Group Event"
-        value={'ALL'}
-        // onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            sx: { '& .MuiPaper-root': { maxHeight: 260 } },
-          },
-        }}
-        sx={{
-          width: '25%',
-          textTransform: 'capitalize',
-        }}
-      >
-        {/* { roleOptions.map((option) => ( */}
-          <MenuItem
-            // key={option}
-            value={'ALL'}
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            ALL
-          </MenuItem>
-        {/* ))} */}
-      </TextField>
-      
+    <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2, px: 1 }} alignItems='center' width='100%'>      
       <TextField
         sx={{
-            width: '50%',
+            width: '100%',
         }}
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
@@ -68,23 +36,6 @@ export default function ListGroupEventFilterBar({
           ),
         }}
       />
-      <Stack direction={'row'} spacing={2} sx={{ width: '25%'}} alignItems='center' justifyContent={'center'}>
-        <LoadingButton
-          type="submit"
-          variant="contained"
-        //   loading={isLoading}
-        //   onClick={() => handleSearch()}
-        >
-          Tìm kiếm
-        </LoadingButton>
-        <LoadingButton
-          color="inherit"
-          variant="contained"
-        //   onClick={handleCancel}
-        >
-          Xóa
-        </LoadingButton>
-      </Stack>
     </Stack>
   );
 }
