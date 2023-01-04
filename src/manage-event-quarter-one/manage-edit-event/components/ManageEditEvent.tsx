@@ -17,7 +17,11 @@ import {
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
-import { BREADCUMBS, FORMAT_DATE, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
+import {
+  BREADCUMBS,
+  FORMAT_DATE,
+  FORMAT_DATE_NEWS,
+} from 'src/common/constants/common.constants';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -99,10 +103,12 @@ function EditEventDashboard() {
     },
   });
   const { data: transactionType } = useEventGroup({});
-  const transactionTypeOptions = transactionType?.map((item: {id:number,name:string}) => ({
-    value: item.id,
-    label: item.name,
-  }));
+  const transactionTypeOptions = transactionType?.map(
+    (item: { id: number; name: string }) => ({
+      value: item.id,
+      label: item.name,
+    })
+  );
   const defaultTransactionType = transactionTypeOptions?.find(
     (item: any) => item.value === data?.eventGroupId
   );
@@ -126,9 +132,7 @@ function EditEventDashboard() {
       defaultTransactionType 
     );
     }
-
-  
-  }, [data,defaultTransactionType]);
+  }, [data, defaultTransactionType]);
   useDeepCompareEffect(() => {
     const data = watch();
     if (confirmEdit) {
@@ -141,7 +145,7 @@ function EditEventDashboard() {
         upRate: data.upRate,
         downRate: data.downRate,
         eventCustomerLimit: Number(data.eventCustomerLimit),
-        eventStoreLimit:Number( data.eventStoreLimit),
+        eventStoreLimit: Number(data.eventStoreLimit),
         skus: data.skus.map((item: any) => item.value),
         status: data.eventStatus ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
         id: Number(id),
@@ -174,13 +178,15 @@ function EditEventDashboard() {
             <Stack spacing="26px">
               <Stack direction={'row'} spacing={2} paddingTop="20px">
                 <Stack width="50%">
-                
-                <RHFTextField name="name" InputLabelProps={{ shrink: true }}  label="Tên sự kiện*" />
+                  <RHFTextField
+                    name="name"
+                    InputLabelProps={{ shrink: true }}
+                    label="Tên sự kiện*"
+                  />
                 </Stack>
 
-
-<Stack width="50%">
-                <Box sx={{ zIndex: 1006 }}>
+                <Stack width="50%">
+                  <Box sx={{ zIndex: 1006 }}>
                     <SelectSingleEvent
                       name={'eventGroupId'}
                       placeholder="Tên nhóm sự kiện*"
@@ -189,12 +195,12 @@ function EditEventDashboard() {
                       error={errors}
                     />
                     {errors && (
-                  <FormHelperText error sx={{ marginLeft: '10px' }}>
-                    {errors?.eventGroupId?.message}
-                  </FormHelperText>
-                )}
+                      <FormHelperText error sx={{ marginLeft: '10px' }}>
+                        {errors?.eventGroupId?.message}
+                      </FormHelperText>
+                    )}
                   </Box>
-                  </Stack>
+                </Stack>
               </Stack>
               <Stack
                 spacing={2}
@@ -249,17 +255,15 @@ function EditEventDashboard() {
                 <RHFTextField
                   sx={{ width: '300px' }}
                   name="eventCustomerLimit"
-                type="number"
-                InputLabelProps={{ shrink: true }}
-
+                  type="number"
                   label="Giới hạn trúng giải trên tệp người dùng*"
+                  InputLabelProps={{ shrink: true }}
                 />
                 <RHFTextField
                   sx={{ width: '300px' }}
                   name="eventStoreLimit"
-                type="number"
-                InputLabelProps={{ shrink: true }}
-
+                  type="number"
+                  InputLabelProps={{ shrink: true }}
                   label="Giới hạn trúng giải trên tệp cửa hàng*"
                 />
                 <RHFSwitch name={'eventStatus'} label="Trạng thái" />
@@ -284,7 +288,6 @@ function EditEventDashboard() {
                 name="defaultWinRate"
                 type="number"
                 InputLabelProps={{ shrink: true }}
-
               />
               <RHFTextField
                 fullWidth
@@ -292,7 +295,6 @@ function EditEventDashboard() {
                 name="upRate"
                 type="number"
                 InputLabelProps={{ shrink: true }}
-
               />
               <RHFTextField
                 fullWidth
@@ -300,14 +302,13 @@ function EditEventDashboard() {
                 name="downRate"
                 type="number"
                 InputLabelProps={{ shrink: true }}
-
               />
             </Stack>
           </Scrollbar>
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
-          <Button variant="contained"  type="submit">
+            <Button variant="contained" type="submit">
               Lưu thay đổi
             </Button>
             <Button
@@ -317,7 +318,6 @@ function EditEventDashboard() {
             >
               Hủy bỏ
             </Button>
-           
           </Stack>
         </Box>
         <ConfirmEditModal
@@ -326,7 +326,6 @@ function EditEventDashboard() {
           handleOnAgree={handleOnAgree}
           type="Chỉnh sửa sự kiện Q1"
           colorType={true}
-
         />
       </FormProvider>
     </>
