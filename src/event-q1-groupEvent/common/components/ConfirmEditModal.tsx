@@ -13,19 +13,14 @@ export const ConfirmEditModal = ({
   handleOnAgree,
   type,
   colorType,
-}: //   setConfirmEdit,
+}: 
 {
   open: boolean;
   handleClose: () => void;
   handleOnAgree:() => void;
   type:string,
   colorType:boolean
-  //   setConfirmEdit: (state: boolean) => void;
 }) => {
-  // const handleOnAgree = () => {
-  //   handleClose();
-  //   dispatch(setConfirmEdit(true));
-  // };
   return (
     <div>
       <Dialog

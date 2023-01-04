@@ -75,16 +75,11 @@ export const AddGroupEventForm = () => {
       eventIds: [],
     };
     mutate(formDataAddNewGroupEvent);
-    console.log('this is form Data', formDataAddNewGroupEvent);
     
-    // dispatch(setProduct([]));
     showSuccessSnackbar('Tạo mới thành công');
     navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
   };
 
-  // const onSubmit = (data: any) => {
-  //   console.log('Submit OK');
-  // };
   return (
     <>
       <HeaderBreadcrumbs

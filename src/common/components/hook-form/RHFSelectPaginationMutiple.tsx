@@ -122,11 +122,7 @@ const colourStyles = (isFocus: boolean, error: any) => {
     container: (provided, state) => ({
       ...provided,
     }),
-    // input: (styles, state) => ({
-    //   ...styles,
-    //   padding: 10,
-    // }),
-
+    
     valueContainer: (provided, state) => ({
       ...provided,
       overflow: 'visible',

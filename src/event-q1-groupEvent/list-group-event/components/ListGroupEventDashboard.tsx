@@ -65,14 +65,6 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
     } = useTable();
     const navigate = useNavigate();
     const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
-    // const {mutate} = useDeleteListPrizeAdmin({
-    //   onSuccess: () => {
-    //     showSuccessSnackbar('Delete prize successfully');
-    //   },
-    //   onError: () => {
-    //     showErrorSnackbar('Delete prize fail');
-    //   },
-    // });
   
     const params = useParams();
     const id = params?.id;
@@ -82,13 +74,10 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
     };
 
     const filterName = useSelector(filterNameGroupEventSelector);
-    // const filterName = '';
-    
     const { useDeepCompareEffect } = useDeepEffect();
     const openEditModal = useSelector(openEditModalSelector);
     const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
     const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
-    // const selectedIdsValue = useSelector(selectedIdsState);
     
     if (filterName.length >2) searchParams.searchText = filterName;
     
@@ -113,8 +102,7 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
         showErrorSnackbar('Delete group fail');
       },
     });
-  
-  
+
     // const alertStatus = useSelector(alertStatusSelector)
     // const itemRow= useSelector(itemRowsSelector)
     const handleFilterName = (filterName: string) => {

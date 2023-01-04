@@ -77,23 +77,16 @@ export const EditGroupEventForm = () => {
       eventIds: [],
     };
     mutate(formDataAddNewGroupEvent);
-    console.log('this is form Data', formDataAddNewGroupEvent);
-    
-    // dispatch(setProduct([]));
     navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
     showSuccessSnackbar('Tạo mới thành công');
   };
   const params = useParams();
   const id = params?.id;
-  // const {data:dataForm, isLoading} = useGetGroupEventById(3)
   const { data, isLoading } = useGetGroupEventById({
     id: parseInt(id as string)
   });
-  console.log('this is Data', data);
-
 
   const dataGroupEventDetail = data?.data?.response;
-  console.log('this is DataResponse', dataGroupEventDetail);
   
   useDeepCompareEffect(() => {
     if (dataGroupEventDetail) {
