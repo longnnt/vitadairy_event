@@ -30,4 +30,3 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
 }
 
 export { PrizeHistoryTableRow };
-

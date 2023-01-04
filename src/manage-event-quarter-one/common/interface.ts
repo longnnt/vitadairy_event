@@ -79,12 +79,29 @@ export interface IFormEditManageEvents {
   downRate: number;
   id:number
 }
+export interface IFormEditManageEvent {
+  name: string;
+  eventGroupId: {
+    value:string,
+    label:string
+  } | null;
+  startDate: string ;
+  endDate: string ;
+  eventCustomerLimit: number ;
+  eventStoreLimit: number ;
+  eventStatus: boolean;
+  skus: any[];
+  defaultWinRate: number;
+  upRate: number;
+  downRate: number;
+  id:number
+}
 
 export interface IResEditManageEvent {
   data:{
      response:
-      IFormEditManageEvents
-     
+      IFormEditManageEvent
+
   }
 }
 export interface IManageEventParams {

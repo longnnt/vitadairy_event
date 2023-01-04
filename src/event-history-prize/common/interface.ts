@@ -34,7 +34,7 @@ export interface IPrizeHistoryParams {
   endDate?: Date | null;
   page?: number;
   searchText?: string;
-  size?: number;
+  limit?: number;
   startDate?: Date | null;
 }
 
