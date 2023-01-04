@@ -76,25 +76,7 @@ export default function TableHeadCustom({
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{ width: headCell.width, minWidth: headCell.minWidth }}
           >
-            {/* {onSort ? (
-              <TableSortLabel
-                hideSortIcon
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={() => onSort(headCell.id)}
-                sx={{ textTransform: 'capitalize' }}
-              >
-                {headCell.label}
-
-                {orderBy === headCell.id ? (
-                  <Box sx={{ ...visuallyHidden }}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            ) : ( */}
-              {headCell.label}
-            {/* )} */}
+            {headCell.label}
           </TableCell>
         ))}
       </TableRow>
