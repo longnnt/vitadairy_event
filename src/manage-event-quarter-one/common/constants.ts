@@ -34,7 +34,10 @@ export const SEARCH_BY = {
 
 export const defaultValues = {
   name: '',
-  eventGroupId: null,
+  eventGroupId: {
+    value:"",
+    label:""
+  },
   startDate: null,
   endDate: null,
   eventCustomerLimit: null,

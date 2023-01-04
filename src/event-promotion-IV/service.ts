@@ -34,6 +34,9 @@ export const getProductCode = (params: EventSearchParams) => {
   return axiosInstance.get(`${API_PRODUCT}`, { params });
 };
 
+
+
+
 export const updateEventStatus = (data: IUpdateEventStatus) => {
   const {id, ...body} = data;
   return axiosInstance.patch(`${API_UPDATE_EVENT_STATUS}/${id}/status`, body);

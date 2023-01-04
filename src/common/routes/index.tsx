@@ -115,6 +115,7 @@ export default function Router() {
                         { path: 'event-q1-prize/list', element: <ListEventQ1Prize /> },
                         { path: 'event-q1-prize/edit', element: <EditEventPrizeQ1 /> },
                         { path: 'event-q1-prize/create', element: <CreateEventPrizeQ1 /> },
+                        
                     ]
                 },
                 {
@@ -126,6 +127,7 @@ export default function Router() {
                       },
                       { path: 'event-quarter-one', element: <ManageListEvent /> },
                       { path: 'add-new-event', element: <ManageCreateEvent /> },
+                      { path: 'event-quarter-one/:id', element: <ManageEditEvent /> },
                     ]
                   },
                   {
@@ -242,3 +244,5 @@ const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin'
 // MANAGE_EVENT_QUARTER_ONE
 const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event/index')));
 const ManageCreateEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-create-event/index')))
+const ManageEditEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-edit-event/index')))
+
