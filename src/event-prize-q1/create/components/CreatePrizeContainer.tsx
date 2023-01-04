@@ -19,6 +19,7 @@ import useMessage from "src/common/hooks/useMessage";
 import { FORMAT_DATE_NEWS } from "src/common/constants/common.constants";
 import dayjs from "dayjs";
 import RHFSwitch from "./RHFSwitch";
+import { replacePathParams } from "src/common/utils/replaceParams";
 
 export default function CreatePrizeContainer() {
     const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion } = useSelector(state => state.eventPrizeQ1);
@@ -78,6 +79,7 @@ export default function CreatePrizeContainer() {
 
     const onSuccess = () => {
         showSuccessSnackbar('Tạo giải thành công');
+        navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
     };
 
     const onError = () => {
@@ -87,11 +89,12 @@ export default function CreatePrizeContainer() {
     const { mutate, isLoading } = useAddEventPrize({ onSuccess, onError })
 
     const onSubmit = (data: any) => {
-        // if(eventId === undefined) return;
+        if (eventId === undefined) {
+            return showErrorSnackbar('Không tìm thấy event. Vui lòng thử lại');
+        }
         let dataSend: IFormSubmitCreate = {
             quantity: data.quantity,
-            eventId: 136,
-            // eventId: parseInt(eventId),
+            eventId: parseInt(eventId),
             giftId: data.giftId.value,
             startDate: data.startDate || null,
             endDate: data.startDate || null,
@@ -273,7 +276,7 @@ export default function CreatePrizeContainer() {
             <Stack spacing={3} direction='row' alignItems='center' justifyContent='flex-end' sx={{ width: '100%', mt: 5 }} >
                 <Button variant="contained" type="submit">Lưu thay đổi</Button>
                 <Button variant="contained" color="inherit" onClick={() => {
-                    navigate(PATH_DASHBOARD.eventPrizeQ1.list)
+                    navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
                 }}>Hủy</Button>
             </Stack>
         </FormProvider>

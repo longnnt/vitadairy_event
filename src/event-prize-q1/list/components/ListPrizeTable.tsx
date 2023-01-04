@@ -23,8 +23,7 @@ export default function ListPrizeTable() {
     const params = useParams();
     const eventId = params?.eventId || '';
 
-    const { data, isLoading, isError } = useGetListPrize(136);
-    // const { data, isLoading, isError } = useGetListPrize(parseInt(eventId));
+    const { data, isLoading, isError } = useGetListPrize(parseInt(eventId));
     const listPrize = data?.data?.response || [];
 
     const totalRecords = data?.data?.pagination?.totalRecords || 0;

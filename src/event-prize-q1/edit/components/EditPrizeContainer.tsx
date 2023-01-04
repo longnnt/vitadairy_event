@@ -23,6 +23,7 @@ import { useGetGiftById } from "src/event-prize-q1/hooks/useGetGiftById";
 import useDeepEffect from "src/common/hooks/useDeepEffect";
 import { RHFSelectPaginationSingle } from "./RHFSelectPaginationSingle";
 import { useUpdateEventPrize } from "src/event-prize-q1/hooks/useUpdateEventPrize";
+import { replacePathParams } from "src/common/utils/replaceParams";
 
 export default function EditPrizeContainer() {
     const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit } = useSelector(state => state.eventPrizeQ1);
@@ -86,6 +87,8 @@ export default function EditPrizeContainer() {
     const onSuccess = () => {
         dispatch(setCrmTypeIdEdit(0))
         showSuccessSnackbar('Sửa thông tin giải thành công');
+        navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, {eventId: eventId}));
+
     };
 
     const onError = () => {
@@ -309,7 +312,7 @@ export default function EditPrizeContainer() {
             <Stack spacing={3} direction='row' alignItems='center' justifyContent='flex-end' sx={{ width: '100%', mt: 5 }} >
                 <Button variant="contained" type="submit">Lưu thay đổi</Button>
                 <Button variant="contained" color="inherit" onClick={() => {
-                    navigate(PATH_DASHBOARD.eventPrizeQ1.list)
+                    navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
                 }}>Hủy</Button>
             </Stack>
         </FormProvider>

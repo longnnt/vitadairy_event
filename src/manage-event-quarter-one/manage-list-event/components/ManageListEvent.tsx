@@ -39,6 +39,7 @@ import { useDeleteEventId } from 'src/manage-event-quarter-one/hooks/useDeleteEv
 import useMessage from 'src/store-admin/hooks/useMessage';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import TableHeadCustom from './TableHeadCustom';
+import { replacePathParams } from 'src/common/utils/replaceParams';
 
 function ListEventDashboard() {
   const navigate = useNavigate();
@@ -103,6 +104,10 @@ function ListEventDashboard() {
   const handleEditRow = (id: number) => {
     navigate(PATH_DASHBOARD.manageEventQuarterOne.edit(id));
   };
+
+  const handleGotoPrize = (id: number) => {
+    navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, {eventId: id}))
+  }
   
 
   const { totalRecords } = data?.pagination || {
@@ -163,6 +168,9 @@ function ListEventDashboard() {
                     onDeleteRow={() => handleDeleteRows([row.id])}
                     onEditRow={() => {
                       handleEditRow(row.id);
+                    }}
+                    handleGotoPrize={() => {
+                        handleGotoPrize(row.id)
                     }}
                   />
                 ))}

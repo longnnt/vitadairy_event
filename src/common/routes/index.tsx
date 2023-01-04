@@ -112,9 +112,9 @@ export default function Router() {
                     path: '',
                     children: [
                         { element: <Navigate to="/dashboard/event-q1-prize" replace />, index: true },
-                        { path: 'event-q1-prize/list', element: <ListEventQ1Prize /> },
-                        { path: 'event-q1-prize/edit', element: <EditEventPrizeQ1 /> },
-                        { path: 'event-q1-prize/create', element: <CreateEventPrizeQ1 /> },
+                        { path: 'event-q1-prize/event-:eventId', element: <ListEventQ1Prize /> },
+                        { path: 'event-q1-prize/event-:eventId/:prizeId', element: <EditEventPrizeQ1 /> },
+                        { path: 'event-q1-prize/event-:eventId/create', element: <CreateEventPrizeQ1 /> },
                         
                     ]
                 },

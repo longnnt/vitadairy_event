@@ -8,93 +8,104 @@ import { TableMoreMenu } from 'src/common/components/table';
 import { FORMAT_DATE_EVENT } from 'src/manage-event-quarter-one/common/constants';
 import { IPropsListEventTableRow } from 'src/manage-event-quarter-one/common/interface';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 // ----------------------------------------------------------------------
 
 function ListEventTableRow({
-  row,
-  selected,
-  onEditRow,
-  onSelectRow,
-  onDeleteRow,
+    row,
+    selected,
+    onEditRow,
+    onSelectRow,
+    onDeleteRow,
+    handleGotoPrize
 }: IPropsListEventTableRow) {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const {
-    id,
-    name,
-    groupName,
-    startDate,
-    endDate,
-    eventCustomerLimit,
-    eventStoreLimit,
-    status,
-  } = row;
+    const {
+        id,
+        name,
+        groupName,
+        startDate,
+        endDate,
+        eventCustomerLimit,
+        eventStoreLimit,
+        status,
+    } = row;
 
-  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
+    const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
-  const handleOpenMenu = (category: React.MouseEvent<HTMLElement>) => {
-    setOpenMenuActions(category.currentTarget);
-  };
+    const handleOpenMenu = (category: React.MouseEvent<HTMLElement>) => {
+        setOpenMenuActions(category.currentTarget);
+    };
 
-  const handleCloseMenu = () => {
-    setOpenMenuActions(null);
-  };
+    const handleCloseMenu = () => {
+        setOpenMenuActions(null);
+    };
 
-  const dispatch = useDispatch();
-  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  return (
-    <TableRow hover selected={selected}>
-      <TableCell align="left">{id}</TableCell>
+    const dispatch = useDispatch();
+    const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+    return (
+        <TableRow hover selected={selected}>
+            <TableCell align="left">{id}</TableCell>
 
-      <TableCell align="left">{name}</TableCell>
+            <TableCell align="left">{name}</TableCell>
 
-      <TableCell align="left">{groupName}</TableCell>
+            <TableCell align="left">{groupName}</TableCell>
 
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_EVENT) : ''}
-      </TableCell>
+            <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+                {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_EVENT) : ''}
+            </TableCell>
 
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_EVENT) : ''}
-      </TableCell>
+            <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+                {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_EVENT) : ''}
+            </TableCell>
 
-      <TableCell align="left">{eventCustomerLimit}</TableCell>
+            <TableCell align="left">{eventCustomerLimit}</TableCell>
 
-      <TableCell align="left">{eventStoreLimit}</TableCell>
+            <TableCell align="left">{eventStoreLimit}</TableCell>
 
-      <TableCell align="left">{status}</TableCell>
-      <TableCell align="left">
-        <TableMoreMenu
-          open={openMenu}
-          onOpen={handleOpenMenu}
-          onClose={handleCloseMenu}
-          actions={
-            <>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'eva:edit-fill'} />
-                Chỉnh sửa
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  onDeleteRow();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Xóa
-              </MenuItem>
-            </>
-          }
-        />
-      </TableCell>
-    </TableRow>
-  );
+            <TableCell align="left">{status}</TableCell>
+            <TableCell align="left">
+                <TableMoreMenu
+                    open={openMenu}
+                    onOpen={handleOpenMenu}
+                    onClose={handleCloseMenu}
+                    actions={
+                        <>
+                            <MenuItem
+                                onClick={() => {
+                                    onEditRow();
+                                    handleGotoPrize();
+                                }}
+                            >
+                                <RemoveRedEyeIcon />
+                                Xem danh sách giải
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    onEditRow();
+                                    handleCloseMenu();
+                                }}
+                            >
+                                <Iconify icon={'eva:edit-fill'} />
+                                Chỉnh sửa
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    onDeleteRow();
+                                    handleCloseMenu();
+                                }}
+                                sx={{ color: 'error.main' }}
+                            >
+                                <Iconify icon={'eva:trash-2-outline'} />
+                                Xóa
+                            </MenuItem>
+                        </>
+                    }
+                />
+            </TableCell>
+        </TableRow>
+    );
 }
 
 export { ListEventTableRow };
