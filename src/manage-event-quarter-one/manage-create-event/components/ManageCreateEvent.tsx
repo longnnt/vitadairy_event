@@ -67,7 +67,7 @@ function CreateEventDashboard() {
   const onSubmit = (data: ISubmitCreateEvent) => {
     const formDataCreateEvent  =  {
       name: data.name,
-      eventGroupId: data?.eventGroupId?.value,
+      eventGroupId: data?.eventGroupId?.value as string,
       startDate: data.startDate,
       endDate: data.endDate,
       eventCustomerLimit: data.eventCustomerLimit as number,
@@ -173,8 +173,6 @@ function CreateEventDashboard() {
                 <RHFSwitch name={'status'} label="Trạng thái" labelPlacement='start' />
               </Stack>
 
-              {/* <RHFSelect name='skus' label="Mã sản phẩm*">
-              </RHFSelect> */}
               <Box sx={{ zIndex: 500 }} height="65px">
                 <RHFSelectPagitnationMultiple
                   name={'skus'}

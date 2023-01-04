@@ -30,7 +30,7 @@ export interface IPostCreateEvent {
 
 export interface ISubmitCreateEvent {
   name: string;
-  eventGroupId: IEventGroupType;
+  eventGroupId: IEventGroupType | null;
   startDate: string | null;
   endDate: string | null;
   eventCustomerLimit: null | number;
@@ -140,6 +140,6 @@ export interface IEventGroupParams {
 }
 
 export interface IEventGroupType {
-  label: string;
-  value: string;
+  label: string | null;
+  value: string | null;
 }
