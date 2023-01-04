@@ -30,7 +30,6 @@ export const SelectSingleEvent = ({
   searchParams,
   error,
 }: IProps) => {
-console.log(name)
 
   const { control } = useFormContext();
   const loadOptions = async (

@@ -145,7 +145,6 @@ function EditEventDashboard() {
         status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
         id: Number(id),
       };
-      console.log(dataEdit)
       mutate({ formEditData: dataEdit });
       dispatch(setConfirmEdit(false));
     }
