@@ -3,12 +3,14 @@ import * as yup from 'yup';
 export const schemaAddManageEvent = yup
   .object()
   .shape({
-    nameEvent: yup.string().required('Vui lòng nhập tên sự kiện'),
-    nameGroupEvent: yup.string().required('Vui lòng nhập tên nhóm sự kiện'),
-    startDate: yup.mixed().required('Vui lòng chọn ngày bắt đầu'),
-    endDate: yup.mixed().required('Vui lòng chọn ngày kết thúc'),
-    prizeWinningUser: yup.number().required('Vui lòng nhập số giải').transform((value) => (isNaN(value) ? undefined : value)),
-    prizeWinningShop: yup.number().required('Vui lòng nhập số giải').transform((value) => (isNaN(value) ? undefined : value)),
+name: yup.string().required('Vui lòng nhập tên sự kiện'),
+startDate: yup.date().typeError('Vui lòng chọn ngày bắt đầu'),
+endDate: yup.date().typeError('Vui lòng chọn ngày kết thúc').min(
+  yup.ref('startDate'),
+  "Ngày kết thúc phải sau ngày bắt đầu"
+),
+eventCustomerLimit: yup.number().required('Vui lòng nhập số giải').transform((value) => (isNaN(value) ? undefined : value)),
+eventStoreLimit: yup.number().required('Vui lòng nhập số giải').transform((value) => (isNaN(value) ? undefined : value)),
     skus: yup
       .array()
       .of(yup.mixed())

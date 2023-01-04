@@ -12,6 +12,7 @@ export const initialState: StateProps = {
   openEditModal: false,
   confirmEdit: false,
   isResetSelect: false,
+  product: [] as string[],
 };
 
 export const manageEventSlice = createSlice({
@@ -45,6 +46,9 @@ export const manageEventSlice = createSlice({
     setConfirmEdit: (state, action: PayloadAction<boolean>) => {
       state.confirmEdit = action.payload;
     },
+    setProduct: (state, action: PayloadAction<string[]>) => {
+      state.product = action.payload;
+    },
   },
 });
 
@@ -58,6 +62,7 @@ export const {
   setIsResetSelect,
   setOpeneditModal,
   setConfirmEdit,
+  setProduct
 } = manageEventSlice.actions;
 
 export const setSearchTextSelector = (state: RootState) => state.manageEvent.searchText;
@@ -71,5 +76,6 @@ export const openEditModalSelector = (state: RootState) =>
   state.manageEvent.openEditModal;
 export const confirmEditSelector = (state: RootState) =>
   state.manageEvent.confirmEdit;
+export const productState = (state: RootState) => state.manageEvent.product;
 
 export default manageEventSlice.reducer;

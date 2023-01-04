@@ -38,6 +38,6 @@ export const API_EVENT_Q1_ADMIN = '/loyalty/v1/admin/event';
 export const API_EVENT_GROUP_ADMIN = '/loyalty/v1/admin/event-group';
 
 export const API_MANAGE_EVENT = 'admin/event';
-
+export const API_EVENT_GROUP = 'admin/event-group'
 export const API_Q1_GET_ALL_GROUP_EVENT= '/admin/event-group'
 export const API_Q1_GET_ALL_EVENT_NOT_IN_GROUP= '/admin/event/not-in-group'

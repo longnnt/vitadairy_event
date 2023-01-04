@@ -23,18 +23,25 @@ import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField } from 'src/common/components/hook-form';
-import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { useDispatch, useSelector } from 'src/common/redux/store';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import { defaultValues } from 'src/manage-event-quarter-one/common/constants';
 import { schemaAddManageEvent } from 'src/manage-event-quarter-one/manageEvent.schema';
-import { IFormCreateEvent, IProCodeSelect } from 'src/manage-event-quarter-one/common/interface';
+import { IProCodeSelect, ISubmitCreateEvent } from 'src/manage-event-quarter-one/common/interface';
+import { getEventGroup, getProductCode } from 'src/manage-event-quarter-one/services';
+import { usePostCreateEventAdmin } from 'src/manage-event-quarter-one/hooks/usePostCreateEventAdmin';
+import { setProduct } from 'src/manage-event-quarter-one/manageEvent.slice';
+import { STATUS } from 'src/event-promotion-IV/constant';
+import { RHFSelectPagitnationMultiple } from 'src/common/components/hook-form/RHFSelectPaginationMutiple';
+import { SelectSingleEvent } from './SelectSingleEvent';
+import { setButtonType, buttonTypeState } from 'src/event-promotion-IV/eventPromotionIV.slice';
 
 function CreateEventDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const methods = useForm({
+  const buttonTypeValue = useSelector(buttonTypeState);
+  const methods = useForm<ISubmitCreateEvent>({
     resolver: yupResolver(schemaAddManageEvent),
     defaultValues,
   });
@@ -51,21 +58,35 @@ function CreateEventDashboard() {
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
 
-  const onSubmit = (data: any) => {
-    const formDataAddNewEvent: IFormCreateEvent = {
+  const { mutate, isSuccess, data } = usePostCreateEventAdmin({
+    onError: () => {
+      showErrorSnackbar('Tạo mới sự kiện thất bại');
+    },
+  });
+
+  const onSubmit = (data: ISubmitCreateEvent) => {
+    const formDataCreateEvent  =  {
       name: data.name,
-      eventGroupId: data.eventGroupId,
+      eventGroupId: data?.eventGroupId?.value as string,
       startDate: data.startDate,
       endDate: data.endDate,
-      eventCustomerLimit: data.eventCustomerLimit,
-      eventStoreLimit: data.eventStoreLimit,
-      skus: data.skus.map((item: IProCodeSelect) => item.value),
-      defaultWinRate: data.defaultWinRate,
-      upRate: data.upRate,
-      downRate: data.downRate,
-      status: data.status,
+      eventCustomerLimit: data.eventCustomerLimit as number,
+      eventStoreLimit: data.eventStoreLimit as number,
+      skus: data?.skus?.map((item) => item.value) || [],
+      defaultWinRate: data.defaultWinRate as number,
+      upRate: data.upRate as number,
+      downRate: data.downRate as number,
+      status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
     };
+    mutate(formDataCreateEvent);
+    dispatch(setProduct([]));
   };
+
+  useDeepCompareEffect(() => {
+    if (isSuccess) {
+      navigate(PATH_DASHBOARD.manageEventQuarterOne.list);
+    }
+  }, [isSuccess]);
 
   return (
     <>
@@ -81,9 +102,21 @@ function CreateEventDashboard() {
           <Scrollbar>
             <Stack spacing="26px">
               <Stack direction={'row'} spacing={2} marginTop={1}>
+                <Stack width={700}>
 
-              <RHFTextField name="nameEvent" label="Tên sự kiện*"  />
-              <RHFTextField name="nameGroupEvent" label="Tên nhóm sự kiện*"  />
+              <RHFTextField name="name" label="Tên sự kiện*"  />
+                </Stack>
+                <Stack>
+
+              <Box sx={{ zIndex: 1001 }} width={470}>
+                <SelectSingleEvent
+                  name={'eventGroupId'}
+                  getAsyncData={getEventGroup}
+                  placeholder="Mã nhóm sự kiện"
+                  error={errors}
+                />
+              </Box>
+                </Stack>
               </Stack>
               <Stack
                 spacing={2}
@@ -135,14 +168,22 @@ function CreateEventDashboard() {
                 />
               </Stack>
               <Stack direction={'row'} spacing={2}>
-
-              <RHFTextField sx={{width: '300px'}} name="prizeWinningUser" label="Giới hạn trúng giải trên tệp người dùng*" />
-              <RHFTextField sx={{width: '300px'}} name="prizeWinningShop" label="Giới hạn trúng giải trên tệp cửa hàng*" />
+                <RHFTextField sx={{width: '300px'}} name="eventCustomerLimit" label="Giới hạn trúng giải trên tệp người dùng*" />
+                <RHFTextField sx={{width: '300px'}} name="eventStoreLimit" label="Giới hạn trúng giải trên tệp cửa hàng*" />
                 <RHFSwitch name={'status'} label="Trạng thái" labelPlacement='start' />
               </Stack>
 
-              <RHFSelect name='skus' label="Mã sản phẩm*">
-              </RHFSelect>
+              <Box sx={{ zIndex: 500 }} height="65px">
+                <RHFSelectPagitnationMultiple
+                  name={'skus'}
+                  getAsyncData={getProductCode}
+                  placeholder="Mã sản phẩm*"
+                  error={errors}
+                />
+                <FormHelperText error sx={{ marginLeft: '10px' }}>
+                  {errors?.skus?.message}
+                </FormHelperText>
+              </Box>
 
               <RHFTextField
                 fullWidth
@@ -171,7 +212,7 @@ function CreateEventDashboard() {
           <Button
               variant="contained"
               type="submit"
-              onClick={() => {}}
+              onClick={() => dispatch(setButtonType('saveSubmit'))}
             >
               Lưu
             </Button>

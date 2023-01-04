@@ -20,7 +20,6 @@ import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Iconify from 'src/common/components/Iconify';
 import Scrollbar from 'src/common/components/Scrollbar';
 import {
-  TableHeadCustom,
   TableNoData,
   TableSelectedActions,
 } from 'src/common/components/table';
@@ -39,6 +38,7 @@ import { useGetListEventAdmin } from 'src/manage-event-quarter-one/hooks/useGetL
 import { useDeleteEventId } from 'src/manage-event-quarter-one/hooks/useDeleteEventId';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import TableHeadCustom from './TableHeadCustom';
 
 function ListEventDashboard() {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ function ListEventDashboard() {
   const startDate = useSelector(setStartDateSelector);
   const endDate = useSelector(setEndDateSelector);
   const searchBy = useSelector(setSearchBySelector);
-  
+
   const searchParams: IManageEventParams = {
     page: page + 1,
     limit: rowsPerPage,

@@ -68,7 +68,6 @@ function EditEventDashboard() {
 
   const methods = useForm<IFormEditManageEvents>({
     resolver: yupResolver(schemaEditManageEvent),
-    // defaultValues,
   });
 
   const {
