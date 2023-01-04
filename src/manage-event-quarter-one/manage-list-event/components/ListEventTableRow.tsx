@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { TableMoreMenu } from 'src/common/components/table';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import { FORMAT_DATE_EVENT } from 'src/manage-event-quarter-one/common/constants';
 import { IPropsListEventTableRow } from 'src/manage-event-quarter-one/common/interface';
 import useMessage from 'src/store-admin/hooks/useMessage';
@@ -51,11 +52,11 @@ function ListEventTableRow({
       <TableCell align="left">{groupName}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_EVENT) : ''}
+        {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_FILTER) : ''}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_EVENT) : ''}
+        {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_FILTER) : ''}
       </TableCell>
 
       <TableCell align="left">{eventCustomerLimit}</TableCell>

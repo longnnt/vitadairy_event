@@ -20,7 +20,7 @@ export const TABLE_HEAD = [
   { id: '', label: 'Tùy chọn' },
 ];
 
-export const FORMAT_DATE_EVENT = 'DD-MM-YYYY';
+export const FORMAT_DATE_EVENT = 'MM-dd-yyyy HH:MM:ss';
 
 export enum STATUS {
   ACTIVE= 'ACTIVE',

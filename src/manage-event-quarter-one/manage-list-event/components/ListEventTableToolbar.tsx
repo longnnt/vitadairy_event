@@ -76,8 +76,13 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
         <Card>
           <Grid container spacing={5} py="30px">
             <Grid item xs={10} md={4} ml="20px">
-              <Stack direction="row" spacing={3} width={850}>
-                <RHFSelect name={'searchBy'} key="searchBy" label={'Tìm kiếm theo...'}>
+              <Stack direction="row" spacing={3} width={950}>
+                <RHFSelect
+                  name={'searchBy'}
+                  key="searchBy"
+                  label={'Tìm kiếm theo...'}
+                  sx={{ width: '100%' }}
+                >
                   <option value=""></option>
                   <option value={SEARCH_BY.EVENT_NAME}>Sự kiện</option>
                   <option value={SEARCH_BY.EVENT_GROUP_NAME}>Nhóm sự kiện</option>
@@ -105,35 +110,35 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                   )}
                 />
 
-                <RHFSelect name={'status'} key="status" label={'Trạng thái'}>
+                <RHFSelect
+                  name={'status'}
+                  key="status"
+                  label={'Trạng thái'}
+                  sx={{ width: '100%' }}
+                >
                   <option value=""></option>
                   <option value={STATUS.ACTIVE}>Hiệu lực</option>
                   <option value={STATUS.IN_ACTIVE}>Không hiệu lực</option>
                 </RHFSelect>
-
-                <Box>
-                  <Stack direction={'row'} spacing={2} width={50}>
-                    <LoadingButton
-                      sx={{ size: '30px' }}
-                      type="submit"
-                      variant="contained"
-                      size="medium"
-                      onClick={() => handleSearch()}
-                    >
-                      Tìm kiếm
-                    </LoadingButton>
-                    <Button
-                      sx={{ size: '30px' }}
-                      type="reset"
-                      variant="contained"
-                      color="inherit"
-                      size="medium"
-                      onClick={handleResetSearch}
-                    >
-                      Hủy bỏ
-                    </Button>
-                  </Stack>
-                </Box>
+                <LoadingButton
+                  sx={{ width: '50%' }}
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  onClick={() => handleSearch()}
+                >
+                  Tìm kiếm
+                </LoadingButton>
+                <Button
+                  sx={{ width: '50%' }}
+                  type="reset"
+                  variant="contained"
+                  color="inherit"
+                  size="large"
+                  onClick={handleResetSearch}
+                >
+                  Hủy bỏ
+                </Button>
               </Stack>
               <Stack direction={'row'} width={700} spacing={3} marginTop={2}>
                 <Stack>
