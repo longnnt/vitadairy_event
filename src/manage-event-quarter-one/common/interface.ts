@@ -11,12 +11,12 @@ export interface IFormListEvent {
   status: string;
   eventCustomerLimit: number;
   eventStoreLimit: number;
-  groupName: string
+  groupName: string;
 }
 
-export interface IFormCreateEvent {
+export interface IPostCreateEvent {
   name: string;
-  eventGroupId: number;
+  eventGroupId: string;
   startDate: string | null;
   endDate: string | null;
   eventCustomerLimit: number;
@@ -28,13 +28,27 @@ export interface IFormCreateEvent {
   skus: string[];
 }
 
+export interface ISubmitCreateEvent {
+  name: string;
+  eventGroupId: IEventGroupType;
+  startDate: string | null;
+  endDate: string | null;
+  eventCustomerLimit: null | number;
+  eventStoreLimit: null | number;
+  status: string | boolean;
+  defaultWinRate: null | number;
+  upRate: null | number;
+  downRate: null | number;
+  skus: IProCodeSelect[];
+}
+
 export type IManageEventAdminCallback = {
   onSuccess?: VoidFunction;
   onError?: VoidFunction;
 };
 
 export interface IDataListEvent {
-  data:{
+  data: {
     meta: {
       status: number;
       msg: string;
@@ -47,7 +61,7 @@ export interface IDataListEvent {
       totalPages: number;
       last: boolean;
     };
-  }
+  };
 }
 
 export interface IManageEventParams {
@@ -91,10 +105,41 @@ export interface IProCodeSelect {
   label: string;
 }
 
-export interface EventSearchParams {
+export interface IEventSearchParams {
   startDate?: Date | null;
   page?: number;
   endDate?: Date | null;
   searchText?: string;
   size?: number;
+}
+
+export interface IFormListEventGroup {
+  id: number;
+  name: string;
+}
+export interface IDataListEventGroup {
+  data: {
+    meta: {
+      status: number;
+      msg: string;
+    };
+    response: IFormListEventGroup[];
+    pagination: {
+      totalRecords: number;
+      currentPage: number;
+      recordsPerPage: number;
+      totalPages: number;
+      last: boolean;
+    };
+  };
+}
+export interface IEventGroupParams {
+  searchText?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface IEventGroupType {
+  label: string;
+  value: string;
 }

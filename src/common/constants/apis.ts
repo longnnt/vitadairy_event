@@ -34,3 +34,4 @@ export const API_PROVINCE_SEARCH_BY_FILTER = '/province/search_by_filter';
 export const API_GET_ALL_GIFTS = 'admin/gift';
 export const API_GIFT = 'admin/gift';
 export const API_MANAGE_EVENT = 'admin/event';
+export const API_EVENT_GROUP = 'admin/event-group'
