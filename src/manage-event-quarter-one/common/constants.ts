@@ -40,7 +40,7 @@ export const defaultValues = {
   eventCustomerLimit: null,
   eventStoreLimit: null,
   status: false,
-  skus: [] as string[],
+  skus: [],
   defaultWinRate: null,
   downRate: null,
   upRate: null,
