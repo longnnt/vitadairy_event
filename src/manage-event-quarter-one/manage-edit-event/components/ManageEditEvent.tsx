@@ -40,6 +40,7 @@ import { defaultValues } from 'src/manage-event-quarter-one/common/constants';
 import { schemaEditManageEvent } from 'src/manage-event-quarter-one/manageEvent.schema';
 import {
   IEventGroup,
+  IFormEditManageEvent,
   IFormEditManageEvents,
   IProCodeSelect,
 } from 'src/manage-event-quarter-one/common/interface';
@@ -70,7 +71,7 @@ function EditEventDashboard() {
   const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
   const handleOpenEditModal: any = () => dispatch(setOpeneditModal(true));
 
-  const methods = useForm<IFormEditManageEvents>({
+  const methods = useForm<IFormEditManageEvent>({
     resolver: yupResolver(schemaEditManageEvent),
   });
 
@@ -122,16 +123,22 @@ function EditEventDashboard() {
         'skus',
         data.skus.map((item: string) => ({ value: item, label: item }))
       );
-
-      setValue('eventGroupId', defaultTransactionType);
+      setValue(
+        'eventStatus',
+        data.status === STATUS.ACTIVE ? true :false
+      );
+    setValue(
+      'eventGroupId',
+      defaultTransactionType 
+    );
     }
   }, [data, defaultTransactionType]);
   useDeepCompareEffect(() => {
     const data = watch();
     if (confirmEdit) {
-      const dataEdit: IFormEditManageEvents = {
+      const dataEdit = {
         name: data?.name,
-        eventGroupId: data?.eventGroupId,
+        eventGroupId:data?.eventGroupId?.value as string,
         startDate: data.startDate,
         endDate: data.endDate,
         defaultWinRate: data.defaultWinRate,
@@ -140,7 +147,7 @@ function EditEventDashboard() {
         eventCustomerLimit: Number(data.eventCustomerLimit),
         eventStoreLimit: Number(data.eventStoreLimit),
         skus: data.skus.map((item: any) => item.value),
-        status: data.status ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
+        status: data.eventStatus ? STATUS.ACTIVE : STATUS.IN_ACTIVE,
         id: Number(id),
       };
       mutate({ formEditData: dataEdit });
@@ -259,7 +266,7 @@ function EditEventDashboard() {
                   InputLabelProps={{ shrink: true }}
                   label="Giới hạn trúng giải trên tệp cửa hàng*"
                 />
-                <RHFSwitch name={'status'} label="Trạng thái" />
+                <RHFSwitch name={'eventStatus'} label="Trạng thái" />
               </Stack>
 
               <Box sx={{ zIndex: 1001 }}>

@@ -42,7 +42,7 @@ import { IListGroupEvent, IListGroupEventParams } from 'src/event-q1-groupEvent/
 import { ListGroupEventTableRow } from './ListGroupEventTable';
 import TableHeadGroupEvent from './TableHeadGroupEvent';
 import ListGroupEventTableNoData from './ListGroupEventTableNoData';
-import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, itemIdGroupEventSelector, setAlert, setFilterName, setIsConfirmDelete } from 'src/event-q1-groupEvent/groupEvent.slice';
+import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, rowIdGroupEventSelector, setAlert, setFilterName, setIsConfirmDelete, setRowID } from 'src/event-q1-groupEvent/groupEvent.slice';
 import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
 import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGroupEvent';
   
@@ -103,31 +103,25 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
       },
     });
 
-    // const alertStatus = useSelector(alertStatusSelector)
-    // const itemRow= useSelector(itemRowsSelector)
+    const itemRowID = useSelector(rowIdGroupEventSelector);
     const handleFilterName = (filterName: string) => {
       dispatch(setFilterName(filterName));
       setPage(0);
     };
     const handleDeleteRows = (ids: number) => {
-      mutate(ids);
-      // dispatch(setAlert({alert: true, itemRowId: ids}))
+      dispatch(setAlert(true))
+      dispatch(setRowID(ids))
     };
-
+    
+    
     const confirmDelete = useSelector(isConfirmDeleteGroupEventSelector);
-    const idRowDelete = useSelector(itemIdGroupEventSelector) 
-    // console.log('id =', idRowDelete);
-    // console.log('confirmDel =', confirmDelete);
-    // useDeepCompareEffect(() => {
-    //   if (confirmDelete ==true) {
-    //     console.log("this is delete= ", idRowDelete);
-        
-    //     mutate(idRowDelete);
-    //     dispatch(setIsConfirmDelete(false));
-    //     // dispatch(setAlert({alert: false, itemRowId: 0}))
-    //     resetSelect();
-    //   }
-    // }, [confirmDelete]);
+    useDeepCompareEffect(() => {
+      if (confirmDelete) {
+        mutate(itemRowID);
+        dispatch(setIsConfirmDelete(false));
+        resetSelect();
+      }
+    }, [confirmDelete]);
     const handleEditRow = (id: number) => {
       navigate(PATH_DASHBOARD.eventQ1GroupEvent.editGroupEvent(id));
     };

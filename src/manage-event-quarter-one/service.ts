@@ -4,7 +4,7 @@ import { IQuery } from "src/event/edit-event-prize/common/interface";
 import { IEventGroup,  IFormEditManageEvents, IManageEventParams, IResEditManageEvent } from "./common/interface";
 
 export const getEventOneById = (id: number) => {
-    return axiosInstanceTemp.get<unknown, IResEditManageEvent> (`${API_EVENT_Q1_ADMIN}/${id}`);
+    return axiosInstanceTemp.get (`${API_EVENT_Q1_ADMIN}/${id}`);
   };
 
   export const getEventGroup = (params: IEventGroup) => {
@@ -20,4 +20,3 @@ export const getEventOneById = (id: number) => {
     const data = await axiosInstanceTemp.put(`${API_EVENT_Q1_ADMIN}`, formEditData);
     return data;
   };
-  

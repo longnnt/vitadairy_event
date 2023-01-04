@@ -10,27 +10,29 @@ import { STATUS } from 'src/manage-event-quarter-one/common/constants';
 import { IPropsListEventTableRow } from 'src/manage-event-quarter-one/common/interface';
 import { usePatchEvent } from 'src/manage-event-quarter-one/hooks/usePatchEvent';
 import useMessage from 'src/store-admin/hooks/useMessage';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 // ----------------------------------------------------------------------
 
 function ListEventTableRow({
-  row,
-  selected,
-  onEditRow,
-  onSelectRow,
-  onDeleteRow,
+    row,
+    selected,
+    onEditRow,
+    onSelectRow,
+    onDeleteRow,
+    handleGotoPrize
 }: IPropsListEventTableRow) {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const {
-    id,
-    name,
-    groupName,
-    startDate,
-    endDate,
-    eventCustomerLimit,
-    eventStoreLimit,
-    status,
-  } = row;
+    const {
+        id,
+        name,
+        groupName,
+        startDate,
+        endDate,
+        eventCustomerLimit,
+        eventStoreLimit,
+        status,
+    } = row;
 
   const checkStatus: any = status;
   const isChecked = checkStatus === STATUS.ACTIVE;
@@ -52,19 +54,19 @@ function ListEventTableRow({
     mutate({ id, status: active ? STATUS.ACTIVE : STATUS.IN_ACTIVE });
   };
 
-  const handleCloseMenu = () => {
-    setOpenMenuActions(null);
-  };
+    const handleCloseMenu = () => {
+        setOpenMenuActions(null);
+    };
 
-  const dispatch = useDispatch();
-  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
-  return (
-    <TableRow hover selected={selected}>
-      <TableCell align="left">{id}</TableCell>
+    const dispatch = useDispatch();
+    const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+    return (
+        <TableRow hover selected={selected}>
+            <TableCell align="left">{id}</TableCell>
 
-      <TableCell align="left">{name}</TableCell>
+            <TableCell align="left">{name}</TableCell>
 
-      <TableCell align="left">{groupName}</TableCell>
+            <TableCell align="left">{groupName}</TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(startDate).isValid() ? dayjs(startDate).format(FORMAT_DATE_FILTER) : ''}
@@ -74,7 +76,7 @@ function ListEventTableRow({
         {dayjs(endDate).isValid() ? dayjs(endDate).format(FORMAT_DATE_FILTER) : ''}
       </TableCell>
 
-      <TableCell align="left">{eventCustomerLimit}</TableCell>
+            <TableCell align="left">{eventCustomerLimit}</TableCell>
 
       <TableCell align="left">{eventStoreLimit}</TableCell>
       <TableCell align="left" title={checkStatus}>

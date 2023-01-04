@@ -113,6 +113,11 @@ const navConfig = [
           },
         ],
       },
+      {
+        title: BREADCUMBS.EVENT_HISTORY_PRIZE,
+        path: PATH_DASHBOARD.eventHistoryPrize.listHistoryPrize,
+        icon: ICONS.calendar,
+      },
     ],
   },
 ];

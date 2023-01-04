@@ -4,24 +4,22 @@ import { ITableGroupEventPayload, ITablePayload } from './interfaces';
 
 type StateProps = {
   filterName: string;
-  itemRows:{
-    itemRowId:number;
-    alertStatus: boolean;
-  }
+  alertStatus: boolean;
   selectedIds: number[];
   isResetSelect: boolean;
   isConfirmDelete: boolean;
+  rowID: number;
 };
 
 const initialState: StateProps = {
   filterName: '',
-  itemRows: {
-    itemRowId: 0,
-    alertStatus: false,
-  },
+  
+  alertStatus: false,
+  
   selectedIds: [],
   isResetSelect:false,
   isConfirmDelete: false,
+  rowID: 0,
 };
 
 export const groupEventSlice = createSlice({
@@ -31,9 +29,8 @@ export const groupEventSlice = createSlice({
     setFilterName: (state, action: PayloadAction<string>) => {
       state.filterName = action.payload;
     },
-    setAlert: (state, action:PayloadAction<ITableGroupEventPayload>) =>{
-      state.itemRows.alertStatus = action.payload.alert as boolean;
-      state.itemRows.itemRowId= action.payload.itemRowId as number; 
+    setAlert: (state, action:PayloadAction<boolean>) =>{
+      state.alertStatus =action.payload; 
     },
     setSelectedIds: (state, action: PayloadAction<number[]>) => {
       state.selectedIds = action.payload;
@@ -44,6 +41,9 @@ export const groupEventSlice = createSlice({
     setIsConfirmDelete:(state, action:PayloadAction<boolean>) =>{
       state.isConfirmDelete = action.payload;
     },
+    setRowID: (state, action: PayloadAction<number>) =>{
+      state.rowID = action.payload;
+    }
   },
 })
 
@@ -53,6 +53,7 @@ export const {
   setAlert,
   setIsResetSelect,
   setIsConfirmDelete,
+  setRowID,
 
 
 
@@ -60,12 +61,12 @@ export const {
 
 
 export const filterNameGroupEventSelector = (state: RootState) => state.groupEvent.filterName;
-export const alertStatusGroupEventSelector = (state: RootState) => state.groupEvent.itemRows.alertStatus;
-export const itemIdGroupEventSelector = (state: RootState) => state.groupEvent.itemRows.itemRowId;
-export const itemRowsGroupEventSelector = (state: RootState) => state.groupEvent.itemRows;
+export const alertStatusGroupEventSelector = (state: RootState) => state.groupEvent.alertStatus;
 export const selectedIdsGroupEventState = (state: RootState) => state.groupEvent.selectedIds;
 export const isResetSelectGroupEventSelector = (state: RootState) => state.groupEvent.isResetSelect;
 export const isConfirmDeleteGroupEventSelector = (state: RootState) => state.groupEvent.isConfirmDelete;
+export const rowIdGroupEventSelector = (state: RootState) => state.groupEvent.rowID;
+
 
 
 
