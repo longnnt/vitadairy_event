@@ -31,13 +31,14 @@ import { schemaAddEvent } from 'src/event-promotion-IV/schema';
 import { DEFAULT_EDIT_VALUE, LIST_GROUP_EVENT } from 'src/event-q1-groupEvent/contants';
 import { schemaAddEditGroupEvent } from 'src/event-q1-groupEvent/schema';
 import { getProductCode } from 'src/event-promotion-IV/service';
-import { getEventNotInGroup } from 'src/event-q1-groupEvent/services';
+import { getEventNotInGroup, getGroupEventById } from 'src/event-q1-groupEvent/services';
 import { useGetListEvent } from 'src/event-promotion-IV/hooks/useGetListEvent';
 import { useGetEventNotInGroup } from 'src/event-q1-groupEvent/hooks/useGetEventNotInGroup';
 import { useAddNewGroupEvent } from 'src/event-q1-groupEvent/hooks/useAddNewGroupEvent';
 import { IEventSelectProps, IFormDataGroupEvent } from 'src/event-q1-groupEvent/interfaces';
 import useShowSnackbar from 'src/common/hooks/useMessage';
 import { RHFSelectPaginationGroupEvent } from 'src/event-q1-groupEvent/common/components/RHFSelectPaginationMutiple';
+import { useEffect, useState } from 'react';
 
 export const AddGroupEventForm = () => {
   const navigate = useNavigate();
@@ -57,8 +58,7 @@ export const AddGroupEventForm = () => {
     formState: { errors },
   } = methods;
 
-  // const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
-
+  const {data:dataEventNotInGroup} = useGetEventNotInGroup();
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   
   const { mutate, isSuccess, data } = useAddNewGroupEvent({
@@ -76,7 +76,6 @@ export const AddGroupEventForm = () => {
       eventIds: data.events.map((item: IEventSelectProps) => item.value),
     };
     mutate(formDataAddNewGroupEvent);
-    
     showSuccessSnackbar('Tạo mới thành công');
     navigate(PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent);
   };
@@ -103,7 +102,7 @@ export const AddGroupEventForm = () => {
               <Box sx={{ zIndex: 1001 }} minHeight="65px">
                 <RHFSelectPaginationGroupEvent
                   name={'events'}
-                  getAsyncData={getEventNotInGroup()}
+                  getAsyncData={dataEventNotInGroup}
                   placeholder="Danh sách Event"
                   error={errors}
                 />

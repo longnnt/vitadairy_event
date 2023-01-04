@@ -48,13 +48,12 @@ export const RHFSelectPaginationGroupEvent = ({
     loadedOptions: any,
     { page }: { page: number }
   ) => {
-    const {data} = useGetEventNotInGroup();
+    const dataSelect = getAsyncData;
     const hasMore = page < 10;
-    
-    const optionSelects = data?.data?.response?.map((eventNotInGroup: any) => {
+    const optionSelects = dataSelect?.data?.response.map((events: any) => {
       return {
-        value: eventNotInGroup.id,
-        label: eventNotInGroup.name,
+        value: events.id,
+        label: events.name,
       };
     });
     

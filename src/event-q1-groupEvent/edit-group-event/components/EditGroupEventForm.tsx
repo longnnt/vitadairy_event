@@ -56,7 +56,7 @@ export const EditGroupEventForm = () => {
     formState: { errors },
   } = methods;
   
-  const listEventNotInGroup = useGetEventNotInGroup()?.data?.data?.response || [];
+  const {data:dataEventNotInGroup} = useGetEventNotInGroup();
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const { useDeepCompareEffect } = useDeepEffect();
@@ -118,7 +118,7 @@ export const EditGroupEventForm = () => {
                 <Box sx={{ zIndex: 1001 }} minHeight="65px">
                   <RHFSelectPaginationGroupEvent
                     name={'events'}
-                    getAsyncData={getEventNotInGroup()}
+                    getAsyncData={dataEventNotInGroup}
                     placeholder="Danh sách Event"
                     error={errors}
                   />
