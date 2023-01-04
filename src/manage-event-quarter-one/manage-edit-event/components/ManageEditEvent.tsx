@@ -103,7 +103,7 @@ function EditEventDashboard() {
     value: item.id,
     label: item.name,
   }));
-  const defaultTransactionType = transactionTypeOptions?.filter(
+  const defaultTransactionType = transactionTypeOptions?.find(
     (item: any) => item.value === data?.eventGroupId
   );
   useEffect(() => {
@@ -121,12 +121,12 @@ function EditEventDashboard() {
 
     setValue(
       'eventGroupId',
-      defaultTransactionType ? defaultTransactionType[0] : ({} as {value:number,label:string})
+      defaultTransactionType
     );
     }
 
   
-  }, [data]);
+  }, [data, defaultTransactionType]);
   useDeepCompareEffect(() => {
     const data = watch();
     if (confirmEdit) {
