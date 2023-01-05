@@ -187,7 +187,7 @@ function EditEventDashboard() {
                   <Box sx={{ zIndex: 1006 }}>
                     <SelectSingleEvent
                       name={'eventGroupId'}
-                      placeholder="Tên nhóm sự kiện*"
+                      placeholder="Tên nhóm sự kiện"
                       getAsyncData={getEventGroup}
                       searchParams={searchParamsPaginate}
                       error={errors}
