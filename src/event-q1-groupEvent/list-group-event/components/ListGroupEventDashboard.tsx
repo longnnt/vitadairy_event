@@ -46,6 +46,7 @@ import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, rowIdG
 import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
 import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGroupEvent';
 import GroupEventTableSkeleton from './GroupEventTableSkeleton';
+import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
   
   function ListGroupEventDashboard() {
     const {

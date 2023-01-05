@@ -28,3 +28,5 @@ export const DEFAULT_EDIT_VALUE = {
 export const initialState = {
   searchText: '',
 };
+
+export const DEFAULT_LOADING_LIMIT = 5;
