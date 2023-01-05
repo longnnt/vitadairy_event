@@ -45,6 +45,7 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
 import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, rowIdGroupEventSelector, setAlert, setFilterName, setIsConfirmDelete, setRowID } from 'src/event-q1-groupEvent/groupEvent.slice';
 import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
 import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGroupEvent';
+import GroupEventTableSkeleton from './GroupEventTableSkeleton';
 import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
   
   function ListGroupEventDashboard() {
@@ -75,14 +76,15 @@ import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
     };
 
     const filterName = useSelector(filterNameGroupEventSelector);
+    if (filterName) searchParams.searchText = filterName;
+
     const { useDeepCompareEffect } = useDeepEffect();
     const openEditModal = useSelector(openEditModalSelector);
     const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
     const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
     
-    if (filterName.length >2) searchParams.searchText = filterName;
     
-    const { data, isLoading } = useGetListGroupEvents(searchParams);
+    const { data, isLoading, refetch } = useGetListGroupEvents(searchParams);
     const listGroupEvent = data?.data?.response || [];
     
     const {
@@ -105,8 +107,8 @@ import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
     });
 
     const itemRowID = useSelector(rowIdGroupEventSelector);
-    const handleFilterName = (filterName: string) => {
-      dispatch(setFilterName(filterName));
+    const handleFilterName = () => {
+      refetch();
       setPage(0);
     };
     const handleDeleteRows = (ids: number) => {
@@ -133,14 +135,12 @@ import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
 
     return (
       <>
-      {isLoading ? <LoadingSkeletonListGroupEventPage/> :
-      <>
         <HeaderBreadcrumbs
           heading= {BREADCUMBS.LIST_GROUP_EVENT}
           links={[
             {
               name: BREADCUMBS.MANAGE_GROUP_EVENT,
-              href: PATH_DASHBOARD.eventQ1GroupEvent.root,
+              href: PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent,
             },
             { name: BREADCUMBS.LIST_GROUP_EVENT, href: PATH_DASHBOARD.eventQ1GroupEvent.listGroupEvent },
           ]}
@@ -151,7 +151,7 @@ import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
                     variant="contained"
                     to={PATH_DASHBOARD.eventQ1GroupEvent.addGroupEvent}
                     component={RouterLink}
-                    startIcon={<Iconify icon={'akar-icons:file'} />}
+                    startIcon={<Iconify icon={'eva:plus-fill'} />}
                 >
                     Tạo mới
                 </Button>
@@ -187,10 +187,10 @@ import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
                       onEditRow={() => handleEditRow(row.id)}
                     />
                   ))}
-                  {/* {Array.from(Array(rowsPerPage)).map((index) => {
-                    return <ListPrizeTableSkeleton key={index} isNotFound={isLoading} />;
-                  })} */}
-                  <ListGroupEventTableNoData isNotFound={isNotFound}/>
+                  {Array.from(Array(rowsPerPage)).map((index) => {
+                    return <GroupEventTableSkeleton key={index} isNotFound={isLoading} />;
+                  })}
+                  <ListGroupEventTableNoData isNotFound={isNotFound && !isLoading}/>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -214,8 +214,6 @@ import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
             />
           </Box>
         </Card>
-      </>
-      }
       </>
     );
   }

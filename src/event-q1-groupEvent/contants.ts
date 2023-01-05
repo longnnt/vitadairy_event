@@ -25,3 +25,8 @@ export const DEFAULT_EDIT_VALUE = {
     events:[] as number[],
   };
   
+export const initialState = {
+  searchText: '',
+};
+
+export const DEFAULT_LOADING_LIMIT = 5;
