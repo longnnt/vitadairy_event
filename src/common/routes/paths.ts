@@ -101,7 +101,7 @@ export const PATH_DASHBOARD = {
     listGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/list'), 
     addGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/add'), 
     editGroupEvent: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-q1-groupEvent/${idEvent}`),
-    // editGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/edit'),
+    viewGroupEvent: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-q1-groupEvent/view/${idEvent}`),
   },
 
   eventHistoryPrize: {

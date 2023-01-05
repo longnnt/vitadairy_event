@@ -1,11 +1,13 @@
 import { Checkbox, MenuItem, TableCell, TableRow } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
 import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { TableMoreMenu } from 'src/common/components/table';
 import Can from 'src/common/lib/Can';
 import { dispatch, useSelector } from 'src/common/redux/store';
+import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import { setConfirmEdit } from 'src/event-promotion-IV/eventPromotionIV.slice';
 import { alertStatusGroupEventSelector, setAlert, setIsConfirmDelete } from 'src/event-q1-groupEvent/groupEvent.slice';
 import { IPropsListGroupEventTableRow } from 'src/event-q1-groupEvent/interfaces';
@@ -20,6 +22,7 @@ function ListGroupEventTableRow({
   onDeleteRow,
 }: IPropsListGroupEventTableRow) {
   const { id, name } = row;
+  const navigate = useNavigate();
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -51,6 +54,14 @@ function ListGroupEventTableRow({
             actions={
               <>
                 <Stack>
+                  <MenuItem
+                    onClick={() => {
+                      navigate(PATH_DASHBOARD.eventQ1GroupEvent.viewGroupEvent(id));
+                    }}
+                  >
+                    <Iconify icon={'mdi:eye-outline'} />
+                    Xem
+                  </MenuItem>
                   <MenuItem
                     onClick={() => {
                       onEditRow();

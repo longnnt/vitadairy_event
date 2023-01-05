@@ -75,7 +75,7 @@ export default function ListGroupEventFilterBar({
         <Stack
           direction="row"
           spacing={3}
-          width="25%"
+          width="35%"
           justifyContent={'center'}
           sx={{ height: '56px' }}
         >
