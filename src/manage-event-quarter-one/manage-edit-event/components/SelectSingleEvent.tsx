@@ -2,12 +2,13 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { GroupBase, StylesConfig, components, ControlProps } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import React, { useState } from 'react';
-import { IEventGroup } from 'src/manage-event-quarter-one/common/interface';
+import { IEventGroupParams } from 'src/manage-event-quarter-one/common/interface';
+
 type IProps = {
   name: string;
   getAsyncData: any;
   placeholder: string;
-  searchParams?: IEventGroup;
+  searchParams?: IEventGroupParams;
   error: any;
 };
 const { ValueContainer, Placeholder } = components;
@@ -30,7 +31,6 @@ export const SelectSingleEvent = ({
   searchParams,
   error,
 }: IProps) => {
-
   const { control } = useFormContext();
   const loadOptions = async (
     search: string,
@@ -99,12 +99,12 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
         border: '1px solid black',
       },
       border: error[name]?.message
-        ? '1.5px solid #FF4842!important'
+        ? '1.5px solid #ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
-        ? '1px solid #00AB55!important'
+        ? '1px solid #00ab55!important'
         : !state.hasValue || !state.selectProps.inputValue
-        ? '1px solid #E2DBDB'
-        : '1px solid #00AB55!important',
+        ? '1px solid #e2dbdb'
+        : '1px solid #00ab55!important',
     }),
     container: (provided, state) => ({
       ...provided,
@@ -143,12 +143,12 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
           (isFocus as unknown as ControlProps<boolean>)) &&
         12,
       color: error[name]?.message
-        ? '#FF4842!important'
+        ? '#ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
-        ? '#00AB55'
+        ? '#00ab55'
         : state.hasValue || state.selectProps.inputValue
         ? '#919EAB'
-        : '#919EAB',
+        : '#919eab',
     }),
   };
   return styles;
