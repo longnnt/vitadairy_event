@@ -12,9 +12,11 @@ import {
   Switch,
   TextField,
   Typography,
+  InputAdornment
 } from '@mui/material';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import HeaderBreadcrumbs from 'src/common/components/HeaderBreadcrumbs';
 import Scrollbar from 'src/common/components/Scrollbar';
 import { BREADCUMBS, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
@@ -129,10 +131,17 @@ function CreateEventDashboard() {
                   control={control}
                   render={({ field }) => (
                     <Stack position="relative" width="100%">
-                      <DateTimePicker
+                      <MobileDateTimePicker
                         {...field}
                         label="Ngày bắt đầu*"
                         inputFormat={FORMAT_DATE_NEWS}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -150,10 +159,17 @@ function CreateEventDashboard() {
                   control={control}
                   render={({ field }) => (
                     <Stack position={'relative'} width="100%">
-                      <DateTimePicker
+                      <MobileDateTimePicker
                         {...field}
                         label="Ngày kết thúc*"
                         inputFormat={FORMAT_DATE_NEWS}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Calendar />
+                            </InputAdornment>
+                          ),
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}

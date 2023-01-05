@@ -49,7 +49,7 @@ export const RHFSelectPaginationGroupEvent = ({
     { page }: { page: number }
   ) => {
     const dataSelect = getAsyncData;
-    const hasMore = page < 10;
+    const hasMore = page < 1;
     const optionSelects = dataSelect?.data?.response.map((events: any) => {
       return {
         value: events.id,
@@ -59,10 +59,6 @@ export const RHFSelectPaginationGroupEvent = ({
     
     return {
       options: optionSelects,
-      hasMore: hasMore,
-      additional: {
-        page: page + 1,
-      },
     };
   };
   const [isFocus, setFocus] = useState<boolean>(false);

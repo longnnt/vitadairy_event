@@ -25,3 +25,6 @@ export const DEFAULT_EDIT_VALUE = {
     events:[] as number[],
   };
   
+export const initialState = {
+  searchText: '',
+};
