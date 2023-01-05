@@ -66,6 +66,7 @@ export const BREADCUMBS = {
   LIST_GROUP_EVENT: 'Danh sách Group Event',
   CREATE_GROUP_EVENT: 'Tạo Group Event',
   EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',
+  VIEW_GROUP_EVENT: 'Chi tiết Group Event',
 
   EVENT_HISTORY_PRIZE : 'Lịch sử trúng giải',
 

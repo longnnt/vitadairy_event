@@ -140,6 +140,7 @@ export default function Router() {
                       { path: 'event-q1-groupEvent/list', element: <ListGroupEvent /> },
                       { path: 'event-q1-groupEvent/add', element: <AddGroupEvent /> },
                       { path: 'event-q1-groupEvent/:id', element: <EditGroupEvent /> },
+                      { path: 'event-q1-groupEvent/view/:id', element: <ViewGroupEvent /> },
                     ],
                   },
                   {
@@ -238,7 +239,9 @@ const AddGroupEvent = Loadable(
 const EditGroupEvent = Loadable(
   lazy(() => import('../../event-q1-groupEvent/edit-group-event/index'))
 );
-
+const ViewGroupEvent = Loadable(
+    lazy(() => import('../../event-q1-groupEvent/view-group-event/index'))
+  );
 // ADMIN
 const AdminList = Loadable(lazy(() => import('../../admin/admin-pages/AdminList')));
 const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));

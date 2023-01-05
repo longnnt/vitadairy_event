@@ -17,6 +17,7 @@ type IProps = {
   placeholder: string;
   searchParams?: ISearchParams;
   error: any;
+  isDisabled?: boolean;
 };
 
 const { ValueContainer, Placeholder } = components;
@@ -40,6 +41,7 @@ export const RHFSelectPaginationGroupEvent = ({
   placeholder,
   searchParams,
   error,
+  isDisabled,
 }: IProps) => {
 
   const { control } = useFormContext();
@@ -69,6 +71,7 @@ export const RHFSelectPaginationGroupEvent = ({
       render={({ field: { onChange, value } }) => {
         return (
           <AsyncPaginate
+            isDisabled={isDisabled}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             debounceTimeout={1000}
