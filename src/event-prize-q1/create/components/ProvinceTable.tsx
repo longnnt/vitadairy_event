@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { DataGrid, GridColumns, GridActionsCellItem, GridRowModesModel, GridRowModel, GridRowModes, GridRowId } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { dispatch, useSelector } from "src/common/redux/store";
-import { setCountPrizeProvince, setProvinceInFoSelector } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCloseConfirmDelete, setCountPrizeProvince, setOpenConfirmDelete, setProvinceInFoSelector, setRowProvinceId } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { Controller, useFormContext } from "react-hook-form";
 import { IFormCreate, IFormCreateProvince, IProvinceDetail, ISelectType } from "src/event-prize-q1/interface";
 import { useGetListProvince } from "src/event-prize-q1/hooks/useGetListProvince";
@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { randomId } from '@mui/x-data-grid-generator';
 import useDeepEffect from "src/common/hooks/useDeepEffect";
 import { IFormCreateEvent } from "src/event/event-history-prize/interfaces";
+import AlertConfirmDelete from "src/event-prize-q1/common/AlertConfirmDelete";
 
 type Props = {
     dataProvinceAPI?: IProvinceDetail[]
@@ -27,7 +28,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
     const { useDeepCompareEffect } = useDeepEffect();
 
-    const {countPrizeEvent, countPrizeProvince} = useSelector(state => state.eventPrizeQ1);
+    const { openConfirmDelete, rowProvinceId } = useSelector(state => state.eventPrizeQ1);
 
     const provinceSelector = useSelector(setProvinceInFoSelector);
 
@@ -247,7 +248,10 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                         key={id}
                         label="Delete"
                         icon={<DeleteIcon />}
-                        onClick={handleDeleteClick(id)}
+                        onClick={() => {
+                            dispatch(setRowProvinceId(id))
+                            dispatch(setOpenConfirmDelete())
+                        }}
                         color="inherit"
                     />,
                 ];
@@ -299,10 +303,16 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
         return updatedRow;
     }
 
-    const handleDeleteClick = (id: GridRowId) => () => {
-        const { [id]: rowDelete, ...newRows } = rows;
+    const handleDeleteClick = () => {
+        console.log('rowProvinceId', rowProvinceId)
+        if(!rowProvinceId) {
+            return console.log('không tìm thấy rowId')
+         }
+        const { [rowProvinceId || '']: rowDelete, ...newRows } = rows;
         setRows(newRows);
         setValue('eventDetailProvinces', newRows);
+        dispatch(setCloseConfirmDelete());
+        dispatch(setRowProvinceId(null));
     };
 
     useDeepCompareEffect(() => {
@@ -345,6 +355,11 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
 
     return (
         <>
+            <AlertConfirmDelete 
+                open={openConfirmDelete}
+                handleClose={() => dispatch(setCloseConfirmDelete())}
+                handleConfirm={handleDeleteClick}
+            />
             <Box
                 sx={{
                     width: '100%',
