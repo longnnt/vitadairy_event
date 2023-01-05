@@ -32,13 +32,14 @@ import { TABLE_HEAD } from '../../common/constants';
 import { ListEventTableRow } from './ListEventTableRow';
 import { ListEventTableToolbar } from './ListEventTableToolbar';
 import { ListEventTableSkeleton } from './ListEventTableSkeleton';
-import { confirmEditSelector, selectedIdsState, setConfirmEdit, setEndDateSelector, setOpeneditModal, setSearchBySelector, setSearchTextSelector, setSelectedIds, setStartDateSelector, setStatusSelector } from '../../manageEvent.slice';
+import { confirmEditSelector, openEditModalSelector, selectedIdsState, setConfirmEdit, setEndDateSelector, setOpeneditModal, setSearchBySelector, setSearchTextSelector, setSelectedIds, setStartDateSelector, setStatusSelector } from '../../manageEvent.slice';
 import { IFormListEvent, IManageEventParams } from '../../common/interface';
 import { useGetListEventAdmin } from 'src/manage-event-quarter-one/hooks/useGetListEventAdmin';
 import { useDeleteEventId } from 'src/manage-event-quarter-one/hooks/useDeleteEventId';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import TableHeadCustom from './TableHeadCustom';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 import { replacePathParams } from 'src/common/utils/replaceParams';
 
 function ListEventDashboard() {
@@ -57,12 +58,17 @@ function ListEventDashboard() {
   } = useTable();
 
   const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
+  const { useDeepCompareEffect } = useDeepEffect();
   const dispatch = useDispatch();
   const searchText = useSelector(setSearchTextSelector);
   const status = useSelector(setStatusSelector);
   const startDate = useSelector(setStartDateSelector);
   const endDate = useSelector(setEndDateSelector);
   const searchBy = useSelector(setSearchBySelector);
+  const handleCloseEditModal = () => dispatch(setOpeneditModal(false));
+  const handleOpenEditModal = () => dispatch(setOpeneditModal(true));
+  const selectedIdsValue = useSelector(selectedIdsState);
+  const openEditModal = useSelector(openEditModalSelector);
 
   const searchParams: IManageEventParams = {
     page: page + 1,
@@ -89,17 +95,28 @@ function ListEventDashboard() {
     page + 1
   );
 
-  const mutationDetele = useDeleteEventId({
+  
+  const handleDeleteRows = (ids: number[]) => {
+    handleOpenEditModal();
+    dispatch(setSelectedIds(ids));
+    resetSelect();
+  };
+  
+  const confirmEdit = useSelector(confirmEditSelector);
+  const {mutate} = useDeleteEventId({
     onSuccess: () => {showSuccessSnackbar('Xóa sự kiện thành công')},
     onError: () => showErrorSnackbar('Xóa sự kiện thất bại'),
   })
 
-  const handleDeleteRows = (ids: number[]) => {
-    for (let i = 0; i < ids.length; i++) {
-      mutationDetele.mutate(ids[i]);
-      resetSelect();
+  useDeepCompareEffect(() => {
+    
+    if (confirmEdit) {
+      for (let i = 0; i < selectedIdsValue.length; i++) {
+        mutate(selectedIdsValue[i]);
+      }
+      dispatch(setConfirmEdit(false));
     }
-  };
+  }, [confirmEdit, selectedIdsValue]);
 
   const handleEditRow = (id: number) => {
     navigate(PATH_DASHBOARD.manageEventQuarterOne.edit(id));
@@ -119,6 +136,10 @@ function ListEventDashboard() {
   const handleSearch = () => {
     refetch();
     setPage(0);
+  };
+
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
   };
 
   return (
@@ -141,6 +162,13 @@ function ListEventDashboard() {
       />
       <Card>
         <Divider />
+        <ConfirmEditModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            handleOnAgree={handleOnAgree}
+            type='Xóa sự kiện quý 1'
+            colorType={false}
+          />
         <ListEventTableToolbar handleSearch={handleSearch} />
 
         <Scrollbar>

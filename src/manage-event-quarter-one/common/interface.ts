@@ -198,3 +198,8 @@ export interface IEventGroupType {
   label: string | null;
   value: string | null;
 }
+
+export interface IStatusParams {
+  id: number;
+  status: string;
+}

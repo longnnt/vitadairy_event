@@ -7,12 +7,13 @@ const initialState: StateProps = {
     formStartDate: null,
     formEndDate: null,
     provinceInFo: {},
-    openDeleteModal: false,
     isStoreExclusion: false,
     isStoreGroupExclusion: false,
     isCustomerExclusion: false,
     isCustomerGroupExclusion:false,
-    crmTypeIdEdit: 0
+    crmTypeIdEdit: 0,
+    openConfirmDelete: false,
+    idPrizeDelete: 0
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -34,12 +35,6 @@ export const eventPrizeQ1Slice = createSlice({
         setProvinceInFo: (state, action: PayloadAction<IFormCreateProvince>) => {
             state.provinceInFo = action.payload;
         },
-        setOpenDeleteModal: (state) => {
-            state.openDeleteModal = true
-        },
-        setCloseDeleteModal: (state) => {
-            state.openDeleteModal = false;
-        },
         setIsStoreExclusion: (state, action: PayloadAction<boolean>) => {
             state.isStoreExclusion = action.payload;
         },
@@ -54,6 +49,15 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setCrmTypeIdEdit: (state, action: PayloadAction<number>) => {
             state.crmTypeIdEdit = action.payload;
+        },
+        setOpenConfirmDelete: (state) => {
+            state.openConfirmDelete = true
+        },
+        setCloseConfirmDelete: (state) => {
+            state.openConfirmDelete = false
+        },
+        setIdPrizeDelete: (state, action: PayloadAction<number>) => {
+            state.idPrizeDelete = action.payload;
         }
     }
 })
@@ -64,13 +68,14 @@ export const {
     setFormStartDate,
     setFormEndDate,
     setProvinceInFo,
-    setOpenDeleteModal,
-    setCloseDeleteModal,
     setIsStoreExclusion,
     setIsStoreGroupExclusion,
     setIsCustomerExclusion,
     setIsCustomerGroupExclusion,
-    setCrmTypeIdEdit
+    setCrmTypeIdEdit,
+    setOpenConfirmDelete,
+    setCloseConfirmDelete,
+    setIdPrizeDelete
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>

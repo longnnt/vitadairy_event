@@ -1,6 +1,6 @@
 import { API_EVENT_GROUP, API_MANAGE_EVENT, API_PRODUCT } from './../common/constants/apis';
 import axiosInstanceV2 from 'src/common/utils/axiosV2';
-import { IEventGroupParams, IEventSearchParams, IDataListEvent,IPostCreateEvent, IManageEventParams, IDataListEventGroup } from './common/interface';
+import { IEventGroupParams, IEventSearchParams, IDataListEvent,IPostCreateEvent, IManageEventParams, IDataListEventGroup, IStatusParams } from './common/interface';
 import axiosInstance from 'src/common/utils/axios';
 
 export const getListEventAdmin = (params: IManageEventParams) => {
@@ -31,3 +31,7 @@ export const getProductCode = (params: IEventSearchParams) => {
 export const getEventGroup = () => {
   return axiosInstanceV2.get<unknown, IDataListEventGroup>(`${API_EVENT_GROUP}`);
 };
+
+export const patchEventStatus = (data: IStatusParams) => {
+  return axiosInstanceV2.patch(API_MANAGE_EVENT, data)
+}

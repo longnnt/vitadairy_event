@@ -1,4 +1,4 @@
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { Box, Typography, Button, TextField, Stack, Table, TableHead, TableRow, TableBody, TableCell, TableContainer } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { DataGrid, GridColumns, GridActionsCellItem, GridRowModesModel, GridRowModel, GridRowModes, GridRowId } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { randomId } from '@mui/x-data-grid-generator';
 import useDeepEffect from "src/common/hooks/useDeepEffect";
 import { IFormCreateEvent } from "src/event/event-history-prize/interfaces";
+import { TableHeadCustom } from "src/common/components/table";
 
 type Props = {
     dataProvinceAPI?: IProvinceDetail[]
@@ -233,20 +234,11 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
             headerAlign: 'center'
         },
         {
-            field: 'totalPrizeAllCountry',
-            headerName: 'Tổng số giải ở tất cả tỉnh thành',
-            flex: 1,
-            editable: false,
-            sortable: false,
-            type: "number",
-            align: 'center',
-            headerAlign: 'center'
-        },
-        {
             field: 'actions',
             type: 'actions',
             headerName: 'Actions',
             flex: 1,
+
             cellClassName: 'actions',
             getActions: ({ id }) => {
                 return [
@@ -284,7 +276,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                 }
             }
         });
-        
+
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: 'provinceId' },
@@ -294,7 +286,6 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     const processRowUpdate = (row: GridRowModel) => {
         const updatedRow = { ...row, isNew: false } as IProvinceDetail
         const newRow = { ...rows };
-        console.log(rows)
         newRow[row.id] = { ...updatedRow }
         setRows(newRow);
 
@@ -324,7 +315,6 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
 
     useDeepCompareEffect(() => {
         if (dataProvinceAPI && dataProvinceAPI?.length > 0) {
-            console.log(dataProvinceAPI)
             const data: IFormCreateProvince = {}
             dataProvinceAPI.forEach((item: IProvinceDetail) => {
                 const id = randomId()
@@ -365,20 +355,32 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                     Thêm tỉnh thành
                 </Button>
             </Box>
-            <StyledBox>
-                <DataGrid
-                    rows={Object.values(rows)}
-                    columns={columns}
-                    editMode="row"
-                    rowModesModel={rowModesModel}
-                    onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
-                    processRowUpdate={processRowUpdate}
-                    onRowEditStop={() => {
-                        trigger('eventDetailProvinces');
-                    }}
-                    experimentalFeatures={{ newEditingApi: true }}
-                />
-            </StyledBox>
+            <Stack direction={"row"}>
+                <StyledBox sx={{ width: '80%' }}>
+                    <DataGrid
+                        rows={Object.values(rows)}
+                        columns={columns}
+                        editMode="row"
+                        rowModesModel={rowModesModel}
+                        onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+                        processRowUpdate={processRowUpdate}
+                        onRowEditStop={() => {
+                            trigger('eventDetailProvinces');
+                        }}
+                        experimentalFeatures={{ newEditingApi: true }}
+                    />
+                </StyledBox>
+                <TableContainer sx={{ width: '20%' }}>
+                    <Table size="medium">
+                        <TableHeadCustom headLabel={[{ label: 'Tổng số giải ở tất cả tỉnh thành', id: 'totalAllProvince', align: 'center' }]} rowCount={Object.values(rows).length} />
+                        <TableBody>
+                            <TableRow>
+                                <TableCell align="center">sdffsdf</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Stack>
         </>
     )
 }

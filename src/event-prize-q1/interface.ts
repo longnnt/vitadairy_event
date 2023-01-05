@@ -1,4 +1,14 @@
-import { Dayjs } from "dayjs"
+import { Dayjs } from "dayjs";
+
+export interface IListPrizeData {
+    endDate: string | null;
+    startDate: string | null;
+    quantity: number;
+    id: number;
+    giftId: number;
+    eventId: number;
+    ordinal: number;
+}
 
 export interface IPrizeData {
     id: number
@@ -36,12 +46,13 @@ export interface StateProps {
     formStartDate: string | null;
     formEndDate: string | null;
     provinceInFo: IFormCreateProvince;
-    openDeleteModal: boolean;
     isStoreExclusion: boolean;
     isStoreGroupExclusion: boolean;
     isCustomerExclusion: boolean;
     isCustomerGroupExclusion: boolean;
     crmTypeIdEdit: number;
+    openConfirmDelete: boolean;
+    idPrizeDelete: number;
 }
 
 export interface ICountryTableValue {
@@ -236,6 +247,7 @@ export interface IFormSubmitCreate {
     isCustomerGroupExclusion: boolean;
     isStoreExclusion: boolean;
     isStoreGroupExclusion: boolean;
+    id?: number
 }
 
 export interface IFormDataStore {

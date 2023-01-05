@@ -1,12 +1,15 @@
 import { Box, Divider, FormControlLabel, Paper, Switch, Table, TableBody, TableContainer, TablePagination } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { ConfirmEditModal } from "src/common/components/modal/ConfirmEditModal";
 import { TableHeadCustom, TableNoData, TableSkeleton } from "src/common/components/table";
+import useMessage from "src/common/hooks/useMessage";
 import useTable from "src/common/hooks/useTable";
 import { dispatch, useSelector } from "src/common/redux/store";
+import AlertConfirmDelete from "src/event-prize-q1/common/AlertConfirmDelete";
 import { dataTest, HEAD_LABELS } from "src/event-prize-q1/constants";
-import { setCloseDeleteModal } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCloseConfirmDelete, setIdPrizeDelete, setOpenConfirmDelete } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { useDeleteListPrizeAdmin } from "src/event-prize-q1/hooks/useDeleteSinglePrize";
 import { useGetListPrize } from "src/event-prize-q1/hooks/useGetListPrize";
+import { IListPrizeData } from "src/event-prize-q1/interface";
 import PrizeTableRow from "./PrizeTableRow";
 
 export default function ListPrizeTable() {
@@ -20,6 +23,8 @@ export default function ListPrizeTable() {
         onChangeRowsPerPage
     } = useTable();
 
+    const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
+    const { openConfirmDelete, idPrizeDelete } = useSelector((state) => state.eventPrizeQ1);
     const params = useParams();
     const eventId = params?.eventId || '';
 
@@ -29,25 +34,38 @@ export default function ListPrizeTable() {
     const totalRecords = data?.data?.pagination?.totalRecords || 0;
     const isNotFound = (!isLoading && !listPrize.length) || isError;
 
-    const {openDeleteModal} = useSelector((state) => state.eventPrizeQ1)
-
     const handleCloseDeleteModal = () => {
-        dispatch(setCloseDeleteModal());
+        dispatch(setCloseConfirmDelete());
     }
 
+    const { mutate } = useDeleteListPrizeAdmin({
+        onSuccess: () => {
+            showSuccessSnackbar('Xóa giải thưởng thành công');
+        },
+        onError: () => {
+            showErrorSnackbar('Xóa giải thưởng thất bại!');
+        },
+    })
+
     const handleDeleteSingle = () => {
+        if (idPrizeDelete !== 0) {
+            mutate(idPrizeDelete)
+        } else {
+            showErrorSnackbar('Không tìm được thông tin giải thưởng!');
+        }
+        dispatch(setCloseConfirmDelete());
+        dispatch(setIdPrizeDelete(0))
 
     }
 
     return (
         <>
             <Paper elevation={3}>
-                <ConfirmEditModal
-                    open={openDeleteModal}
+                <AlertConfirmDelete
+                    open={openConfirmDelete}
                     handleClose={handleCloseDeleteModal}
-                    handleOnAgree={handleDeleteSingle}
-                    type='Xóa giải thưởng sự kiện'
-                    colorType={false}
+                    handleConfirm={handleDeleteSingle}
+
                 />
                 <TableContainer
                     sx={{ minWidth: 800, position: 'relative' }}
@@ -61,12 +79,12 @@ export default function ListPrizeTable() {
                             rowCount={dataTest.length}
                         />
                         <TableBody>
-                            {/* {listPrize.map((item) => (
+                            {listPrize.map((item: IListPrizeData) => (
                                 <PrizeTableRow
                                     key={item.id}
                                     row={item}
                                 />
-                            ))} */}
+                            ))}
 
                             {isLoading &&
                                 Array.from(Array(rowsPerPage).keys()).map((index) => {

@@ -4,7 +4,7 @@ export interface IListGroupEvent {
 }
 
 export interface IListGroupEventById extends IListGroupEvent {
-  events: number[];
+  events:any[];
 
 }
 
@@ -115,6 +115,6 @@ export interface IEventSelect {
 export type IArrayEvenSelect = Array<IEventSelect>;
 
 export interface IEventSelectProps {
-  value: string;
+  value: number;
   label: string;
 }
