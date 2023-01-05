@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
-import { TableMoreMenu } from 'src/common/components/table';
 import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import { STATUS } from 'src/manage-event-quarter-one/common/constants';
 import { IPropsListEventTableRow } from 'src/manage-event-quarter-one/common/interface';
 import { usePatchEvent } from 'src/manage-event-quarter-one/hooks/usePatchEvent';
 import useMessage from 'src/store-admin/hooks/useMessage';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import TableMoreMenu from './TableMoreMenu';
 // ----------------------------------------------------------------------
 
 function ListEventTableRow({
@@ -102,7 +102,7 @@ function ListEventTableRow({
                                 }}
                             >
                                 <RemoveRedEyeIcon />
-                                Xem danh sách giải thưởng
+                                Xem danh sách giải
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {

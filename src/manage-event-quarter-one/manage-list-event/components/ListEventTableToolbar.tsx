@@ -117,8 +117,8 @@ export const ListEventTableToolbar = (props: { handleSearch: Function }) => {
                   sx={{ width: '100%' }}
                 >
                   <option value=""></option>
-                  <option value={STATUS.ACTIVE}>Hiệu lực</option>
-                  <option value={STATUS.IN_ACTIVE}>Không hiệu lực</option>
+                  <option value={STATUS.ACTIVE}>Active</option>
+                  <option value={STATUS.IN_ACTIVE}>Inactive</option>
                 </RHFSelect>
                 <LoadingButton
                   sx={{ width: '50%' }}
