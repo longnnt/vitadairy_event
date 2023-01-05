@@ -111,7 +111,7 @@ function ListEventTableRow({
                 }}
               >
                 <Iconify icon={'mdi:eye-outline'} />
-                Xem
+                Xem chi tiết
               </MenuItem>
               <MenuItem
                 onClick={() => {
