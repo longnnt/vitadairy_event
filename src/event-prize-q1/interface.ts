@@ -8,6 +8,11 @@ export interface IListPrizeData {
     giftId: number;
     eventId: number;
     ordinal: number;
+    gift: {
+        id: number
+        name: string
+
+    }
 }
 
 export interface IPrizeData {
@@ -22,9 +27,9 @@ export interface IPrizeData {
 export interface IPrizeCreateData {
     giftId: number
     quantity: number
-    startDate: string | null,
-    endDate: string | null,
-    ordinal: number,
+    startDate: string | null
+    endDate: string | null
+    ordinal: number
     status: boolean
     crmTransactionTypeId: number,
     eventDetailProvinces: IProvinceData[]
@@ -53,6 +58,8 @@ export interface StateProps {
     crmTypeIdEdit: number;
     openConfirmDelete: boolean;
     idPrizeDelete: number;
+    countPrizeEvent: number,
+    countPrizeProvince: number
 }
 
 export interface ICountryTableValue {

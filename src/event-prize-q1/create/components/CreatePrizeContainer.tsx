@@ -7,7 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelectPrizeGift } from "./RHFSelectPrizeGift";
 import ProvinceTable from "./ProvinceTable";
 import { useSelector, dispatch } from "src/common/redux/store";
-import { setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCountPrizeProvince, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import { getCrmTransaction, getGift } from "src/event-prize-q1/services";
@@ -22,7 +22,7 @@ import RHFSwitch from "./RHFSwitch";
 import { replacePathParams } from "src/common/utils/replaceParams";
 
 export default function CreatePrizeContainer() {
-    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion } = useSelector(state => state.eventPrizeQ1);
+    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, countPrizeProvince } = useSelector(state => state.eventPrizeQ1);
     const navigate = useNavigate();
     const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
 
@@ -86,6 +86,8 @@ export default function CreatePrizeContainer() {
         dispatch(setIsStoreGroupExclusion(false))
         dispatch(setIsCustomerExclusion(false))
         dispatch(setIsCustomerGroupExclusion(false))
+        dispatch(setCountPrizeProvince(0))
+
 
         navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
     };
@@ -97,6 +99,11 @@ export default function CreatePrizeContainer() {
     const { mutate, isLoading } = useAddEventPrize({ onSuccess, onError })
 
     const onSubmit = (data: any) => {
+
+        if (countPrizeProvince > data.quantity) {
+            return showErrorSnackbar('Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có')
+        }
+
         if (eventId === undefined) {
             return showErrorSnackbar('Không tìm thấy event. Vui lòng thử lại');
         }
@@ -154,6 +161,9 @@ export default function CreatePrizeContainer() {
                             type="number"
                             label="Số lượng tổng giải*"
                             sx={{ width: '30%' }}
+                            onWheelCapture={e => {
+                                (document.activeElement as HTMLElement).blur();
+                            }}
                         />
                     </Stack>
                     <Stack direction={'row'} spacing={3}>
@@ -216,6 +226,10 @@ export default function CreatePrizeContainer() {
                             key={'ordinal'}
                             type="number"
                             label="Thứ tự trúng giải*"
+                            onWheelCapture={e => {
+                                (document.activeElement as HTMLElement).blur();
+                            }}
+
                         />
                     </Stack>
                     <Box sx={{ zIndex: 1001, marginTop: 1 }}>

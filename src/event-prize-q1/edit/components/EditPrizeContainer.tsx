@@ -6,7 +6,7 @@ import { IEventPrize, IFormSubmitCreate, IGiftParams, IPrizeCreateData, IProvinc
 import { DateTimePicker } from '@mui/x-date-pickers';
 import TableCountry from "./TableCountry";
 import { useSelector, dispatch } from "src/common/redux/store";
-import { setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCountPrizeProvince, setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import useMessage from "src/common/hooks/useMessage";
@@ -26,7 +26,7 @@ import { useUpdateEventPrize } from "src/event-prize-q1/hooks/useUpdateEventPriz
 import { replacePathParams } from "src/common/utils/replaceParams";
 
 export default function EditPrizeContainer() {
-    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit } = useSelector(state => state.eventPrizeQ1);
+    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit, countPrizeProvince } = useSelector(state => state.eventPrizeQ1);
     const navigate = useNavigate();
     const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
     const { useDeepCompareEffect } = useDeepEffect();
@@ -35,7 +35,6 @@ export default function EditPrizeContainer() {
 
     const { data: prizeDetail } = useGetDetailPrize(parseInt(prizeId || ''));
     const prizeDataDetail: IEventPrize = prizeDetail?.data?.response || {};
-    console.log('prizeDataDetail', prizeDataDetail)
 
     const { data: giftSelected } = useGetGiftById(prizeDataDetail.giftId)
     const giftSelectedDetail = giftSelected?.data?.response || null;
@@ -92,6 +91,7 @@ export default function EditPrizeContainer() {
         dispatch(setIsStoreGroupExclusion(false))
         dispatch(setIsCustomerExclusion(false))
         dispatch(setIsCustomerGroupExclusion(false))
+        dispatch(setCountPrizeProvince(0))
         
         showSuccessSnackbar('Sửa thông tin giải thành công');
         navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
@@ -105,7 +105,11 @@ export default function EditPrizeContainer() {
     const { mutate, isLoading } = useUpdateEventPrize({ onSuccess, onError })
 
     const onSubmit = (data: any) => {
-        console.log('dataSubmit', data)
+
+        if(countPrizeProvince > data.quantity) {
+            return showErrorSnackbar('Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có')
+        }
+
         let dataSend: IFormSubmitCreate = {
             id: prizeDataDetail?.id,
             quantity: data.quantity,
@@ -136,9 +140,7 @@ export default function EditPrizeContainer() {
             dataSend = { ...dataSend, eventDetailProvinces: array }
         }
 
-        console.log('dataSend',dataSend)
-        // mutate(dataSend)
-
+        mutate(dataSend)
     }
 
     useDeepCompareEffect(() => {
@@ -192,6 +194,9 @@ export default function EditPrizeContainer() {
                             type="number"
                             label="Số lượng tổng giải*"
                             sx={{ width: '30%' }}
+                            onWheelCapture={e => {
+                                (document.activeElement as HTMLElement).blur();
+                            }}
                         />
                     </Stack>
                     <Stack direction={'row'} spacing={3}>
@@ -255,6 +260,9 @@ export default function EditPrizeContainer() {
                             type="number"
                             label="Thứ tự trúng giải*"
                             InputLabelProps={{ shrink: true }}
+                            onWheelCapture={e => {
+                                (document.activeElement as HTMLElement).blur();
+                            }}
                         />
                     </Stack>
                     <Box sx={{ zIndex: 1001, marginTop: 1 }}>

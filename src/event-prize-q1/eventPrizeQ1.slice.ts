@@ -13,7 +13,9 @@ const initialState: StateProps = {
     isCustomerGroupExclusion:false,
     crmTypeIdEdit: 0,
     openConfirmDelete: false,
-    idPrizeDelete: 0
+    idPrizeDelete: 0,
+    countPrizeEvent: 0,
+    countPrizeProvince: 0
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -58,6 +60,12 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setIdPrizeDelete: (state, action: PayloadAction<number>) => {
             state.idPrizeDelete = action.payload;
+        },
+        setCountPrizeEvent: (state, action: PayloadAction<number>) => {
+            state.countPrizeEvent = action.payload;
+        },
+        setCountPrizeProvince: (state, action: PayloadAction<number>) => {
+            state.countPrizeProvince = action.payload;
         }
     }
 })
@@ -75,7 +83,9 @@ export const {
     setCrmTypeIdEdit,
     setOpenConfirmDelete,
     setCloseConfirmDelete,
-    setIdPrizeDelete
+    setIdPrizeDelete,
+    setCountPrizeEvent,
+    setCountPrizeProvince
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>
