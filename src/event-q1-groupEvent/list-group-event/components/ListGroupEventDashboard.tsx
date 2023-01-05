@@ -45,6 +45,7 @@ import ListGroupEventTableNoData from './ListGroupEventTableNoData';
 import { filterNameGroupEventSelector, isConfirmDeleteGroupEventSelector, rowIdGroupEventSelector, setAlert, setFilterName, setIsConfirmDelete, setRowID } from 'src/event-q1-groupEvent/groupEvent.slice';
 import { useGetListGroupEvents } from 'src/event-q1-groupEvent/hooks/useGetListGroupEvents';
 import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGroupEvent';
+import LoadingSkeletonListGroupEventPage from './SkeletonPageListGroupEvent';
   
   function ListGroupEventDashboard() {
     const {
@@ -132,6 +133,8 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
 
     return (
       <>
+      {isLoading ? <LoadingSkeletonListGroupEventPage/> :
+      <>
         <HeaderBreadcrumbs
           heading= {BREADCUMBS.LIST_GROUP_EVENT}
           links={[
@@ -211,6 +214,8 @@ import { useDeleteGroupEvent } from 'src/event-q1-groupEvent/hooks/useDeleteGrou
             />
           </Box>
         </Card>
+      </>
+      }
       </>
     );
   }
