@@ -16,10 +16,10 @@ import { createEventPrizeValidate } from "src/event-prize-q1/prize.schema";
 import { useGetListProvince } from "src/event-prize-q1/hooks/useGetListProvince";
 import { useAddEventPrize } from "src/event-prize-q1/hooks/useAddEventPrize";
 import useMessage from "src/common/hooks/useMessage";
-import { FORMAT_DATE_NEWS } from "src/common/constants/common.constants";
 import dayjs from "dayjs";
 import RHFSwitch from "./RHFSwitch";
 import { replacePathParams } from "src/common/utils/replaceParams";
+import { FORMAT_DATE_NEWS } from "src/common/constants/common.constants";
 
 export default function CreatePrizeContainer() {
     const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, countPrizeProvince } = useSelector(state => state.eventPrizeQ1);
@@ -111,8 +111,8 @@ export default function CreatePrizeContainer() {
             quantity: data.quantity,
             eventId: parseInt(eventId),
             giftId: data.giftId.value,
-            startDate: data.startDate || null,
-            endDate: data.startDate || null,
+            startDate: formStartDate,
+            endDate: formEndDate,
             ordinal: data.ordinal,
             status: data.status,
             crmTransactionTypeId: data.crmTransactionTypeId.value,
@@ -135,6 +135,11 @@ export default function CreatePrizeContainer() {
             })
             dataSend = { ...dataSend, eventDetailProvinces: array }
         }
+
+        if(formStartDate || formEndDate) {
+            dataSend.eventDetailProvinces = [];
+        }
+        
         mutate(dataSend)
     }
 

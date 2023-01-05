@@ -4,7 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { FormProvider, RHFTextField } from "src/common/components/hook-form";
 import { IEventPrize, IFormSubmitCreate, IGiftParams, IPrizeCreateData, IProvinceData, ISelectType } from "src/event-prize-q1/interface";
 import { DateTimePicker } from '@mui/x-date-pickers';
-import TableCountry from "./TableCountry";
 import { useSelector, dispatch } from "src/common/redux/store";
 import { setCountPrizeProvince, setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,10 +11,8 @@ import { PATH_DASHBOARD } from "src/common/routes/paths";
 import useMessage from "src/common/hooks/useMessage";
 import { useGetListProvince } from "src/event-prize-q1/hooks/useGetListProvince";
 import { createEventPrizeValidate } from "src/event-prize-q1/prize.schema";
-import { useAddEventPrize } from "src/event-prize-q1/hooks/useAddEventPrize";
 import dayjs from "dayjs";
-import { getCrmTransaction, getGift } from "src/event-prize-q1/services";
-import { FORMAT_DATE_NEWS } from "src/store-admin/constants";
+import { getCrmTransaction } from "src/event-prize-q1/services";
 import RHFSwitch from "src/event-prize-q1/create/components/RHFSwitch";
 import ProvinceTable from "src/event-prize-q1/create/components/ProvinceTable";
 import { useGetDetailPrize } from "src/event-prize-q1/hooks/useGetDetailPrize";
@@ -24,6 +21,7 @@ import useDeepEffect from "src/common/hooks/useDeepEffect";
 import { RHFSelectPaginationSingle } from "./RHFSelectPaginationSingle";
 import { useUpdateEventPrize } from "src/event-prize-q1/hooks/useUpdateEventPrize";
 import { replacePathParams } from "src/common/utils/replaceParams";
+import { FORMAT_DATE_NEWS } from "src/common/constants/common.constants";
 
 export default function EditPrizeContainer() {
     const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit, countPrizeProvince } = useSelector(state => state.eventPrizeQ1);
@@ -115,8 +113,8 @@ export default function EditPrizeContainer() {
             quantity: data.quantity,
             eventId: parseInt(eventId || ''),
             giftId: prizeDataDetail?.giftId,
-            startDate: data.startDate || null,
-            endDate: data.startDate || null,
+            startDate: formStartDate,
+            endDate: formEndDate,
             ordinal: data.ordinal,
             status: data.status,
             crmTransactionTypeId: crmTypeIdEdit,
@@ -138,6 +136,10 @@ export default function EditPrizeContainer() {
                 array.push(dataConvert)
             })
             dataSend = { ...dataSend, eventDetailProvinces: array }
+        }
+
+        if(formStartDate || formEndDate) {
+            dataSend.eventDetailProvinces = []
         }
 
         mutate(dataSend)

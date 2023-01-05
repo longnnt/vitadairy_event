@@ -243,8 +243,8 @@ export interface IFormSubmitCreate {
     quantity: number;
     eventId: number;
     giftId: number;
-    startDate?: Dayjs | Date | string;
-    endDate?: Dayjs | Date | string;
+    startDate?: Dayjs | Date | string | null;
+    endDate?: Dayjs | Date | string | null;
     ordinal: number;
     status: boolean;
     crmTransactionTypeId: number;
