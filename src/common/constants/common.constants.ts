@@ -69,7 +69,7 @@ export const BREADCUMBS = {
   VIEW_GROUP_EVENT: 'Chi tiết Group Event',
 
   EVENT_HISTORY_PRIZE : 'Lịch sử trúng giải',
-
+  EVENT_PROMOTION_Q1: 'Sự kiện Promotion Quý 1'
 };
 
 export const CACHE_TIME = 2 * 1000 * 60;
