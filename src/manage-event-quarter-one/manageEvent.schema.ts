@@ -51,7 +51,6 @@ export const schemaEditManageEvent = yup
   .object()
   .shape({
     name: yup.string().required('Vui lòng nhập tên sự kiện'),
-    eventGroupId: yup.mixed().required("Vui lòng chọn giá trị"),
     startDate: yup.string()
       .required('Vui lòng nhập thông tin')
       .typeError('Vui lòng nhập thông tin'),

@@ -192,11 +192,6 @@ function EditEventDashboard() {
                       searchParams={searchParamsPaginate}
                       error={errors}
                     />
-                    {errors && (
-                      <FormHelperText error sx={{ marginLeft: '10px' }}>
-                        {errors?.eventGroupId?.message}
-                      </FormHelperText>
-                    )}
                   </Box>
                 </Stack>
               </Stack>
