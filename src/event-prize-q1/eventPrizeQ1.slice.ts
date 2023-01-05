@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import { ICountryTableValue, IFormCreateProvince, StateProps } from "./interface";
+import { GridRowId } from "@mui/x-data-grid";
 
 const initialState: StateProps = {
     fields: [],
@@ -13,7 +14,10 @@ const initialState: StateProps = {
     isCustomerGroupExclusion:false,
     crmTypeIdEdit: 0,
     openConfirmDelete: false,
-    idPrizeDelete: 0
+    idPrizeDelete: 0,
+    countPrizeEvent: 0,
+    countPrizeProvince: 0,
+    rowProvinceId: null
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -58,6 +62,15 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setIdPrizeDelete: (state, action: PayloadAction<number>) => {
             state.idPrizeDelete = action.payload;
+        },
+        setCountPrizeEvent: (state, action: PayloadAction<number>) => {
+            state.countPrizeEvent = action.payload;
+        },
+        setCountPrizeProvince: (state, action: PayloadAction<number>) => {
+            state.countPrizeProvince = action.payload;
+        },
+        setRowProvinceId: (state, action: PayloadAction<GridRowId | null>) => {
+            state.rowProvinceId = action.payload;
         }
     }
 })
@@ -75,7 +88,10 @@ export const {
     setCrmTypeIdEdit,
     setOpenConfirmDelete,
     setCloseConfirmDelete,
-    setIdPrizeDelete
+    setIdPrizeDelete,
+    setCountPrizeEvent,
+    setCountPrizeProvince,
+    setRowProvinceId
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>

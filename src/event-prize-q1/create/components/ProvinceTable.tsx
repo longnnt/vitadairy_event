@@ -2,8 +2,8 @@ import { Box, Typography, Button, TextField, Stack, Table, TableHead, TableRow, 
 import AddIcon from '@mui/icons-material/Add';
 import { DataGrid, GridColumns, GridActionsCellItem, GridRowModesModel, GridRowModel, GridRowModes, GridRowId } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useSelector } from "src/common/redux/store";
-import { setProvinceInFoSelector } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { dispatch, useSelector } from "src/common/redux/store";
+import { setCloseConfirmDelete, setCountPrizeProvince, setOpenConfirmDelete, setProvinceInFoSelector, setRowProvinceId } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { Controller, useFormContext } from "react-hook-form";
 import { IFormCreate, IFormCreateProvince, IProvinceDetail, ISelectType } from "src/event-prize-q1/interface";
 import { useGetListProvince } from "src/event-prize-q1/hooks/useGetListProvince";
@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { randomId } from '@mui/x-data-grid-generator';
 import useDeepEffect from "src/common/hooks/useDeepEffect";
 import { IFormCreateEvent } from "src/event/event-history-prize/interfaces";
-import { TableHeadCustom } from "src/common/components/table";
+import AlertConfirmDelete from "src/event-prize-q1/common/AlertConfirmDelete";
 
 type Props = {
     dataProvinceAPI?: IProvinceDetail[]
@@ -27,6 +27,8 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     const [rows, setRows] = useState<IFormCreateProvince>({});
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
     const { useDeepCompareEffect } = useDeepEffect();
+
+    const { openConfirmDelete, rowProvinceId } = useSelector(state => state.eventPrizeQ1);
 
     const provinceSelector = useSelector(setProvinceInFoSelector);
 
@@ -246,7 +248,10 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                         key={id}
                         label="Delete"
                         icon={<DeleteIcon />}
-                        onClick={handleDeleteClick(id)}
+                        onClick={() => {
+                            dispatch(setRowProvinceId(id))
+                            dispatch(setOpenConfirmDelete())
+                        }}
                         color="inherit"
                     />,
                 ];
@@ -261,6 +266,12 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
 
     useEffect(() => {
         setValue('eventDetailProvinces', rows);
+
+        let countPrize = 0;
+        Object.values(rows).map((item) => {
+            countPrize += item.quantity;
+        })
+        dispatch(setCountPrizeProvince(countPrize))
     }, [rows])
 
     const handleClickAddnewRow = () => {
@@ -284,7 +295,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     }
 
     const processRowUpdate = (row: GridRowModel) => {
-        const updatedRow = { ...row, isNew: false } as IProvinceDetail
+        const updatedRow = { ...row, isNew: false, quantity: parseInt(row.quantity) } as IProvinceDetail
         const newRow = { ...rows };
         newRow[row.id] = { ...updatedRow }
         setRows(newRow);
@@ -292,10 +303,16 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
         return updatedRow;
     }
 
-    const handleDeleteClick = (id: GridRowId) => () => {
-        const { [id]: rowDelete, ...newRows } = rows;
+    const handleDeleteClick = () => {
+        console.log('rowProvinceId', rowProvinceId)
+        if(!rowProvinceId) {
+            return console.log('không tìm thấy rowId')
+         }
+        const { [rowProvinceId || '']: rowDelete, ...newRows } = rows;
         setRows(newRows);
         setValue('eventDetailProvinces', newRows);
+        dispatch(setCloseConfirmDelete());
+        dispatch(setRowProvinceId(null));
     };
 
     useDeepCompareEffect(() => {
@@ -316,6 +333,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     useDeepCompareEffect(() => {
         if (dataProvinceAPI && dataProvinceAPI?.length > 0) {
             const data: IFormCreateProvince = {}
+            let countPrize = 0;
             dataProvinceAPI.forEach((item: IProvinceDetail) => {
                 const id = randomId()
                 data[id] = {
@@ -326,14 +344,22 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                     endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
                     isNew: false
                 }
+                countPrize += item.quantity
             })
-            setRows({ ...rows, ...data })
-            setValue('eventDetailProvinces', { ...rows, ...data });
+            setRows(data);
+            setValue('eventDetailProvinces', data);
+            dispatch(setCountPrizeProvince(countPrize))
+
         }
     }, [dataProvinceAPI])
 
     return (
         <>
+            <AlertConfirmDelete 
+                open={openConfirmDelete}
+                handleClose={() => dispatch(setCloseConfirmDelete())}
+                handleConfirm={handleDeleteClick}
+            />
             <Box
                 sx={{
                     width: '100%',
@@ -370,12 +396,14 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                         experimentalFeatures={{ newEditingApi: true }}
                     />
                 </StyledBox>
-                <TableContainer sx={{ width: '20%' }}>
+                <TableContainer sx={{ width: '20%', overflow: 'hidden' }}>
                     <Table size="medium">
-                        <TableHeadCustom headLabel={[{ label: 'Tổng số giải ở tất cả tỉnh thành', id: 'totalAllProvince', align: 'center' }]} rowCount={Object.values(rows).length} />
+                        <TableHead sx={{ width: '100%', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <TableCell align="center" sx={{ background: 'white' }}>Tổng số giải đã trúng ở tất cả tỉnh thành</TableCell>
+                        </TableHead>
                         <TableBody>
                             <TableRow>
-                                <TableCell align="center">sdffsdf</TableCell>
+                                <TableCell align="center">0</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

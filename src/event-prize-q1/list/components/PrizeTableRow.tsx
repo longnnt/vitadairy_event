@@ -19,9 +19,6 @@ export default function PrizeTableRow({ row }: Props) {
     const navigate = useNavigate();
     const [openMenu, setOpenMenu] = useState<HTMLElement | null>(null);
 
-    const {data: giftRes} = useGetGiftById(row.giftId);
-    const giftDetail = giftRes?.data?.response;
-
     const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
         setOpenMenu(e.currentTarget)
     }
@@ -36,7 +33,7 @@ export default function PrizeTableRow({ row }: Props) {
                 {row.id}
             </TableCell>
             <TableCell align="center">
-                {giftDetail?.name}
+                {row.gift.name}
             </TableCell>
             <TableCell align="center">
                 {row.quantity}

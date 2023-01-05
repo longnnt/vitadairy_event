@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { GridRowId } from "@mui/x-data-grid";
 
 export interface IListPrizeData {
     endDate: string | null;
@@ -8,6 +9,7 @@ export interface IListPrizeData {
     giftId: number;
     eventId: number;
     ordinal: number;
+    gift: IGift
 }
 
 export interface IPrizeData {
@@ -22,9 +24,9 @@ export interface IPrizeData {
 export interface IPrizeCreateData {
     giftId: number
     quantity: number
-    startDate: string | null,
-    endDate: string | null,
-    ordinal: number,
+    startDate: string | null
+    endDate: string | null
+    ordinal: number
     status: boolean
     crmTransactionTypeId: number,
     eventDetailProvinces: IProvinceData[]
@@ -53,6 +55,10 @@ export interface StateProps {
     crmTypeIdEdit: number;
     openConfirmDelete: boolean;
     idPrizeDelete: number;
+    countPrizeEvent: number;
+    countPrizeProvince: number;
+    rowProvinceId: GridRowId | null;
+
 }
 
 export interface ICountryTableValue {
@@ -237,8 +243,8 @@ export interface IFormSubmitCreate {
     quantity: number;
     eventId: number;
     giftId: number;
-    startDate?: Dayjs | Date | string;
-    endDate?: Dayjs | Date | string;
+    startDate?: Dayjs | Date | string | null;
+    endDate?: Dayjs | Date | string | null;
     ordinal: number;
     status: boolean;
     crmTransactionTypeId: number;
