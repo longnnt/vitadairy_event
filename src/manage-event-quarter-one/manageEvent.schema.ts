@@ -4,11 +4,21 @@ export const schemaAddManageEvent = yup
   .object()
   .shape({
 name: yup.string().required('Vui lòng nhập tên sự kiện'),
-startDate: yup.date().typeError('Vui lòng chọn ngày bắt đầu'),
-endDate: yup.date().typeError('Vui lòng chọn ngày kết thúc').min(
-  yup.ref('startDate'),
-  "Ngày kết thúc phải sau ngày bắt đầu"
-),
+startDate: yup.date()
+      .required('Vui lòng nhập thông tin')
+      .typeError('Vui lòng nhập thông tin'),
+      endDate: yup.date()
+      .required('Vui lòng nhập thông tin')
+      .typeError('Vui lòng nhập thông tin')
+      .when('startDate', (eventStartDate, schema) => {
+        return (
+          eventStartDate &&
+          schema.test(
+            'test date',"Ngày kết thúc phải sau ngày bắt đầu",
+            (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime()
+          )
+        );
+      }),
 eventCustomerLimit: yup.number().required('Vui lòng nhập số giải').transform((value) => (isNaN(value) ? undefined : value)),
 eventStoreLimit: yup.number().required('Vui lòng nhập số giải').transform((value) => (isNaN(value) ? undefined : value)),
     skus: yup
@@ -42,11 +52,21 @@ export const schemaEditManageEvent = yup
   .shape({
     name: yup.string().required('Vui lòng nhập tên sự kiện'),
     eventGroupId: yup.mixed().required("Vui lòng chọn giá trị"),
-    endDate: yup.date().typeError('Vui lòng chọn ngày kết thúc').min(
-      yup.ref('startDate'),
-      "Ngày kết thúc sau ngày bắt đầu"
-    ),
-    startDate: yup.date().typeError('Vui lòng chọn ngày bắt đầu'),
+    startDate: yup.string()
+      .required('Vui lòng nhập thông tin')
+      .typeError('Vui lòng nhập thông tin'),
+      endDate: yup.string()
+      .required('Vui lòng nhập thông tin')
+      .typeError('Vui lòng nhập thông tin')
+      .when('startDate', (eventStartDate, schema) => {
+        return (
+          eventStartDate &&
+          schema.test(
+            'test date',"Ngày kết thúc phải sau ngày bắt đầu",
+            (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime()
+          )
+        );
+      }),
     eventCustomerLimit: yup.number().required().typeError('Vui lòng chọn giới hạn trúng giải người dùng').min(1, 'Vui lòng nhập số giải'),
     eventStoreLimit: yup.number().required().typeError('Vui lòng chọn giới hạn trúng giải cửa hàng').min(1, 'Vui lòng nhập số giải'),
     skus: yup
