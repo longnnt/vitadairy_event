@@ -93,6 +93,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId'),
     create: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/create'),
     edit: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/:prizeId'),
+    detail: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/:prizeId/detail')
   },
   
 

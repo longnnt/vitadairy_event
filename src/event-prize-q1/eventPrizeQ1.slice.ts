@@ -1,3 +1,4 @@
+import { boolean } from 'yup';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import { ICountryTableValue, IFormCreateProvince, StateProps } from "./interface";
@@ -17,7 +18,8 @@ const initialState: StateProps = {
     idPrizeDelete: 0,
     countPrizeEvent: 0,
     countPrizeProvince: 0,
-    rowProvinceId: null
+    rowProvinceId: null,
+    statusPrize: true
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -71,6 +73,9 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setRowProvinceId: (state, action: PayloadAction<GridRowId | null>) => {
             state.rowProvinceId = action.payload;
+        },
+        setStatusPrize: (state, action: PayloadAction<boolean>) => {
+            state.statusPrize = action.payload;
         }
     }
 })
@@ -91,7 +96,8 @@ export const {
     setIdPrizeDelete,
     setCountPrizeEvent,
     setCountPrizeProvince,
-    setRowProvinceId
+    setRowProvinceId,
+    setStatusPrize
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>

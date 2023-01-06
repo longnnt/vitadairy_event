@@ -115,6 +115,7 @@ export default function Router() {
                         { path: 'event-q1-prize/event-:eventId', element: <ListEventQ1Prize /> },
                         { path: 'event-q1-prize/event-:eventId/:prizeId', element: <EditEventPrizeQ1 /> },
                         { path: 'event-q1-prize/event-:eventId/create', element: <CreateEventPrizeQ1 /> },
+                        {path: 'event-q1-prize/event-:eventId/:prizeId/detail', element: <EventQ1PrizeDetail />}
                         
                     ]
                 },
@@ -202,6 +203,7 @@ const EditEventPrize = Loadable(lazy(() => import('../../event/edit-event-prize/
 const ListEventQ1Prize = Loadable(lazy(() => import('../../event-prize-q1/list')));
 const EditEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/edit')));
 const CreateEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/create')));
+const EventQ1PrizeDetail = Loadable(lazy(() => import('../../event-prize-q1/detail')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));

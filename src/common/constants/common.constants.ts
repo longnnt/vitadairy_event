@@ -58,9 +58,10 @@ export const BREADCUMBS = {
 
   EVENT_Q1: 'Sự kiện quý 1',
   EVENT_PRIZE: 'Giải thưởng sự kiện',
-  EVENT_PRIZE_LIST: 'Quản lý giải',
-  EVENT_PRIZE_CREATE: 'Tạo giải',
+  EVENT_PRIZE_LIST: 'Danh sách giải',
+  EVENT_PRIZE_CREATE: 'Tạo mới giải',
   EVENT_PRIZE_EDIT: 'Chỉnh sửa giải',
+  EVENT_PRIZE_DETAIL: 'Thông tin giải',
 
   MANAGE_GROUP_EVENT: 'Quản lý Group Event',
   LIST_GROUP_EVENT: 'Danh sách Group Event',

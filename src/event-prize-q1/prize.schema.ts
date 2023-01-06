@@ -21,7 +21,7 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
             .test('test province id', 'this field is required', (val) =>
                 provinceIds.includes(val as number)
             ),
-        quantity: Yup.mixed(),
+        quantity: Yup.mixed().required('Số lượng không được để trống'),
         startDate: Yup.string()
             .required('This field is required')
             .typeError('Must be a string'),
@@ -38,14 +38,14 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
         crmTransactionTypeId: Yup.mixed().required('Vui lòng chọn CRM Transaction Type'),
         eventDetailProvinces: Yup.lazy((value: IFormCreateProvince) => {
             const validationObject: any = {};
-            if(value !== undefined && value !== null){
+            if (value !== undefined && value !== null) {
                 Object.keys(value).map((item) => {
                     validationObject[item] = eventDetailProvincesSchema;
                 });
             }
             return Yup.object()
                 .shape({ ...validationObject })
-                // .required();
+            // .required();
         }),
     });
     return createEventPrizeSchema;
@@ -71,7 +71,7 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
             .test('test province id', 'Không được để trống', (val) =>
                 provinceIds.includes(val as number)
             ),
-        quantity: Yup.mixed(),
+        quantity: Yup.mixed().required('Số lượng không được để trống'),
         startDate: Yup.string()
             .required('Không được để trống')
             .typeError('Phải là một chuỗi'),
@@ -87,14 +87,14 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
         crmTransactionTypeId: Yup.mixed().required('Vui lòng chọn CRM Transaction Type'),
         eventDetailProvinces: Yup.lazy((value: IFormCreateProvince) => {
             const validationObject: any = {};
-            if(value !== undefined && value !== null){
+            if (value !== undefined && value !== null) {
                 Object.keys(value).map((item) => {
                     validationObject[item] = eventDetailProvincesSchema;
                 });
             }
             return Yup.object()
                 .shape({ ...validationObject })
-                // .required();
+            // .required();
         }),
     });
     return edittEventPrizeSchema;

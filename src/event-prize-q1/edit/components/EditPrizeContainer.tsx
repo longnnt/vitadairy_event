@@ -5,7 +5,7 @@ import { FormProvider, RHFTextField } from "src/common/components/hook-form";
 import { IEventPrize, IFormSubmitCreate, IGiftParams, IPrizeCreateData, IProvinceData, ISelectType } from "src/event-prize-q1/interface";
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { useSelector, dispatch } from "src/common/redux/store";
-import { setCountPrizeProvince, setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCountPrizeProvince, setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion, setStatusPrize } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import useMessage from "src/common/hooks/useMessage";
@@ -24,7 +24,7 @@ import { replacePathParams } from "src/common/utils/replaceParams";
 import { FORMAT_DATE_NEWS } from "src/common/constants/common.constants";
 
 export default function EditPrizeContainer() {
-    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit, countPrizeProvince } = useSelector(state => state.eventPrizeQ1);
+    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit, countPrizeProvince, statusPrize } = useSelector(state => state.eventPrizeQ1);
     const navigate = useNavigate();
     const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
     const { useDeepCompareEffect } = useDeepEffect();
@@ -81,8 +81,7 @@ export default function EditPrizeContainer() {
     } = methods
 
     const onSuccess = () => {
-        dispatch(setCrmTypeIdEdit(0))
-        dispatch(setCrmTypeIdEdit(0))
+        dispatch(setCrmTypeIdEdit(0));
         dispatch(setFormStartDate(null));
         dispatch(setFormEndDate(null));
         dispatch(setIsStoreExclusion(false))
@@ -103,7 +102,6 @@ export default function EditPrizeContainer() {
     const { mutate, isLoading } = useUpdateEventPrize({ onSuccess, onError })
 
     const onSubmit = (data: any) => {
-
         if(countPrizeProvince > data.quantity) {
             return showErrorSnackbar('Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có')
         }
@@ -116,7 +114,7 @@ export default function EditPrizeContainer() {
             startDate: formStartDate,
             endDate: formEndDate,
             ordinal: data.ordinal,
-            status: data.status,
+            status: statusPrize,
             crmTransactionTypeId: crmTypeIdEdit,
             isCustomerExclusion: isCustomerExclusion,
             isCustomerGroupExclusion: isCustomerExclusion ? isCustomerGroupExclusion : false,
@@ -141,7 +139,6 @@ export default function EditPrizeContainer() {
         if(formStartDate || formEndDate) {
             dataSend.eventDetailProvinces = []
         }
-
         mutate(dataSend)
     }
 
@@ -153,7 +150,6 @@ export default function EditPrizeContainer() {
                 startDate: prizeDataDetail.startDate,
                 endDate: prizeDataDetail.endDate,
                 ordinal: prizeDataDetail.ordinal,
-                status: prizeDataDetail.status,
                 crmTransactionTypeId: prizeDataDetail.crmTransactionTypeId
             };
             reset(data);
@@ -164,6 +160,7 @@ export default function EditPrizeContainer() {
             dispatch(setIsStoreGroupExclusion(prizeDataDetail.isStoreGroupExclusion))
             dispatch(setIsCustomerExclusion(prizeDataDetail.isCustomerExclusion))
             dispatch(setIsCustomerGroupExclusion(prizeDataDetail.isCustomerGroupExclusion))
+            dispatch(setStatusPrize(prizeDataDetail.status))
         }
     }, [prizeDataDetail]);
 
@@ -269,12 +266,12 @@ export default function EditPrizeContainer() {
                     </Stack>
                     <Box sx={{ zIndex: 1001, marginTop: 1 }}>
                         <RHFSelectPaginationSingle
-                            name={'crmTransactionTypeId'}
+                            name={'crmTransactionTypeId*'}
                             getAsyncData={getCrmTransaction}
                             searchParams={{ page: 0 }}
                             placeholder="CRM Transaction Type"
                             error={errors}
-                            defaultvalue={82}
+                            defaultvalue={prizeDataDetail?.crmTransactionTypeId}
                         />
                         <FormHelperText error sx={{ marginLeft: '10px' }}>
                             {errors?.crmTransactionTypeId?.message}
@@ -299,7 +296,12 @@ export default function EditPrizeContainer() {
                             </Stack>
                             <Stack justifyContent={'space-between'} alignItems={'center'} direction="row" sx={{ width: "65%" }}>
                                 <Typography variant="body1">Trạng thái giải</Typography>
-                                <RHFSwitch name="status" label="" checked />
+                                 <RHFSwitch
+                                    name="status"
+                                    label=""
+                                    data={statusPrize}
+                                    onChange={() => dispatch(setStatusPrize(!statusPrize))}
+                                />
                             </Stack>
                         </Box>
                         <Box sx={{ width: '50%' }}>
@@ -317,7 +319,7 @@ export default function EditPrizeContainer() {
                                 <RHFSwitch
                                     name="isCustomerGroupExclusion"
                                     label=""
-                                    data={isCustomerGroupExclusion} onChange={() => dispatch(setIsCustomerGroupExclusion(!isCustomerExclusion))}
+                                    data={isCustomerGroupExclusion} onChange={() => dispatch(setIsCustomerGroupExclusion(!isCustomerGroupExclusion))}
                                     disabledCheck={!isCustomerExclusion}
                                 />
                             </Stack>
