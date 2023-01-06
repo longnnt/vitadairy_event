@@ -280,7 +280,7 @@ function ViewEventDashboard() {
                   label="Giới hạn trúng giải trên tệp cửa hàng*"
                   disabled
                 />
-                <RHFSwitch name={'eventStatus'} label="Trạng thái" disabled />
+                <Switch name={'eventStatus'} checked={watch().eventStatus} disabled />
               </Stack>
 
               <Box sx={{ zIndex: 1001 }}>
