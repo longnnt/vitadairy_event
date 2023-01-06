@@ -20,7 +20,7 @@ export function useDeleteEventId(callback: IManageEventAdminCallback) {
           });
         callback.onSuccess && callback.onSuccess();
       } else {
-        showErrorSnackbar('Sự kiện này không thể xóa');
+        showErrorSnackbar('Sự kiện này đã có người trúng giải không thể xóa');
       }
     },
     onError: (error, _variables) => {
