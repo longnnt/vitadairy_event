@@ -152,7 +152,7 @@ export default function CreatePrizeContainer() {
             <Paper elevation={3} sx={{ p: 3 }}>
                 <Stack spacing={3}>
                     <Stack direction={'row'} spacing={3}>
-                        <Box sx={{ width: '70%', zIndex: 1999 }}>
+                        <Box sx={{ width: '70%', zIndex: 1100 }}>
                             <RHFSelectPrizeGift
                                 name={'giftId'}
                                 placeholder="Tên giải*"

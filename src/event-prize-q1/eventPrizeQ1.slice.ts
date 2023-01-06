@@ -14,6 +14,7 @@ const initialState: StateProps = {
     isCustomerExclusion: false,
     isCustomerGroupExclusion:false,
     crmTypeIdEdit: 0,
+    giftIdEdit: 0,
     openConfirmDelete: false,
     idPrizeDelete: 0,
     countPrizeEvent: 0,
@@ -56,6 +57,9 @@ export const eventPrizeQ1Slice = createSlice({
         setCrmTypeIdEdit: (state, action: PayloadAction<number>) => {
             state.crmTypeIdEdit = action.payload;
         },
+        setGiftIdEdit: (state, action: PayloadAction<number>) => {
+            state.giftIdEdit = action.payload;
+        },
         setOpenConfirmDelete: (state) => {
             state.openConfirmDelete = true
         },
@@ -91,6 +95,7 @@ export const {
     setIsCustomerExclusion,
     setIsCustomerGroupExclusion,
     setCrmTypeIdEdit,
+    setGiftIdEdit,
     setOpenConfirmDelete,
     setCloseConfirmDelete,
     setIdPrizeDelete,

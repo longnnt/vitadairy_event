@@ -60,6 +60,7 @@ export interface StateProps {
     isCustomerExclusion: boolean;
     isCustomerGroupExclusion: boolean;
     crmTypeIdEdit: number;
+    giftIdEdit: number;
     openConfirmDelete: boolean;
     idPrizeDelete: number;
     countPrizeEvent: number;

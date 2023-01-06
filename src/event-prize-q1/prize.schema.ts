@@ -28,7 +28,7 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
     });
 
     const createEventPrizeSchema = Yup.object().shape({
-        giftId: Yup.mixed().required('Vui lòng nhập tên giải').typeError('Must be a number'),
+        giftId: Yup.mixed().required('Vui lòng nhập tên giải'),
         ordinal: Yup.number()
             .required('Vui lòng nhập thứ tự trúng giải')
             .typeError('Giá trị nhập phải là số'),
@@ -78,6 +78,7 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
     });
 
     const edittEventPrizeSchema = Yup.object().shape({
+        giftId: Yup.mixed().required('Vui lòng nhập tên giải'),
         ordinal: Yup.number()
             .required('Vui lòng nhập thứ tự trúng giải')
             .typeError('Giá trị nhập phải là số'),
