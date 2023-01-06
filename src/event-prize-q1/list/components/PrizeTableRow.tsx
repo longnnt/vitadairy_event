@@ -1,4 +1,4 @@
-import { MenuItem, TableCell, TableRow } from "@mui/material";
+import { Link, MenuItem, TableCell, TableRow } from "@mui/material";
 import { useState } from "react";
 import Iconify from "src/common/components/Iconify";
 import { TableMoreMenu } from "src/common/components/table";
@@ -7,9 +7,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import { replacePathParams } from "src/common/utils/replaceParams";
-import { useGetGiftById } from "src/event/edit-event-prize/hooks/useGetGiftById";
 import { dispatch } from "src/common/redux/store";
 import { setIdPrizeDelete, setOpenConfirmDelete } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { FORMAT_DATE_FILTER } from "src/common/constants/common.constants";
+import dayjs from "dayjs";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 type Props = {
     row: IListPrizeData
@@ -27,22 +29,26 @@ export default function PrizeTableRow({ row }: Props) {
         setOpenMenu(null);
     }
 
+    const handleViewDetailPrize = () => {
+        navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.detail, { eventId: row.eventId, prizeId: row.id }))
+    }
+
     return (
         <TableRow hover>
             <TableCell align="center">
                 {row.id}
             </TableCell>
-            <TableCell align="center">
-                {row.gift.name}
+            <TableCell align="center" onClick={handleViewDetailPrize}>
+                <Link sx={{ cursor: 'pointer' }} underline="always">{row.gift.name}</Link>
             </TableCell>
             <TableCell align="center">
                 {row.quantity}
             </TableCell>
-            <TableCell align="center">
-                {row.startDate || '-'}
+            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                {dayjs(row.startDate).isValid() ? dayjs(row.startDate).format(FORMAT_DATE_FILTER) : ''}
             </TableCell>
-            <TableCell align="center">
-                {row.endDate || '-'}
+            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                {dayjs(row.endDate).isValid() ? dayjs(row.endDate).format(FORMAT_DATE_FILTER) : ''}
             </TableCell>
             <TableCell align="center">
                 {row.ordinal}
@@ -56,7 +62,7 @@ export default function PrizeTableRow({ row }: Props) {
                         <>
                             <MenuItem
                                 onClick={() => {
-                                    navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.edit, {eventId: row.eventId, prizeId: row.id}))
+                                    navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.edit, { eventId: row.eventId, prizeId: row.id }))
                                     handleCloseMenu();
                                 }}
                             >

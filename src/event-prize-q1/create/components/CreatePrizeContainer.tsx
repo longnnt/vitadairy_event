@@ -7,7 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelectPrizeGift } from "./RHFSelectPrizeGift";
 import ProvinceTable from "./ProvinceTable";
 import { useSelector, dispatch } from "src/common/redux/store";
-import { setCountPrizeProvince, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCountPrizeProvince, setFormEndDate, setFormStartDate, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion, setStatusPrize } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import { getCrmTransaction, getGift } from "src/event-prize-q1/services";
@@ -22,7 +22,7 @@ import { replacePathParams } from "src/common/utils/replaceParams";
 import { FORMAT_DATE_NEWS } from "src/common/constants/common.constants";
 
 export default function CreatePrizeContainer() {
-    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, countPrizeProvince } = useSelector(state => state.eventPrizeQ1);
+    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, countPrizeProvince, statusPrize } = useSelector(state => state.eventPrizeQ1);
     const navigate = useNavigate();
     const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
 
@@ -54,7 +54,7 @@ export default function CreatePrizeContainer() {
             isStoreExclusion: false,
             isCustomerGroupExclusion: false,
             isStoreGroupExclusion: false,
-            status: true,
+            status: false,
             startDate: null,
             endDate: null
         }
@@ -114,7 +114,7 @@ export default function CreatePrizeContainer() {
             startDate: formStartDate,
             endDate: formEndDate,
             ordinal: data.ordinal,
-            status: data.status,
+            status: statusPrize,
             crmTransactionTypeId: data.crmTransactionTypeId.value,
             isCustomerExclusion: isCustomerExclusion,
             isCustomerGroupExclusion: isCustomerGroupExclusion,
@@ -136,10 +136,14 @@ export default function CreatePrizeContainer() {
             dataSend = { ...dataSend, eventDetailProvinces: array }
         }
 
-        if(formStartDate || formEndDate) {
+        if (formStartDate || formEndDate) {
             dataSend.eventDetailProvinces = [];
+
+            if(new Date(formStartDate || '').getTime() >= new Date(formEndDate || '').getTime()) {
+                return showErrorSnackbar('Ngày bắt đầu phải trước ngày kết thúc');
+            }
         }
-        
+
         mutate(dataSend)
     }
 
@@ -148,7 +152,7 @@ export default function CreatePrizeContainer() {
             <Paper elevation={3} sx={{ p: 3 }}>
                 <Stack spacing={3}>
                     <Stack direction={'row'} spacing={3}>
-                        <Box sx={{ width: '70%', zIndex: 1999 }}>
+                        <Box sx={{ width: '70%', zIndex: 1100 }}>
                             <RHFSelectPrizeGift
                                 name={'giftId'}
                                 placeholder="Tên giải*"
@@ -242,7 +246,7 @@ export default function CreatePrizeContainer() {
                             name={'crmTransactionTypeId'}
                             getAsyncData={getCrmTransaction}
                             searchParams={{ page: 0 }}
-                            placeholder="CRM Transaction Type"
+                            placeholder="CRM Transaction Type*"
                             error={errors}
                         />
                         <FormHelperText error sx={{ marginLeft: '10px' }}>
@@ -268,7 +272,12 @@ export default function CreatePrizeContainer() {
                             </Stack>
                             <Stack justifyContent={'space-between'} alignItems={'center'} direction="row" sx={{ width: "65%" }}>
                                 <Typography variant="body1">Trạng thái giải</Typography>
-                                <RHFSwitch name="status" label="" checked />
+                                <RHFSwitch
+                                    name="status"
+                                    label=""
+                                    data={statusPrize}
+                                    onChange={() => dispatch(setStatusPrize(!statusPrize))}
+                                />
                             </Stack>
                         </Box>
                         <Box sx={{ width: '50%' }}>

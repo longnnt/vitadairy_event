@@ -2,7 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { GroupBase, StylesConfig, components, ControlProps } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import React, { useEffect, useState } from 'react';
-import { getCrmTransaction } from 'src/event-prize-q1/services';
+import { getCrmTransactionById } from 'src/event-prize-q1/services';
 import { dispatch } from 'src/common/redux/store';
 import { setCrmTypeIdEdit } from 'src/event-prize-q1/eventPrizeQ1.slice';
 
@@ -23,7 +23,7 @@ type IProps = {
     placeholder: string;
     searchParams?: ISearchParams;
     error: any;
-    defaultvalue?: number;
+    defaultvalue: number;
 };
 
 const { ValueContainer, Placeholder } = components;
@@ -51,10 +51,9 @@ export const RHFSelectPaginationSingle = ({
 }: IProps) => {
 
     useEffect(() => {
-        const response = getCrmTransaction().then((res) => {
-            const data = res.data?.response.filter((item: any) => {
-                if(item.id == defaultvalue) setCustomValue({value: item.id, label: item.name})
-            })
+        const response = getCrmTransactionById(defaultvalue).then((res) => {
+            const data = res?.data?.response
+            setCustomValue({value: data.id, label: data.description})
         });
     }, [defaultvalue])
 
@@ -113,7 +112,7 @@ export const RHFSelectPaginationSingle = ({
                             >
                         }
                         onChange={(value) => {
-                            setCustomValue(value)
+                            setCustomValue({value: value?.value, label: value?.label})
                             dispatch(setCrmTypeIdEdit(value?.value))
                         }}
                         styles={colourStyles(isFocus, error, name)}

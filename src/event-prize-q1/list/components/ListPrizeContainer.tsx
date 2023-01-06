@@ -18,13 +18,14 @@ export default function ListPrizeContainer() {
                 heading={BREADCUMBS.EVENT_PRIZE_LIST}
                 links={[
                     {
-                        name: BREADCUMBS.MANAGE_EVENT
+                        name: BREADCUMBS.MANAGE_EVENT,
                     },
                     {
-                        name: BREADCUMBS.EVENT_PRIZE_LIST
+                        name: BREADCUMBS.MANAGE_LIST_EVENT,
+                        href: PATH_DASHBOARD.manageEventQuarterOne.list
                     },
                     {
-                        name: BREADCUMBS.EVENT_PRIZE_LIST
+                        name: BREADCUMBS.EVENT_PRIZE_LIST,
                     }
                 ]}
                 action={

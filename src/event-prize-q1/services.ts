@@ -1,10 +1,14 @@
-import { API_GIFT, API_PROVINCE_SEARCH_BY_FILTER, API_TRANSACTION_TYPE_UNUSE, API_EVENT_Q1_PRIZE } from 'src/common/constants/apis';
+import { API_GIFT, API_PROVINCE_SEARCH_BY_FILTER, API_TRANSACTION_TYPE_UNUSE, API_EVENT_Q1_PRIZE, API_TRANSACTION_TYPE } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import axiosInstanceV2 from 'src/common/utils/axiosV2';
-import { IResCrmTransaction, IResGift, IResProvince, IProvinceParams, IGiftParams, IFormSubmitCreate, IGiftById } from './interface';
+import { IResCrmTransaction, IResGift, IResProvince, IProvinceParams, IGiftParams, IFormSubmitCreate, IGiftById, IResCrmTransactionDetail } from './interface';
 
 export const getCrmTransaction = () => {
     return axiosInstance.get<unknown, IResCrmTransaction>(`${API_TRANSACTION_TYPE_UNUSE}`, {params: {page: 0, size: 2000}})
+}
+
+export const getCrmTransactionById = (id: number) => {
+    return axiosInstance.get<unknown, IResCrmTransactionDetail>(`${API_TRANSACTION_TYPE}/${id}`)
 }
 
 export const getGift = async (params: IGiftParams) => {

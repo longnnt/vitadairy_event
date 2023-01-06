@@ -9,7 +9,14 @@ export interface IListPrizeData {
     giftId: number;
     eventId: number;
     ordinal: number;
-    gift: IGift
+    gift: IGift;
+    crmTransactionTypeId?: number
+    isCustomerExclusion?: boolean
+    isCustomerGroupExclusion?: boolean
+    isStoreExclusion?: boolean
+    isStoreGroupExclusion?: boolean
+    status?: boolean
+    eventDetailProvinces?: IProvinceDetail[]
 }
 
 export interface IPrizeData {
@@ -53,11 +60,13 @@ export interface StateProps {
     isCustomerExclusion: boolean;
     isCustomerGroupExclusion: boolean;
     crmTypeIdEdit: number;
+    giftIdEdit: number;
     openConfirmDelete: boolean;
     idPrizeDelete: number;
     countPrizeEvent: number;
     countPrizeProvince: number;
     rowProvinceId: GridRowId | null;
+    statusPrize: boolean;
 
 }
 
@@ -78,6 +87,23 @@ export interface IResCrmTransaction {
             msg: string;
         };
         response: ICrmTranSacTion[];
+        pagination: {
+            totalPages: number;
+            totalRecords: number;
+            currentPage: number;
+            recordsPerPage: number;
+            last: boolean;
+        };
+    };
+}
+
+export interface IResCrmTransactionDetail {
+    data: {
+        meta: {
+            status: number;
+            msg: string;
+        };
+        response: ICrmTranSacTion;
         pagination: {
             totalPages: number;
             totalRecords: number;
@@ -146,14 +172,14 @@ export interface IEventPrize {
     status: boolean,
     crmTransactionTypeId: number,
     eventDetailProvinces: [
-      {
-        id: number,
-        provinceId: number,
-        provinceName: string,
-        quantity: number,
-        startDate: string,
-        endDate: string
-      }
+        {
+            id: number,
+            provinceId: number,
+            provinceName: string,
+            quantity: number,
+            startDate: string,
+            endDate: string
+        }
     ] | [],
     isCustomerExclusion: boolean,
     isCustomerGroupExclusion: boolean,
@@ -162,7 +188,7 @@ export interface IEventPrize {
 }
 
 
-interface ICrmTranSacTion {
+export interface ICrmTranSacTion {
     id: number;
     code: string;
     name: string;
@@ -231,12 +257,13 @@ export interface IFormCreateProvince {
 
 export interface IProvinceDetail {
     id?: number | string;
-    provinceId: number;
+    provinceId: number | string;
     quantity: number;
-    endDate: Dayjs | Date | string;
-    startDate: Dayjs | Date | string;
+    endDate: Dayjs | Date | string | null;
+    startDate: Dayjs | Date | string | null;
     name?: string;
     isNew?: boolean;
+    provinceName?:string
 }
 
 export interface IFormSubmitCreate {

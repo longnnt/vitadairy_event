@@ -45,6 +45,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
         watch,
         setValue,
         trigger,
+        getValues,
         clearErrors,
         formState: { errors },
     } = methods;
@@ -85,6 +86,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                                 `eventDetailProvinces.${params.row.id}.provinceId`,
                                 parseInt(e.target.value)
                             );
+                            setRows(getValues('eventDetailProvinces'))
                         }}
                     >
                         <option value="" />
@@ -116,6 +118,15 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                         name={`eventDetailProvinces.${params.row.id}.quantity`}
                         key={`eventDetailProvinces.${params.row.id}.quantity`}
                         type="number"
+                        helperText={''}
+                        onChange={(e) => {
+                            setValue(
+                                `eventDetailProvinces.${params.row.id}.quantity`,
+                                parseInt(e.target.value)
+                            );
+                            setRows(getValues('eventDetailProvinces'))
+                        }}
+                        
                     />
                 );
             },
@@ -153,6 +164,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                                 onChange={(value) => {
                                     clearErrors(`eventDetailProvinces.${param.row.id}.startDate`);
                                     setValue(`eventDetailProvinces.${param.row.id}.startDate`, value);
+                                    setRows(getValues('eventDetailProvinces'))
                                 }}
                                 inputFormat={FORMAT_DATE_NEWS}
                                 renderInput={(params) => (
@@ -203,6 +215,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                                 onChange={(value: string) => {
                                     clearErrors(`eventDetailProvinces.${param.row.id}.endDate`);
                                     setValue(`eventDetailProvinces.${param.row.id}.endDate`, value);
+                                    setRows(getValues('eventDetailProvinces'))
                                 }}
                                 inputFormat={FORMAT_DATE_NEWS}
                                 renderInput={(params: any) => (
@@ -227,7 +240,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
         },
         {
             field: 'totalPrizeCountry',
-            headerName: 'Tổng số giải ở tỉnh thành',
+            headerName: 'Số giải đã trúng ở tỉnh thành',
             flex: 1,
             editable: false,
             sortable: false,
@@ -275,6 +288,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     }, [rows])
 
     const handleClickAddnewRow = () => {
+        // trigger('eventDetailProvinces');
         const id = randomId();
         setRows((oldRows: any) => {
             return {
@@ -282,7 +296,6 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                 [id]: {
                     id,
                     provinceId: '',
-                    quantity: 0,
                     isNew: true,
                 }
             }
@@ -295,7 +308,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     }
 
     const processRowUpdate = (row: GridRowModel) => {
-        const updatedRow = { ...row, isNew: false, quantity: parseInt(row.quantity) } as IProvinceDetail
+        const updatedRow = { ...row, isNew: false, quantity: row.quantity ? parseInt(row.quantity) : null } as IProvinceDetail
         const newRow = { ...rows };
         newRow[row.id] = { ...updatedRow }
         setRows(newRow);
@@ -304,7 +317,6 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     }
 
     const handleDeleteClick = () => {
-        console.log('rowProvinceId', rowProvinceId)
         if(!rowProvinceId) {
             return console.log('không tìm thấy rowId')
          }
@@ -399,7 +411,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
                 <TableContainer sx={{ width: '20%', overflow: 'hidden' }}>
                     <Table size="medium">
                         <TableHead sx={{ width: '100%', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            <TableCell align="center" sx={{ background: 'white' }}>Tổng số giải đã trúng ở tất cả tỉnh thành</TableCell>
+                            <TableCell align="center" sx={{ background: 'white' }}>Số giải đã trúng ở tất cả tỉnh thành</TableCell>
                         </TableHead>
                         <TableBody>
                             <TableRow>
