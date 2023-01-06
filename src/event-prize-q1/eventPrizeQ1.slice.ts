@@ -20,7 +20,8 @@ const initialState: StateProps = {
     countPrizeEvent: 0,
     countPrizeProvince: 0,
     rowProvinceId: null,
-    statusPrize: true
+    statusPrize: true,
+    prizeQuantityChange: null
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -80,6 +81,9 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setStatusPrize: (state, action: PayloadAction<boolean>) => {
             state.statusPrize = action.payload;
+        },
+        setPrizeQuantityChange: (state, action: PayloadAction<number | null>) => {
+            state.prizeQuantityChange = action.payload;
         }
     }
 })
@@ -102,7 +106,8 @@ export const {
     setCountPrizeEvent,
     setCountPrizeProvince,
     setRowProvinceId,
-    setStatusPrize
+    setStatusPrize,
+    setPrizeQuantityChange
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>
