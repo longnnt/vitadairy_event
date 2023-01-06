@@ -146,7 +146,7 @@ function EventPrizeHistoryDashboard() {
         heading="Lịch sử trúng giải"
         links={[
           {
-            name: BREADCUMBS.EVENT_PROMOTION_Q4,
+            name: BREADCUMBS.EVENT_PROMOTION_Q1,
             href: PATH_DASHBOARD.eventAdmin.historyPrize,
           },
           { name: 'Lịch sử trúng giải' },

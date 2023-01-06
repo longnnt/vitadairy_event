@@ -86,6 +86,7 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/add-new-event'),
     edit: (idEventOne: number) =>
     path(ROOTS_DASHBOARD, `/event-quarter-one/${idEventOne}`),
+    view: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-quarter-one/view/${idEvent}`),
   },
 
   eventPrizeQ1: {
