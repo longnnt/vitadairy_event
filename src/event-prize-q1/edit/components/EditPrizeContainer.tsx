@@ -5,7 +5,7 @@ import { FormProvider, RHFTextField } from "src/common/components/hook-form";
 import { IEventPrize, IFormSubmitCreate, IGiftParams, IPrizeCreateData, IProvinceData, ISelectType } from "src/event-prize-q1/interface";
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { useSelector, dispatch } from "src/common/redux/store";
-import { setCountPrizeProvince, setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setGiftIdEdit, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion, setStatusPrize } from "src/event-prize-q1/eventPrizeQ1.slice";
+import { setCountPrizeProvince, setCrmTypeIdEdit, setFormEndDate, setFormStartDate, setGiftIdEdit, setIsCustomerExclusion, setIsCustomerGroupExclusion, setIsStoreExclusion, setIsStoreGroupExclusion, setPrizeQuantityChange, setStatusPrize } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "src/common/routes/paths";
 import useMessage from "src/common/hooks/useMessage";
@@ -26,7 +26,7 @@ import { RHFSelectPrizeGift } from "src/event-prize-q1/create/components/RHFSele
 import { RHFSelectGift } from "./RHFSelectGift";
 
 export default function EditPrizeContainer() {
-    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit, countPrizeProvince, statusPrize, giftIdEdit } = useSelector(state => state.eventPrizeQ1);
+    const { formStartDate, formEndDate, isStoreExclusion, isStoreGroupExclusion, isCustomerExclusion, isCustomerGroupExclusion, crmTypeIdEdit, countPrizeProvince, statusPrize, giftIdEdit, prizeQuantityChange } = useSelector(state => state.eventPrizeQ1);
     const navigate = useNavigate();
     const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
     const { useDeepCompareEffect } = useDeepEffect();
@@ -92,6 +92,7 @@ export default function EditPrizeContainer() {
         dispatch(setIsCustomerExclusion(false))
         dispatch(setIsCustomerGroupExclusion(false))
         dispatch(setCountPrizeProvince(0))
+        dispatch(setPrizeQuantityChange(null))
 
         showSuccessSnackbar('Sửa thông tin giải thành công');
         navigate(replacePathParams(PATH_DASHBOARD.eventPrizeQ1.list, { eventId: eventId }));
@@ -105,13 +106,13 @@ export default function EditPrizeContainer() {
     const { mutate, isLoading } = useUpdateEventPrize({ onSuccess, onError })
 
     const onSubmit = (data: any) => {
-        if (countPrizeProvince > data.quantity) {
+        if (countPrizeProvince > (data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0))) {
             return showErrorSnackbar('Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có')
         }
-
+        console.log(prizeQuantityChange)
         let dataSend: IFormSubmitCreate = {
             id: prizeDataDetail?.id,
-            quantity: data.quantity,
+            quantity: prizeQuantityChange ? prizeQuantityChange : 0,
             eventId: parseInt(eventId || ''),
             giftId: giftIdEdit,
             startDate: formStartDate,
@@ -177,7 +178,7 @@ export default function EditPrizeContainer() {
                             name="id"
                             type="number"
                             label="ID"
-                            sx={{ width: '30%' }}
+                            sx={{ width: '20%' }}
                             value={prizeDataDetail?.id}
                             disabled
                             InputLabelProps={{ shrink: true }}
@@ -199,10 +200,26 @@ export default function EditPrizeContainer() {
                         <RHFTextField
                             name="quantity"
                             type="number"
-                            label="Số lượng tổng giải*"
-                            sx={{ width: '30%' }}
+                            label="Số lượng đang có"
+                            sx={{ width: '20%' }}
                             onWheelCapture={e => {
                                 (document.activeElement as HTMLElement).blur();
+                            }}
+                            value={prizeDataDetail?.quantity}
+                            disabled
+                            InputLabelProps={{ shrink: true }}
+                        />
+                        <RHFTextField
+                            name="quantityChange"
+                            type="number"
+                            label="Số lượng nhập vào"
+                            sx={{ width: '20%' }}
+                            onWheelCapture={e => {
+                                (document.activeElement as HTMLElement).blur();
+                            }}
+                            value={prizeQuantityChange}
+                            onChange={(e) => {
+                                dispatch(setPrizeQuantityChange(parseInt(e.target.value)))
                             }}
                         />
                     </Stack>

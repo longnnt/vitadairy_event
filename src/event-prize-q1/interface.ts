@@ -67,6 +67,7 @@ export interface StateProps {
     countPrizeProvince: number;
     rowProvinceId: GridRowId | null;
     statusPrize: boolean;
+    prizeQuantityChange: number | null;
 
 }
 
