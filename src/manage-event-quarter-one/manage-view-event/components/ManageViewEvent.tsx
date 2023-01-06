@@ -122,14 +122,8 @@ function ViewEventDashboard() {
         'skus',
         data.skus.map((item: string) => ({ value: item, label: item }))
       );
-      setValue(
-        'eventStatus',
-        data.status === STATUS.ACTIVE ? true :false
-      );
-    setValue(
-      'eventGroupId',
-      defaultTransactionType 
-    );
+      setValue('eventStatus', data.status === STATUS.ACTIVE ? true : false);
+      setValue('eventGroupId', defaultTransactionType);
     }
   }, [data, defaultTransactionType]);
   useDeepCompareEffect(() => {
@@ -137,7 +131,7 @@ function ViewEventDashboard() {
     if (confirmEdit) {
       const dataEdit = {
         name: data?.name,
-        eventGroupId:data?.eventGroupId?.value as string,
+        eventGroupId: data?.eventGroupId?.value as string,
         startDate: data.startDate,
         endDate: data.endDate,
         defaultWinRate: data.defaultWinRate,
@@ -280,7 +274,12 @@ function ViewEventDashboard() {
                   label="Giới hạn trúng giải trên tệp cửa hàng*"
                   disabled
                 />
-                <Switch name={'eventStatus'} checked={watch().eventStatus} disabled />
+                <Stack direction={'row'}>
+                  <Switch name={'eventStatus'} checked={watch().eventStatus} disabled />
+                  <Typography color={'#919EAB'} marginTop={1}>
+                    Trạng thái
+                  </Typography>
+                </Stack>
               </Stack>
 
               <Box sx={{ zIndex: 1001 }}>
@@ -326,7 +325,15 @@ function ViewEventDashboard() {
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" type="submit" onClick={() => navigate(PATH_DASHBOARD.manageEventQuarterOne.edit(parseInt(id as string)))}>
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={() =>
+                navigate(
+                  PATH_DASHBOARD.manageEventQuarterOne.edit(parseInt(id as string))
+                )
+              }
+            >
               Chỉnh sửa
             </Button>
             <Button
