@@ -140,46 +140,48 @@ export default function EditPrizeContainer() {
 
   const onSubmit = (data: any) => {
     if (
-        countPrizeProvince >
-        data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0)
-      ) {
-        return showErrorSnackbar(
-          'Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có'
-        );
+      countPrizeProvince >
+      data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0)
+    ) {
+      return showErrorSnackbar(
+        'Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có'
+      );
+    }
+
+    const isHasStartDateEndDate = data.startDate || data.endDate;
+    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
+    const isRequiredDatetime = !data.startDate || !data.endDate;
+    const isTimeValid =
+      new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
+      data.startDate &&
+      data.endDate;
+
+    if (isHasStartDateEndDate) {
+      // @ts-ignore
+      setValue('eventDetailProvinces', {});
+    }
+
+    if (isCountProvinceData) {
+      if (isRequiredDatetime) {
+        !data.startDate &&
+          setError('startDate', { type: 'required', message: 'Vui lòng ngày bắt đầu' });
+        !data.endDate &&
+          setError('endDate', { type: 'required', message: 'Vui lòng ngày kết thúc' });
+        return;
       }
 
-      if(data.startDate || data.endDate) {
-        // @ts-ignore
-        setValue('eventDetailProvinces', {})
-      }
-
-      if (Object.values(getValues('eventDetailProvinces')).length === 0) {
-        if (!data.startDate || !data.endDate) {
-          !data.startDate &&
-            setError('startDate', { type: 'required', message: 'Vui lòng ngày bắt đầu'});
-          !data.endDate &&
-            setError('endDate', { type: 'required', message: 'Vui lòng ngày kết thúc' });
-          return;
-        }
-
-        if (
-          new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
-          data.startDate &&
-          data.endDate
-        )
-          return setError('startDate', {
-            type: 'required',
-            message: 'Ngày bắt đầu phải trước ngày kết thúc',
-          });
-      }
+      if (isTimeValid)
+        return setError('startDate', {
+          type: 'required',
+          message: 'Ngày bắt đầu phải trước ngày kết thúc',
+        });
+    }
     dispatch(setOpenEditModal(true));
   };
 
   useDeepCompareEffect(() => {
     const data = watch();
     if (confirmEdit) {
-      
-
       let dataSend: IFormSubmitCreate = {
         id: prizeDataDetail?.id,
         quantity: prizeQuantityChange ? prizeQuantityChange : 0,
