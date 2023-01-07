@@ -130,20 +130,30 @@ export default function CreatePrizeContainer() {
     if (eventId === undefined) {
       return showErrorSnackbar('Không tìm thấy event. Vui lòng thử lại');
     }
-    if (Object.values(data.eventDetailProvinces).length === 0) {
-      if (!data.startDate || !data.endDate) {
+
+    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
+    const isRequiredDatetime = !data.startDate || !data.endDate;
+    const isTimeValid =
+      new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
+      data.startDate &&
+      data.endDate;
+
+    if (isCountProvinceData) {
+      if (isRequiredDatetime) {
         !data.startDate &&
-          setError('startDate', { type: 'required', message: 'Vui lòng nhập ngày bắt đầu' });
+          setError('startDate', {
+            type: 'required',
+            message: 'Vui lòng nhập ngày bắt đầu',
+          });
         !data.endDate &&
-          setError('endDate', { type: 'required', message: 'Vui lòng nhập ngày kết thúc' });
+          setError('endDate', {
+            type: 'required',
+            message: 'Vui lòng nhập ngày kết thúc',
+          });
         return;
       }
 
-      if (
-        new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
-        data.startDate &&
-        data.endDate
-      )
+      if (isTimeValid)
         return setError('startDate', {
           type: 'required',
           message: 'Ngày bắt đầu phải trước ngày kết thúc',
