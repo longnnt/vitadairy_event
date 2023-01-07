@@ -51,10 +51,13 @@ export const RHFSelectGift = ({
 }: IProps) => {
 
     useEffect(() => {
-        const response = getGiftById(valueGift).then((res) => {
-            const data = res?.data?.response;
-            setCustomValue({value: data.id, label: data.name})
-        })
+        if(valueGift !== undefined && valueGift !== 0){
+            const response = getGiftById(valueGift).then((res) => {
+                const data = res?.data?.response;
+                setCustomValue({value: data.id, label: data.name})
+            })
+        }
+       
     }, [valueGift])
 
   const { control } = useFormContext();
@@ -66,7 +69,7 @@ export const RHFSelectGift = ({
     const response = await getAsyncData({
       ...searchParams,
       page: page,
-      searchText: search,
+      keySearch: search,
     });
 
     const hasMore = page < response?.data?.pagination.totalPages;

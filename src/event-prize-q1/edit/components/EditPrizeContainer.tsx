@@ -13,15 +13,18 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormProvider, RHFTextField } from 'src/common/components/hook-form';
 import {
   IEventPrize,
+  IFormCreateProvince,
   IFormSubmitCreate,
   IGiftParams,
   IPrizeCreateData,
   IProvinceData,
+  IProvinceDetail,
   ISelectType,
 } from 'src/event-prize-q1/interface';
-import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { useSelector, dispatch } from 'src/common/redux/store';
 import {
+  setConfirmEdit,
   setCountPrizeProvince,
   setCrmTypeIdEdit,
   setFormEndDate,
@@ -31,6 +34,7 @@ import {
   setIsCustomerGroupExclusion,
   setIsStoreExclusion,
   setIsStoreGroupExclusion,
+  setOpenEditModal,
   setPrizeQuantityChange,
   setStatusPrize,
 } from 'src/event-prize-q1/eventPrizeQ1.slice';
@@ -44,16 +48,17 @@ import { getCrmTransaction, getGift } from 'src/event-prize-q1/services';
 import RHFSwitch from 'src/event-prize-q1/create/components/RHFSwitch';
 import ProvinceTable from 'src/event-prize-q1/create/components/ProvinceTable';
 import { useGetDetailPrize } from 'src/event-prize-q1/hooks/useGetDetailPrize';
-import { useGetGiftById } from 'src/event-prize-q1/hooks/useGetGiftById';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import { RHFSelectPaginationSingle } from './RHFSelectPaginationSingle';
 import { useUpdateEventPrize } from 'src/event-prize-q1/hooks/useUpdateEventPrize';
 import { replacePathParams } from 'src/common/utils/replaceParams';
 import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
-import { RHFSelectPrizeGift } from 'src/event-prize-q1/create/components/RHFSelectPrizeGift';
 import { RHFSelectGift } from './RHFSelectGift';
 import InputAdornment from '@mui/material/InputAdornment/InputAdornment';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
+import { paramsProvince, searchParamsGift } from 'src/event-prize-q1/constants';
+import { number } from 'yup';
+import { ConfirmEditModal } from 'src/common/components/modal/ConfirmEditModal';
 
 export default function EditPrizeContainer() {
   const {
@@ -66,6 +71,8 @@ export default function EditPrizeContainer() {
     statusPrize,
     giftIdEdit,
     prizeQuantityChange,
+    openEditModal,
+    confirmEdit,
   } = useSelector((state) => state.eventPrizeQ1);
   const navigate = useNavigate();
   const { showErrorSnackbar, showSuccessSnackbar } = useMessage();
@@ -76,18 +83,9 @@ export default function EditPrizeContainer() {
   const { data: prizeDetail } = useGetDetailPrize(parseInt(prizeId || ''));
   const prizeDataDetail: IEventPrize = prizeDetail?.data?.response || {};
 
-  const { data: giftSelected } = useGetGiftById(prizeDataDetail.giftId);
-  const giftSelectedDetail = giftSelected?.data?.response || null;
-
-  const searchParamsProvince = {
-    page: 0,
-    size: 1000,
-    type: 'PROVINCE',
-  };
-
-  const { data: addProvince } = useGetListProvince(searchParamsProvince);
+  const { data: addProvince } = useGetListProvince(paramsProvince);
   const dataProvince = addProvince?.data?.response || [];
-  const addProvinceVN = dataProvince.map((item) => ({
+  const addProvinceVN = dataProvince?.map((item) => ({
     value: item.id,
     label: item.name,
   }));
@@ -102,11 +100,6 @@ export default function EditPrizeContainer() {
       quantity: prizeDataDetail.quantity || 0,
     },
   });
-  console.log(prizeDataDetail);
-
-  const searchParamsGift: IGiftParams = {
-    keySearch: '',
-  };
 
   const {
     handleSubmit,
@@ -115,7 +108,9 @@ export default function EditPrizeContainer() {
     setValue,
     getValues,
     trigger,
+    setError,
     clearErrors,
+    resetField,
     register,
     reset,
     formState: { errors },
@@ -145,50 +140,95 @@ export default function EditPrizeContainer() {
 
   const onSubmit = (data: any) => {
     if (
-      countPrizeProvince >
-      data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0)
-    ) {
-      return showErrorSnackbar(
-        'Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có'
-      );
-    }
-    console.log(prizeQuantityChange);
-    let dataSend: IFormSubmitCreate = {
-      id: prizeDataDetail?.id,
-      quantity: prizeQuantityChange ? prizeQuantityChange : 0,
-      eventId: parseInt(eventId || ''),
-      giftId: giftIdEdit,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      ordinal: data.ordinal,
-      status: statusPrize,
-      crmTransactionTypeId: crmTypeIdEdit,
-      isCustomerExclusion: isCustomerExclusion,
-      isCustomerGroupExclusion: isCustomerExclusion ? isCustomerGroupExclusion : false,
-      isStoreExclusion: isStoreExclusion,
-      isStoreGroupExclusion: isStoreExclusion ? isStoreGroupExclusion : false,
-    };
+        countPrizeProvince >
+        data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0)
+      ) {
+        return showErrorSnackbar(
+          'Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có'
+        );
+      }
 
-    if (data.eventDetailProvinces && data.eventDetailProvinces !== undefined) {
-      const array: IProvinceData[] = [];
-      const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces)?.map(
-        (item) => {
-          const dataConvert = {
-            provinceId: data.eventDetailProvinces[item].provinceId,
-            quantity: parseInt(data.eventDetailProvinces[item].quantity),
-            startDate: dayjs(data.eventDetailProvinces[item].startDate),
-            endDate: dayjs(data.eventDetailProvinces[item].endDate),
-          };
-          array.push(dataConvert);
+      if(data.startDate || data.endDate) {
+        // @ts-ignore
+        setValue('eventDetailProvinces', {})
+      }
+
+      if (Object.values(getValues('eventDetailProvinces')).length === 0) {
+        if (!data.startDate || !data.endDate) {
+          !data.startDate &&
+            setError('startDate', { type: 'required', message: 'Vui lòng ngày bắt đầu'});
+          !data.endDate &&
+            setError('endDate', { type: 'required', message: 'Vui lòng ngày kết thúc' });
+          return;
         }
-      );
-      dataSend = { ...dataSend, eventDetailProvinces: array };
-    }
 
-    if (watch().startDate || watch().endDate) {
-      dataSend.eventDetailProvinces = [];
+        if (
+          new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
+          data.startDate &&
+          data.endDate
+        )
+          return setError('startDate', {
+            type: 'required',
+            message: 'Ngày bắt đầu phải trước ngày kết thúc',
+          });
+      }
+    dispatch(setOpenEditModal(true));
+  };
+
+  useDeepCompareEffect(() => {
+    const data = watch();
+    if (confirmEdit) {
+      
+
+      let dataSend: IFormSubmitCreate = {
+        id: prizeDataDetail?.id,
+        quantity: prizeQuantityChange ? prizeQuantityChange : 0,
+        eventId: parseInt(eventId || ''),
+        giftId: giftIdEdit,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        ordinal: data.ordinal,
+        status: statusPrize,
+        crmTransactionTypeId: crmTypeIdEdit,
+        isCustomerExclusion: isCustomerExclusion,
+        isCustomerGroupExclusion: isCustomerExclusion ? isCustomerGroupExclusion : false,
+        isStoreExclusion: isStoreExclusion,
+        isStoreGroupExclusion: isStoreExclusion ? isStoreGroupExclusion : false,
+      };
+
+      if (data.eventDetailProvinces && data.eventDetailProvinces !== undefined) {
+        const array: IProvinceDetail[] = [];
+        const dataProvince: IFormCreateProvince =
+          data.eventDetailProvinces as unknown as IFormCreateProvince;
+        const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces)?.map(
+          (item: string) => {
+            const dataConvert = {
+              provinceId: dataProvince[item].provinceId,
+              quantity: dataProvince[item].quantity,
+              startDate: dayjs(dataProvince[item].startDate),
+              endDate: dayjs(dataProvince[item].endDate),
+            };
+            array.push(dataConvert);
+          }
+        );
+        dataSend = {
+          ...dataSend,
+          eventDetailProvinces: array as unknown as IProvinceData[],
+        };
+      }
+
+      if (watch().startDate || watch().endDate) {
+        dataSend.eventDetailProvinces = [];
+      }
+      mutate(dataSend);
+      dispatch(setConfirmEdit(false));
     }
-    mutate(dataSend);
+  }, [confirmEdit]);
+
+  const handleCloseEditModal = () => dispatch(setOpenEditModal(false));
+
+  const handleOnAgree = () => {
+    dispatch(setConfirmEdit(true));
   };
 
   useDeepCompareEffect(() => {
@@ -245,7 +285,7 @@ export default function EditPrizeContainer() {
             <RHFTextField
               name="quantity"
               type="number"
-              label="Số lượng đang có"
+              label="Số lượng đang có*"
               sx={{ width: '20%' }}
               onWheelCapture={(e) => {
                 (document.activeElement as HTMLElement).blur();
@@ -264,7 +304,7 @@ export default function EditPrizeContainer() {
               }}
               value={prizeQuantityChange}
               onChange={(e) => {
-                dispatch(setPrizeQuantityChange(parseInt(e.target.value)));
+                dispatch(setPrizeQuantityChange(parseFloat(e.target.value)));
               }}
             />
           </Stack>
@@ -274,9 +314,9 @@ export default function EditPrizeContainer() {
               control={control}
               render={({ field }) => (
                 <Stack position="relative" width="100%">
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     {...field}
-                    label="Ngày bắt đầu*"
+                    label="Ngày bắt đầu"
                     inputFormat={FORMAT_DATE_NEWS}
                     InputProps={{
                       endAdornment: (
@@ -303,9 +343,9 @@ export default function EditPrizeContainer() {
               control={control}
               render={({ field }) => (
                 <Stack position={'relative'} width="100%">
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     {...field}
-                    label="Ngày kết thúc*"
+                    label="Ngày kết thúc"
                     inputFormat={FORMAT_DATE_NEWS}
                     InputProps={{
                       endAdornment: (
@@ -342,10 +382,10 @@ export default function EditPrizeContainer() {
           </Stack>
           <Box sx={{ zIndex: 1001, marginTop: 1 }}>
             <RHFSelectPaginationSingle
-              name={'crmTransactionTypeId*'}
+              name={'crmTransactionTypeId'}
               getAsyncData={getCrmTransaction}
               searchParams={{ page: 0 }}
-              placeholder="CRM Transaction Type"
+              placeholder="CRM Transaction Type*"
               error={errors}
               defaultvalue={prizeDataDetail?.crmTransactionTypeId}
             />
@@ -459,6 +499,13 @@ export default function EditPrizeContainer() {
           Hủy
         </Button>
       </Stack>
+      <ConfirmEditModal
+        open={openEditModal}
+        handleClose={handleCloseEditModal}
+        handleOnAgree={handleOnAgree}
+        type="Chỉnh sửa giải thưởng này"
+        colorType={true}
+      />
     </FormProvider>
   );
 }

@@ -68,7 +68,8 @@ export interface StateProps {
     rowProvinceId: GridRowId | null;
     statusPrize: boolean;
     prizeQuantityChange: number | null;
-
+    openEditModal: boolean;
+    confirmEdit: boolean;
 }
 
 export interface ICountryTableValue {

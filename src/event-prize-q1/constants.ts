@@ -1,3 +1,5 @@
+import { IGiftParams } from "./interface";
+
 export const HEAD_LABELS = [
     {
         id: 'id',
@@ -36,33 +38,13 @@ export const HEAD_LABELS = [
     }
 ]
 
-export const dataTest = [
-    {
-        id: 1,
-        name: 'Giai ABC',
-        count_prize: 10,
-        start_time: '05/12/2022',
-        end_time: '11/11/2022',
-        win_prize: 90
-    },
-    {
-        id: 2,
-        name: 'Giai ABC XYZ',
-        count_prize: 40,
-        start_time: '',
-        end_time: '11/11/2022',
-        win_prize: 40
-    },
-    {
-        id: 3,
-        name: 'Giai XYZ',
-        count_prize: 60,
-        start_time: '',
-        end_time: '11/11/2022',
-        win_prize: 70
-    }
-]
 
-export const dataCountry = [
-    'Tỉnh Hà Giang' , 'Tỉnh Hưng Yên'
-]
+export const paramsProvince = {
+    page: 0,
+    size: 1000,
+    type: 'PROVINCE',
+}
+
+export const searchParamsGift: IGiftParams = {
+    keySearch: '',
+  };
