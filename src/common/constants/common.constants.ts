@@ -54,7 +54,8 @@ export const BREADCUMBS = {
   MANAGE_EVENT: 'Quản lý sự kiện',
   MANAGE_LIST_EVENT: 'Danh sách sự kiện',
   MANAGE_CREATE_EVENT: 'Tạo mới sự kiện',
-  MANAGE_EDIT_EVENT: 'Chỉnh sửa sự kiện Q1',
+  MANAGE_EDIT_EVENT: 'Chỉnh sửa sự kiện',
+  MANAGE_VIEW_EVENT: 'Thông tin sự kiện',
 
   EVENT_Q1: 'Sự kiện quý 1',
   EVENT_PRIZE: 'Giải thưởng sự kiện',

@@ -159,10 +159,10 @@ function ViewEventDashboard() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading={BREADCUMBS.MANAGE_EDIT_EVENT}
+        heading={BREADCUMBS.MANAGE_VIEW_EVENT}
         links={[
           { name: BREADCUMBS.MANAGE_LIST_EVENT, href: PATH_DASHBOARD.root },
-          { name: BREADCUMBS.MANAGE_EDIT_EVENT },
+          { name: BREADCUMBS.MANAGE_VIEW_EVENT },
         ]}
       />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
