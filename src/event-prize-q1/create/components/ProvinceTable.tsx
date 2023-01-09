@@ -350,19 +350,18 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     if (!rowProvinceId) {
       return console.log('không tìm thấy rowId');
     }
-
-    if (Object.values(rows).length === 1) {
-      setRows({});
-      setValue('eventDetailProvinces', {});
-      dispatch(setRowProvinceId(null));
-      dispatch(setCloseConfirmDelete());
-      return;
-    }
     const { [rowProvinceId || '']: rowDelete, ...newRows } = rows;
     setRows(rows);
     setValue('eventDetailProvinces', newRows);
     dispatch(setCloseConfirmDelete());
     dispatch(setRowProvinceId(null));
+    if (Object.values(rows).length !== 0) {
+      setRows(newRows);
+      setValue('eventDetailProvinces', newRows);
+      dispatch(setRowProvinceId(null));
+      dispatch(setCloseConfirmDelete());
+      return;
+    }
   };
 
   useDeepCompareEffect(() => {
