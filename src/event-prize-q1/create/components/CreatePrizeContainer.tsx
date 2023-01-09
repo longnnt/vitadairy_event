@@ -131,7 +131,7 @@ export default function CreatePrizeContainer() {
       return showErrorSnackbar('Không tìm thấy event. Vui lòng thử lại');
     }
 
-    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
+    const isCountProvinceData = data.eventDetailProvince !== undefined ? Object.values(data.eventDetailProvinces).length === 0 : 0;
     const isRequiredDatetime = !data.startDate || !data.endDate;
     const isTimeValid =
       new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
@@ -189,10 +189,11 @@ export default function CreatePrizeContainer() {
         }
       );
       dataSend = { ...dataSend, eventDetailProvinces: array };
+    // dataSend = {...dataSend, eventDetailProvinces: data.eventDetailProvinces}
     }
 
     if (watch().startDate || watch().endDate) {
-      dataSend.eventDetailProvinces = [];
+      dataSend.eventDetailProvinces = null;
     }
     mutate(dataSend);
   };

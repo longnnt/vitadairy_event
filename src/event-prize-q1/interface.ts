@@ -277,7 +277,7 @@ export interface IFormSubmitCreate {
     ordinal: number;
     status: boolean;
     crmTransactionTypeId: number;
-    eventDetailProvinces?: IProvinceData[],
+    eventDetailProvinces?: IProvinceData[] | null | IFormCreateProvince,
     isCustomerExclusion: boolean;
     isCustomerGroupExclusion: boolean;
     isStoreExclusion: boolean;
