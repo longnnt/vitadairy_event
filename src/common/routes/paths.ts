@@ -86,6 +86,7 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/add-new-event'),
     edit: (idEventOne: number) =>
     path(ROOTS_DASHBOARD, `/event-quarter-one/${idEventOne}`),
+    view: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-quarter-one/view/${idEvent}`),
   },
 
   eventPrizeQ1: {
@@ -93,6 +94,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId'),
     create: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/create'),
     edit: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/:prizeId'),
+    detail: path(ROOTS_DASHBOARD, '/event-q1-prize/event-:eventId/:prizeId/detail')
   },
   
 
@@ -101,7 +103,7 @@ export const PATH_DASHBOARD = {
     listGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/list'), 
     addGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/add'), 
     editGroupEvent: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-q1-groupEvent/${idEvent}`),
-    // editGroupEvent: path(ROOTS_DASHBOARD, '/event-q1-groupEvent/edit'),
+    viewGroupEvent: (idEvent: number) => path (ROOTS_DASHBOARD, `/event-q1-groupEvent/view/${idEvent}`),
   },
 
   eventHistoryPrize: {

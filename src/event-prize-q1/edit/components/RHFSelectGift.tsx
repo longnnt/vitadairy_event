@@ -2,9 +2,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { GroupBase, StylesConfig, components, ControlProps } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import React, { useEffect, useState } from 'react';
-import { getCrmTransactionById } from 'src/event-prize-q1/services';
+import { getGiftById } from 'src/event-prize-q1/services';
 import { dispatch } from 'src/common/redux/store';
-import { setCrmTypeIdEdit } from 'src/event-prize-q1/eventPrizeQ1.slice';
+import { setGiftIdEdit } from 'src/event-prize-q1/eventPrizeQ1.slice';
 
 interface ISearchParams {
   except?: number;
@@ -13,8 +13,8 @@ interface ISearchParams {
 }
 
 interface ICustomValue {
-  value: number;
-  label: string;
+    value: number;
+    label: string;
 }
 
 type IProps = {
@@ -23,7 +23,7 @@ type IProps = {
   placeholder: string;
   searchParams?: ISearchParams;
   error: any;
-  defaultvalue: number;
+  valueGift: number;
 };
 
 const { ValueContainer, Placeholder } = components;
@@ -41,22 +41,24 @@ const CustomValueContainer = ({ children, ...props }: any) => {
   );
 };
 
-export const RHFSelectPaginationSingle = ({
+export const RHFSelectGift = ({
   name,
   getAsyncData,
   placeholder,
   searchParams,
   error,
-  defaultvalue,
+  valueGift
 }: IProps) => {
-  useEffect(() => {
-    if (defaultvalue !== undefined && defaultvalue !== 0) {
-      const response = getCrmTransactionById(defaultvalue).then((res) => {
-        const data = res?.data?.response;
-        setCustomValue({ value: data.id, label: data.description });
-      });
-    }
-  }, [defaultvalue]);
+
+    useEffect(() => {
+        if(valueGift !== undefined && valueGift !== 0){
+            const response = getGiftById(valueGift).then((res) => {
+                const data = res?.data?.response;
+                setCustomValue({value: data.id, label: data.name})
+            })
+        }
+       
+    }, [valueGift])
 
   const { control } = useFormContext();
   const loadOptions = async (
@@ -67,18 +69,14 @@ export const RHFSelectPaginationSingle = ({
     const response = await getAsyncData({
       ...searchParams,
       page: page,
-      searchText: search,
-    });
-
-    const data = response.data?.response.filter((item: any) => {
-      if (item.id == defaultvalue) setCustomValue({ value: item.id, label: item.name });
+      keySearch: search,
     });
 
     const hasMore = page < response?.data?.pagination.totalPages;
     const optionSelects = response.data?.response.map((item: any) => {
       return {
         value: item.id,
-        label: item.description,
+        label: item.name,
       };
     });
     return {
@@ -90,7 +88,7 @@ export const RHFSelectPaginationSingle = ({
     };
   };
   const [isFocus, setFocus] = useState<boolean>(false);
-  const [customValue, setCustomValue] = useState<ICustomValue>();
+  const [customValue, setCustomValue] = useState<ICustomValue>()
 
   return (
     <Controller
@@ -113,8 +111,8 @@ export const RHFSelectPaginationSingle = ({
               >
             }
             onChange={(value) => {
-              setCustomValue({ value: value?.value, label: value?.label });
-              dispatch(setCrmTypeIdEdit(value?.value));
+                setCustomValue({value: value?.value, label: value?.label});
+                dispatch(setGiftIdEdit(value?.value))
             }}
             styles={colourStyles(isFocus, error, name)}
             components={{
@@ -135,7 +133,7 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
       borderRadius: '8px',
       boxShadow: 'none',
       '&:hover': {
-        border: '1px solid black',
+        border:'1px solid black'
       },
       border: error[name]?.message
         ? '1.5px solid #ff4842!important'
@@ -171,12 +169,12 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
           ? 'white'
           : 'primary',
       top: state.hasValue
-        ? '-22px'
-        : state.selectProps.inputValue
-        ? '-22px'
-        : (isFocus as unknown as ControlProps<boolean>)
-        ? '-22px'
-        : '10%',
+          ? '-22px'
+          : state.selectProps.inputValue
+          ? '-22px'
+          : (isFocus as unknown as ControlProps<boolean>)
+          ? '-22px'
+          : '10%',
 
       transition: 'top 0.2s, font-size 0.2s',
       fontSize:

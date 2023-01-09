@@ -2,11 +2,11 @@ import { Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import Page from 'src/common/components/Page';
 import useSettings from 'src/common/hooks/useSettings';
-import { EditGroupEventForm } from './components/EditGroupEventForm';
 import LoadingPageAddEditGroupEvent from '../common/components/SkeletonAddEdit';
 import { useGetGroupEventById } from '../hooks/useGetGroupEventById';
+import { ViewGroupEventForm } from './components/ViewGroupEventForm';
 
-export default function AddGroupEvent() {
+export default function AddViewGroupEvent() {
   const { themeStretch } = useSettings();
   const params = useParams();
   const id = params?.id;
@@ -19,7 +19,7 @@ export default function AddGroupEvent() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         {isLoading ?
           <LoadingPageAddEditGroupEvent />
-        :<EditGroupEventForm/>
+        :<ViewGroupEventForm/>
         }
       </Container>
     </Page>

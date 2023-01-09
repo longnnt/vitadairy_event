@@ -115,6 +115,7 @@ export default function Router() {
                         { path: 'event-q1-prize/event-:eventId', element: <ListEventQ1Prize /> },
                         { path: 'event-q1-prize/event-:eventId/:prizeId', element: <EditEventPrizeQ1 /> },
                         { path: 'event-q1-prize/event-:eventId/create', element: <CreateEventPrizeQ1 /> },
+                        {path: 'event-q1-prize/event-:eventId/:prizeId/detail', element: <EventQ1PrizeDetail />}
                         
                     ]
                 },
@@ -128,6 +129,7 @@ export default function Router() {
                       { path: 'event-quarter-one', element: <ManageListEvent /> },
                       { path: 'add-new-event', element: <ManageCreateEvent /> },
                       { path: 'event-quarter-one/:id', element: <ManageEditEvent /> },
+                      { path: 'event-quarter-one/view/:id', element: <ManageViewEvent /> },
                     ]
                   },
                   {
@@ -140,6 +142,7 @@ export default function Router() {
                       { path: 'event-q1-groupEvent/list', element: <ListGroupEvent /> },
                       { path: 'event-q1-groupEvent/add', element: <AddGroupEvent /> },
                       { path: 'event-q1-groupEvent/:id', element: <EditGroupEvent /> },
+                      { path: 'event-q1-groupEvent/view/:id', element: <ViewGroupEvent /> },
                     ],
                   },
                   {
@@ -202,6 +205,7 @@ const EditEventPrize = Loadable(lazy(() => import('../../event/edit-event-prize/
 const ListEventQ1Prize = Loadable(lazy(() => import('../../event-prize-q1/list')));
 const EditEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/edit')));
 const CreateEventPrizeQ1 = Loadable(lazy(() => import('../../event-prize-q1/create')));
+const EventQ1PrizeDetail = Loadable(lazy(() => import('../../event-prize-q1/detail')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
@@ -238,7 +242,9 @@ const AddGroupEvent = Loadable(
 const EditGroupEvent = Loadable(
   lazy(() => import('../../event-q1-groupEvent/edit-group-event/index'))
 );
-
+const ViewGroupEvent = Loadable(
+    lazy(() => import('../../event-q1-groupEvent/view-group-event/index'))
+  );
 // ADMIN
 const AdminList = Loadable(lazy(() => import('../../admin/admin-pages/AdminList')));
 const AddNewAdmin = Loadable(lazy(() => import('../../admin/admin-pages/AddNewAdmin')));
@@ -247,6 +253,7 @@ const EditAdmin = Loadable(lazy(() => import('../../admin/admin-pages/EditAdmin'
 // MANAGE_EVENT_QUARTER_ONE
 const ManageListEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-list-event/index')));
 const ManageCreateEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-create-event/index')))
+const ManageViewEvent = Loadable(lazy(() => import('../../manage-event-quarter-one/manage-view-event/index')))
 
 // EVENT_HISTORY_PRIZE_Q1
 const ListHistoryPrize = Loadable(lazy(() => import('../../event-history-prize/list-event-history-prize/index')))

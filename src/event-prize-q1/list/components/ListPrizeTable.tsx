@@ -5,7 +5,7 @@ import useMessage from "src/common/hooks/useMessage";
 import useTable from "src/common/hooks/useTable";
 import { dispatch, useSelector } from "src/common/redux/store";
 import AlertConfirmDelete from "src/event-prize-q1/common/AlertConfirmDelete";
-import { dataTest, HEAD_LABELS } from "src/event-prize-q1/constants";
+import { HEAD_LABELS } from "src/event-prize-q1/constants";
 import { setCloseConfirmDelete, setIdPrizeDelete, setOpenConfirmDelete } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useDeleteListPrizeAdmin } from "src/event-prize-q1/hooks/useDeleteSinglePrize";
 import { useGetListPrize } from "src/event-prize-q1/hooks/useGetListPrize";
@@ -65,6 +65,7 @@ export default function ListPrizeTable() {
                     open={openConfirmDelete}
                     handleClose={handleCloseDeleteModal}
                     handleConfirm={handleDeleteSingle}
+                    content={'Bạn có chắc chắn muốn Xóa giải này không?'}
 
                 />
                 <TableContainer
@@ -76,7 +77,7 @@ export default function ListPrizeTable() {
                     >
                         <TableHeadCustom
                             headLabel={HEAD_LABELS}
-                            rowCount={dataTest.length}
+                            rowCount={listPrize.length}
                         />
                         <TableBody>
                             {listPrize.map((item: IListPrizeData) => (

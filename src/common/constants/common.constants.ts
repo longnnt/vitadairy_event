@@ -54,21 +54,24 @@ export const BREADCUMBS = {
   MANAGE_EVENT: 'Quản lý sự kiện',
   MANAGE_LIST_EVENT: 'Danh sách sự kiện',
   MANAGE_CREATE_EVENT: 'Tạo mới sự kiện',
-  MANAGE_EDIT_EVENT: 'Chỉnh sửa sự kiện Q1',
+  MANAGE_EDIT_EVENT: 'Chỉnh sửa sự kiện',
+  MANAGE_VIEW_EVENT: 'Thông tin sự kiện',
 
   EVENT_Q1: 'Sự kiện quý 1',
   EVENT_PRIZE: 'Giải thưởng sự kiện',
-  EVENT_PRIZE_LIST: 'Quản lý giải',
-  EVENT_PRIZE_CREATE: 'Tạo giải',
+  EVENT_PRIZE_LIST: 'Danh sách giải',
+  EVENT_PRIZE_CREATE: 'Tạo mới giải',
   EVENT_PRIZE_EDIT: 'Chỉnh sửa giải',
+  EVENT_PRIZE_DETAIL: 'Thông tin giải',
 
   MANAGE_GROUP_EVENT: 'Quản lý Group Event',
   LIST_GROUP_EVENT: 'Danh sách Group Event',
   CREATE_GROUP_EVENT: 'Tạo Group Event',
   EDIT_GROUP_EVENT: 'Chỉnh sửa Group Event',
+  VIEW_GROUP_EVENT: 'Chi tiết Group Event',
 
   EVENT_HISTORY_PRIZE : 'Lịch sử trúng giải',
-
+  EVENT_PROMOTION_Q1: 'Sự kiện Promotion Quý 1'
 };
 
 export const CACHE_TIME = 2 * 1000 * 60;

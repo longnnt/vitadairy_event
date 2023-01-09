@@ -1,3 +1,4 @@
+import { boolean } from 'yup';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/common/redux/store';
 import { ICountryTableValue, IFormCreateProvince, StateProps } from "./interface";
@@ -13,11 +14,16 @@ const initialState: StateProps = {
     isCustomerExclusion: false,
     isCustomerGroupExclusion:false,
     crmTypeIdEdit: 0,
+    giftIdEdit: 0,
     openConfirmDelete: false,
     idPrizeDelete: 0,
     countPrizeEvent: 0,
     countPrizeProvince: 0,
-    rowProvinceId: null
+    rowProvinceId: null,
+    statusPrize: true,
+    prizeQuantityChange: null,
+    openEditModal: false,
+    confirmEdit: false
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -54,6 +60,9 @@ export const eventPrizeQ1Slice = createSlice({
         setCrmTypeIdEdit: (state, action: PayloadAction<number>) => {
             state.crmTypeIdEdit = action.payload;
         },
+        setGiftIdEdit: (state, action: PayloadAction<number>) => {
+            state.giftIdEdit = action.payload;
+        },
         setOpenConfirmDelete: (state) => {
             state.openConfirmDelete = true
         },
@@ -71,7 +80,19 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setRowProvinceId: (state, action: PayloadAction<GridRowId | null>) => {
             state.rowProvinceId = action.payload;
-        }
+        },
+        setStatusPrize: (state, action: PayloadAction<boolean>) => {
+            state.statusPrize = action.payload;
+        },
+        setPrizeQuantityChange: (state, action: PayloadAction<number | null>) => {
+            state.prizeQuantityChange = action.payload;
+        },
+        setOpenEditModal: (state, action: PayloadAction<boolean>) => {
+            state.openEditModal = action.payload;
+        },
+        setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+            state.confirmEdit = action.payload;
+        },
     }
 })
 
@@ -86,12 +107,17 @@ export const {
     setIsCustomerExclusion,
     setIsCustomerGroupExclusion,
     setCrmTypeIdEdit,
+    setGiftIdEdit,
     setOpenConfirmDelete,
     setCloseConfirmDelete,
     setIdPrizeDelete,
     setCountPrizeEvent,
     setCountPrizeProvince,
-    setRowProvinceId
+    setRowProvinceId,
+    setStatusPrize,
+    setPrizeQuantityChange,
+    setOpenEditModal,
+    setConfirmEdit
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>

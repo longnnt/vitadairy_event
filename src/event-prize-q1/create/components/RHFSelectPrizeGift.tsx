@@ -49,7 +49,7 @@ export const RHFSelectPrizeGift = ({
     const response = await getAsyncData({
       ...searchParams,
       page: page,
-      searchText: search,
+      keySearch: search,
     });
 
     const hasMore = page < response?.data?.pagination.totalPages;

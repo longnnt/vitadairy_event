@@ -59,8 +59,9 @@ import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSe
 import { StarIcon } from 'src/common/theme/overrides/CustomIcons';
 import { SelectSingleEvent } from './SelectSingleEvent';
 import { useEventGroup } from 'src/manage-event-quarter-one/hooks/useEventGroup';
+import { SelectMultipleEvent } from './SelectMultipleEvent';
 
-function EditEventDashboard() {
+function ViewEventDashboard() {
   const navigate = useNavigate();
   const { useDeepCompareEffect } = useDeepEffect();
   const dispatch: any = useDispatch();
@@ -121,14 +122,8 @@ function EditEventDashboard() {
         'skus',
         data.skus.map((item: string) => ({ value: item, label: item }))
       );
-      setValue(
-        'eventStatus',
-        data.status === STATUS.ACTIVE ? true :false
-      );
-    setValue(
-      'eventGroupId',
-      defaultTransactionType 
-    );
+      setValue('eventStatus', data.status === STATUS.ACTIVE ? true : false);
+      setValue('eventGroupId', defaultTransactionType);
     }
   }, [data, defaultTransactionType]);
   useDeepCompareEffect(() => {
@@ -136,7 +131,7 @@ function EditEventDashboard() {
     if (confirmEdit) {
       const dataEdit = {
         name: data?.name,
-        eventGroupId:data?.eventGroupId?.value as string,
+        eventGroupId: data?.eventGroupId?.value as string,
         startDate: data.startDate,
         endDate: data.endDate,
         defaultWinRate: data.defaultWinRate,
@@ -164,10 +159,10 @@ function EditEventDashboard() {
   return (
     <>
       <HeaderBreadcrumbs
-        heading={BREADCUMBS.MANAGE_EDIT_EVENT}
+        heading={BREADCUMBS.MANAGE_VIEW_EVENT}
         links={[
           { name: BREADCUMBS.MANAGE_LIST_EVENT, href: PATH_DASHBOARD.root },
-          { name: BREADCUMBS.MANAGE_EDIT_EVENT },
+          { name: BREADCUMBS.MANAGE_VIEW_EVENT },
         ]}
       />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -180,6 +175,7 @@ function EditEventDashboard() {
                     name="name"
                     InputLabelProps={{ shrink: true }}
                     label="Tên sự kiện*"
+                    disabled
                   />
                 </Stack>
 
@@ -191,6 +187,7 @@ function EditEventDashboard() {
                       getAsyncData={getEventGroup}
                       searchParams={searchParamsPaginate}
                       error={errors}
+                      isDisabled={true}
                     />
                   </Box>
                 </Stack>
@@ -210,6 +207,7 @@ function EditEventDashboard() {
                         {...field}
                         label="Ngày bắt đầu*"
                         inputFormat={FORMAT_DATE_NEWS}
+                        disabled
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
@@ -238,6 +236,7 @@ function EditEventDashboard() {
                         {...field}
                         label="Ngày kết thúc*"
                         inputFormat={FORMAT_DATE_NEWS}
+                        disabled
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
@@ -265,6 +264,7 @@ function EditEventDashboard() {
                   type="number"
                   label="Giới hạn trúng giải trên tệp người dùng*"
                   InputLabelProps={{ shrink: true }}
+                  disabled
                 />
                 <RHFTextField
                   sx={{ width: '300px' }}
@@ -272,16 +272,23 @@ function EditEventDashboard() {
                   type="number"
                   InputLabelProps={{ shrink: true }}
                   label="Giới hạn trúng giải trên tệp cửa hàng*"
+                  disabled
                 />
-                <RHFSwitch name={'eventStatus'} label="Trạng thái" />
+                <Stack direction={'row'}>
+                  <Switch name={'eventStatus'} checked={watch().eventStatus} disabled />
+                  <Typography color={'#919EAB'} marginTop={1}>
+                    Trạng thái
+                  </Typography>
+                </Stack>
               </Stack>
 
               <Box sx={{ zIndex: 1001 }}>
-                <RHFSelectPagitnationMultiple
+                <SelectMultipleEvent
                   name={'skus'}
                   getAsyncData={getProductCode}
                   placeholder="Mã sản phẩm*"
                   error={errors}
+                  isDisabled={true}
                 />
                 {errors && (
                   <FormHelperText error sx={{ marginLeft: '10px' }}>
@@ -295,6 +302,7 @@ function EditEventDashboard() {
                 name="defaultWinRate"
                 type="number"
                 InputLabelProps={{ shrink: true }}
+                disabled
               />
               <RHFTextField
                 fullWidth
@@ -302,6 +310,7 @@ function EditEventDashboard() {
                 name="upRate"
                 type="number"
                 InputLabelProps={{ shrink: true }}
+                disabled
               />
               <RHFTextField
                 fullWidth
@@ -309,14 +318,23 @@ function EditEventDashboard() {
                 name="downRate"
                 type="number"
                 InputLabelProps={{ shrink: true }}
+                disabled
               />
             </Stack>
           </Scrollbar>
         </Card>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '26px' }}>
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" type="submit">
-              Lưu thay đổi
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={() =>
+                navigate(
+                  PATH_DASHBOARD.manageEventQuarterOne.edit(parseInt(id as string))
+                )
+              }
+            >
+              Chỉnh sửa
             </Button>
             <Button
               variant="contained"
@@ -339,4 +357,4 @@ function EditEventDashboard() {
   );
 }
 
-export { EditEventDashboard };
+export { ViewEventDashboard };

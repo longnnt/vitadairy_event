@@ -16,17 +16,19 @@ import {
             <Stack direction={'row'} height="30%" width='60%' spacing={4}>
               <Skeleton variant="text" width="33%" />
               <Skeleton variant="text" width="33%" />
-              <Skeleton variant="text" width="33%" />
             </Stack>
           </Stack>
-          <Stack direction={'row'} width="20%" spacing={2}>
-            <Skeleton variant="rounded" width='50%' height={40} />
+          <Stack direction={'row'} width="20%" spacing={2} justifyContent='center'>
             <Skeleton variant="rounded" width='50%' height={40} />
           </Stack>
         </Stack>
         <Card sx={{ overflow: 'hidden'} }>
           <Stack spacing={2} sx={{ py: 2, px: 1 }}  height={550}>
-            <Skeleton variant="rounded" height='10%' width="100%"/>
+            <Stack height='10%' width="100%" direction={'row'} spacing={3}>
+              <Skeleton variant="rounded" height='100%' width="75%"/>
+              <Skeleton variant="rounded" height='100%' width="12.5%"/>
+              <Skeleton variant="rounded" height='100%' width="12.5%"/>
+            </Stack>
             <Skeleton variant="rounded" height='90%' width="100%"/>
           </Stack>
         </Card>

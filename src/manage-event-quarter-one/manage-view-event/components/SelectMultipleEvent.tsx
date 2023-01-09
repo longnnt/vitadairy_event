@@ -1,20 +1,12 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { GroupBase, StylesConfig, components, ControlProps } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
-import React, { useEffect, useState } from 'react';
-import { getCrmTransactionById } from 'src/event-prize-q1/services';
-import { dispatch } from 'src/common/redux/store';
-import { setCrmTypeIdEdit } from 'src/event-prize-q1/eventPrizeQ1.slice';
+import React, { useState } from 'react';
 
 interface ISearchParams {
   except?: number;
   page?: number;
   size?: number;
-}
-
-interface ICustomValue {
-  value: number;
-  label: string;
 }
 
 type IProps = {
@@ -23,7 +15,7 @@ type IProps = {
   placeholder: string;
   searchParams?: ISearchParams;
   error: any;
-  defaultvalue: number;
+  isDisabled: boolean;
 };
 
 const { ValueContainer, Placeholder } = components;
@@ -41,22 +33,14 @@ const CustomValueContainer = ({ children, ...props }: any) => {
   );
 };
 
-export const RHFSelectPaginationSingle = ({
+export const SelectMultipleEvent = ({
   name,
   getAsyncData,
   placeholder,
   searchParams,
   error,
-  defaultvalue,
+  isDisabled,
 }: IProps) => {
-  useEffect(() => {
-    if (defaultvalue !== undefined && defaultvalue !== 0) {
-      const response = getCrmTransactionById(defaultvalue).then((res) => {
-        const data = res?.data?.response;
-        setCustomValue({ value: data.id, label: data.description });
-      });
-    }
-  }, [defaultvalue]);
 
   const { control } = useFormContext();
   const loadOptions = async (
@@ -69,16 +53,11 @@ export const RHFSelectPaginationSingle = ({
       page: page,
       searchText: search,
     });
-
-    const data = response.data?.response.filter((item: any) => {
-      if (item.id == defaultvalue) setCustomValue({ value: item.id, label: item.name });
-    });
-
-    const hasMore = page < response?.data?.pagination.totalPages;
-    const optionSelects = response.data?.response.map((item: any) => {
+    const hasMore = page < response?.data?.response.pagination.totalPages;
+    const optionSelects = response.data?.response.response.map((prodCode: any) => {
       return {
-        value: item.id,
-        label: item.description,
+        value: prodCode.code,
+        label: prodCode.code,
       };
     });
     return {
@@ -90,8 +69,6 @@ export const RHFSelectPaginationSingle = ({
     };
   };
   const [isFocus, setFocus] = useState<boolean>(false);
-  const [customValue, setCustomValue] = useState<ICustomValue>();
-
   return (
     <Controller
       name={name}
@@ -99,11 +76,12 @@ export const RHFSelectPaginationSingle = ({
       render={({ field: { onChange, value } }) => {
         return (
           <AsyncPaginate
+            isDisabled={isDisabled}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             debounceTimeout={1000}
             placeholder={placeholder}
-            value={customValue ? customValue : value}
+            value={value}
             additional={{ page: 0 }}
             loadOptions={
               loadOptions as unknown as LoadOptions<
@@ -112,11 +90,10 @@ export const RHFSelectPaginationSingle = ({
                 { page: number }
               >
             }
-            onChange={(value) => {
-              setCustomValue({ value: value?.value, label: value?.label });
-              dispatch(setCrmTypeIdEdit(value?.value));
-            }}
-            styles={colourStyles(isFocus, error, name)}
+            isMulti
+            closeMenuOnSelect={false}
+            onChange={onChange}
+            styles={colourStyles(isFocus, error)}
             components={{
               ValueContainer: CustomValueContainer,
             }}
@@ -127,7 +104,7 @@ export const RHFSelectPaginationSingle = ({
   );
 };
 
-const colourStyles = (isFocus: boolean, error: any, name: string) => {
+const colourStyles = (isFocus: boolean, error: any) => {
   const styles: StylesConfig = {
     control: (styles, state) => ({
       ...styles,
@@ -135,9 +112,9 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
       borderRadius: '8px',
       boxShadow: 'none',
       '&:hover': {
-        border: '1px solid black',
+        border:'1px solid black'
       },
-      border: error[name]?.message
+      border: error?.skus?.message
         ? '1.5px solid #ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '1px solid #00ab55!important'
@@ -148,12 +125,17 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
     container: (provided, state) => ({
       ...provided,
     }),
-
+    
     valueContainer: (provided, state) => ({
       ...provided,
       overflow: 'visible',
       padding: 10,
       color: (isFocus as unknown as ControlProps<boolean>) && 'black!important',
+    }),
+
+    menu: (provided, state) => ({
+      ...provided,
+      marginLeft: 1,
     }),
 
     placeholder: (base, state) => ({
@@ -170,10 +152,9 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
         (isFocus as unknown as ControlProps<boolean>)
           ? 'white'
           : 'primary',
-      top: state.hasValue
-        ? '-22px'
-        : state.selectProps.inputValue
-        ? '-22px'
+      top:
+        state.hasValue || state.selectProps.inputValue
+        ? '-10px'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '-22px'
         : '10%',
@@ -184,7 +165,7 @@ const colourStyles = (isFocus: boolean, error: any, name: string) => {
           state.selectProps.inputValue ||
           (isFocus as unknown as ControlProps<boolean>)) &&
         12,
-      color: error[name]?.message
+      color: error?.skus?.message
         ? '#ff4842!important'
         : (isFocus as unknown as ControlProps<boolean>)
         ? '#00ab55'

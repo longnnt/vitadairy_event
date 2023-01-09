@@ -17,6 +17,7 @@ type IProps = {
   placeholder: string;
   searchParams?: ISearchParams;
   error: any;
+  isDisabled?: boolean;
 };
 
 const { ValueContainer, Placeholder } = components;
@@ -40,6 +41,7 @@ export const RHFSelectPaginationGroupEvent = ({
   placeholder,
   searchParams,
   error,
+  isDisabled,
 }: IProps) => {
 
   const { control } = useFormContext();
@@ -49,7 +51,7 @@ export const RHFSelectPaginationGroupEvent = ({
     { page }: { page: number }
   ) => {
     const dataSelect = getAsyncData;
-    const hasMore = page < 10;
+    const hasMore = page < 1;
     const optionSelects = dataSelect?.data?.response.map((events: any) => {
       return {
         value: events.id,
@@ -59,10 +61,6 @@ export const RHFSelectPaginationGroupEvent = ({
     
     return {
       options: optionSelects,
-      hasMore: hasMore,
-      additional: {
-        page: page + 1,
-      },
     };
   };
   const [isFocus, setFocus] = useState<boolean>(false);
@@ -73,6 +71,7 @@ export const RHFSelectPaginationGroupEvent = ({
       render={({ field: { onChange, value } }) => {
         return (
           <AsyncPaginate
+            isDisabled={isDisabled}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             debounceTimeout={1000}
