@@ -18,7 +18,7 @@ import {
   IProvinceDetail,
   ISelectType,
 } from 'src/event-prize-q1/interface';
-import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelectPrizeGift } from './RHFSelectPrizeGift';
 import ProvinceTable from './ProvinceTable';
 import { useSelector, dispatch } from 'src/common/redux/store';
@@ -46,6 +46,7 @@ import { replacePathParams } from 'src/common/utils/replaceParams';
 import { FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
 import InputAdornment from '@mui/material/InputAdornment/InputAdornment';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
+import { paramsProvince, searchParamsGift } from 'src/event-prize-q1/constants';
 
 export default function CreatePrizeContainer() {
   const {
@@ -62,13 +63,7 @@ export default function CreatePrizeContainer() {
   const params = useParams();
   const eventId = params?.eventId;
 
-  const searchParamsProvince = {
-    page: 0,
-    size: 1000,
-    type: 'PROVINCE',
-  };
-
-  const { data: addProvince } = useGetListProvince(searchParamsProvince);
+  const { data: addProvince } = useGetListProvince(paramsProvince);
   const dataProvince = addProvince?.data?.response || [];
   const addProvinceVN = dataProvince.map((item) => ({
     value: item.id,
@@ -92,10 +87,6 @@ export default function CreatePrizeContainer() {
     },
   });
 
-  const searchParamsGift: IGiftParams = {
-    keySearch: '',
-  };
-
   const {
     handleSubmit,
     control,
@@ -104,6 +95,7 @@ export default function CreatePrizeContainer() {
     getValues,
     trigger,
     clearErrors,
+    setError,
     register,
     formState: { errors },
   } = methods;
@@ -139,6 +131,35 @@ export default function CreatePrizeContainer() {
       return showErrorSnackbar('Không tìm thấy event. Vui lòng thử lại');
     }
 
+    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
+    const isRequiredDatetime = !data.startDate || !data.endDate;
+    const isTimeValid =
+      new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
+      data.startDate &&
+      data.endDate;
+
+    if (isCountProvinceData) {
+      if (isRequiredDatetime) {
+        !data.startDate &&
+          setError('startDate', {
+            type: 'required',
+            message: 'Vui lòng nhập ngày bắt đầu',
+          });
+        !data.endDate &&
+          setError('endDate', {
+            type: 'required',
+            message: 'Vui lòng nhập ngày kết thúc',
+          });
+        return;
+      }
+
+      if (isTimeValid)
+        return setError('startDate', {
+          type: 'required',
+          message: 'Ngày bắt đầu phải trước ngày kết thúc',
+        });
+    }
+
     let dataSend: IFormSubmitCreate = {
       quantity: data.quantity,
       eventId: parseInt(eventId),
@@ -171,9 +192,8 @@ export default function CreatePrizeContainer() {
     }
 
     if (watch().startDate || watch().endDate) {
-        dataSend.eventDetailProvinces = [];
+      dataSend.eventDetailProvinces = [];
     }
-
     mutate(dataSend);
   };
 
@@ -211,7 +231,7 @@ export default function CreatePrizeContainer() {
               control={control}
               render={({ field }) => (
                 <Stack position="relative" width="100%">
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     {...field}
                     label="Ngày bắt đầu*"
                     inputFormat={FORMAT_DATE_NEWS}
@@ -240,7 +260,7 @@ export default function CreatePrizeContainer() {
               control={control}
               render={({ field }) => (
                 <Stack position={'relative'} width="100%">
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     {...field}
                     label="Ngày kết thúc*"
                     inputFormat={FORMAT_DATE_NEWS}

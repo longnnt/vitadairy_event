@@ -11,10 +11,8 @@ export const useUpdateEventPrize = (callback: IStoreAdminCallback) => {
         onSuccess: (res) => {
             if(res.data?.meta?.status === 1000) {
                 queryClient.invalidateQueries([QUERY_KEYS.EVENT_LIST_PRIZE_Q1]);
-                const idEvent = res?.data?.response?.eventId;
                 callback.onSuccess && callback.onSuccess()
             } else {
-                console.log(res)
                 showErrorSnackbar(res.data?.meta?.msg)
             }
         },

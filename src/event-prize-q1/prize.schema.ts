@@ -39,22 +39,6 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
       .min(1, 'Số lượng tổng giải phải lớn hơn 0')
       .typeError('Giá trị nhập phải là số'),
     crmTransactionTypeId: Yup.mixed().required('Vui lòng chọn CRM Transaction Type'),
-    startDate: Yup.date()
-      .required('Vui lòng nhập thông tin')
-      .typeError('Vui lòng nhập thông tin'),
-    endDate: Yup.date()
-      .required('Vui lòng nhập thông tin')
-      .typeError('Vui lòng nhập thông tin')
-      .when('startDate', (eventStartDate, schema) => {
-        return (
-          eventStartDate &&
-          schema.test(
-            'test date',
-            'Ngày kết thúc phải sau ngày bắt đầu',
-            (val: string) => new Date(val).getTime() > new Date(eventStartDate).getTime()
-          )
-        );
-      }),
     eventDetailProvinces: Yup.lazy((value: IFormCreateProvince) => {
       const validationObject: any = {};
       if (value !== undefined && value !== null) {

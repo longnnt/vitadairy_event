@@ -10,9 +10,10 @@ type Props = {
     open: boolean;
     handleClose: () => void;
     handleConfirm: () => void;
+    content: string;
 }
 
-export default function AlertConfirmDelete({ open, handleClose, handleConfirm }: Props) {
+export default function AlertConfirmDelete({ open, handleClose, handleConfirm,content }: Props) {
     return (
         <div>
             <Dialog
@@ -28,7 +29,7 @@ export default function AlertConfirmDelete({ open, handleClose, handleConfirm }:
                 }}
             >
                 <DialogTitle id="alert-dialog-title">
-                    Bạn có chắc chắn muốn Xóa giải này không?
+                    {content}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -45,7 +46,7 @@ export default function AlertConfirmDelete({ open, handleClose, handleConfirm }:
                     </Button>
                     <Button
                         onClick={handleClose}
-                        variant="outlined"
+                        variant="contained"
                         color="inherit"
                     >Hủy bỏ</Button>
 

@@ -21,7 +21,9 @@ const initialState: StateProps = {
     countPrizeProvince: 0,
     rowProvinceId: null,
     statusPrize: true,
-    prizeQuantityChange: null
+    prizeQuantityChange: null,
+    openEditModal: false,
+    confirmEdit: false
 }
 
 export const eventPrizeQ1Slice = createSlice({
@@ -84,7 +86,13 @@ export const eventPrizeQ1Slice = createSlice({
         },
         setPrizeQuantityChange: (state, action: PayloadAction<number | null>) => {
             state.prizeQuantityChange = action.payload;
-        }
+        },
+        setOpenEditModal: (state, action: PayloadAction<boolean>) => {
+            state.openEditModal = action.payload;
+        },
+        setConfirmEdit: (state, action: PayloadAction<boolean>) => {
+            state.confirmEdit = action.payload;
+        },
     }
 })
 
@@ -107,7 +115,9 @@ export const {
     setCountPrizeProvince,
     setRowProvinceId,
     setStatusPrize,
-    setPrizeQuantityChange
+    setPrizeQuantityChange,
+    setOpenEditModal,
+    setConfirmEdit
 } = eventPrizeQ1Slice.actions;
 
 export const setProvinceInFoSelector = (state: RootState) =>
