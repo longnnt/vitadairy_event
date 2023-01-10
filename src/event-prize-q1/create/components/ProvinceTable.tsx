@@ -49,7 +49,10 @@ import { useEffect, useState } from 'react';
 import { randomId } from '@mui/x-data-grid-generator';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import AlertConfirmDelete from 'src/event-prize-q1/common/AlertConfirmDelete';
-import { paramsProvince } from 'src/event-prize-q1/constants';
+import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS, paramsProvince } from 'src/event-prize-q1/constants';
+import Iconify from 'src/common/components/Iconify';
+import { parse, ParseResult } from 'papaparse';
+import useShowSnackbar from 'src/common/hooks/useMessage';
 
 type Props = {
   dataProvinceAPI?: IProvinceDetail[];
@@ -61,7 +64,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
   const { useDeepCompareEffect } = useDeepEffect();
 
   const { openConfirmDelete, rowProvinceId } = useSelector((state) => state.eventPrizeQ1);
-
+  const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const provinceSelector = useSelector(setProvinceInFoSelector);
 
   const methods = useFormContext<IFormCreate>();
@@ -401,6 +404,54 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
     }
   }, [dataProvinceAPI]);
 
+  const importFile = async (event: any) => {
+    try{
+    const allowedExtensions = ACCEPT_FILE_IMPORT;
+    if (event.target.files.length) {
+        const inputFile = event.target.files[0];
+        const fileExtension = inputFile?.type.split('/')[1];
+        if (!allowedExtensions.includes(fileExtension)) {
+          showErrorSnackbar('Sai định dạng file');
+          return;
+        }
+        showSuccessSnackbar('Import file thành công');
+      }
+
+      if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
+
+      parse(event.target.files[0], {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        delimiter: ',',
+        fastMode: true,
+        encoding: 'utf-8',
+        transformHeader: (header: string, index: number) => COLUMNS_HEADERS[index],
+        complete: async (results: ParseResult<IProvinceDetail>) => {
+          const data: IFormCreateProvince = {};
+          results?.data?.forEach((item: IProvinceDetail) => {
+            const id = randomId();
+            data[id] = {
+              id: id,
+              provinceId: item.provinceId,
+              quantity: item.quantity,
+              startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+              endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
+              isNew: false,
+            };
+          });
+
+          setRows({ ...rows, ...data });
+          setValue('eventDetailProvinces', { ...rows, ...data });
+        },
+      });
+    } catch (e) {
+      return;
+    } finally {
+      event.target.value = '';
+    }
+  };
+
   return (
     <>
       <AlertConfirmDelete
@@ -420,13 +471,24 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
       >
         <Typography variant="h5">Tỉnh thành</Typography>
 
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleClickAddnewRow}
-        >
-          Thêm tỉnh thành
-        </Button>
+        <Stack direction={'row'} spacing={1} sx={{ alignSelf: 'flex-end' }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<Iconify icon={'mdi:file-import'} />}
+            component="label"
+          >
+            Nhập
+            <input hidden multiple type="file" onChange={importFile} accept=".csv" />
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleClickAddnewRow}
+          >
+            Thêm tỉnh thành
+          </Button>
+        </Stack>
       </Box>
       <Stack direction={'row'}>
         <StyledBox sx={{ width: '80%' }}>
