@@ -494,13 +494,16 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
           </Button>
         </Stack>
       </Box>
+
       {!window.location.pathname.includes('create') && <Box sx={{ mt:3, mb: 3 }}>
+        <Box sx={{ mt:3, mb: 3 }}>
         <Card sx={{ width: '20%', px: 4, py: 2 }}>
             <Stack direction={'row'} alignItems='center' justifyContent='space-between'>
-                <Typography variant='body1'>Tổng số giải đã trúng <br/>ở tất cả tỉnh thành</Typography>
+                <Typography variant='body1'>Tổng số giải <br/>ở tất cả tỉnh thành</Typography>
                 <Typography variant='h5'>{countWonPrize}</Typography>
                 </Stack>
         </Card>
+      </Box>
       </Box>}
       <StyledBox sx={{ width: '100%' }}>
         <DataGrid
