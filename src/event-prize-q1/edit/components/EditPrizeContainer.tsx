@@ -490,7 +490,10 @@ export default function EditPrizeContainer() {
       </Paper>
 
       {!watch().startDate && !watch().startDate && (
-        <ProvinceTable dataProvinceAPI={prizeDataDetail?.eventDetailProvinces} />
+        <ProvinceTable 
+        dataProvinceAPI={prizeDataDetail?.eventDetailProvinces}
+        countWonPrize={prizeDataDetail?.totalWonAmount}
+         />
       )}
 
       <Stack

@@ -55,9 +55,10 @@ import useShowSnackbar from 'src/common/hooks/useMessage';
 
 type Props = {
   dataProvinceAPI?: IProvinceDetail[];
+  countWonPrize?:number;
 };
 
-export default function ProvinceTable({ dataProvinceAPI }: Props) {
+export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Props) {
   const [rows, setRows] = useState<IFormCreateProvince>({});
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const { useDeepCompareEffect } = useDeepEffect();
@@ -431,15 +432,17 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
         complete: async (results: ParseResult<IProvinceDetail>) => {
           const data: IFormCreateProvince = {};
           results?.data?.forEach((item: IProvinceDetail) => {
-            const id = randomId();
-            data[id] = {
-              id: id,
-              provinceId: item.provinceId,
-              quantity: item.quantity,
-              startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
-              endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
-              isNew: false,
-            };
+            if(item.provinceId) {
+                const id = randomId();
+                data[id] = {
+                  id: id,
+                  provinceId: item.provinceId,
+                  quantity: item.quantity,
+                  startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+                  endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
+                  isNew: false,
+                };
+            }
           });
 
           setRows({ ...rows, ...data });
@@ -491,14 +494,17 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
           </Button>
         </Stack>
       </Box>
-      <Box sx={{ mt:3, mb: 3 }}>
+
+      {!window.location.pathname.includes('create') && <Box sx={{ mt:3, mb: 3 }}>
+        <Box sx={{ mt:3, mb: 3 }}>
         <Card sx={{ width: '20%', px: 4, py: 2 }}>
             <Stack direction={'row'} alignItems='center' justifyContent='space-between'>
                 <Typography variant='body1'>Tổng số giải <br/>ở tất cả tỉnh thành</Typography>
-                <Typography variant='h5'>{countPrizeProvince}</Typography>
+                <Typography variant='h5'>{countWonPrize}</Typography>
                 </Stack>
         </Card>
       </Box>
+      </Box>}
       <StyledBox sx={{ width: '100%' }}>
         <DataGrid
           rows={Object.values(rows)}
