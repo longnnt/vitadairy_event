@@ -4,12 +4,7 @@ import {
   Button,
   TextField,
   Stack,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableContainer,
+  Card,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {
@@ -49,7 +44,11 @@ import { useEffect, useState } from 'react';
 import { randomId } from '@mui/x-data-grid-generator';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import AlertConfirmDelete from 'src/event-prize-q1/common/AlertConfirmDelete';
-import { ACCEPT_FILE_IMPORT, COLUMNS_HEADERS, paramsProvince } from 'src/event-prize-q1/constants';
+import {
+  ACCEPT_FILE_IMPORT,
+  COLUMNS_HEADERS,
+  paramsProvince,
+} from 'src/event-prize-q1/constants';
 import Iconify from 'src/common/components/Iconify';
 import { parse, ParseResult } from 'papaparse';
 import useShowSnackbar from 'src/common/hooks/useMessage';
@@ -63,7 +62,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const { useDeepCompareEffect } = useDeepEffect();
 
-  const { openConfirmDelete, rowProvinceId } = useSelector((state) => state.eventPrizeQ1);
+  const { openConfirmDelete, rowProvinceId, countPrizeProvince, confirmEdit } = useSelector((state) => state.eventPrizeQ1);
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const provinceSelector = useSelector(setProvinceInFoSelector);
 
@@ -264,7 +263,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
       },
     },
     {
-      field: 'totalPrizeCountry',
+      field: 'wonAmount',
       headerName: 'Số giải đã trúng ở tỉnh thành',
       flex: 1,
       editable: false,
@@ -326,6 +325,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
           id,
           provinceId: '',
           isNew: true,
+          quantity: 0
         },
       };
     });
@@ -395,6 +395,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
           startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
           endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
           isNew: false,
+          wonAmount: item?.wonAmount
         };
         countPrize += item.quantity;
       });
@@ -405,9 +406,9 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
   }, [dataProvinceAPI]);
 
   const importFile = async (event: any) => {
-    try{
-    const allowedExtensions = ACCEPT_FILE_IMPORT;
-    if (event.target.files.length) {
+    try {
+      const allowedExtensions = ACCEPT_FILE_IMPORT;
+      if (event.target.files.length) {
         const inputFile = event.target.files[0];
         const fileExtension = inputFile?.type.split('/')[1];
         if (!allowedExtensions.includes(fileExtension)) {
@@ -474,7 +475,7 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
         <Stack direction={'row'} spacing={1} sx={{ alignSelf: 'flex-end' }}>
           <Button
             variant="contained"
-            color="secondary"
+            color="inherit"
             startIcon={<Iconify icon={'mdi:file-import'} />}
             component="label"
           >
@@ -486,42 +487,32 @@ export default function ProvinceTable({ dataProvinceAPI }: Props) {
             startIcon={<AddIcon />}
             onClick={handleClickAddnewRow}
           >
-            Thêm tỉnh thành
+            Thêm
           </Button>
         </Stack>
       </Box>
-      <Stack direction={'row'}>
-        <StyledBox sx={{ width: '80%' }}>
-          <DataGrid
-            rows={Object.values(rows)}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
-            processRowUpdate={processRowUpdate}
-            onRowEditStop={() => {
-              trigger('eventDetailProvinces');
-            }}
-            experimentalFeatures={{ newEditingApi: true }}
-          />
-        </StyledBox>
-        <TableContainer sx={{ width: '20%', overflow: 'hidden' }}>
-          <Table size="medium">
-            <TableHead
-              sx={{ width: '100%', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-            >
-              <TableCell align="center" sx={{ background: 'white' }}>
-                Số giải đã trúng ở tất cả tỉnh thành
-              </TableCell>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell align="center">0</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Stack>
+      <Box sx={{ mt:3, mb: 3 }}>
+        <Card sx={{ width: '20%', px: 4, py: 2 }}>
+            <Stack direction={'row'} alignItems='center' justifyContent='space-between'>
+                <Typography variant='body1'>Tổng số giải <br/>ở tất cả tỉnh thành</Typography>
+                <Typography variant='h5'>{countPrizeProvince}</Typography>
+                </Stack>
+        </Card>
+      </Box>
+      <StyledBox sx={{ width: '100%' }}>
+        <DataGrid
+          rows={Object.values(rows)}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+          processRowUpdate={processRowUpdate}
+          onRowEditStop={() => {
+            trigger('eventDetailProvinces');
+          }}
+          experimentalFeatures={{ newEditingApi: true }}
+        />
+      </StyledBox>
     </>
   );
 }

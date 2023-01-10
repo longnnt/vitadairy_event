@@ -16,7 +16,8 @@ export interface IListPrizeData {
     isStoreExclusion?: boolean
     isStoreGroupExclusion?: boolean
     status?: boolean
-    eventDetailProvinces?: IProvinceDetail[]
+    eventDetailProvinces?: IProvinceDetail[];
+    totalWonAmount: number;
 }
 
 export interface IPrizeData {
@@ -265,7 +266,8 @@ export interface IProvinceDetail {
     startDate: Dayjs | Date | string | null;
     name?: string;
     isNew?: boolean;
-    provinceName?:string
+    provinceName?:string;
+    wonAmount?: number;
 }
 
 export interface IFormSubmitCreate {
