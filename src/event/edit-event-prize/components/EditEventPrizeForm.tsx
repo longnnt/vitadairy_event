@@ -7,7 +7,7 @@ import {
   FormHelperText,
   Grid,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material';
 import { Container } from '@mui/system';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ import {
   RHFRadioGroup,
   RHFSelect,
   RHFSwitch,
-  RHFTextField
+  RHFTextField,
 } from 'src/common/components/hook-form';
 import { RHFSelectPaginationSingle } from 'src/common/components/hook-form/RHFSelectPaginationSingle';
 import useDeepEffect from 'src/common/hooks/useDeepEffect';
@@ -34,7 +34,7 @@ import {
   NO_ID,
   popupTypeOption,
   POPUP_CODE,
-  POPUP_TYPE
+  POPUP_TYPE,
 } from '../common/constants';
 import {
   IEventProvince,
@@ -44,7 +44,7 @@ import {
   IProvinceParams,
   ISelect,
   ISelectPopup,
-  ITransactionType
+  ITransactionType,
 } from '../common/interface';
 import { fomatFormData, formatDataProvinces, tranferData } from '../common/utils';
 import { eidtEventPrizevalidate } from '../editEvent.Schema';
@@ -67,7 +67,7 @@ import {
   setOpeneditModal,
   setPopUpCode,
   setPopUpType,
-  setProvinceInfor
+  setProvinceInfor,
 } from '../editEventPrize.Slice';
 import { useEditEventPrize } from '../hooks/useEditEventPrize';
 import { useGetAllGift } from '../hooks/useGetAllGift';
@@ -95,7 +95,7 @@ export const EditEventPrizeForm = () => {
     page: ScrollProvinceEnum.PAGE_PROVINCE,
     size: ScrollProvinceEnum.SIZE_PROVINCE,
     type: PROVINCE,
-  }
+  };
   const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const { data: eventPrizeById, isLoading } = useGetEventPrizeById(idEventPrize);
 
@@ -232,13 +232,13 @@ export const EditEventPrizeForm = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const filterGift = useSelector(filterGiftSelector)
-  const paramsGift = { page: page, size: DEFAULT_SIZE_GIFT, keySearch:''};
-  if(filterGift.length > 2) paramsGift.keySearch = filterGift
+  const filterGift = useSelector(filterGiftSelector);
+  const paramsGift = { page: page, size: DEFAULT_SIZE_GIFT, keySearch: '' };
+  if (filterGift.length > 2) paramsGift.keySearch = filterGift;
 
   const { data } = useGetAllGift(paramsGift);
   const giftDta = data?.data?.response ? data?.data?.response : [];
-  
+
   useDeepCompareEffect(() => {
     if (choosenGift) {
       setValue('giftId', choosenGift.id);
@@ -361,11 +361,7 @@ export const EditEventPrizeForm = () => {
                         key={'popupContent'}
                         label="Nội dung Pop up*"
                       />
-                      <RHFTextField
-                        name="popupText"
-                        key={'popupText'}
-                        label="CTA*"
-                      />
+                      <RHFTextField name="popupText" key={'popupText'} label="CTA*" />
                     </>
                   )}
                   <RHFRadioGroup

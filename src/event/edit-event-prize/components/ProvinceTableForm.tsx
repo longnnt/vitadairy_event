@@ -39,7 +39,10 @@ import { Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { RHFSelect, RHFTextField } from 'src/common/components/hook-form';
 import { PROVINCE, ScrollProvinceEnum } from 'src/event/event-history-prize/constants';
-import { FORMAT_DATE_FILTER, FORMAT_DATE_NEWS } from 'src/common/constants/common.constants';
+import {
+  FORMAT_DATE_FILTER,
+  FORMAT_DATE_NEWS,
+} from 'src/common/constants/common.constants';
 
 // --------------------------------------------------------------------------
 
@@ -119,8 +122,8 @@ export default function PovinceTableForm() {
   const searchProvince: IProvinceParams = {
     page: ScrollProvinceEnum.PAGE_PROVINCE,
     size: ScrollProvinceEnum.SIZE_PROVINCE,
-    type: PROVINCE
-  }
+    type: PROVINCE,
+  };
 
   const { data: provincesData } = useGetAllProvinceVN(searchProvince);
   const provinceOptions = provincesData?.map((item: IProvince) => ({
@@ -283,7 +286,6 @@ export default function PovinceTableForm() {
         const extraquantity = watch(
           `eventDetailProvinces.${params.row.id}.extraquantity`
         );
-
         return { ...params.row, extraquantity: extraquantity };
       },
     },

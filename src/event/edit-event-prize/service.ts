@@ -32,7 +32,9 @@ export const getAllTransactionType = (params: IQuery) => {
 };
 
 export const getAllProvinceVN = (params: IProvinceParams) => {
-  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_SEARCH_BY_FILTER}`, {params});
+  return axiosInstance.get<unknown, IResProvince>(`${API_PROVINCE_SEARCH_BY_FILTER}`, {
+    params,
+  });
 };
 
 export const eidtEventPrize = (newData: IFormSubmitEdit) => {

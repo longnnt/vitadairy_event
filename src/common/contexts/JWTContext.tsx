@@ -4,6 +4,7 @@ import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
 // @types
 import { ActionMap, AuthState, AuthUser, JWTContextType } from '../@types/auth';
+import { API_LOGIN, API_REGISTER } from '../constants/apis';
 
 // ----------------------------------------------------------------------
 
@@ -116,7 +117,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     initialize();
   }, []);
   const login = async (email: string, password: string) => {
-    const response = await axios.post('admin/login', {
+    const response = await axios.post(API_LOGIN, {
       email,
       password,
     });
@@ -135,7 +136,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     firstName: string,
     lastName: string
   ) => {
-    const response = await axios.post('/api/account/register', {
+    const response = await axios.post(API_REGISTER, {
       email,
       password,
       firstName,
