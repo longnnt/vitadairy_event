@@ -9,14 +9,12 @@ import Snackbar from '@mui/material/Snackbar';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL:  HOST_API,
 
 });
 
-export const axiosInstanceTemp = axios.create({
-  baseURL:  'https://api-sandbox.vitadairyvietnam.vn/api-v3',
-});
+
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -26,7 +24,7 @@ axiosInstance.interceptors.response.use(
       window.location.href = PATH_AUTH.login;
     }
     // else if ((response?.status === 401 && response?.data?.meta?.status === 1002)){
-        
+
     // }
     return Promise.reject(error);
   }

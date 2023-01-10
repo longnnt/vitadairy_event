@@ -77,7 +77,7 @@ export const editEventPrizeSlice = createSlice({
     },
     setFilterGift: (state, action: PayloadAction<string>) => {
       state.filterGift = action.payload;
-    }
+    },
   },
 });
 

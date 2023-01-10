@@ -9,7 +9,13 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { FormProvider } from 'src/common/components/hook-form';
 import { useDispatch, useSelector } from 'src/common/redux/store';
-import { ButtonType, DEFAULT_FORM_VALUE, POPUP_CODE, PROVINCE, ScrollProvinceEnum } from '../../constants';
+import {
+  ButtonType,
+  DEFAULT_FORM_VALUE,
+  POPUP_CODE,
+  PROVINCE,
+  ScrollProvinceEnum,
+} from '../../constants';
 import { createEventPrizeValidate } from '../../event.schema';
 import {
   buttonTypeState,
@@ -24,7 +30,13 @@ import {
   setOpeneditModal,
 } from '../../event.slice';
 import { useAddEvent } from '../../hooks/useAddEvent';
-import { IFormCreate, IFormSubmitCreate, IProvinceParams, ISelect, ISelectPopup } from '../../interfaces';
+import {
+  IFormCreate,
+  IFormSubmitCreate,
+  IProvinceParams,
+  ISelect,
+  ISelectPopup,
+} from '../../interfaces';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
@@ -62,8 +74,8 @@ export default function HistoryNewForm() {
   const searchParams: IProvinceParams = {
     page: ScrollProvinceEnum.PAGE_PROVINCE,
     size: ScrollProvinceEnum.SIZE_PROVINCE,
-    type: PROVINCE
-  }
+    type: PROVINCE,
+  };
 
   const { data: addProvince } = useGetAllProvince(searchParams);
   const dataProvince = addProvince?.data?.response || [];
@@ -115,22 +127,26 @@ export default function HistoryNewForm() {
     }
   }, [idEventPrize]);
   const onSubmit = async (data: IFormCreate) => {
-    const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map((key) => data.eventDetailProvinces[key]);
-    const sum = [...eventDetailProvincesArray].reduce((sum, item) => sum += (item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0), 0)
+    const eventDetailProvincesArray = Object.keys(data.eventDetailProvinces).map(
+      (key) => data.eventDetailProvinces[key]
+    );
+    const sum = [...eventDetailProvincesArray].reduce(
+      (sum, item) =>
+        (sum += item.extraquantity ? parseInt(item?.extraquantity.toString()) : 0),
+      0
+    );
     if (popUpType === 'NULL') {
       data.popupLink = 'NULL';
     }
     data.popupCode = popUpCode;
     data.popupType = popUpType;
-    if(sum === data.quantity) {
+    if (sum === data.quantity) {
       handleOpenEditModal();
       const tempEditData = fomatFormData(data);
       dispatch(setEditData(tempEditData));
-    }
-    else if (sum > (data.quantity as number)) {
+    } else if (sum > (data.quantity as number)) {
       showErrorSnackbar('Tổng số giải theo tỉnh lớn hơn');
-    }
-    else {
+    } else {
       showErrorSnackbar('Tổng số lượng quà lớn hơn');
     }
   };
