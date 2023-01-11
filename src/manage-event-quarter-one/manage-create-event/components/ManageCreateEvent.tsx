@@ -61,6 +61,9 @@ function CreateEventDashboard() {
   const { useDeepCompareEffect } = useDeepEffect();
 
   const { mutate, isSuccess, data } = usePostCreateEventAdmin({
+    onSuccess: () => {
+      showSuccessSnackbar('Tạo mới sự kiện thành công')
+    },
     onError: () => {
       showErrorSnackbar('Tạo mới sự kiện thất bại');
     },

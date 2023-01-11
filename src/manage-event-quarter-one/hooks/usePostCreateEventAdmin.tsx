@@ -10,12 +10,10 @@ export const usePostCreateEventAdmin = (callback: IManageEventAdminCallback) => 
   const keys = getRelatedCacheKeys(queryClient, QUERY_KEYS.EVENT_LIST);
   return {
     ...useMutation(postCreateEventAdmin, {
-      onSuccess: (_result, _variables, context) => {
-        if (!context) return;
+      onSuccess: (_result, _variables) => {
         keys.forEach((queryKey) => {
           queryClient.invalidateQueries(queryKey);
         });
-
         callback.onSuccess && callback.onSuccess();
       },
       onError: () => {
