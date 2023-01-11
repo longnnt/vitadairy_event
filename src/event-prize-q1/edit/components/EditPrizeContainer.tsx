@@ -418,12 +418,13 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
                   Giải loại trừ event theo tệp chủ shop
                 </Typography>
                 <Switch
                   checked={prizeDataDetail?.isStoreExclusion}
                   onClick={(e) => e.preventDefault()}
+                  disabled
                 />
               </Stack>
               <Stack
@@ -432,12 +433,13 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
                   Giải loại trừ event group theo tệp chủ shop
                 </Typography>
                 <Switch
                   checked={prizeDataDetail?.isStoreGroupExclusion}
                   onClick={(e) => e.preventDefault()}
+                  disabled
                 />
               </Stack>
               <Stack
@@ -462,12 +464,13 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
                   Giải loại trừ event theo tệp người dùng
                 </Typography>
                 <Switch
                   checked={prizeDataDetail?.isCustomerExclusion}
                   onClick={(e) => e.preventDefault()}
+                  disabled
                 />
               </Stack>
               <Stack
@@ -476,12 +479,13 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
                   Giải loại trừ event group theo tệp người dùng
                 </Typography>
                 <Switch
                   checked={prizeDataDetail?.isCustomerGroupExclusion}
                   onClick={(e) => e.preventDefault()}
+                  disabled
                 />
               </Stack>
             </Box>
