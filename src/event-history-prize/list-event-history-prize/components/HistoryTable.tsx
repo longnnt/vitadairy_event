@@ -1,8 +1,7 @@
 import { TableCell, TableRow } from '@mui/material';
 
 import dayjs from 'dayjs';
-import _ from 'lodash';
-import { FORMAT_DATE_FILTER, FORMAT_TEST } from 'src/common/constants/common.constants';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
 import { IPropsPrizeHistoryTableRow } from '../../common/interface';
 
 // ----------------------------------------------------------------------
