@@ -1,9 +1,8 @@
 import { TableCell, TableRow } from '@mui/material';
 
 import dayjs from 'dayjs';
-import {
-  FORMAT_DATE_FILTER
-} from 'src/common/constants/common.constants';
+import { FORMAT_DATE_FILTER } from 'src/common/constants/common.constants';
+import { formatDates } from 'src/event-history-prize/common/utils/formatDate';
 import { IPropsPrizeHistoryTableRow } from '../../common/interface';
 
 // ----------------------------------------------------------------------
@@ -20,7 +19,7 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(giftReceivedDate).isValid()
           ? dayjs(giftReceivedDate).format(FORMAT_DATE_FILTER)
-          : ''}
+          : formatDates(giftReceivedDate)}
       </TableCell>
 
       <TableCell align="left">{qr}</TableCell>
