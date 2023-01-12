@@ -404,7 +404,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
+                <Typography variant="body1" sx={{color: '#919EAB'}}>
                   Giải loại trừ event theo tệp chủ shop
                 </Typography>
                 <Switch
@@ -419,7 +419,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
+                <Typography variant="body1" sx={{color: '#919EAB'}}>
                   Giải loại trừ event group theo tệp chủ shop
                 </Typography>
                 <Switch
@@ -450,7 +450,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
+                <Typography variant="body1" sx={{color: '#919EAB'}}>
                   Giải loại trừ event theo tệp người dùng
                 </Typography>
                 <Switch
@@ -465,7 +465,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#9e9e9e'}}>
+                <Typography variant="body1" sx={{color: '#919EAB'}}>
                   Giải loại trừ event group theo tệp người dùng
                 </Typography>
                 <Switch
