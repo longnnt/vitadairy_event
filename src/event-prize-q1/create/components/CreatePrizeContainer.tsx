@@ -189,10 +189,11 @@ export default function CreatePrizeContainer() {
         }
       );
       dataSend = { ...dataSend, eventDetailProvinces: array };
+    // dataSend = {...dataSend, eventDetailProvinces: data.eventDetailProvinces}
     }
 
     if (watch().startDate || watch().endDate) {
-      dataSend.eventDetailProvinces = [];
+      dataSend.eventDetailProvinces = null;
     }
     mutate(dataSend);
   };

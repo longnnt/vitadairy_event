@@ -80,6 +80,7 @@ export interface IProvince {
   type: string;
   parentId: number;
   regionId: number;
+  regionName: string;
 }
 
 export interface ISelect {

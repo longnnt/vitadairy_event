@@ -173,6 +173,12 @@ export interface IResGift {
   };
 }
 
+export interface IProvinceParams {
+  page?: number;
+  size?: number;
+  type: string;
+}
+
 export interface IResProvince {
   data: {
     meta: {

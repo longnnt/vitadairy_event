@@ -16,7 +16,8 @@ export interface IListPrizeData {
     isStoreExclusion?: boolean
     isStoreGroupExclusion?: boolean
     status?: boolean
-    eventDetailProvinces?: IProvinceDetail[]
+    eventDetailProvinces?: IProvinceDetail[];
+    totalWonAmount: number;
 }
 
 export interface IPrizeData {
@@ -164,15 +165,16 @@ export interface IGift {
 }
 
 export interface IEventPrize {
-    id: number,
-    quantity: number,
-    giftId: number,
-    eventId: number,
-    startDate: string | null,
-    endDate: string | null,
-    ordinal: number,
-    status: boolean,
-    crmTransactionTypeId: number,
+    id: number
+    quantity: number
+    giftId: number
+    eventId: number
+    startDate: string | null
+    endDate: string | null
+    ordinal: number
+    status: boolean
+    crmTransactionTypeId: number
+    totalWonAmount?: number
     eventDetailProvinces: [
         {
             id: number,
@@ -183,8 +185,8 @@ export interface IEventPrize {
             endDate: string
         }
     ] | [],
-    isCustomerExclusion: boolean,
-    isCustomerGroupExclusion: boolean,
+    isCustomerExclusion: boolean
+    isCustomerGroupExclusion: boolean
     isStoreExclusion: boolean,
     isStoreGroupExclusion: boolean
 }
@@ -265,7 +267,8 @@ export interface IProvinceDetail {
     startDate: Dayjs | Date | string | null;
     name?: string;
     isNew?: boolean;
-    provinceName?:string
+    provinceName?:string;
+    wonAmount?: number;
 }
 
 export interface IFormSubmitCreate {
@@ -277,7 +280,7 @@ export interface IFormSubmitCreate {
     ordinal: number;
     status: boolean;
     crmTransactionTypeId: number;
-    eventDetailProvinces?: IProvinceData[],
+    eventDetailProvinces?: IProvinceData[] | null | IFormCreateProvince,
     isCustomerExclusion: boolean;
     isCustomerGroupExclusion: boolean;
     isStoreExclusion: boolean;

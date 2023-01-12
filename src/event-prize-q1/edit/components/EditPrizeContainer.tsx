@@ -147,12 +147,18 @@ export default function EditPrizeContainer() {
         'Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có'
       );
     }
+    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
+
+    if(!data.startDate && !data.endDate && isCountProvinceData) {
+        setError('startDate', { type: 'required', message: 'Vui lòng ngày bắt đầu' });
+        setError('endDate', { type: 'required', message: 'Vui lòng ngày kết thúc' });
+        return;
+    }
 
     const isHasStartDateEndDate = data.startDate || data.endDate;
-    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
     const isRequiredDatetime = !data.startDate || !data.endDate;
     const isTimeValid =
-      new Date(data.startDate).getTime() >= new Date(data.endDate).getTime() &&
+      new Date(data.startDate?.toString()).getTime() >= new Date(data.endDate?.toString()).getTime() &&
       data.startDate &&
       data.endDate;
 
@@ -220,8 +226,8 @@ export default function EditPrizeContainer() {
       }
 
       if (watch().startDate || watch().endDate) {
-        dataSend.eventDetailProvinces = [];
-      }
+        dataSend.eventDetailProvinces = null;
+    }
       mutate(dataSend);
       dispatch(setConfirmEdit(false));
     }
@@ -253,8 +259,16 @@ export default function EditPrizeContainer() {
       dispatch(setIsCustomerExclusion(prizeDataDetail.isCustomerExclusion));
       dispatch(setIsCustomerGroupExclusion(prizeDataDetail.isCustomerGroupExclusion));
       dispatch(setStatusPrize(prizeDataDetail.status));
+      dispatch(setPrizeQuantityChange(null));
     }
   }, [prizeDataDetail]);
+
+  useDeepCompareEffect(() => {
+    if(watch('startDate') || watch('endDate') ){
+        // @ts-ignore
+      setValue('eventDetailProvinces', {});
+    }
+  }, [watch('startDate'), watch('endDate') ])
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -480,7 +494,10 @@ export default function EditPrizeContainer() {
       </Paper>
 
       {!watch().startDate && !watch().startDate && (
-        <ProvinceTable dataProvinceAPI={prizeDataDetail?.eventDetailProvinces} />
+        <ProvinceTable 
+        dataProvinceAPI={prizeDataDetail?.eventDetailProvinces}
+        countWonPrize={prizeDataDetail?.totalWonAmount}
+         />
       )}
 
       <Stack
