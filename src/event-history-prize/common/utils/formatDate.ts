@@ -1,5 +1,3 @@
-import { IPrizeHistory } from '../interface';
-
 export function formatDates(giftReceivedDate: string) {
   const time = giftReceivedDate.split(' ')[0].replace(',', '');
   const date = giftReceivedDate.split(' ')[1].split('/');
