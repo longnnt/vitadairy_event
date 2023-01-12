@@ -422,7 +422,6 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
       if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
 
       const arrayCurrentPRovince = Object.values(watch('eventDetailProvinces'))
-      console.log(arrayCurrentPRovince)
 
       parse(event.target.files[0], {
         header: true,
