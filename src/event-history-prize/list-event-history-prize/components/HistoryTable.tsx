@@ -19,7 +19,7 @@ function PrizeHistoryTableRow({ row, selected }: IPropsPrizeHistoryTableRow) {
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {dayjs(giftReceivedDate).isValid()
           ? dayjs(giftReceivedDate).format(FORMAT_DATE_FILTER)
-          : formatDates(row)}
+          : formatDates(giftReceivedDate)}
       </TableCell>
 
       <TableCell align="left">{qr}</TableCell>
