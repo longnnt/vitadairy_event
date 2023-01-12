@@ -1,3 +1,4 @@
+import { IListPrizeParams } from './../event/list-prize/interfaces';
 import { API_GIFT, API_PROVINCE_SEARCH_BY_FILTER, API_TRANSACTION_TYPE_UNUSE, API_EVENT_Q1_PRIZE, API_TRANSACTION_TYPE } from 'src/common/constants/apis';
 import axiosInstance from 'src/common/utils/axios';
 import { IResCrmTransaction, IResGift, IResProvince, IProvinceParams, IGiftParams, IFormSubmitCreate, IGiftById, IResCrmTransactionDetail } from './interface';
@@ -22,8 +23,8 @@ export const createEventPrize = (data: IFormSubmitCreate) => {
     return axiosInstance.post(`${API_EVENT_Q1_PRIZE}`, data);
 }
 
-export const getListPrize = (eventId: number) => {
-    return axiosInstance.get(`${API_EVENT_Q1_PRIZE}`, {params: {eventId}})
+export const getListPrize = (params: IListPrizeParams) => {
+    return axiosInstance.get(`${API_EVENT_Q1_PRIZE}`, {params})
 }
 
 export const updateEventPrize = (data: IFormSubmitCreate) => {

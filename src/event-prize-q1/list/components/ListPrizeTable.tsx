@@ -9,7 +9,7 @@ import { HEAD_LABELS } from "src/event-prize-q1/constants";
 import { setCloseConfirmDelete, setIdPrizeDelete, setOpenConfirmDelete } from "src/event-prize-q1/eventPrizeQ1.slice";
 import { useDeleteListPrizeAdmin } from "src/event-prize-q1/hooks/useDeleteSinglePrize";
 import { useGetListPrize } from "src/event-prize-q1/hooks/useGetListPrize";
-import { IListPrizeData } from "src/event-prize-q1/interface";
+import { IListPrizeData, IListPrizeParams } from "src/event-prize-q1/interface";
 import PrizeTableRow from "./PrizeTableRow";
 
 export default function ListPrizeTable() {
@@ -28,7 +28,13 @@ export default function ListPrizeTable() {
     const params = useParams();
     const eventId = params?.eventId || '';
 
-    const { data, isLoading, isError } = useGetListPrize(parseInt(eventId));
+    const searchParams: IListPrizeParams = {
+        page: page + 1,
+        limit: rowsPerPage,
+        eventId: parseInt(eventId)
+    }
+
+    const { data, isLoading, isError } = useGetListPrize(searchParams);
     const listPrize = data?.data?.response || [];
 
     const totalRecords = data?.data?.pagination?.totalRecords || 0;
