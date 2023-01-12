@@ -311,7 +311,7 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
 
     let countPrize = 0;
     Object.values(rows).map((item) => {
-      countPrize += item.quantity;
+      countPrize += parseInt(item.quantity.toString());
     });
     dispatch(setCountPrizeProvince(countPrize));
   }, [rows]);
@@ -437,7 +437,7 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
                 data[id] = {
                   id: id,
                   provinceId: item.provinceId,
-                  quantity: item.quantity,
+                  quantity: parseInt(item.quantity.toString()),
                   startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
                   endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
                   isNew: false,
