@@ -311,7 +311,7 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
 
     let countPrize = 0;
     Object.values(rows).map((item) => {
-      countPrize += item.quantity;
+      countPrize += parseInt(item.quantity?.toString());
     });
     dispatch(setCountPrizeProvince(countPrize));
   }, [rows]);
@@ -408,7 +408,7 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
 
   const importFile = async (event: any) => {
     try {
-      const allowedExtensions = ACCEPT_FILE_IMPORT;
+          const allowedExtensions = ACCEPT_FILE_IMPORT;
       if (event.target.files.length) {
         const inputFile = event.target.files[0];
         const fileExtension = inputFile?.type.split('/')[1];
@@ -421,6 +421,8 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
 
       if (!event.target.files[0]) return showErrorSnackbar('file không hợp lệ!!!');
 
+      const arrayCurrentPRovince = Object.values(watch('eventDetailProvinces'))
+
       parse(event.target.files[0], {
         header: true,
         download: true,
@@ -432,16 +434,40 @@ export default function ProvinceTable({ dataProvinceAPI, countWonPrize = 0 }: Pr
         complete: async (results: ParseResult<IProvinceDetail>) => {
           const data: IFormCreateProvince = {};
           results?.data?.forEach((item: IProvinceDetail) => {
+            const id = randomId();
             if(item.provinceId) {
-                const id = randomId();
-                data[id] = {
-                  id: id,
-                  provinceId: item.provinceId,
-                  quantity: item.quantity,
-                  startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
-                  endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
-                  isNew: false,
-                };
+                if(arrayCurrentPRovince.length > 0){
+                    const isDataContain = arrayCurrentPRovince.filter((provi) => provi.provinceId == parseInt(item.provinceId?.toString()))
+
+                    if(isDataContain.length > 0) {
+                        data[isDataContain[0]?.id || id] = {
+                            id: isDataContain[0]?.id || id,
+                            provinceId: item.provinceId,    
+                            quantity: isDataContain[0]?.quantity + parseInt(item.quantity.toString()),
+                            startDate:dayjs(item.startDate, FORMAT_DATE_FILTER),
+                            endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
+                            isNew: false
+                        }
+                    } else {
+                        data[id] = {
+                            id: id,
+                            provinceId: item.provinceId,
+                            quantity: parseInt(item.quantity.toString()),
+                            startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+                            endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
+                            isNew: false,
+                          };
+                    }
+                }else {
+                    data[id] = {
+                      id: id,
+                      provinceId: item.provinceId,
+                      quantity: parseInt(item.quantity.toString()),
+                      startDate: dayjs(item.startDate, FORMAT_DATE_FILTER),
+                      endDate: dayjs(item.endDate, FORMAT_DATE_FILTER),
+                      isNew: false,
+                    };
+                }
             }
           });
 
