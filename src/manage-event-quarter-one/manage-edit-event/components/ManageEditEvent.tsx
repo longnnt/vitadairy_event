@@ -293,21 +293,18 @@ function EditEventDashboard() {
                 fullWidth
                 label="Tỉ lệ trúng quà mặc định của người dùng (%)*"
                 name="defaultWinRate"
-                type="number"
                 InputLabelProps={{ shrink: true }}
               />
               <RHFTextField
                 fullWidth
                 label="Tỉ lệ cộng thêm khi người dùng không trúng quà (%)*"
                 name="upRate"
-                type="number"
                 InputLabelProps={{ shrink: true }}
               />
               <RHFTextField
                 fullWidth
                 label="Tỉ lệ bị trừ đi khi người dùng trúng quà (%)*"
                 name="downRate"
-                type="number"
                 InputLabelProps={{ shrink: true }}
               />
             </Stack>
