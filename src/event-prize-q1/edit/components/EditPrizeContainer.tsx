@@ -42,7 +42,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import useMessage from 'src/common/hooks/useMessage';
 import { useGetListProvince } from 'src/event-prize-q1/hooks/useGetListProvince';
-import { createEventPrizeValidate } from 'src/event-prize-q1/prize.schema';
+import { editEventPrizevalidate } from 'src/event-prize-q1/prize.schema';
 import dayjs from 'dayjs';
 import { getCrmTransaction, getGift } from 'src/event-prize-q1/services';
 import RHFSwitch from 'src/event-prize-q1/create/components/RHFSwitch';
@@ -95,7 +95,7 @@ export default function EditPrizeContainer() {
     : [];
 
   const methods = useForm<IPrizeCreateData>({
-    resolver: yupResolver(createEventPrizeValidate(provinceId)),
+    resolver: yupResolver(editEventPrizevalidate(provinceId)),
     defaultValues: {
       quantity: prizeDataDetail.quantity || 0,
     },
@@ -139,26 +139,32 @@ export default function EditPrizeContainer() {
   const { mutate, isLoading } = useUpdateEventPrize({ onSuccess, onError });
 
   const onSubmit = (data: any) => {
-    if (
-      countPrizeProvince >
-      data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0)
-    ) {
+    const countPrize = data.quantity + (prizeQuantityChange ? prizeQuantityChange : 0);
+    if (countPrize < 1 ) {
+      return showErrorSnackbar('Số lượng giải phải lớn hơn 0');
+    }
+
+    if (countPrizeProvince > countPrize) {
       return showErrorSnackbar(
         'Số lượng giải ở các tỉnh thành cộng lại cần nhỏ hơn hoặc bằng số lượng tổng giải thưởng có'
       );
     }
-    const isCountProvinceData = Object.values(data.eventDetailProvinces).length === 0;
+    const isCountProvinceData =
+      Object.values(
+        data.eventDetailProvinces == undefined ? {} : data.eventDetailProvinces
+      ).length === 0;
 
-    if(!data.startDate && !data.endDate && isCountProvinceData) {
-        setError('startDate', { type: 'required', message: 'Vui lòng ngày bắt đầu' });
-        setError('endDate', { type: 'required', message: 'Vui lòng ngày kết thúc' });
-        return;
+    if (!data.startDate && !data.endDate && isCountProvinceData) {
+      setError('startDate', { type: 'required', message: 'Vui lòng ngày bắt đầu' });
+      setError('endDate', { type: 'required', message: 'Vui lòng ngày kết thúc' });
+      return;
     }
 
     const isHasStartDateEndDate = data.startDate || data.endDate;
     const isRequiredDatetime = !data.startDate || !data.endDate;
     const isTimeValid =
-      new Date(data.startDate?.toString()).getTime() >= new Date(data.endDate?.toString()).getTime() &&
+      new Date(data.startDate?.toString()).getTime() >=
+        new Date(data.endDate?.toString()).getTime() &&
       data.startDate &&
       data.endDate;
 
@@ -227,7 +233,7 @@ export default function EditPrizeContainer() {
 
       if (watch().startDate || watch().endDate) {
         dataSend.eventDetailProvinces = null;
-    }
+      }
       mutate(dataSend);
       dispatch(setConfirmEdit(false));
     }
@@ -264,11 +270,11 @@ export default function EditPrizeContainer() {
   }, [prizeDataDetail]);
 
   useDeepCompareEffect(() => {
-    if(watch('startDate') || watch('endDate') ){
-        // @ts-ignore
+    if (watch('startDate') || watch('endDate')) {
+      // @ts-ignore
       setValue('eventDetailProvinces', {});
     }
-  }, [watch('startDate'), watch('endDate') ])
+  }, [watch('startDate'), watch('endDate')]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -418,7 +424,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#919EAB'}}>
+                <Typography variant="body1" sx={{ color: '#919EAB' }}>
                   Giải loại trừ event theo tệp chủ shop
                 </Typography>
                 <Switch
@@ -433,7 +439,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#919EAB'}}>
+                <Typography variant="body1" sx={{ color: '#919EAB' }}>
                   Giải loại trừ event group theo tệp chủ shop
                 </Typography>
                 <Switch
@@ -464,7 +470,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#919EAB'}}>
+                <Typography variant="body1" sx={{ color: '#919EAB' }}>
                   Giải loại trừ event theo tệp người dùng
                 </Typography>
                 <Switch
@@ -479,7 +485,7 @@ export default function EditPrizeContainer() {
                 direction="row"
                 sx={{ width: '65%' }}
               >
-                <Typography variant="body1" sx={{color: '#919EAB'}}>
+                <Typography variant="body1" sx={{ color: '#919EAB' }}>
                   Giải loại trừ event group theo tệp người dùng
                 </Typography>
                 <Switch
@@ -494,10 +500,10 @@ export default function EditPrizeContainer() {
       </Paper>
 
       {!watch().startDate && !watch().startDate && (
-        <ProvinceTable 
-        dataProvinceAPI={prizeDataDetail?.eventDetailProvinces}
-        countWonPrize={prizeDataDetail?.totalWonAmount}
-         />
+        <ProvinceTable
+          dataProvinceAPI={prizeDataDetail?.eventDetailProvinces}
+          countWonPrize={prizeDataDetail?.totalWonAmount}
+        />
       )}
 
       <Stack

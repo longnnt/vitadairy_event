@@ -53,7 +53,7 @@ export const createEventPrizeValidate = (provinceIds: number[]) => {
   return createEventPrizeSchema;
 };
 
-export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) => {
+export const editEventPrizevalidate = (provinceIds: number[]) => {
   const eventDetailProvincesSchema = Yup.object().shape({
     endDate: Yup.string()
       .required('Ngày kết thúc không được để trống')
@@ -81,13 +81,9 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
       .typeError('Phải là một chuỗi'),
   });
 
-  const edittEventPrizeSchema = Yup.object().shape({
+  const editEventPrizeSchema = Yup.object().shape({
     ordinal: Yup.number()
       .required('Vui lòng nhập thứ tự trúng giải')
-      .typeError('Giá trị nhập phải là số'),
-    quantity: Yup.number()
-      .min(1, 'Số lượng phải lớn hơn 0')
-      .required('Vui lòng nhập số lượng')
       .typeError('Giá trị nhập phải là số'),
     crmTransactionTypeId: Yup.mixed().required('Vui lòng chọn CRM Transaction Type'),
     eventDetailProvinces: Yup.lazy((value: IFormCreateProvince) => {
@@ -101,5 +97,5 @@ export const editEventPrizevalidate = (provinceIds: number[], leftGift: number) 
       // .required();
     }),
   });
-  return edittEventPrizeSchema;
+  return editEventPrizeSchema;
 };
